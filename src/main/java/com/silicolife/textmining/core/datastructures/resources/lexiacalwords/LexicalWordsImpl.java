@@ -13,6 +13,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.daemon.deseriali
 import com.silicolife.textmining.core.datastructures.language.LanguageProperties;
 import com.silicolife.textmining.core.datastructures.resources.ResourceImpl;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
+import com.silicolife.textmining.core.interfaces.resource.IResource;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 import com.silicolife.textmining.core.interfaces.resource.ResourcesTypeEnum;
 import com.silicolife.textmining.core.interfaces.resource.lexicalwords.ILexicalWords;
@@ -36,8 +37,8 @@ public class LexicalWordsImpl  extends ResourceImpl implements ILexicalWords{
 		lexicalWordElement = null;
 	}
 
-	public LexicalWordsImpl() {
-		super();
+	public LexicalWordsImpl(IResource<IResourceElement> resource) {
+		this(resource.getId(),resource.getName(),resource.getInfo(),resource.isActive());
 	}
 	
 	public Map<String, IResourceElement> getLexicalWordElement() {
