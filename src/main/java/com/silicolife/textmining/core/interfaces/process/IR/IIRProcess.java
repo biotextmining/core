@@ -1,5 +1,6 @@
 package com.silicolife.textmining.core.interfaces.process.IR;
 
+import com.silicolife.textmining.core.datastructures.exceptions.process.InvalidConfigurationException;
 import com.silicolife.textmining.core.interfaces.process.IProcess;
 
 /**
@@ -10,5 +11,6 @@ import com.silicolife.textmining.core.interfaces.process.IProcess;
  * @version 1.0 ( 16 Junho de 2009)
  */
 public interface IIRProcess extends IProcess{
-
+	
+	public void validateConfiguration(IIRSearchConfiguration configuration) throws InvalidConfigurationException;
 }

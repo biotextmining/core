@@ -2,28 +2,16 @@ package com.silicolife.textmining.core.interfaces.process.IR;
 
 import java.util.Properties;
 
+import com.silicolife.textmining.core.interfaces.process.IConfiguration;
+
 /**
  * Class that implemets a Information Retrieval Search Configuration
  * 
  * @author Hugo Costa
  *
  */
-public interface IIRSearchConfiguration {
-	
-	/**
-	 * Return keywords
-	 * 
-	 * @return
-	 */
-	public String getKeywords();
-	
-	/**
-	 * Return Organism
-	 * @return
-	 */
-	public String getOrganism();
-	
-	
+public interface IIRSearchConfiguration extends IConfiguration{
+		
 	/**
 	 * Return Configuration properties
 	 * 

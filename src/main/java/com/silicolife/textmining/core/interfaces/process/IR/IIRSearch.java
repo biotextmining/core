@@ -2,6 +2,7 @@ package com.silicolife.textmining.core.interfaces.process.IR;
 
 
 import com.silicolife.textmining.core.datastructures.exceptions.PubmedException;
+import com.silicolife.textmining.core.datastructures.exceptions.process.InvalidConfigurationException;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
 import com.silicolife.textmining.core.interfaces.core.report.processes.ir.IIRSearchProcessReport;
@@ -48,7 +49,7 @@ public interface IIRSearch extends IIRProcess{
 	 * @throws InternetConnectionProblemException 
 	 * @throws DaemonException 
 	 */
-	public IIRSearchProcessReport search(IIRSearchConfiguration query) throws ANoteException, InternetConnectionProblemException;
+	public IIRSearchProcessReport search(IIRSearchConfiguration query) throws InvalidConfigurationException, ANoteException, InternetConnectionProblemException;
 }
 
 

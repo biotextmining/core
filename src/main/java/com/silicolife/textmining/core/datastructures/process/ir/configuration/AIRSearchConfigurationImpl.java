@@ -5,32 +5,19 @@ import java.util.Properties;
 import com.silicolife.textmining.core.interfaces.process.IR.IIRSearchConfiguration;
 
 
-public class IRSearchConfigurationImpl implements IIRSearchConfiguration{
+public abstract class AIRSearchConfigurationImpl implements IIRSearchConfiguration{
 
 	
-	public String keywords;
-	public String organism;
 	public String queryName;
 	public Properties propeties;
 	
 	
-	public IRSearchConfigurationImpl(String keywords, String organism,String queryName,Properties propeties) {
+	public AIRSearchConfigurationImpl(String queryName,Properties propeties) {
 		super();
-		this.keywords = keywords;
-		this.organism = organism;
 		this.queryName = queryName;
 		this.propeties = propeties;
 	}
 
-	@Override
-	public String getKeywords() {
-		return keywords;
-	}
-
-	@Override
-	public String getOrganism() {
-		return organism;
-	}
 
 	@Override
 	public Properties getProperties() {
@@ -41,5 +28,6 @@ public class IRSearchConfigurationImpl implements IIRSearchConfiguration{
 	public String getQueryName() {
 		return queryName;
 	}
+
 
 }
