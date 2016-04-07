@@ -13,7 +13,7 @@ import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 public class ResourcesToNerAnote {
 	
 	private List<GenericTriple<IResource<IResourceElement>,Set<Long>,Set<Long>>> list; // Resource, selected class(es), all class(es)
-	private boolean caseSensitive;
+	private NERCaseSensativeEnum caseSensitive;
 	private boolean useOtherResourceInformationInRules;
 	
 	public ResourcesToNerAnote()
@@ -22,7 +22,7 @@ public class ResourcesToNerAnote {
 
 	}
 	
-	public ResourcesToNerAnote(boolean caseSensitive,boolean useOtherResourceInformationInRules)
+	public ResourcesToNerAnote(NERCaseSensativeEnum caseSensitive,boolean useOtherResourceInformationInRules)
 	{
 		this.caseSensitive = caseSensitive;
 		list = new ArrayList<GenericTriple<IResource<IResourceElement>,Set<Long>,Set<Long>>>();
@@ -50,7 +50,7 @@ public class ResourcesToNerAnote {
 		return list;
 	}
 
-	public boolean isCaseSensitive() {
+	public NERCaseSensativeEnum getCaseSensitive() {
 		return caseSensitive;
 	}
 

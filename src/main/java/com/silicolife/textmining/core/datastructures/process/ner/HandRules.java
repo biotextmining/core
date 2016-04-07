@@ -22,8 +22,12 @@ public class HandRules {
 	
 	public HandRules(ElementToNer elementsToNER) throws ANoteException{ 
 		this.elementsToNER = elementsToNER;
-		this.extraInfo = new HandRulesExtraRulesInformation(elementsToNER.getResourcesForRulesInfo(),elementsToNER.getResourceToNER().isCaseSensitive());
-	}
+		NERCaseSensativeEnum caseSensitive = elementsToNER.getResourceToNER().getCaseSensitive();
+		if(caseSensitive.equals(NERCaseSensativeEnum.INALLWORDS)){
+			this.extraInfo = new HandRulesExtraRulesInformation(elementsToNER.getResourcesForRulesInfo(),true);
+		}else{
+			this.extraInfo = new HandRulesExtraRulesInformation(elementsToNER.getResourcesForRulesInfo(),false);
+		}	}
 	
 	/** annotations is the list of the already existing annotations 
 	 * @throws DatabaseLoadDriverException 
@@ -55,8 +59,13 @@ public class HandRules {
 	public void applyRules(ITextSegment text, AnnotationPositions annotations) throws ANoteException{
 		if(elementsToNER.isUsingOtherResourceInfoToImproveRuleAnnotstions() && elementsToNER.getResourcesForRulesInfo().size() > 0)
 		{
-			HandRulesExtraRulesInformation extraInfo = new HandRulesExtraRulesInformation(elementsToNER.getResourcesForRulesInfo(),elementsToNER.getResourceToNER().isCaseSensitive());
-			for(IResourceElement rule : elementsToNER.getRules())
+			HandRulesExtraRulesInformation extraInfo = null;
+			NERCaseSensativeEnum caseSensitive = elementsToNER.getResourceToNER().getCaseSensitive();
+			if(caseSensitive.equals(NERCaseSensativeEnum.INALLWORDS)){
+				extraInfo = new HandRulesExtraRulesInformation(elementsToNER.getResourcesForRulesInfo(),true);
+			}else{
+				extraInfo = new HandRulesExtraRulesInformation(elementsToNER.getResourcesForRulesInfo(),false);
+			}			for(IResourceElement rule : elementsToNER.getRules())
 			{
 				applyRule(extraInfo,rule, annotations, text);
 			}

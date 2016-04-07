@@ -237,16 +237,13 @@ public class ElementToNer {
 		return terms;
 	}
 	
-	public List<IEntityAnnotation>  getTermsByAlphabeticOrder(boolean caseignore)
-	{
-		if(caseignore)
-		{
-			return getTermsByAlphabeticOrderCaseInsentitive();
-		}
-		else
-		{
+	public List<IEntityAnnotation> getTermsByAlphabeticOrder(NERCaseSensativeEnum caseSensativeEnum){
+		if(caseSensativeEnum.equals(NERCaseSensativeEnum.INALLWORDS)){
 			return  getTermsByAlphabeticOrderCaseSentitive();
+		}else if(caseSensativeEnum.equals(NERCaseSensativeEnum.ONLYINSMALLWORDS)){
+			return getTermsByAlphabeticOrderCaseSentitiveForSmallWords(caseSensativeEnum.getSmallWordSize());
 		}
+		return getTermsByAlphabeticOrderCaseInsentitive();
 	}
 	
 	private List<IEntityAnnotation> getTermsByAlphabeticOrderCaseSentitive() {
@@ -255,6 +252,29 @@ public class ElementToNer {
 		for(IEntityAnnotation elem : elements)
 		{
 			sortceSet.put(elem.getAnnotationValue(), elem);
+			resourceMapClass.put(elem.getResourceElement().getId(), elem.getClassAnnotation().getId());
+			mapResourceIDsToResourceElements.put(elem.getResourceElement().getId(), elem.getResourceElement());
+		}
+		return new ArrayList<IEntityAnnotation>(sortceSet.values());
+	}
+	
+	private List<IEntityAnnotation> getTermsByAlphabeticOrderCaseSentitiveForSmallWords(int wordSize) {
+		List<IEntityAnnotation> elements = getTerms();
+		SortedMap<String, IEntityAnnotation> sortceSet = new TreeMap<String, IEntityAnnotation>();
+		for(IEntityAnnotation elem : elements)
+		{
+			String term = elem.getAnnotationValue();
+			if(wordSize<elem.getAnnotationValue().length() ){
+				term = term.toLowerCase();
+			}
+			sortceSet.put(term, elem);
+			if(!maplowerCaseToPossibleResourceIDs.containsKey(term)){
+				maplowerCaseToPossibleResourceIDs.put(term, new HashSet<Long>());
+			}
+			Set<Long> listResourceIds = maplowerCaseToPossibleResourceIDs.get(term);
+			listResourceIds.add(elem.getResourceElement().getId());
+			maplowerCaseToPossibleResourceIDs.put(term, listResourceIds);
+			mapPossibleResourceIDsToTermString.put(elem.getResourceElement().getId(), elem.getAnnotationValue());
 			resourceMapClass.put(elem.getResourceElement().getId(), elem.getClassAnnotation().getId());
 			mapResourceIDsToResourceElements.put(elem.getResourceElement().getId(), elem.getResourceElement());
 		}
