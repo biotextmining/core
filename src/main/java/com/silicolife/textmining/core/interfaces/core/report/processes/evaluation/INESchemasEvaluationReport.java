@@ -2,11 +2,11 @@ package com.silicolife.textmining.core.interfaces.core.report.processes.evaluati
 
 import com.silicolife.textmining.core.interfaces.core.report.IReport;
 import com.silicolife.textmining.core.interfaces.process.IE.INERSchema;
-import com.silicolife.textmining.core.interfaces.process.IE.ner.INERSchemaEvaluation;
+import com.silicolife.textmining.core.interfaces.process.IE.ner.eval.INERSchemaEvaluationResult;
 
 public interface INESchemasEvaluationReport extends IReport{
 		
-	public INERSchemaEvaluation getEvaluation();
+	public INERSchemaEvaluationResult getEvaluation();
 	public INERSchema getGoldenStandardNERSchema();
 	public INERSchema getNERSchemaCompared();
 
