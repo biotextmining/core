@@ -34,6 +34,7 @@ import com.silicolife.textmining.core.interfaces.core.user.IGroup;
 import com.silicolife.textmining.core.interfaces.core.user.IUser;
 import com.silicolife.textmining.core.interfaces.core.user.IUserDataObject;
 import com.silicolife.textmining.core.interfaces.core.utils.IGenericPair;
+import com.silicolife.textmining.core.interfaces.process.IConfiguration;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcessStatistics;
 import com.silicolife.textmining.core.interfaces.process.IE.re.IRelationsType;
@@ -777,6 +778,12 @@ public class DataAccessStart implements IDataAccess {
 	@Override
 	public void updateQueryClusteringProcess(IClusterProcess clustering) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Boolean runServerProcesses(IConfiguration configuration) throws ANoteException {
+		return null;
 		
 	}
 

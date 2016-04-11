@@ -20,6 +20,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implement
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.publicationmanager.QueryAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.resources.ResourcesAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.resources.ResourcesElementsAccessImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.runserverprocesses.RunSercerProcessesAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.user.UserAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.user.UserPrevilegesAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.webserviceclient.DaemonResponse;
@@ -55,6 +56,7 @@ import com.silicolife.textmining.core.interfaces.core.user.IGroup;
 import com.silicolife.textmining.core.interfaces.core.user.IUser;
 import com.silicolife.textmining.core.interfaces.core.user.IUserDataObject;
 import com.silicolife.textmining.core.interfaces.core.utils.IGenericPair;
+import com.silicolife.textmining.core.interfaces.process.IConfiguration;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcessStatistics;
 import com.silicolife.textmining.core.interfaces.process.IE.re.IRelationsType;
@@ -89,6 +91,7 @@ public class DaemonAccess implements IDataAccess {
 	private HyperlinkAccessImpl hyperLinkAccessImpl;
 	private ResourcesAccessImpl resourcesAccessImpl;
 	private ResourcesElementsAccessImpl resourcesElementAccessImpl;
+	private RunSercerProcessesAccessImpl runServerProcessesImpl;
 
 	public DaemonAccess(IDaemon daemonConfigurations) {
 		this.daemonConfigurations = daemonConfigurations;
@@ -105,6 +108,7 @@ public class DaemonAccess implements IDataAccess {
 		userAccessImpl = new UserAccessImpl();
 		userAccessPrivilegesImpl = new UserPrevilegesAccessImpl();
 		userLogged = new UsersLoggedImpl();
+		runServerProcessesImpl = new RunSercerProcessesAccessImpl();
 	}
 
 	public IDaemon getDaemonConfigurations() {
@@ -134,6 +138,7 @@ public class DaemonAccess implements IDataAccess {
 			hyperLinkAccessImpl.setRestClient(webClient);
 			resourcesAccessImpl.setRestClient(webClient);
 			resourcesElementAccessImpl.setRestClient(webClient);
+			runServerProcessesImpl.setRestClient(webClient);
 		}
 	}
 
@@ -839,5 +844,11 @@ public class DaemonAccess implements IDataAccess {
 		}
 		rc.getTemplate().setMaxTry(4);
 		return false;
+	}
+
+	@Override
+	public Boolean runServerProcesses(IConfiguration configuration)throws ANoteException {
+		return runServerProcessesImpl.runSercerProcesses(configuration);
+		
 	}
 }
