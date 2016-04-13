@@ -32,11 +32,21 @@ public class InitConfiguration {
 
 	private InitConfiguration() throws ANoteException
 	{
+		DataAccessManager dataAccessManager = (DataAccessManager) PropertiesManager.getPManager().getProperty(DataAccessDefaultSettings.DATAACCESS_SELECTED);
+		dataAccess = dataAccessManager.getCurrent();	
+	}
+	
+	public static void login(UsersLogged userlogged) throws ANoteException
+	{
+		DataAccessManager dataAccessManager = (DataAccessManager) PropertiesManager.getPManager().getProperty(DataAccessDefaultSettings.DATAACCESS_SELECTED);
+		dataAccessManager.setUsersLogged(userlogged);
+	}
+	
+	public static void login() throws ANoteException
+	{
 		UsersLogged user = (UsersLogged) PropertiesManager.getPManager().getProperty(DataAccessDefaultSettings.USER_CREDENTIALS);
 		DataAccessManager dataAccessManager = (DataAccessManager) PropertiesManager.getPManager().getProperty(DataAccessDefaultSettings.DATAACCESS_SELECTED);
 		dataAccessManager.setUsersLogged(user);
-		dataAccess = dataAccessManager.getCurrent();
-		
 	}
 	
 	private InitConfiguration(IDataAccess dataAccess, Proxy proxy,Properties properties)  throws ANoteException
@@ -172,6 +182,10 @@ public class InitConfiguration {
 	
 	public static String getPropertyValue(String key)
 	{
+		if(properties==null)
+		{
+			return null;
+		}
 		return properties.getProperty(key);
 	}
 }
