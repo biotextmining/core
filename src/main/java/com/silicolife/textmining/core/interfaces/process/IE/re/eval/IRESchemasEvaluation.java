@@ -18,6 +18,6 @@ public interface IRESchemasEvaluation {
 	 * @param configuration
 	 * @return
 	 */
-	public IRESchemaEvaluationReport evaluateNERSchemas(IRESchemasEvaluationConfiguration configuration) throws ANoteException;
+	public IRESchemaEvaluationReport evaluateRESchemas(IRESchemasEvaluationConfiguration configuration) throws ANoteException;
 
 }
