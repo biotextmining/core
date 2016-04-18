@@ -1,7 +1,6 @@
 package com.silicolife.textmining.core.datastructures.nlptools;
 
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import com.silicolife.textmining.core.interfaces.core.document.structure.ISenten
  */
 public class OpenNLPSentenceSpliter {
 
-	private final static String sentenceModelFile = "src/main/resources/nlpmodels/en-sent.bin";
+	private final static String sentenceModelFile = "nlpmodels/en-sent.bin";
 
 	private SentenceModel sentenceModel;
 
@@ -56,7 +55,8 @@ public class OpenNLPSentenceSpliter {
 
 	private void initSentenceModel() throws IOException
 	{
-		InputStream modelIn = new FileInputStream(sentenceModelFile);
+		InputStream modelIn = OpenNLPSentenceSpliter.class.getClassLoader().getResourceAsStream(sentenceModelFile);
+//		InputStream modelIn = new FileInputStream(sentenceModelFile);
 		sentenceModel = new SentenceModel(modelIn);
 	}
 
