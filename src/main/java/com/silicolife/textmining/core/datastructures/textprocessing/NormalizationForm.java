@@ -8,7 +8,7 @@ package com.silicolife.textmining.core.datastructures.textprocessing;
  */
 public class NormalizationForm {
 	
-	private static String numbers = "-{0,1}\\d+?\\.\\d+|-{0,1}\\d+";
+private static String numbers = "-{0,1}\\d+?\\.\\d+|-{0,1}\\d+";
 
 	
 	public static String getNormalizationForm(String term)
@@ -62,6 +62,33 @@ public class NormalizationForm {
 		return text;
 	}
 	
+	public static String removeOffsetProblemSituationSubAbstractTags(String text) {
+		text = text.replaceAll("\\r", "");//.trim();
+		text = text.replaceAll("([a-zA-Z]{2,})[-|—|−]\\n{1}([a-zA-Z]{3,})", "$1$2"); // word break removal in pdf
+		text = text.replaceAll("\\n\\n", ". ");
+		text = text.replaceAll("\\n", " "); 
+		text = text.replaceAll("\\s", " ");
+		text = text.replaceAll("\\t", " ");
+		text = text.replaceAll("\\f", "");			
+		text = text.replaceAll("\\e", "");
+		text = text.replaceAll("\\c[", "");
+		text = text.replaceAll("<", "«");
+		text = text.replaceAll(">", "»");
+		text = text.replaceAll("·", ".");
+		text = text.replaceAll("\\Q", "");	
+		text = text.replaceAll("\\.{2,}\\s", ". ");
+		text = text.replaceAll("-\\r{0,1}\\n", "");
+		text = text.replaceAll("\\.([a-zA-Z]{1,})", ". $1");
+		text = text.replaceAll("’", "");
+		text = text.replaceAll("\u2019", "'");
+		text = text.replaceAll("\\s+", " ");
+		text = text.replaceAll("("+numbers+")\\s{0,1}[×x]\\s{0,1}10\\s{0,1}(\\d+)", "$1 x 10exp$2"); // convert numbers to cientific numbers
+		text = text.replaceAll( "([\\ud800-\\udbff])", ""); // remove invalid caracters
+		text = text.replaceAll( "([\\udc00-\\udfff])", ""); //  remove invalid caracters
+		text = text.replaceAll( "[−|—]", "-"); // Added to Ana project
+		return text;
+	}
+	
 	
 	
 	public static String removeOffsetProblemSituationWithoutXMLMarks(String text) {
@@ -79,5 +106,4 @@ public class NormalizationForm {
 		return text;
 	}
 	
-
 }
