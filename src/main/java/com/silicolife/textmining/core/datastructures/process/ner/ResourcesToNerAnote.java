@@ -18,8 +18,9 @@ public class ResourcesToNerAnote {
 	
 	public ResourcesToNerAnote()
 	{
-		list = new ArrayList<GenericTriple<IResource<IResourceElement>,Set<Long>,Set<Long>>>();
-
+		this.caseSensitive = NERCaseSensativeEnum.NONE;
+		this.list = new ArrayList<GenericTriple<IResource<IResourceElement>,Set<Long>,Set<Long>>>();
+		this.useOtherResourceInformationInRules = false;
 	}
 	
 	public ResourcesToNerAnote(NERCaseSensativeEnum caseSensitive,boolean useOtherResourceInformationInRules)
