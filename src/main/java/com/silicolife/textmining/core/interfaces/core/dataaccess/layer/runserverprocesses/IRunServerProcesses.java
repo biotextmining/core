@@ -1,7 +1,6 @@
 package com.silicolife.textmining.core.interfaces.core.dataaccess.layer.runserverprocesses;
 
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
-import com.silicolife.textmining.core.interfaces.process.IConfiguration;
 
 /**
  * 
@@ -13,6 +12,6 @@ import com.silicolife.textmining.core.interfaces.process.IConfiguration;
 public interface IRunServerProcesses {
 	
 	
-	public Boolean runServerProcesses(IConfiguration configuration) throws ANoteException;
+	public Boolean runServerProcesses(String klass, String configuration) throws ANoteException;
 
 }

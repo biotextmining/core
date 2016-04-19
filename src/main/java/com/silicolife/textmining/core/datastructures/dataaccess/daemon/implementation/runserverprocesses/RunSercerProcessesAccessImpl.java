@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.RestClientAccess;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.webserviceclient.DaemonResponse;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
-import com.silicolife.textmining.core.interfaces.process.IConfiguration;
 
 /**
  * Class which implements all run server processes daemon access methods
@@ -29,11 +28,13 @@ public class RunSercerProcessesAccessImpl extends RestClientAccess {
 	 * @return
 	 * @throws DaemonException
 	 */
-	public Boolean runSercerProcesses(IConfiguration configuration) throws DaemonException {
+	public Boolean runSercerProcesses(String klass,String json) throws DaemonException {
 		checkAndForceLoginIfNecessary();
-		
+		String[] parameters = new String[2];
+		parameters[0] = klass;
+		parameters[1] = json;
 		ParameterizedTypeReference<DaemonResponse<Boolean>> responseType = new ParameterizedTypeReference<DaemonResponse<Boolean>>() {};
-		ResponseEntity<DaemonResponse<Boolean>> response = webClient.post("runserverprocesses/configuration",responseType, configuration);
+		ResponseEntity<DaemonResponse<Boolean>> response = webClient.post("runserverprocesses/configuration",responseType, parameters);
 
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());

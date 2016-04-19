@@ -56,7 +56,6 @@ import com.silicolife.textmining.core.interfaces.core.user.IGroup;
 import com.silicolife.textmining.core.interfaces.core.user.IUser;
 import com.silicolife.textmining.core.interfaces.core.user.IUserDataObject;
 import com.silicolife.textmining.core.interfaces.core.utils.IGenericPair;
-import com.silicolife.textmining.core.interfaces.process.IConfiguration;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcessStatistics;
 import com.silicolife.textmining.core.interfaces.process.IE.re.IRelationsType;
@@ -847,8 +846,8 @@ public class DaemonAccess implements IDataAccess {
 	}
 
 	@Override
-	public Boolean runServerProcesses(IConfiguration configuration)throws ANoteException {
-		return runServerProcessesImpl.runSercerProcesses(configuration);
+	public Boolean runServerProcesses(String configurationUID,String configurationJson) throws ANoteException {
+		return runServerProcessesImpl.runSercerProcesses(configurationUID,configurationJson);
 		
 	}
 }

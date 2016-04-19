@@ -782,7 +782,7 @@ public class DataAccessStart implements IDataAccess {
 	}
 
 	@Override
-	public Boolean runServerProcesses(IConfiguration configuration) throws ANoteException {
+	public Boolean runServerProcesses(String klass,String configuration) throws ANoteException {
 		return null;
 		
 	}
