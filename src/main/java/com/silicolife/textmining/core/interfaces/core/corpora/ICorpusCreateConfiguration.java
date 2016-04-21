@@ -7,6 +7,7 @@ import com.silicolife.textmining.core.datastructures.corpora.CorpusImpl;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.CorpusTextType;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
+import com.silicolife.textmining.core.interfaces.process.IConfiguration;
 
 /**
  * Interface to define parameter to create Corpus
@@ -14,7 +15,7 @@ import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
  * @author Hugo Costa
  *
  */
-public interface ICorpusCreateConfiguration {
+public interface ICorpusCreateConfiguration extends IConfiguration{
 	
 	/**
 	 * Method that return corpus name
@@ -36,6 +37,13 @@ public interface ICorpusCreateConfiguration {
 	 */
 	public Set<IPublication> getDocuments();
 	
+	/**
+	 * Method that return set of {@link IPublication} for add  to new {@link ICorpus}
+	 * 
+	 * @return
+	 */
+	public Set<Long> getDocumentsIDs();
+	
 	
 	public void setDocuments(Set<IPublication> publictions);
 		
@@ -51,7 +59,7 @@ public interface ICorpusCreateConfiguration {
 	 * 
 	 * @return
 	 */
-	public boolean processJournalRetrievalBefore();
+	public boolean isProcessJournalRetrievalBeforeNeeded();
 	
 	public Properties getProperties();
 	

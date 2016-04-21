@@ -29,7 +29,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.hyperlink.IHyperLinkService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.processes.IProcessesService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.processes.ProcessesServiceImpl;
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.publications.PublicationsService;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.publications.IPublicationsService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.publications.PublicationsServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.queries.QueriesService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.queries.QueriesServiceImpl;
@@ -91,7 +91,7 @@ public class DatabaseAccess implements IDataAccess {
 	private ServiceRegistry servReg;
 	private ManagerDao managerDao;
 	private QueriesService queriesService;
-	private PublicationsService publicationsService;
+	private IPublicationsService publicationsService;
 	private PrivilegesService privilegesService;
 	private ResourcesService resourcesService;
 	private ClassesService classesService;

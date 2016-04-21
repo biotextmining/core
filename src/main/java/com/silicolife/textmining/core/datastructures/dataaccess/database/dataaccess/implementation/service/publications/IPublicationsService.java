@@ -15,7 +15,7 @@ import com.silicolife.textmining.core.interfaces.core.document.labels.IPublicati
  * @year 2015
  *
  */
-public interface PublicationsService {
+public interface IPublicationsService {
 
 	/**
 	 * Get publication by id (without fulltext)

@@ -44,7 +44,7 @@ import com.silicolife.textmining.core.interfaces.core.document.structure.IPublic
  */
 @Service
 @Transactional(readOnly = true)
-public class PublicationsServiceImpl implements PublicationsService {
+public class PublicationsServiceImpl implements IPublicationsService {
 
 	private PublicationsManagerDao publicationsManagerDao;
 	private UsersManagerDao usersManagerDao;
