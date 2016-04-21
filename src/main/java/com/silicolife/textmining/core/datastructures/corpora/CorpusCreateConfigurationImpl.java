@@ -5,13 +5,14 @@ import java.util.Properties;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.silicolife.textmining.core.datastructures.process.ConfigurationImpl;
 import com.silicolife.textmining.core.interfaces.core.corpora.ICorpusCreateConfiguration;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.CorpusTextType;
 
-public class CorpusCreateConfigurationImpl implements ICorpusCreateConfiguration{
+public class CorpusCreateConfigurationImpl extends ConfigurationImpl implements ICorpusCreateConfiguration{
 
-	public String configurationUID = "corpus.cretation";
+	public  static final String  configurationUID = "corpus.cretation";
 	
 	private String corpusName;
 	private String corpusNotes;
@@ -19,9 +20,14 @@ public class CorpusCreateConfigurationImpl implements ICorpusCreateConfiguration
 	private CorpusTextType corpusTextType;
 	private boolean processJournalRetrievalBeforeNeeded;
 	private Properties properties;
-	
-	
-	private CorpusCreateConfigurationImpl(String corpusName,String notes,Properties properties) {
+	private Set<Long> documentsIDs;
+
+	public CorpusCreateConfigurationImpl()
+	{
+		super();
+	}
+
+	public CorpusCreateConfigurationImpl(String corpusName,String notes,Properties properties) {
 		super();
 		this.corpusName = corpusName;
 		this.properties = properties;
@@ -30,14 +36,14 @@ public class CorpusCreateConfigurationImpl implements ICorpusCreateConfiguration
 	
 	public CorpusCreateConfigurationImpl(String corpusName,String notes, Set<IPublication> docIds,CorpusTextType corpusTextType, boolean processJournalRetrievalBeforeNeeded) {
 		this(corpusName,notes,new Properties());
-		this.docs = docIds;
+		setDocuments(docIds);
 		this.corpusTextType = corpusTextType;
 		this.processJournalRetrievalBeforeNeeded = processJournalRetrievalBeforeNeeded;
 	}
 	
 	public CorpusCreateConfigurationImpl(String corpusName,String notes, Set<IPublication> docIds,CorpusTextType corpusTextType, boolean processJournalRetrievalBeforeNeeded,Properties properties) {
 		this(corpusName,notes,properties);
-		this.docs = docIds;
+		setDocuments(docIds);
 		this.corpusTextType = corpusTextType;
 		this.processJournalRetrievalBeforeNeeded = processJournalRetrievalBeforeNeeded;
 	}
@@ -77,6 +83,9 @@ public class CorpusCreateConfigurationImpl implements ICorpusCreateConfiguration
 	@JsonIgnore
 	public void setDocuments(Set<IPublication> publictions) {
 		this.docs = publictions;
+		this.documentsIDs = new HashSet<>();
+		for(IPublication pub:publictions)
+			documentsIDs.add(pub.getId());
 	}
 
 	public String getConfigurationUID() {
@@ -84,18 +93,33 @@ public class CorpusCreateConfigurationImpl implements ICorpusCreateConfiguration
 	}
 
 	@Override
-	public void setConfigurationUID(String configurationUID) {
-		this.configurationUID=configurationUID;
+	public Set<Long> getDocumentsIDs() {
+		return documentsIDs;
+	}
+	
+	public void setCorpusName(String corpusName) {
+		this.corpusName = corpusName;
 	}
 
-	@Override
-	public Set<Long> getDocumentsIDs() {
-		Set<Long> documentIDs = new HashSet<>();
-		for(IPublication pub:getDocuments())
-		{
-			documentIDs.add(pub.getId());
-		}
-		return documentIDs;
+	public void setCorpusNotes(String corpusNotes) {
+		this.corpusNotes = corpusNotes;
+	}
+
+	public void setCorpusTextType(CorpusTextType corpusTextType) {
+		this.corpusTextType = corpusTextType;
+	}
+
+	public void setProcessJournalRetrievalBeforeNeeded(
+			boolean processJournalRetrievalBeforeNeeded) {
+		this.processJournalRetrievalBeforeNeeded = processJournalRetrievalBeforeNeeded;
+	}
+
+	public void setProperties(Properties properties) {
+		this.properties = properties;
+	}
+	
+	public void setDocumentsIDs(Set<Long> documentsIDs) {
+		this.documentsIDs = documentsIDs;
 	}
 
 }
