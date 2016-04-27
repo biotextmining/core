@@ -5,22 +5,22 @@ import java.util.Properties;
 import com.silicolife.textmining.core.datastructures.report.ReportImpl;
 import com.silicolife.textmining.core.interfaces.core.report.processes.INERProcessReport;
 import com.silicolife.textmining.core.interfaces.process.ProcessTypeEnum;
-import com.silicolife.textmining.core.interfaces.process.IE.INERProcess;
+import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 
 public class NERProcessReportImpl extends ReportImpl implements INERProcessReport{
 
 	private int numberOfDocuments;
 	private int entitiesExtracted;
-	private INERProcess nerProcess;
+	private IIEProcess nerProcess;
 	
-	public NERProcessReportImpl(String title,INERProcess process) {
+	public NERProcessReportImpl(String title,IIEProcess process) {
 		super(title);
 		this.numberOfDocuments = 0;
 		this.entitiesExtracted = 0;
 		this.nerProcess = process;
 	}
 	
-	public NERProcessReportImpl(String title,Properties prop,INERProcess process) {
+	public NERProcessReportImpl(String title,Properties prop,IIEProcess process) {
 		super(title,prop);
 		this.numberOfDocuments = 0;
 		this.entitiesExtracted = 0;
@@ -48,7 +48,7 @@ public class NERProcessReportImpl extends ReportImpl implements INERProcessRepor
 	}
 
 	@Override
-	public INERProcess getNERProcess() {
+	public IIEProcess getNERProcess() {
 		return nerProcess;
 	}
 	

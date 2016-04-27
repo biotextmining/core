@@ -94,9 +94,13 @@ public class OtherConfigurations {
 			ArrayList<String> elements = new ArrayList<String>();
 			elements.add("Number-Threads");
 			List<String> data = InitConfiguration.getElementByXMLFile(GlobalOptions.otherConfigurationFile,elements);
-			if(data.size()>0 && data.get(0)!=null)
+			if(data!=null && data.size()>0 && data.get(0)!=null)
 			{
 				GlobalOptions.threadsNumber = Integer.valueOf(data.get(0));
+			}
+			else
+			{
+				GlobalOptions.threadsNumber= 2;
 			}
 		}
 		return GlobalOptions.threadsNumber;
@@ -108,9 +112,13 @@ public class OtherConfigurations {
 			ArrayList<String> elements = new ArrayList<String>();
 			elements.add("Free-Full-Text-Only");
 			List<String> data = InitConfiguration.getElementByXMLFile(GlobalOptions.otherConfigurationFile,elements);
-			if(data.size()>0 && data.get(0)!=null)
+			if(data!=null && data.size()>0 && data.get(0)!=null)
 			{
 				GlobalOptions.freeFullTextOnly = Boolean.valueOf(data.get(0));
+			}
+			else
+			{
+				GlobalOptions.freeFullTextOnly = true;
 			}
 		}
 		return GlobalOptions.freeFullTextOnly;
@@ -123,9 +131,13 @@ public class OtherConfigurations {
 			ArrayList<String> elements = new ArrayList<String>();
 			elements.add("Dictionary-View-Search-Synonyms");
 			List<String> data = InitConfiguration.getElementByXMLFile(GlobalOptions.otherConfigurationFile,elements);
-			if(data.size()>0 && data.get(0)!=null)
+			if(data!=null && data.size()>0 && data.get(0)!=null)
 			{
 				GlobalOptions.dictionaryViewSearchForSynonyms = Boolean.valueOf(data.get(0));
+			}
+			else
+			{
+				GlobalOptions.dictionaryViewSearchForSynonyms = true;
 			}
 		}
 		return GlobalOptions.dictionaryViewSearchForSynonyms;
@@ -138,7 +150,7 @@ public class OtherConfigurations {
 			ArrayList<String> elements = new ArrayList<String>();
 			elements.add("Highlight-Color");
 			List<String> data = InitConfiguration.getElementByXMLFile(GlobalOptions.otherConfigurationFile,elements);
-			if(data.size()>0 && data.get(0)!=null)
+			if(data!=null && data.size()>0 && data.get(0)!=null)
 			{
 				GlobalOptions.highlightColor = data.get(0);
 			}

@@ -8,7 +8,6 @@ import com.silicolife.textmining.core.interfaces.core.report.processes.IREProces
 import com.silicolife.textmining.core.interfaces.core.report.processes.manualcuration.INERSchemaWithManualCurationReport;
 import com.silicolife.textmining.core.interfaces.core.report.processes.manualcuration.IRESchemaWithManualCurationReport;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
-import com.silicolife.textmining.core.interfaces.process.IE.INERProcess;
 import com.silicolife.textmining.core.interfaces.process.IE.IREProcess;
 
 public class REProcessReportImpl extends NERProcessReportImpl implements IREProcessReport{
@@ -30,7 +29,7 @@ public class REProcessReportImpl extends NERProcessReportImpl implements IREProc
 		this.useMCAnnoations = useMCAnnoations;
 	}
 	
-	public REProcessReportImpl(String title,Properties prop,INERProcess process)
+	public REProcessReportImpl(String title,Properties prop,IIEProcess process)
 	{
 		super(title,prop,null);
 		this.nerProcess = process;

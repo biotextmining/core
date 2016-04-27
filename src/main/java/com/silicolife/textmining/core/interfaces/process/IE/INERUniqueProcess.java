@@ -22,7 +22,7 @@ public interface INERUniqueProcess{
 	 * Method that give a instance of NER process
 	 * 
 	 * 
-	 * @param configuration
+	 * @param progress
 	 * @return
 	 * @throws NERWrongConfigurationException
 	 * @throws DatabaseLoadDriverException
