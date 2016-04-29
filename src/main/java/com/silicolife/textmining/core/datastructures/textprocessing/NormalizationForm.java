@@ -45,13 +45,13 @@ private static String numbers = "-{0,1}\\d+?\\.\\d+|-{0,1}\\d+";
 		text = text.replaceAll("\\f", "");			
 		text = text.replaceAll("\\e", "");
 		text = text.replaceAll("\\c[", "");
-		text = text.replaceAll("<", "«");
-		text = text.replaceAll(">", "»");
+		text = text.replaceAll("«", "<");
+		text = text.replaceAll("»", ">");
 		text = text.replaceAll("·", ".");
 		text = text.replaceAll("\\Q", "");	
 		text = text.replaceAll("\\.{2,}\\s", ". ");
 		text = text.replaceAll("-\\r{0,1}\\n", "");
-		text = text.replaceAll("\\.([a-zA-Z]{1,})", ". $1");
+		text = text.replaceAll("\\.([a-zA-Z]{1,})", ". $1"); // CASES LIKE "i.e." will be converted to "i. e.", it need to be reviewed.
 		text = text.replaceAll("’", "");
 		text = text.replaceAll("\u2019", "'");
 		text = text.replaceAll("\\s+", " ");
@@ -72,8 +72,8 @@ private static String numbers = "-{0,1}\\d+?\\.\\d+|-{0,1}\\d+";
 		text = text.replaceAll("\\f", "");			
 		text = text.replaceAll("\\e", "");
 		text = text.replaceAll("\\c[", "");
-		text = text.replaceAll("<", "«");
-		text = text.replaceAll(">", "»");
+		text = text.replaceAll("«", "<");
+		text = text.replaceAll("»", ">");
 		text = text.replaceAll("·", ".");
 		text = text.replaceAll("\\Q", "");	
 		text = text.replaceAll("\\.{2,}\\s", ". ");
@@ -104,6 +104,11 @@ private static String numbers = "-{0,1}\\d+?\\.\\d+|-{0,1}\\d+";
 		text = text.replaceAll("\\s+", " ");
 		text = text.replaceAll("> ", ">");
 		return text;
+	}
+	
+	public static void main(String[] args) {
+		String text = "Some culture filtrates or enterotoxin preparations from enterobacteria that activate the adenylate cyclase system (vibrio cholerae, LT fraction from escherichia coli and klebsiella pneumoniae, shigella dysenteriae type 1) exibit an inhibiting effect on ADP-induced platelet aggregation, while other enterotoxin preparations not effective on adenylate cyclase system, don't interfere with this model. The A. propose the platelet aggregation as cellular assay to detect enterotoxin fractions effective upon adenylate cyclase system.";
+		System.out.println(removeOffsetProblemSituation(text));
 	}
 	
 }
