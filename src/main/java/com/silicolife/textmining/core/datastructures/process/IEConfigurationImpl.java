@@ -5,7 +5,7 @@ import java.util.Properties;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEConfiguration;
 
-public abstract class IEConfigurationImpl implements IIEConfiguration{
+public class IEConfigurationImpl extends ConfigurationImpl implements IIEConfiguration{
 	
 	private ICorpus corpus;
 	private String notes;
