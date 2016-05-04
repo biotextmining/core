@@ -85,7 +85,7 @@ public class OtherConfigurations {
 		ArrayList<GenericPairC<String, String>> changes = new ArrayList<GenericPairC<String,String>>();
 		changes.add(new GenericPairC<String, String>("Using-Title-In-Abstract",String.valueOf(usingTitleInAbstract)));
 		InitConfiguration.setXmlProperties(GlobalOptions.otherConfigurationFile, changes);	
-		GlobalOptions.usingTitleInAbstract = false;
+		GlobalOptions.usingTitleInAbstract = usingTitleInAbstract;
 	}
 
 	public static int getThreadsNumber() {
