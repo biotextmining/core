@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.silicolife.textmining.core.datastructures.utils.GenericTriple;
 import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
 import com.silicolife.textmining.core.interfaces.resource.IResource;
@@ -37,6 +38,7 @@ public class ResourcesToNerAnote {
 		list.add(triple);
 	}
 	
+	@JsonIgnore
 	public void addUsingAnoteClasses(IResource<IResourceElement> resElem,Set<IAnoteClass> resourceClassContent,Set<IAnoteClass> selectedClasssContent) {
 		Set<Long> classContent = new HashSet<>();
 		Set<Long> selectedClass = new HashSet<>();
@@ -50,13 +52,27 @@ public class ResourcesToNerAnote {
 	public List<GenericTriple<IResource<IResourceElement>, Set<Long>, Set<Long>>> getList() {
 		return list;
 	}
+	
+	@JsonIgnore
+	public void setList(List<GenericTriple<IResource<IResourceElement>, Set<Long>, Set<Long>>> list) {
+		this.list = list;
+	}
 
 	public NERCaseSensativeEnum getCaseSensitive() {
 		return caseSensitive;
 	}
-
+	
+	public void setCaseSensitive(NERCaseSensativeEnum caseSensitive) {
+		this.caseSensitive = caseSensitive;
+	}
+	
 	public boolean isUseOtherResourceInformationInRules() {
 		return useOtherResourceInformationInRules;
+	}
+
+	public void setUseOtherResourceInformationInRules(
+			boolean useOtherResourceInformationInRules) {
+		this.useOtherResourceInformationInRules = useOtherResourceInformationInRules;
 	}
 
 	public boolean containsResource(IResource<IResourceElement> x) {
