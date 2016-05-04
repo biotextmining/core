@@ -22,7 +22,7 @@ public class CorpusImpl extends Observable implements ICorpus {
 	private String description;
 	private String notes;
 	private Properties properties;
-	private IDocumentSet documentSet;
+	protected IDocumentSet documentSet;
 	private List<IIEProcess> processesList;
 
 	public CorpusImpl() {
