@@ -9,9 +9,9 @@ public interface IIEConfiguration extends IConfiguration{
 	
 	public ICorpus getCorpus();
 	public void setCorpus(ICorpus corpus);
-	public String getNotes();
-	public void setNotes(String notes);
-	public String getName();
+	public String getProcessNotes();
+	public void setProcessNotes(String notes);
+	public String getProcessName();
 	public Properties getProperties();
 	
 }

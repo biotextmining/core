@@ -11,7 +11,6 @@ import com.silicolife.textmining.core.interfaces.process.IE.IIEConfiguration;
  *
  */
 public interface INERConfiguration extends IIEConfiguration{
-	public String getName();
 	public String getUniqueProcessID();
 	public Map<String, String> getNERProperties();
 	public void setConfiguration(Object obj);
