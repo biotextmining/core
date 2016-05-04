@@ -162,7 +162,7 @@ public class InitConfiguration {
 		}
 	}
 
-	public synchronized static IDataAccess getDataAccess() throws ANoteException {
+	public synchronized static IDataAccess getDataAccess() {
 		return dataAccess;
 	}
 	
