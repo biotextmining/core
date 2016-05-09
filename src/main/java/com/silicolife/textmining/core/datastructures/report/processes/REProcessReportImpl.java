@@ -8,18 +8,17 @@ import com.silicolife.textmining.core.interfaces.core.report.processes.IREProces
 import com.silicolife.textmining.core.interfaces.core.report.processes.manualcuration.INERSchemaWithManualCurationReport;
 import com.silicolife.textmining.core.interfaces.core.report.processes.manualcuration.IRESchemaWithManualCurationReport;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
-import com.silicolife.textmining.core.interfaces.process.IE.IREProcess;
 
 public class REProcessReportImpl extends NERProcessReportImpl implements IREProcessReport{
 
 	private int numberOfRElations;
 	private IIEProcess nerProcess;
-	private IREProcess reProcess;
+	private IIEProcess reProcess;
 	private IRESchemaWithManualCurationReport reSchemaManualCurationReport;
 	private INERSchemaWithManualCurationReport nerSchemaManualCurationReport;
 	private boolean useMCAnnoations;
 	
-	public REProcessReportImpl(String title,IIEProcess ieProcess,IREProcess reProcess,boolean useMCAnnoations) {
+	public REProcessReportImpl(String title,IIEProcess ieProcess,IIEProcess reProcess,boolean useMCAnnoations) {
 		super(title,null);
 		this.nerProcess = ieProcess;
 		this.numberOfRElations = 0;
@@ -48,7 +47,7 @@ public class REProcessReportImpl extends NERProcessReportImpl implements IREProc
 		this.numberOfRElations +=newRelations;
 	}
 
-	public IREProcess getREProcess() {
+	public IIEProcess getREProcess() {
 		return reProcess;
 	}
 
