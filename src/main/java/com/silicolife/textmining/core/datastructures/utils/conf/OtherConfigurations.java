@@ -71,6 +71,7 @@ public class OtherConfigurations {
 			if(data!=null && data.size()>0 && data.get(0)!=null)
 			{
 				GlobalOptions.usingTitleInAbstract = Boolean.valueOf(data.get(0));
+				InitConfiguration.addProperty("Using-Title-In-Abstract", data.get(0));
 			}
 			else
 			{
@@ -84,7 +85,8 @@ public class OtherConfigurations {
 	public static void setUsingTitleInAbstract(boolean usingTitleInAbstract) {
 		ArrayList<GenericPairC<String, String>> changes = new ArrayList<GenericPairC<String,String>>();
 		changes.add(new GenericPairC<String, String>("Using-Title-In-Abstract",String.valueOf(usingTitleInAbstract)));
-		InitConfiguration.setXmlProperties(GlobalOptions.otherConfigurationFile, changes);	
+		InitConfiguration.setXmlProperties(GlobalOptions.otherConfigurationFile, changes);
+		InitConfiguration.addProperty("Using-Title-In-Abstract", String.valueOf(usingTitleInAbstract));
 		GlobalOptions.usingTitleInAbstract = usingTitleInAbstract;
 	}
 

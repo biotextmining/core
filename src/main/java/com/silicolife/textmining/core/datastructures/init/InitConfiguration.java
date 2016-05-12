@@ -33,7 +33,8 @@ public class InitConfiguration {
 	private InitConfiguration() throws ANoteException
 	{
 		DataAccessManager dataAccessManager = (DataAccessManager) PropertiesManager.getPManager().getProperty(DataAccessDefaultSettings.DATAACCESS_SELECTED);
-		dataAccess = dataAccessManager.getCurrent();	
+		dataAccess = dataAccessManager.getCurrent();
+		properties = new Properties();
 	}
 	
 	public static void login(UsersLogged userlogged) throws ANoteException
@@ -182,7 +183,7 @@ public class InitConfiguration {
 	
 	public static String getPropertyValue(String key)
 	{
-		if(properties==null)
+		if(properties.isEmpty())
 		{
 			return null;
 		}
