@@ -26,6 +26,10 @@ public class LexicalWordsImpl  extends ResourceImpl implements ILexicalWords{
 	private List<Long> insertedTermIDList;
 	private boolean cancel = false;
 	
+	public LexicalWordsImpl()
+	{
+		super();
+	}
 	
 	public LexicalWordsImpl(long id, String name, String info,boolean active) {
 		super(id, name, info,ResourcesTypeEnum.lexicalwords.toString(), active);

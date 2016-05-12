@@ -16,6 +16,11 @@ public class RelationTypeImpl implements  IRelationsType{
 	private long rightClassID;
 
 
+	public RelationTypeImpl()
+	{
+		
+	}
+	
 	public RelationTypeImpl(long leftClassID, long rightClassID) {
 		super();
 		this.leftClassID = leftClassID;
@@ -26,10 +31,18 @@ public class RelationTypeImpl implements  IRelationsType{
 		return rightClassID;
 	}
 
+	public void setRightClassID(long rightClassID) {
+		this.rightClassID = rightClassID;
+	}
+
 	public Long getLeftClassID() {
 		return leftClassID;
 	}
 	
+	public void setLeftClassID(long leftClassID) {
+		this.leftClassID = leftClassID;
+	}
+
 	public int compareTo(IRelationsType o) {
 		if(this.leftClassID==o.getLeftClassID())
 		{
