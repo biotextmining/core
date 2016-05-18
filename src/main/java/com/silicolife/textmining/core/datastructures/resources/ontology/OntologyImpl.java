@@ -7,6 +7,8 @@ import com.silicolife.textmining.core.datastructures.init.InitConfiguration;
 import com.silicolife.textmining.core.datastructures.language.LanguageProperties;
 import com.silicolife.textmining.core.datastructures.resources.ResourceImpl;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
+import com.silicolife.textmining.core.interfaces.resource.IResource;
+import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 import com.silicolife.textmining.core.interfaces.resource.ResourcesTypeEnum;
 import com.silicolife.textmining.core.interfaces.resource.ontologies.IOntology;
 import com.silicolife.textmining.core.interfaces.resource.ontologies.IResourceElementsRelation;
@@ -22,6 +24,9 @@ public class OntologyImpl extends ResourceImpl implements IOntology{
 		super(name, info, ResourcesTypeEnum.ontology.toString(), active);
 	}
 	
+	public OntologyImpl(IResource<IResourceElement> resource) {
+		this(resource.getId(),resource.getName(),resource.getInfo(),resource.isActive());
+	}
 	
 	public OntologyImpl() {
 		super();
