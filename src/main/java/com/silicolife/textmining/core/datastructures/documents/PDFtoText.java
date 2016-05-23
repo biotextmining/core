@@ -1,14 +1,25 @@
 package com.silicolife.textmining.core.datastructures.documents;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.imageio.IIOImage;
 
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.util.PDFTextStripper;
 
 import com.silicolife.textmining.core.datastructures.textprocessing.NormalizationForm;
+
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
+import net.sourceforge.tess4j.util.ImageIOHelper;
 
 public class PDFtoText {
 
@@ -25,7 +36,27 @@ public class PDFtoText {
 		doc.close();
 		return NormalizationForm.removeOffsetProblemSituation(text);
 	}
-
+	
+	public static String convertEncryptedPDFDocument(String url) throws IOException, TesseractException{
+		int imageDPIValue = 300;
+		PDDocument document = PDDocument.loadNonSeq(new File(url), null);
+		@SuppressWarnings("unchecked")
+		List<PDPage> pdPages = document.getDocumentCatalog().getAllPages();
+		List<BufferedImage> imagesPages = new ArrayList<>();
+		for (PDPage pdPage : pdPages){ 
+			imagesPages.add(pdPage.convertToImage(BufferedImage.TYPE_INT_RGB, imageDPIValue));
+		}
+		document.close();
+		Tesseract tessaract = new Tesseract();
+		tessaract.setDatapath("src/main/resources");
+		List<IIOImage> pagesToOCR = new ArrayList<>();
+		for(BufferedImage image :imagesPages){
+			List<IIOImage> content = ImageIOHelper.getIIOImageList(image);
+			pagesToOCR.addAll(content);
+		}
+		String originalText = tessaract.doOCR(pagesToOCR, null);
+		return NormalizationForm.removeOffsetProblemSituation(originalText);
+	}
 
 }
 
