@@ -17,6 +17,7 @@ import org.apache.pdfbox.util.PDFTextStripper;
 
 import com.silicolife.textmining.core.datastructures.textprocessing.NormalizationForm;
 
+import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import net.sourceforge.tess4j.util.ImageIOHelper;
@@ -34,6 +35,22 @@ public class PDFtoText {
 		String text = stripper.getText(doc);
 		parser.clearResources();
 		doc.close();
+		if(text==null || text.isEmpty())
+		{
+			try {
+				text =  fileOCR(url);
+			} catch (TesseractException e) {
+				text = new String();
+			}
+		}
+		if(text==null || text.isEmpty())
+		{
+			try {
+				text =  convertEncryptedPDFDocument(url);
+			} catch (TesseractException e) {
+				text = new String();
+			}
+		}
 		return NormalizationForm.removeOffsetProblemSituation(text);
 	}
 	
@@ -56,6 +73,19 @@ public class PDFtoText {
 		}
 		String originalText = tessaract.doOCR(pagesToOCR, null);
 		return NormalizationForm.removeOffsetProblemSituation(originalText);
+	}
+	
+	/**
+	 * Apply OCR algorithm to a PDF file given an pathway to the file
+	 * 
+	 */
+	public static String fileOCR (String pdfPath) throws IOException, TesseractException{
+		File imageFile = new File(pdfPath);
+		List<IIOImage> imageList = ImageIOHelper.getIIOImageList(imageFile);
+		ITesseract instance = new Tesseract();
+		instance.setDatapath("src/main/resources");
+		String result = instance.doOCR(imageList, null);
+		return result;
 	}
 
 }
