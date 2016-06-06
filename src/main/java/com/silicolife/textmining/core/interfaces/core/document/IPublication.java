@@ -188,4 +188,17 @@ public interface IPublication {
 	
 	public void setSourceURL(String sourceURL);
 
+	public void setTitle(String title);
+
+	public void setAuthors(String authors);
+
+	public void setYeardate(String date);
+	
+	public void setPublicationExternalIDSource(List<IPublicationExternalSourceLink> publicationExternalIDSource);
+
+	public void setPublicationFields(List<IPublicationField> publicationFields);
+
+	public void setPublicationLabels(List<IPublicationLabel> publicationLabels);
+
+
 }
