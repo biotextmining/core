@@ -2,6 +2,7 @@ package com.silicolife.textmining.core.datastructures.documents;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
@@ -52,7 +53,26 @@ public class PublicationImpl extends Observable implements IPublication {
 	// protected String sourceURL;
 
 	public PublicationImpl() {
-
+		this.id = GenerateRandomId.generateID();
+		this.title = new String();
+		this.authors = new String();
+		this.type = new String();
+		this.yeardate = new String();
+		this.fulldate = new String();
+		this.status = new String();
+		this.journal = new String();
+		this.volume = new String();
+		this.issue = new String();
+		this.pages = new String();
+		this.abstractSection = new String();
+		this.externalLink = new String();
+		this.freeFullText = false;
+		this.fullTextContent = null;
+		this.relativePath = new String();
+		this.notes = new String();
+		this.publicationExternalIDSource = new ArrayList<>();
+		this.publicationFields = new ArrayList<>();
+		this.publicationLabels = new ArrayList<>();
 	}
 
 	public PublicationImpl(IPublication pub) {
