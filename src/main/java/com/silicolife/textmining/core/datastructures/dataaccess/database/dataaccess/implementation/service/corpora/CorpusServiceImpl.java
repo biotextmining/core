@@ -175,6 +175,36 @@ public class CorpusServiceImpl implements ICorpusService {
 
 		return documentSet;
 	}
+	
+	@Override
+	public Long getCorpusPublicationsCount(Long corpusId) throws CorpusException {
+		Corpus corpus = corpusManagerDao.getCorpusDao().findById(corpusId);
+		if (corpus == null)
+			throw new CorpusException(ExceptionsCodes.codeNoCorpus, ExceptionsCodes.msgNoCorpus);
+		
+		Long count = corpusManagerDao.getPublicationsAuxDao().countPublicationsByCorpusId(corpusId);
+		return count;
+
+	}
+	
+	@Override
+	public IDocumentSet getCorpusPublicationsPaginated(Long corpusId, Integer paginationIndex, Integer paginationSize) throws CorpusException {
+		Corpus corpus = corpusManagerDao.getCorpusDao().findById(corpusId);
+		if (corpus == null)
+			throw new CorpusException(ExceptionsCodes.codeNoCorpus, ExceptionsCodes.msgNoCorpus);
+
+		IDocumentSet documentSet = new DocumentSetImpl();
+		List<Publications> publications = corpusManagerDao.getPublicationsAuxDao().findPublicationsByCorpusIdPaginated(corpusId, paginationIndex, paginationSize);
+		for (Publications publication : publications) {
+			IPublication publication_ = PublicationsWrapper.convertToAnoteStructure(publication);
+			documentSet.addDocument(publication_.getId(), publication_);
+		}
+
+//		if (documentSet.size() == 0)
+//			return null;
+
+		return documentSet;
+	}
 
 	@Override
 	public List<IIEProcess> getCorpusProcesses(Long corpusId) throws CorpusException {

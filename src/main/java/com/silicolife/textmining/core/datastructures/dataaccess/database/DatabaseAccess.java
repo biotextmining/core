@@ -108,7 +108,7 @@ public class DatabaseAccess implements IDataAccess {
 
 	private String hibernateFilePath;
 
-	
+
 	public DatabaseAccess(IDatabase db,String hibernateFilePath) {
 		this.db = db;
 		this.hibernateFilePath=hibernateFilePath;
@@ -124,9 +124,9 @@ public class DatabaseAccess implements IDataAccess {
 
 	private void setHibernateConfiguration(IDatabase db) {
 		File file = new File(hibernateFilePath);
-		
+
 		configuration = new Configuration().configure(file);
-		
+
 		configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
 		configuration.setProperty("hibernate.connection.url", db.getDataBaseURL());
 		configuration.setProperty("hibernate.connection.username", db.getUser());
@@ -135,8 +135,8 @@ public class DatabaseAccess implements IDataAccess {
 
 		servReg = new StandardServiceRegistryBuilder().configure(file).applySettings(configuration.getProperties()).build();
 		sessionFactory = configuration.buildSessionFactory(servReg);
-		
-		
+
+
 		userLogged = new UsersLoggedImpl();
 		managerDao = new ManagerDao(sessionFactory);
 		queriesService = new QueriesServiceImpl(managerDao.getQueriesManagerDao(), managerDao.getUsersManagerDao(), userLogged);
@@ -151,7 +151,7 @@ public class DatabaseAccess implements IDataAccess {
 		annotationService = new AnnotationServiceImpl(managerDao.getAnnotationManagerDao(),managerDao.getProcessServiceDao(),managerDao.getCorpusManagerDao(),
 				managerDao.getResourcesManagerDao(),managerDao.getUsersManagerDao(), userLogged);
 		hyperLinkService = new HyperLinkServiceImpl(managerDao.getHyperLinkMenuDao(), userLogged);
-		
+
 		clusteringService = new ClusteringServiceImpl(managerDao.getClusterManagerDao(), managerDao.getUsersManagerDao(), managerDao.getQueriesManagerDao(), userLogged);
 	}
 
@@ -609,6 +609,32 @@ public class DatabaseAccess implements IDataAccess {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IDocumentSet corpusDocumentSet = corpusService.getCorpusPublications(corpus.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return corpusDocumentSet;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Long getCorpusPublicationsCount(ICorpus corpus) throws ANoteException{
+		try{
+			sessionFactory.getCurrentSession().beginTransaction();
+			Long documentsCount = corpusService.getCorpusPublicationsCount(corpus.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return documentsCount;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public IDocumentSet getCorpusPublicationsPaginated(ICorpus corpus, Integer paginationIndex, Integer paginationSize) throws ANoteException{
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IDocumentSet corpusDocumentSet = corpusService.getCorpusPublicationsPaginated(corpus.getId(), paginationIndex, paginationSize);
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return corpusDocumentSet;
 		} catch (RuntimeException e) {
@@ -1602,7 +1628,7 @@ public class DatabaseAccess implements IDataAccess {
 			sessionFactory.getCurrentSession().getTransaction().rollback();
 			throw new ANoteException(e);
 		}
-		
+
 	}
 
 	@Override
@@ -1692,7 +1718,7 @@ public class DatabaseAccess implements IDataAccess {
 			sessionFactory.getCurrentSession().getTransaction().rollback();
 			throw new ANoteException(e);
 		}
-		
+
 	}
 
 	@Override
@@ -1705,12 +1731,13 @@ public class DatabaseAccess implements IDataAccess {
 			sessionFactory.getCurrentSession().getTransaction().rollback();
 			throw new ANoteException(e);
 		}
-		
+
 	}
 
 	@Override
 	public Boolean runServerProcesses(String klass,String configuration) throws ANoteException {
 		throw new ANoteException("Method not available in Database Access");
-		
+
 	}
+
 }

@@ -57,6 +57,35 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 
 		return publications;
 	}
+	
+	@Override
+	public Long countPublicationsByCorpusId(Long corpusId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Publications.class, "pub");
+		c.createAlias("pub.corpusHasPublicationses", "corpusHasPub");
+		c.setFetchMode("pub.corpusHasPublicationses", FetchMode.JOIN);
+		c.add(Restrictions.eq("corpusHasPub.id.chpCorpusId", corpusId));
+		c.setProjection(Projections.rowCount());
+		Long count = (Long) c.uniqueResult();
+		return count;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Publications> findPublicationsByCorpusIdPaginated(Long corpusId, Integer paginationIndex, Integer paginationSize) {
+
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Publications.class, "pub");
+		c.createAlias("pub.corpusHasPublicationses", "corpusHasPub");
+		c.setFetchMode("pub.corpusHasPublicationses", FetchMode.JOIN);
+		c.add(Restrictions.eq("corpusHasPub.id.chpCorpusId", corpusId));
+		c.setFirstResult(paginationIndex);
+		c.setMaxResults(paginationSize);
+
+		List<Publications> publications = c.list();
+
+		return publications;
+	}
 
 	@Override
 	public Publications getPublicationFullText(Long publicationId) {
@@ -113,4 +142,6 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 		List<Object> response = c.list();
 		return response;
 	}
+
+
 }

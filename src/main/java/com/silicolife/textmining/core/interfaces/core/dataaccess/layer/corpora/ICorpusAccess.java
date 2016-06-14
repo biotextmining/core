@@ -89,6 +89,26 @@ public interface ICorpusAccess extends IIEProcessAccess, IAnnotationAccess, IAnn
 	public IDocumentSet getCorpusPublications(ICorpus corpus) throws ANoteException;
 	
 	/**
+	 * Get number of IPublications present in a Corpus
+	 * 
+	 * @param corpus
+	 * @return
+	 * @throws ANoteException
+	 */
+	public Long getCorpusPublicationsCount(ICorpus corpus) throws ANoteException;
+	
+	/**
+	 * Get DocumentSet present in a range of documents from a Corpus
+	 * 
+	 * @param corpus
+	 * @param paginationIndex
+	 * @param paginationSize
+	 * @return
+	 * @throws ANoteException
+	 */
+	public IDocumentSet getCorpusPublicationsPaginated(ICorpus corpus, Integer paginationIndex, Integer paginationSize) throws ANoteException;
+	
+	/**
 	 * Add Corpus Publication - If publication not exists will be create
 	 * 
 	 * @param corpus

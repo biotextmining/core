@@ -33,6 +33,8 @@ public class RunSercerProcessesAccessImpl extends RestClientAccess {
 		String[] parameters = new String[2];
 		parameters[0] = klass;
 		parameters[1] = json;
+		System.out.println(klass);
+		System.out.println(json);
 		ParameterizedTypeReference<DaemonResponse<Boolean>> responseType = new ParameterizedTypeReference<DaemonResponse<Boolean>>() {};
 		ResponseEntity<DaemonResponse<Boolean>> response = webClient.post("runserverprocesses/configuration",responseType, parameters);
 

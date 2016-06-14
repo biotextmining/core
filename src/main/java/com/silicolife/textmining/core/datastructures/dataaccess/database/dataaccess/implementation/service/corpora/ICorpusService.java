@@ -57,6 +57,26 @@ public interface ICorpusService {
 	public IDocumentSet getCorpusPublications(Long corpusId) throws CorpusException;
 	
 	/**
+	 * Get all publications count from a corpus
+	 * 
+	 * @param corpusId
+	 * @return
+	 * @throws CorpusException
+	 */
+	public Long getCorpusPublicationsCount(Long corpusId) throws CorpusException;
+	
+	/**
+	 * Get a page in database of publications from corpus 
+	 * 
+	 * @param corpusId
+	 * @param paginationIndex
+	 * @param paginationSize
+	 * @return
+	 * @throws CorpusException
+	 */
+	public IDocumentSet getCorpusPublicationsPaginated(Long corpusId, Integer paginationIndex, Integer paginationSize)throws CorpusException;
+	
+	/**
 	 * Get processes from a corpus
 	 * 
 	 * @param corpusId
@@ -107,6 +127,5 @@ public interface ICorpusService {
 	 * @return
 	 */
 	public List<ICorpus> getAllPrivilegesCorpusAdminAccess();
-	
-	
+
 }

@@ -34,7 +34,6 @@ import com.silicolife.textmining.core.interfaces.core.user.IGroup;
 import com.silicolife.textmining.core.interfaces.core.user.IUser;
 import com.silicolife.textmining.core.interfaces.core.user.IUserDataObject;
 import com.silicolife.textmining.core.interfaces.core.utils.IGenericPair;
-import com.silicolife.textmining.core.interfaces.process.IConfiguration;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcessStatistics;
 import com.silicolife.textmining.core.interfaces.process.IE.re.IRelationsType;
@@ -785,6 +784,19 @@ public class DataAccessStart implements IDataAccess {
 	public Boolean runServerProcesses(String klass,String configuration) throws ANoteException {
 		return null;
 		
+	}
+
+	@Override
+	public Long getCorpusPublicationsCount(ICorpus corpus) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IDocumentSet getCorpusPublicationsPaginated(ICorpus corpus, Integer paginationIndex, Integer paginationSize)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

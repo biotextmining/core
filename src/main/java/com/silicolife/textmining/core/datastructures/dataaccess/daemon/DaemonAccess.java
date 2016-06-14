@@ -378,6 +378,18 @@ public class DaemonAccess implements IDataAccess {
 	}
 
 	@Override
+	public Long getCorpusPublicationsCount(ICorpus corpus) throws ANoteException {
+		Long count = corpusAccessImpl.getCorpusPublicationsCount(corpus.getId());
+		return count;
+	}
+
+	@Override
+	public IDocumentSet getCorpusPublicationsPaginated(ICorpus corpus, Integer paginationIndex, Integer paginationSize) throws ANoteException {
+		IDocumentSet documentSet = corpusAccessImpl.getCorpusPublicationsPaginated(corpus.getId(), paginationIndex, paginationSize);
+		return documentSet;
+	}
+
+	@Override
 	public void createIEProcess(IIEProcess processe) throws ANoteException {
 		processAccessImpl.createIEProcess(processe);
 	}
@@ -850,4 +862,5 @@ public class DaemonAccess implements IDataAccess {
 		return runServerProcessesImpl.runSercerProcesses(configurationUID,configurationJson);
 		
 	}
+
 }

@@ -9,6 +9,10 @@ public interface PublicationsAuxDao {
 	public List<Publications> findPublicationsByQueryId(Long queryId);
 
 	public List<Publications> findPublicationsByCorpusId(Long corpusId);
+	
+	public Long countPublicationsByCorpusId(Long corpusId);
+	
+	public List<Publications> findPublicationsByCorpusIdPaginated(Long corpusId, Integer paginationIndex, Integer paginationSize);
 
 	public Publications getPublicationFullText(Long publicationId);
 	
