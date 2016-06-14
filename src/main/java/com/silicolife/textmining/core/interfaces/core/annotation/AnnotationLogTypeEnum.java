@@ -10,15 +10,18 @@ public enum AnnotationLogTypeEnum {
 	ENTITYADD,
 	ENTITYREMOVE,
 	ENTITYUPDATE,
+	ENTITYVALIDATED,
 	RELATIONADD,
 	RELATIONREMOVE,
-	RELATIONUPDATE;
+	RELATIONUPDATE,
+	RELATIONVALIDATED;
 	
 	public static boolean isEntityLog(AnnotationLogTypeEnum logType)
 	{
 		if(logType.equals(AnnotationLogTypeEnum.ENTITYADD) ||
 				logType.equals(AnnotationLogTypeEnum.ENTITYREMOVE) ||
-				logType.equals(AnnotationLogTypeEnum.ENTITYUPDATE))
+				logType.equals(AnnotationLogTypeEnum.ENTITYUPDATE) ||
+				logType.equals(AnnotationLogTypeEnum.ENTITYVALIDATED))
 		{
 			return true;
 		}
@@ -28,7 +31,8 @@ public enum AnnotationLogTypeEnum {
 	public static boolean isRelationLog(AnnotationLogTypeEnum logType) {
 		if(logType.equals(AnnotationLogTypeEnum.RELATIONADD) ||
 				logType.equals(AnnotationLogTypeEnum.RELATIONUPDATE) ||
-				logType.equals(AnnotationLogTypeEnum.RELATIONREMOVE))
+				logType.equals(AnnotationLogTypeEnum.RELATIONREMOVE) ||
+				logType.equals(AnnotationLogTypeEnum.RELATIONVALIDATED))
 		{
 			return true;
 		}
@@ -44,11 +48,14 @@ public enum AnnotationLogTypeEnum {
 		else if(AnnotationLogTypeEnum.ENTITYREMOVE.toString().equals(type))
 		{
 			return AnnotationLogTypeEnum.ENTITYREMOVE;
-
 		}
 		else if(AnnotationLogTypeEnum.ENTITYUPDATE.toString().equals(type))
 		{
 			return AnnotationLogTypeEnum.ENTITYUPDATE;
+		}
+		else if(AnnotationLogTypeEnum.ENTITYVALIDATED.toString().equals(type))
+		{
+			return AnnotationLogTypeEnum.ENTITYVALIDATED;
 		}
 		else if(AnnotationLogTypeEnum.RELATIONADD.toString().equals(type))
 		{
@@ -61,6 +68,10 @@ public enum AnnotationLogTypeEnum {
 		else if(AnnotationLogTypeEnum.RELATIONUPDATE.toString().equals(type))
 		{
 			return AnnotationLogTypeEnum.RELATIONUPDATE;
+		}
+		else if(AnnotationLogTypeEnum.RELATIONVALIDATED.toString().equals(type))
+		{
+			return AnnotationLogTypeEnum.RELATIONVALIDATED;
 		}
 		else
 			return null;
