@@ -78,12 +78,14 @@ public class GlobalNames {
 	public final static String metabolicGenes = "Metabolic Genes";
 	
 	
-	public static final String createdby ="Created by";
+	public final static String createdby ="Created by";
 	
 	public final static String color = "Color";
 	public final static String backgoundcolor = "Backgound Color";
 
-	public static final String duplicatedFrom ="Duplicated from";
+	public final static String duplicatedFrom ="Duplicated from";
+	
+	public final static String serverXMLsDirectory = "Server XML directory";
 
 
 }
