@@ -25,7 +25,7 @@ public class InitConfiguration {
 	
 	private static Proxy proxy;
 	private static IDataAccess dataAccess;
-	private static Properties properties;
+	private static Properties properties = new Properties();
 	
 	private static InitConfiguration initConfiguration = null;
 	
@@ -34,7 +34,6 @@ public class InitConfiguration {
 	{
 		DataAccessManager dataAccessManager = (DataAccessManager) PropertiesManager.getPManager().getProperty(DataAccessDefaultSettings.DATAACCESS_SELECTED);
 		dataAccess = dataAccessManager.getCurrent();
-		properties = new Properties();
 	}
 	
 	public static void login(UsersLogged userlogged) throws ANoteException
