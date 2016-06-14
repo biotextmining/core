@@ -17,7 +17,7 @@ public interface ICorpus {
 
 //	public void addDocument(IPublication doc) throws ANoteException;
 
-	public void registerProcess(IIEProcess ieProcess) throws ANoteException;
+//	public void registerProcess(IIEProcess ieProcess) throws ANoteException;
 
 	public IDocumentSet getArticlesCorpus() throws ANoteException;
 

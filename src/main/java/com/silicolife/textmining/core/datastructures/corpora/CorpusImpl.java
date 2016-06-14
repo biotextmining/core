@@ -97,11 +97,11 @@ public class CorpusImpl extends Observable implements ICorpus {
 //	public void addDocument(IPublication doc) throws ANoteException {
 //	}
 
-	@JsonIgnore
-	@Override
-	public void registerProcess(IIEProcess ieProcess) throws ANoteException {
-		InitConfiguration.getDataAccess().registerCorpusProcess(this, ieProcess);
-	}
+//	@JsonIgnore
+//	@Override
+//	public void registerProcess(IIEProcess ieProcess) throws ANoteException {
+//		InitConfiguration.getDataAccess().registerCorpusProcess(this, ieProcess);
+//	}
 
 	@JsonIgnore
 	@Override
