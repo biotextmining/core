@@ -115,7 +115,7 @@ public class PublicationsServiceImpl implements IPublicationsService {
 			 */
 			List<IPublicationExternalSourceLink> pubSources_ = publication_.getPublicationExternalIDSource();
 			List<IPublicationField> pubFiels_ = publication_.getPublicationFields();
-//			List<IPublicationLabel> pubLabels_ = publication_.getPublicationLabels();
+			List<IPublicationLabel> pubLabels_ = publication_.getPublicationLabels();
 			if (pubSources_ != null) {
 				for (IPublicationExternalSourceLink source_ : pubSources_) {
 					PublicationHasSources pubHasPubSource = PublicationsSourceWrapper.convertToDaemonStructure(source_, publication);
@@ -128,12 +128,12 @@ public class PublicationsServiceImpl implements IPublicationsService {
 					createFields(pubFields);
 				}
 			}
-//			if (pubLabels_ != null) {
-//				for (IPublicationLabel label_ : pubLabels_) {
-//					PublicationHasLabels pubHasPubLabel = PublicationsLabelsWrapper.convertToDaemonStructure(label_, publication);
-//					createLabels(pubHasPubLabel);
-//				}
-//			}
+			if (pubLabels_ != null) {
+				for (IPublicationLabel label_ : pubLabels_) {
+					PublicationHasLabels pubHasPubLabel = PublicationsLabelsWrapper.convertToDaemonStructure(label_, publication);
+					createLabels(pubHasPubLabel);
+				}
+			}
 		}
 
 		if (publications_.size() > 0) {
