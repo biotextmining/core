@@ -22,7 +22,7 @@ public class GlobalOptions {
 	
 	public static final String sessionFile = "conf/sessionfile.ssf";
 	
-	public static String savetmpsettings = "conf/settings/settings_tmp.conf";
+	public static final String savetmpsettings = "conf/settings/settings_tmp.conf";
 	
 	public static final String language = "en";
 	
@@ -31,7 +31,6 @@ public class GlobalOptions {
 	public static final String languagePathFile = languageFilesDirectory + "/language_"+language+".lang";
 	
 	public static final String alternativelanguagePathFile = "src/main/resources" + "/language_"+language+".lang";
-
 		
 	public static final String mysqlDatabaseFile = "./conf/database/anote2databasescript.sql";
 		
@@ -123,8 +122,7 @@ public class GlobalOptions {
 
 	public static IDataAccess dataAcess = null;
 
-
-
+	public static String tranformationTextFile = "src/main/resources/tranformationTextFile.prop";
 
 	public static Integer getDoublePrecision() {
 		return 2;
