@@ -1,8 +1,14 @@
 package com.silicolife.textmining.core.datastructures.textprocessing;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import com.silicolife.textmining.core.datastructures.utils.conf.GlobalOptions;
@@ -20,9 +26,7 @@ public class NormalizationForm {
 
 	private static Properties textRulesChangesProperties = null;
 
-	
-	public static String getNormalizationForm(String term)
-	{
+	public static String getNormalizationForm(String term) {
 		return term;
 	}
 	
@@ -75,21 +79,39 @@ public class NormalizationForm {
 	
 	private static String applyTextRulesChanges(String text) {
 		File file = new File(GlobalOptions.tranformationTextFile);
-		if(textRulesChangesProperties==null && file.exists() )
-		{
-			FileInputStream inputstream;
+		if(textRulesChangesProperties==null && file.exists()) {
+			//HUGO// FileInputStream inputstream;
+			InputStreamReader inputstream;
 			try {
 				textRulesChangesProperties = new Properties();
-				inputstream = new FileInputStream(file);
+				//HUGO// inputstream = new FileInputStream(file);
+				inputstream = new InputStreamReader(new FileInputStream(file), "UTF-8");
 				textRulesChangesProperties.load(inputstream);
-			} catch (IOException e) {
+			}
+			catch (IOException e) {
 			}
 		}
-		for(String prop:textRulesChangesProperties.stringPropertyNames())
-		{
+		for(String prop:textRulesChangesProperties.stringPropertyNames()) {
 			text = text.replaceAll(prop, textRulesChangesProperties.getProperty(prop));
-			System.out.println(prop+"/t"+textRulesChangesProperties.getProperty(prop));
+			System.out.println(prop+"\t"+textRulesChangesProperties.getProperty(prop));
 		}
+		return text;
+	}
+	
+	//ANA
+	private static String applyTextRulesChangesTEST(String text) throws IOException {
+		String fileInput = "C:\\Users\\anaal\\Anote2GIT\\core\\src\\main\\resources\\tranformationTextFile.prop";	
+		BufferedReader br = new BufferedReader(new FileReader(fileInput));
+	    String currentLine;
+		Map<String, String> invCharNewChar = new HashMap<String, String>();
+	    while ((currentLine = br.readLine()) != null) {
+	    	String[] dataline = currentLine.split("\\t");
+	    	invCharNewChar.put(dataline[0], dataline[1]);
+	    }
+	    for(String symbol : invCharNewChar.keySet()) {
+	    	text = text.replaceAll(symbol, invCharNewChar.get(symbol));
+	    	System.out.println("TEST: " + symbol + " -> " + invCharNewChar.get(symbol));
+	    }
 		return text;
 	}
 
