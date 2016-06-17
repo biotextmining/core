@@ -166,8 +166,8 @@ public class IEProcessImpl extends Observable implements IIEProcess {
 	protected static Properties transformResourcesToOrderMapInProperties(ResourcesToNerAnote resources) {
 		Properties prop = new Properties();
 		for (int i = 0; i < resources.getList().size(); i++) {
-			Set<Long> selected = resources.getList().get(i).getZ();
-			long id = resources.getList().get(i).getX().getId();
+			Set<Long> selected = resources.getList().get(i).getSelectedClassesID();
+			long id = resources.getList().get(i).getResource().getId();
 			{
 				prop.put(String.valueOf(id), ResourceImpl.convertClassesToResourceProperties(selected));
 			}

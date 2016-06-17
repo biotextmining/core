@@ -21,6 +21,7 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.Daemo
 import com.silicolife.textmining.core.interfaces.resource.IResource;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElementSet;
+import com.silicolife.textmining.core.interfaces.resource.ResourcesTypeEnum;
 import com.silicolife.textmining.core.interfaces.resource.dictionary.IDictionary;
 import com.silicolife.textmining.core.interfaces.resource.lookuptables.ILookupTable;
 import com.silicolife.textmining.core.interfaces.resource.ontologies.IOntology;
@@ -52,22 +53,23 @@ public class ElementToNer {
 		mapResourceIDsToResourceElements = new TreeMap<>();
 		this.termNormalization = termNormalization;
 		this.usingOtherResourceInfoToImproveRuleAnnotstions = resourceToNER.isUseOtherResourceInformationInRules();
-		processingINfo();
 	}
 	
-	private void processingINfo() throws ANoteException {
+	
+	
+	public void processingINfo() throws ANoteException {
 
-		for(int i=0;i<resourceToNER.getList().size();i++)
+		for(int i=0;i<getResourceToNER().getList().size();i++)
 		{
-			Set<Long> selected = resourceToNER.getList().get(i).getZ();
-			Set<Long> all = resourceToNER.getList().get(i).getY();
+			Set<Long> selected = getResourceToNER().getList().get(i).getSelectedClassesID();
+			Set<Long> all = getResourceToNER().getList().get(i).getAllClassesID();
 			if(selected.equals(all))
 			{
-				addResource(resourceToNER.getList().get(i).getX(),termNormalization);
+				addResource(getResourceToNER().getList().get(i).getResource(),isTermNormalization());
 			}
 			else
 			{
-				addResource(resourceToNER.getList().get(i).getX(),new ArrayList<Long>(selected),termNormalization);
+				addResource(getResourceToNER().getList().get(i).getResource(),new ArrayList<Long>(selected),isTermNormalization());
 			}
 		}
 	}
@@ -75,9 +77,9 @@ public class ElementToNer {
 	public List<IResource<IResourceElement>> getResourcesForRulesInfo()
 	{
 		List<IResource<IResourceElement>> resources =  new ArrayList<IResource<IResourceElement>>();
-		for(int i=0;i<resourceToNER.getList().size();i++)
+		for(int i=0;i<getResourceToNER().getList().size();i++)
 		{
-			IResource<IResourceElement> resource = resourceToNER.getList().get(i).getX();
+			IResource<IResourceElement> resource = getResourceToNER().getList().get(i).getResource();
 			if(resource instanceof IDictionary)
 			{
 				resources.add(resource);
@@ -92,11 +94,15 @@ public class ElementToNer {
 
 	public void addResource(IResource<IResourceElement> resource, List<Long> classes, boolean normalization) throws ANoteException
 	{
-		if(resource instanceof IDictionary || resource instanceof ILookupTable || resource instanceof IOntology) 
+		String resourceType = resource.getType();
+		ResourcesTypeEnum type = ResourcesTypeEnum.valueOf(resourceType);
+		if(type.equals(ResourcesTypeEnum.dictionary)|| type.equals(ResourcesTypeEnum.lexicalwords)||
+				type.equals(ResourcesTypeEnum.lookuptable)|| type.equals(ResourcesTypeEnum.ontology)||
+				resource instanceof IDictionary || resource instanceof ILookupTable || resource instanceof IOntology) 
 		{
 			addResources(resource,classes,normalization);
 		}
-		else if(resource instanceof IRuleSet)
+		else if(type.equals(ResourcesTypeEnum.rule) || resource instanceof IRuleSet)
 		{
 			addResources((IRuleSet) resource,classes);
 		}
@@ -108,11 +114,15 @@ public class ElementToNer {
 	
 	public void addResource(IResource<IResourceElement> resource,boolean normalization) throws ANoteException
 	{
-		if(resource instanceof IDictionary || resource instanceof ILookupTable || resource instanceof IOntology) 
+		String resourceType = resource.getType();
+		ResourcesTypeEnum type = ResourcesTypeEnum.valueOf(resourceType);
+		if(type.equals(ResourcesTypeEnum.dictionary)|| type.equals(ResourcesTypeEnum.lexicalwords)||
+				type.equals(ResourcesTypeEnum.lookuptable)|| type.equals(ResourcesTypeEnum.ontology)||
+				resource instanceof IDictionary || resource instanceof ILookupTable || resource instanceof IOntology) 
 		{
 			addResources(resource,normalization);
 		}
-		else if(resource instanceof IRuleSet)
+		else if(type.equals(ResourcesTypeEnum.rule) || resource instanceof IRuleSet)
 		{
 			addResources((IRuleSet) resource);
 		}
@@ -339,6 +349,10 @@ public class ElementToNer {
 	
 	public boolean isUsingOtherResourceInfoToImproveRuleAnnotstions() {
 		return usingOtherResourceInfoToImproveRuleAnnotstions;
+	}
+
+	public boolean isTermNormalization() {
+		return termNormalization;
 	}
 
 }

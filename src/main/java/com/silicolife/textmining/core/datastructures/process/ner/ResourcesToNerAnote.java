@@ -6,36 +6,34 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.silicolife.textmining.core.datastructures.utils.GenericTriple;
 import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
 import com.silicolife.textmining.core.interfaces.resource.IResource;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 
 public class ResourcesToNerAnote {
 	
-	private List<GenericTriple<IResource<IResourceElement>,Set<Long>,Set<Long>>> list; // Resource, selected class(es), all class(es)
+	private List<ResourceSelectedClassesMap> list; // Resource, selected class(es), all class(es)
 	private NERCaseSensativeEnum caseSensitive;
 	private boolean useOtherResourceInformationInRules;
 	
 	public ResourcesToNerAnote()
 	{
 		this.caseSensitive = NERCaseSensativeEnum.NONE;
-		this.list = new ArrayList<GenericTriple<IResource<IResourceElement>,Set<Long>,Set<Long>>>();
+		this.list = new ArrayList<ResourceSelectedClassesMap>();
 		this.useOtherResourceInformationInRules = false;
 	}
 	
 	public ResourcesToNerAnote(NERCaseSensativeEnum caseSensitive,boolean useOtherResourceInformationInRules)
 	{
 		this.caseSensitive = caseSensitive;
-		list = new ArrayList<GenericTriple<IResource<IResourceElement>,Set<Long>,Set<Long>>>();
+		list = new ArrayList<ResourceSelectedClassesMap>();
 		this.useOtherResourceInformationInRules = useOtherResourceInformationInRules;
 	}
 	
 	public void add(IResource<IResourceElement> resElem,Set<Long> classContent,Set<Long> selectedClass)
 	{
-		GenericTriple<IResource<IResourceElement>,Set<Long>,Set<Long>> triple =
-			new GenericTriple<IResource<IResourceElement>, Set<Long>, Set<Long>>(resElem,classContent,selectedClass);
-		list.add(triple);
+		ResourceSelectedClassesMap selectedClasses = new ResourceSelectedClassesMap(resElem,selectedClass,classContent);
+		list.add(selectedClasses);
 	}
 	
 	@JsonIgnore
@@ -49,12 +47,11 @@ public class ResourcesToNerAnote {
 		this.add(resElem,classContent,selectedClass);
 	}
 
-	public List<GenericTriple<IResource<IResourceElement>, Set<Long>, Set<Long>>> getList() {
+	public List<ResourceSelectedClassesMap> getList() {
 		return list;
 	}
 	
-	@JsonIgnore
-	public void setList(List<GenericTriple<IResource<IResourceElement>, Set<Long>, Set<Long>>> list) {
+	public void setList(List<ResourceSelectedClassesMap> list) {
 		this.list = list;
 	}
 
@@ -75,10 +72,10 @@ public class ResourcesToNerAnote {
 		this.useOtherResourceInformationInRules = useOtherResourceInformationInRules;
 	}
 
-	public boolean containsResource(IResource<IResourceElement> x) {
-		for(GenericTriple<IResource<IResourceElement>,Set<Long>,Set<Long>>triple:list)
+	public boolean containsResource(IResource<IResourceElement> resource) {
+		for(ResourceSelectedClassesMap selectedClasses:list)
 		{
-			if(triple.getX().getId() == x.getId())
+			if(selectedClasses.getResource().getId() == resource.getId())
 			{
 				return true;
 			}
