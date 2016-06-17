@@ -87,6 +87,8 @@ public class PDFtoText {
 		String result = instance.doOCR(imageList, null);
 		return result;
 	}
+	
+
 
 }
 

@@ -1,4 +1,12 @@
 package com.silicolife.textmining.core.datastructures.textprocessing;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
+import com.silicolife.textmining.core.datastructures.utils.conf.GlobalOptions;
+
 /**
  * Class for generate the normalization form of a word
  * 
@@ -8,7 +16,9 @@ package com.silicolife.textmining.core.datastructures.textprocessing;
  */
 public class NormalizationForm {
 	
-private static String numbers = "-{0,1}\\d+?\\.\\d+|-{0,1}\\d+";
+//private static String numbers = "-{0,1}\\d+?\\.\\d+|-{0,1}\\d+";
+
+	private static Properties textRulesChangesProperties = null;
 
 	
 	public static String getNormalizationForm(String term)
@@ -55,13 +65,34 @@ private static String numbers = "-{0,1}\\d+?\\.\\d+|-{0,1}\\d+";
 		text = text.replaceAll("’", "");
 		text = text.replaceAll("\u2019", "'");
 		text = text.replaceAll("\\s+", " ");
-		text = text.replaceAll("("+numbers+")\\s{0,1}[×x]\\s{0,1}10\\s{0,1}(\\d+)", "$1 x 10exp$2"); // convert numbers to cientific numbers
+//		text = text.replaceAll("("+numbers+")\\s{0,1}[×x]\\s{0,1}10\\s{0,1}(\\d+)", "$1 x 10exp$2"); // convert numbers to cientific numbers
 		text = text.replaceAll( "([\\ud800-\\udbff])", ""); // remove invalid caracters
 		text = text.replaceAll( "([\\udc00-\\udfff])", ""); //  remove invalid caracters
-		text = text.replaceAll( "[−|—]", "-"); // Added to Ana project
+//		text = text.replaceAll( "[−|—]", "-"); // Added to Ana project
+		text = applyTextRulesChanges(text);
 		return text;
 	}
 	
+	private static String applyTextRulesChanges(String text) {
+		File file = new File(GlobalOptions.tranformationTextFile);
+		if(textRulesChangesProperties==null && file.exists() )
+		{
+			FileInputStream inputstream;
+			try {
+				textRulesChangesProperties = new Properties();
+				inputstream = new FileInputStream(file);
+				textRulesChangesProperties.load(inputstream);
+			} catch (IOException e) {
+			}
+		}
+		for(String prop:textRulesChangesProperties.stringPropertyNames())
+		{
+			text = text.replaceAll(prop, textRulesChangesProperties.getProperty(prop));
+			System.out.println(prop+"/t"+textRulesChangesProperties.getProperty(prop));
+		}
+		return text;
+	}
+
 	public static String removeOffsetProblemSituationSubAbstractTags(String text) {
 		text = text.replaceAll("\\r", "");//.trim();
 		text = text.replaceAll("([a-zA-Z]{2,})[-|—|−]\\n{1}([a-zA-Z]{3,})", "$1$2"); // word break removal in pdf
@@ -82,10 +113,11 @@ private static String numbers = "-{0,1}\\d+?\\.\\d+|-{0,1}\\d+";
 		text = text.replaceAll("’", "");
 		text = text.replaceAll("\u2019", "'");
 		text = text.replaceAll("\\s+", " ");
-		text = text.replaceAll("("+numbers+")\\s{0,1}[×x]\\s{0,1}10\\s{0,1}(\\d+)", "$1 x 10exp$2"); // convert numbers to cientific numbers
+//		text = text.replaceAll("("+numbers+")\\s{0,1}[×x]\\s{0,1}10\\s{0,1}(\\d+)", "$1 x 10exp$2"); // convert numbers to cientific numbers
 		text = text.replaceAll( "([\\ud800-\\udbff])", ""); // remove invalid caracters
 		text = text.replaceAll( "([\\udc00-\\udfff])", ""); //  remove invalid caracters
-		text = text.replaceAll( "[−|—]", "-"); // Added to Ana project
+//		text = text.replaceAll( "[−|—]", "-"); // Added to Ana project
+		text = applyTextRulesChanges(text);
 		return text;
 	}
 	
@@ -107,7 +139,7 @@ private static String numbers = "-{0,1}\\d+?\\.\\d+|-{0,1}\\d+";
 	}
 	
 	public static void main(String[] args) {
-		String text = "Some culture filtrates or enterotoxin preparations from enterobacteria that activate the adenylate cyclase system (vibrio cholerae, LT fraction from escherichia coli and klebsiella pneumoniae, shigella dysenteriae type 1) exibit an inhibiting effect on ADP-induced platelet aggregation, while other enterotoxin preparations not effective on adenylate cyclase system, don't interfere with this model. The A. propose the platelet aggregation as cellular assay to detect enterotoxin fractions effective upon adenylate cyclase system.";
+		String text = "Some culture filtrates or enterotoxin — preparations from enterobacteria — that activate 1,4x1035 the adenylate cyclase system (vibrio cholerae, LT fraction from escherichia coli and klebsiella pneumoniae, shigella dysenteriae type 1) exibit an inhibiting effect on ADP-induced platelet aggregation, while other enterotoxin preparations not effective on adenylate cyclase system, don't interfere with this model. The A. propose the platelet aggregation as cellular assay to detect enterotoxin fractions effective upon adenylate cyclase system.";
 		System.out.println(removeOffsetProblemSituation(text));
 	}
 	
