@@ -54,7 +54,7 @@ public class PDFtoText {
 		return NormalizationForm.removeOffsetProblemSituation(text);
 	}
 	
-	public static String convertEncryptedPDFDocument(String url) throws IOException, TesseractException{
+	private static String convertEncryptedPDFDocument(String url) throws IOException, TesseractException{
 		int imageDPIValue = 300;
 		PDDocument document = PDDocument.loadNonSeq(new File(url), null);
 		@SuppressWarnings("unchecked")
@@ -72,7 +72,7 @@ public class PDFtoText {
 			pagesToOCR.addAll(content);
 		}
 		String originalText = tessaract.doOCR(pagesToOCR, null);
-		return NormalizationForm.removeOffsetProblemSituation(originalText);
+		return originalText;
 	}
 	
 	/**
