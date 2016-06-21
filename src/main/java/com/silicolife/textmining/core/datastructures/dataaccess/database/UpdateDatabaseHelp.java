@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
-import com.silicolife.textmining.core.datastructures.utils.conf.GlobalOptions;
-
 /**
  * Class that contains some static method to help databse Update
  * 
@@ -23,11 +21,11 @@ public class UpdateDatabaseHelp {
 	 * 
 	 * @return
 	 */
-	public static int readDatabaseFileDataBase()
+	public static int readDatabaseFileDataBase(String file)
 	{
 		ArrayList<String> elements = new ArrayList<String>();
 		elements.add("Database-Version");
-		ArrayList<String> data = getElementByXMLFile(GlobalOptions.mysqlDatabaseVersionFile,elements);
+		ArrayList<String> data = getElementByXMLFile(file,elements);
 		if(data.get(0)==null || data.get(0).equals("null") || data.get(0).equals("false"))
 		{
 			return -1;

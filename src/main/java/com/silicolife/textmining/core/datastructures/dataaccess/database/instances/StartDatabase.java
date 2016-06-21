@@ -27,7 +27,7 @@ public class StartDatabase implements IDatabase {
 	}
 
 	@Override
-	public void updateDatabase() throws SQLException {
+	public void updateDatabase(String updateFolder,String databaseversionfile) throws SQLException {
 		// TODO Auto-generated method stub
 
 	}

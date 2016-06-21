@@ -63,6 +63,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Resources;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Sources;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Synonyms;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Versions;
 
 public class ManagerDao {
 
@@ -74,6 +75,7 @@ public class ManagerDao {
 	private AnnotationManagerDao annotationManagerDao;
 	private ClustersManagerDao clusterManagerDao;
 	private HyperLinkMenuManagerDao hyperlinkMenuManagerDao;
+	private SystemManagerDao systemManagerDao;
 	
 	private SessionFactory sessionFactory;
 
@@ -88,9 +90,13 @@ public class ManagerDao {
 		annotationManagerDao = createAnnotationAuxDao();
 		clusterManagerDao = createClusterManagerdao();
 		hyperlinkMenuManagerDao = createHyperLinkMenusDao();
+		systemManagerDao = createSystemMangerDao();
 	}
 
 	
+
+
+
 	private HyperLinkMenuManagerDao createHyperLinkMenusDao() {
 		GenericDao<HyperLinkMenus> hyperLinkMenusDao = new GenericDaoImpl<HyperLinkMenus>(sessionFactory, HyperLinkMenus.class);
 		GenericDao<HyperLinkSubmenus> hyperLinkSubmenusDao = new GenericDaoImpl<HyperLinkSubmenus>(sessionFactory, HyperLinkSubmenus.class);
@@ -228,6 +234,11 @@ public class ManagerDao {
 		return resourcesManagerDao;
 
 	}
+	
+	private SystemManagerDao createSystemMangerDao() {
+		GenericDao<Versions> versionsDao = new GenericDaoImpl<Versions>(sessionFactory, Versions.class);
+		return new SystemManagerDao(versionsDao);
+	}
 
 	public QueriesManagerDao getQueriesManagerDao() {
 		return queriesManagerDao;
@@ -251,5 +262,10 @@ public class ManagerDao {
 
 	public HyperLinkMenuManagerDao getHyperLinkMenuDao() {
 		return hyperlinkMenuManagerDao;
+	}
+
+
+	public SystemManagerDao getSystemServiceDao() {
+		return systemManagerDao;
 	}
 }

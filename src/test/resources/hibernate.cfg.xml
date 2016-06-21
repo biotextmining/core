@@ -141,5 +141,9 @@
 			class="com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AnnotationProperties" />
 		<mapping
 			class="com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.QueryHasPublications" />
+		<!-- Version 2.2 -->
+		<mapping class="com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublicationsHasProcesses" />
+		<mapping class="com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.DataProcessStatus" />
+			
 	</session-factory>
 </hibernate-configuration>

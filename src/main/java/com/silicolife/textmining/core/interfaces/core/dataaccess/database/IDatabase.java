@@ -151,7 +151,7 @@ public interface IDatabase {
 	 * @throws ANoteException 
 	 * @throws IOException
 	 */
-	public void updateDatabase() throws SQLException, ANoteException;
+	public void updateDatabase(String updateFolder,String databaseversionfile) throws SQLException, ANoteException;
 
 	/**
 	 * Test if database exists

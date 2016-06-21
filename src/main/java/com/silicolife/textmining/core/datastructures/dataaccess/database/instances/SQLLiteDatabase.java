@@ -70,7 +70,7 @@ public class SQLLiteDatabase extends ADatabase implements IDatabase{
 
 
 	@Override
-	public void updateDatabase() {
+	public void updateDatabase(String updateFolder,String databaseversionfile) {
 		// TODO Auto-generated method stub
 		
 	}

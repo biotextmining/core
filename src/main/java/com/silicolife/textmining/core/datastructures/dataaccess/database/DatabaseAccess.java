@@ -39,8 +39,10 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.resources.ResourcesElementServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.resources.ResourcesService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.resources.ResourcesServiceImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.system.ISystemService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.system.PrivilegesService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.system.PrivilegesServiceImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.system.SystemServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.users.IUserService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.users.UserServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.PermissionsUtilsEnum;
@@ -101,6 +103,7 @@ public class DatabaseAccess implements IDataAccess {
 	private IAnnotationService annotationService;
 	private IClusteringService clusteringService;
 	private IHyperLinkService hyperLinkService;
+	private ISystemService systemService;
 
 	private IUserService userService;
 	private UsersLogged userLogged = new UsersLoggedImpl();
@@ -153,6 +156,7 @@ public class DatabaseAccess implements IDataAccess {
 		hyperLinkService = new HyperLinkServiceImpl(managerDao.getHyperLinkMenuDao(), userLogged);
 
 		clusteringService = new ClusteringServiceImpl(managerDao.getClusterManagerDao(), managerDao.getUsersManagerDao(), managerDao.getQueriesManagerDao(), userLogged);
+		systemService = new SystemServiceImpl(managerDao.getSystemServiceDao());
 	}
 
 	@Override
@@ -1151,12 +1155,29 @@ public class DatabaseAccess implements IDataAccess {
 
 	@Override
 	public int getDatabaseVersion() throws ANoteException {
-		return 1;
+		startHiberdate();
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			int version = systemService.getDataversion();
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return version;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
 	}
 
 	@Override
 	public boolean addDatabaseVersion(int version, String commments) throws ANoteException {
-		return false;
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			systemService.addDatabaseVersion(version,commments);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+		return true;
 	}
 
 	@Override
@@ -1276,9 +1297,9 @@ public class DatabaseAccess implements IDataAccess {
 		}
 	}
 
-	public boolean isDatabaseOutOfDate() {
+	public boolean isDatabaseOutOfDate(String file) {
 		try {
-			return UpdateDatabaseHelp.readDatabaseFileDataBase() > this.getDatabaseVersion();
+			return UpdateDatabaseHelp.readDatabaseFileDataBase(file) > this.getDatabaseVersion();
 		} catch (ANoteException e) {
 			return false;
 		}

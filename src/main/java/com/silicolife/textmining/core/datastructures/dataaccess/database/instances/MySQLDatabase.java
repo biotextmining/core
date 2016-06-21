@@ -181,12 +181,12 @@ public class MySQLDatabase extends ADatabase {
 	}
 
 	@Override
-	public void updateDatabase() throws SQLException, ANoteException {
+	public void updateDatabase(String updateFolder,String databaseversionfile) throws SQLException, ANoteException {
 		int databaseVersion = InitConfiguration.getDataAccess().getDatabaseVersion();
-		int newVersionID = UpdateDatabaseHelp.readDatabaseFileDataBase();
+		int newVersionID = UpdateDatabaseHelp.readDatabaseFileDataBase(databaseversionfile);
 		for (int i = databaseVersion + 1; i <= newVersionID; i++) {
-			String path = GlobalOptions.mysqlDatbaseUpdateFolder + "/" + GlobalOptions.mysqlDatbaseUpdateStartNameFile + i + GlobalOptions.mysqlDatbaseUpdateEndNameFile;
-			String filePathComments = GlobalOptions.mysqlDatbaseUpdateFolder + "/" + GlobalOptions.mysqlDatbaseUpdateStartNameFile + i
+			String path = updateFolder + "/" + GlobalOptions.mysqlDatbaseUpdateStartNameFile + i + GlobalOptions.mysqlDatbaseUpdateEndNameFile;
+			String filePathComments = updateFolder + "/" + GlobalOptions.mysqlDatbaseUpdateStartNameFile + i
 					+ GlobalOptions.mysqlDatbaseUpdateEndNameInfoFile;
 			String comments = "";
 			try {

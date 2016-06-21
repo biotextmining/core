@@ -13,13 +13,13 @@ import com.silicolife.textmining.core.datastructures.init.exception.InvalidDatab
 import com.silicolife.textmining.core.interfaces.core.dataaccess.database.DataBaseTypeEnum;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.database.IDatabase;
 
-public class CreateAndUpdateMysqlDatabaseTest{
+public class CreateAndFillMysqlDatabaseTest{
 	
 	
 	@Test
 	public void createUpdateDatabase() throws InvalidDatabaseAccess, FileNotFoundException, SQLException, IOException
 	{
-		IDatabase database = createDatabase("localhost","3306","createdatest","root","admin");
+		IDatabase database = createDatabase("localhost","3306","todelete","root","admin");
 		if(database==null)
 		{
 	        assertTrue(false);
@@ -36,7 +36,7 @@ public class CreateAndUpdateMysqlDatabaseTest{
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	private boolean fillDatabase(IDatabase database) throws SQLException, FileNotFoundException, IOException
+	public static boolean fillDatabase(IDatabase database) throws SQLException, FileNotFoundException, IOException
 	{
 		if(!database.isfill())
 		{
@@ -53,7 +53,7 @@ public class CreateAndUpdateMysqlDatabaseTest{
 	 * @throws InvalidDatabaseAccess
 	 * @throws SQLException 
 	 */
-	private IDatabase createDatabase(String host,String port,String schema,String username,String password) throws InvalidDatabaseAccess, SQLException
+	public static IDatabase createDatabase(String host,String port,String schema,String username,String password) throws InvalidDatabaseAccess, SQLException
 	{
 		DataBaseTypeEnum databaseType = DataBaseTypeEnum.MYSQL;
 		if (host.trim().equals("") || port.trim().equals("") || schema.trim().equals("")) {
@@ -84,7 +84,7 @@ public class CreateAndUpdateMysqlDatabaseTest{
 	 * @param databaseAdded
 	 * @return
 	 */
-	private boolean checkConnection(IDatabase databaseAdded) {
+	private static boolean checkConnection(IDatabase databaseAdded) {
 		try {
 			databaseAdded.openConnection();
 			if (databaseAdded.getConnection() != null) {
