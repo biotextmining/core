@@ -373,4 +373,9 @@ public class AnnotationServiceImpl implements IAnnotationService{
 		
 		return true;
 	}
+
+	@Override
+	public void setUserLogged(UsersLogged userLogged) {
+		this.userLogged = userLogged;
+	}
 }

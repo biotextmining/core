@@ -289,4 +289,9 @@ public class PublicationsServiceImpl implements IPublicationsService {
 		
 		return true;
 	}
+	
+	@Override
+	public void setUserLogged(UsersLogged userLogged) {
+		this.userLogged = userLogged;
+	}
 }

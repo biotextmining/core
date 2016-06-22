@@ -355,5 +355,9 @@ public class CorpusServiceImpl implements ICorpusService {
 		return listCorpus_;
 	}
 
+	@Override
+	public void setUserLogged(UsersLogged userLogged) {
+		this.userLogged = userLogged;
+	}
 
 }

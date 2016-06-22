@@ -3,10 +3,11 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 import java.util.List;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.ResourcesExceptions;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.interfaces.resource.IResource;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 
-public interface ResourcesService {
+public interface IResourcesService {
 	
 	
 	/**
@@ -47,4 +48,5 @@ public interface ResourcesService {
 	 */
 	public List<IResource<IResourceElement>> getAllPrivilegesResourcesAdminAccess() throws ResourcesExceptions;
 
+	public void setUserLogged(UsersLogged userLogged);
 }

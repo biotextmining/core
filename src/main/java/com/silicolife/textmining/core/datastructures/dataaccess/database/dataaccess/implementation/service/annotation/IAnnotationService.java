@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.SortedSet;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.AnnotationException;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationLog;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
@@ -33,5 +34,7 @@ public interface IAnnotationService {
 	public Boolean inactiveAnnotations(List<Long> annotation) throws AnnotationException;
 
 	public Boolean updateEntityAnnotations(List<IEntityAnnotation> list) throws AnnotationException;
+	
+	public void setUserLogged(UsersLogged userLogged);
 
 }

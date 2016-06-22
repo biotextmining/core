@@ -831,4 +831,8 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 		return elementSet;
 	}
 
+	@Override
+	public void setUserLogged(UsersLogged userLogged) {
+		this.userLogged = userLogged;
+	}
 }

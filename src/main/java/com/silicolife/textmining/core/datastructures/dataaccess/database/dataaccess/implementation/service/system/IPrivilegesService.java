@@ -3,6 +3,7 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 import java.util.List;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.PrivilegesException;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.user.IUser;
 import com.silicolife.textmining.core.interfaces.core.user.IUserDataObject;
@@ -14,7 +15,7 @@ import com.silicolife.textmining.core.interfaces.core.utils.IGenericPair;
  * @author Utilizador
  *
  */
-public interface PrivilegesService {
+public interface IPrivilegesService {
 	/**
 	 * 
 	 * @param userId
@@ -81,4 +82,6 @@ public interface PrivilegesService {
 	 * @return
 	 */
 	public Boolean hasPermission(Long resourceId, String resource, List<String> permission);
+	
+	public void setUserLogged(UsersLogged userLogged);
 }

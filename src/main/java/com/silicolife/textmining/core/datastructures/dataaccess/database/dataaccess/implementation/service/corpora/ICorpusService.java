@@ -3,6 +3,7 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 import java.util.List;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.CorpusException;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpusStatistics;
@@ -127,5 +128,7 @@ public interface ICorpusService {
 	 * @return
 	 */
 	public List<ICorpus> getAllPrivilegesCorpusAdminAccess();
+	
+	public void setUserLogged(UsersLogged userLogged);
 
 }

@@ -182,4 +182,9 @@ public class ProcessesServiceImpl implements IProcessesService {
 		return listProcesses_;
 	}
 
+	@Override
+	public void setUserLogged(UsersLogged userLogged) {
+		this.userLogged = userLogged;
+	}
+	
 }

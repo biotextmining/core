@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.PublicationManagerException;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.labels.IPublicationLabel;
@@ -84,4 +85,6 @@ public interface IPublicationsService {
 	 * @throws PublicationManagerException 
 	 */
 	public Boolean updatePublicationAFullTextContent(Long publicationID,String fullTextContent) throws PublicationManagerException;
+	
+	public void setUserLogged(UsersLogged userLogged);
 }

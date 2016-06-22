@@ -31,7 +31,7 @@ import com.silicolife.textmining.core.interfaces.core.utils.IGenericPair;
  */
 @Service
 @Transactional(readOnly = true)
-public class PrivilegesServiceImpl implements PrivilegesService {
+public class PrivilegesServiceImpl implements IPrivilegesService {
 
 	private UsersManagerDao usersManagerDao;
 	private UsersLogged userLogged;
@@ -150,6 +150,11 @@ public class PrivilegesServiceImpl implements PrivilegesService {
 			return false;
 		}
 		return true;
+	}
+	
+	@Override
+	public void setUserLogged(UsersLogged userLogged) {
+		this.userLogged = userLogged;
 	}
 
 }

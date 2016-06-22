@@ -3,6 +3,7 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 import java.util.List;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.HyperLinkMenuException;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
 import com.silicolife.textmining.core.interfaces.core.general.source.ISource;
 import com.silicolife.textmining.core.interfaces.core.hyperlink.IHyperLinkMenuItem;
@@ -26,4 +27,5 @@ public interface IHyperLinkService {
 
 	public List<IHyperLinkMenuItem> getHyperLinkMenuItemsForSource(long sourceID) throws HyperLinkMenuException;
 	
+	public void setUserLogged(UsersLogged userLogged);
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.ResourcesExceptions;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.resources.IResourceManagerReport;
 import com.silicolife.textmining.core.interfaces.core.general.IExternalID;
 import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
@@ -63,4 +64,5 @@ public interface IResourcesElementService {
 
 	public IResourceElementSet<IResourceElement> getResourceElementsByName(Long id, String name) throws ResourcesExceptions; //
 
+	public void setUserLogged(UsersLogged userLogged);
 }

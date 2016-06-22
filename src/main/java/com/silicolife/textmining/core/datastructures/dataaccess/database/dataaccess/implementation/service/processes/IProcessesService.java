@@ -3,6 +3,7 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 import java.util.List;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.ProcessException;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcessStatistics;
 
@@ -55,5 +56,7 @@ public interface IProcessesService {
 	 * @return
 	 */
 	public List<IIEProcess> getPrivilegesAllProcessesAdminAccess();
+	
+	public void setUserLogged(UsersLogged userLogged);
 
 }
