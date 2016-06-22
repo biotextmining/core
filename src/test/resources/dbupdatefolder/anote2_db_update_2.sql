@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `corpus_has_publications_has_processes` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_corpus_has_publications_has_processes_processes1`
     FOREIGN KEY (`chphp_processes_id`)
-    REFERENCES `anote2_v22`.`processes` (`pro_id`)
+    REFERENCES `processes` (`pro_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
