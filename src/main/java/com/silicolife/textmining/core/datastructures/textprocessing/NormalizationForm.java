@@ -90,6 +90,8 @@ public class NormalizationForm {
 			}
 			catch (IOException e) {
 			}
+		}else{
+			textRulesChangesProperties = new Properties();
 		}
 		for(String prop:textRulesChangesProperties.stringPropertyNames()) {
 			text = text.replaceAll(prop, textRulesChangesProperties.getProperty(prop));
