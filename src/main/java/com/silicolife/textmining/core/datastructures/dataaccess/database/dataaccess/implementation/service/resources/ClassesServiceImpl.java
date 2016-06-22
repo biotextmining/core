@@ -30,7 +30,7 @@ import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass
  */
 @Service
 @Transactional(readOnly = true)
-public class ClassesServiceImpl implements ClassesService {
+public class ClassesServiceImpl implements IClassesService {
 
 	private ResourcesManagerDao resourcesManagerDao;
 	private UsersManagerDao usersManagerDao;
@@ -103,6 +103,11 @@ public class ClassesServiceImpl implements ClassesService {
 		
 		return true;
 		
+	}
+	
+	@Override
+	public void setUserLogged(UsersLogged userLogged) {
+		this.userLogged = userLogged;
 	}
 
 }

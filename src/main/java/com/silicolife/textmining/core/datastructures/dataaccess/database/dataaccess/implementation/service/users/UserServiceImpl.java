@@ -221,4 +221,9 @@ public class UserServiceImpl implements IUserService {
 			return new Properties();
 		}
 	}
+
+	@Override
+	public void setUserLogged(UsersLogged userLogged) {
+		this.userLogged = userLogged;
+	}
 }

@@ -3,6 +3,7 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 import java.util.List;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.ClusteringException;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.interfaces.core.cluster.IClusterLabel;
 import com.silicolife.textmining.core.interfaces.core.cluster.IClusterProcess;
 
@@ -71,5 +72,5 @@ public interface IClusteringService {
 	 */
 	public Boolean updateQueryClusteringProcess(IClusterProcess clustering) throws ClusteringException;;
 	
-
+	public void setUserLogged(UsersLogged userLogged);
 }

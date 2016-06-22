@@ -29,7 +29,7 @@ import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 
 @Service
 @Transactional(readOnly = true)
-public class ResourcesServiceImpl implements ResourcesService {
+public class ResourcesServiceImpl implements IResourcesService {
 
 	private ResourcesManagerDao resourcesManagerDao;
 	private UsersManagerDao usersManagerDao;
@@ -165,5 +165,10 @@ public class ResourcesServiceImpl implements ResourcesService {
 		}
 
 		return listResources_;
+	}
+	
+	@Override
+	public void setUserLogged(UsersLogged userLogged) {
+		this.userLogged = userLogged;
 	}
 }

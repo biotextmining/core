@@ -218,4 +218,9 @@ public class ClusteringServiceImpl implements IClusteringService {
 		
 		return true;
 	}
+	
+	@Override
+	public void setUserLogged(UsersLogged userLogged) {
+		this.userLogged = userLogged;
+	}
 }

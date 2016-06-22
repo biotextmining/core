@@ -3,6 +3,7 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 import java.util.Set;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.ClassException;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
 
 /**
@@ -12,7 +13,7 @@ import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass
  * @year 2015
  *
  */
-public interface ClassesService {
+public interface IClassesService {
 
 	/**
 	 * Create new class
@@ -46,4 +47,5 @@ public interface ClassesService {
 	 */
 	public Boolean updateClass(IAnoteClass klass) throws ClassException;
 
+	public void setUserLogged(UsersLogged userLogged);
 }

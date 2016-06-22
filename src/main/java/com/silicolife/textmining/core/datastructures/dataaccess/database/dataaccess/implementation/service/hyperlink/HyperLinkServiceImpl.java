@@ -110,4 +110,9 @@ public class HyperLinkServiceImpl implements IHyperLinkService{
 		return hyperLinkMenuItems;
 	}
 	
+	@Override
+	public void setUserLogged(UsersLogged userLogged) {
+		this.userLogged = userLogged;
+	}
+	
 }

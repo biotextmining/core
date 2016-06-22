@@ -47,7 +47,7 @@ import com.silicolife.textmining.core.interfaces.process.IR.IQuery;
  */
 @Service
 @Transactional(readOnly = true)
-public class QueriesServiceImpl implements QueriesService {
+public class QueriesServiceImpl implements IQueriesService {
 
 	private QueriesManagerDao queriesManagerDao;
 	private UsersManagerDao usersManagerDao;
@@ -308,5 +308,10 @@ public class QueriesServiceImpl implements QueriesService {
 		}
 
 		return response;
+	}
+	
+	@Override
+	public void setUserLogged(UsersLogged userLogged) {
+		this.userLogged = userLogged;
 	}
 }
