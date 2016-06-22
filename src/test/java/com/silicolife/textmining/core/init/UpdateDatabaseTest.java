@@ -15,9 +15,17 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANote
 
 public class UpdateDatabaseTest {
 
-	
 	@Test
 	public void update() throws InvalidDatabaseAccess, SQLException, FileNotFoundException, IOException, ANoteException {
+		IDatabase database = CreateAndFillMysqlDatabaseTest.createDatabase("localhost","3306","todelete","root","admin");
+		DatabaseConnectionInit.init("localhost","3306","todelete","root","admin");
+		database.updateDatabase("src/test/resources/dbupdatefolder","src/test/resources/anote2_db_version.xml");	
+	    assertTrue(true);
+	}
+	
+	
+//	@Test
+	public void createandupdate() throws InvalidDatabaseAccess, SQLException, FileNotFoundException, IOException, ANoteException {
 		IDatabase database = CreateAndFillMysqlDatabaseTest.createDatabase("localhost","3306","todelete","root","admin");
         String hibernateFilePath = "src/test/resources/hibernate.cfg.xml";
 		if(database==null)
