@@ -188,4 +188,27 @@ public class InitConfiguration {
 		}
 		return properties.getProperty(key);
 	}
+	
+	public static String getPropertyValueFromInitOrProperties(String key)
+	{
+		if(properties.isEmpty())
+		{
+			return getPropertyFromPropertiesSystem(key);
+		}
+		String result = properties.getProperty(key);
+		if(result==null)
+		{
+			return getPropertyFromPropertiesSystem(key);
+		}
+		return result;
+	}
+	
+	private static String getPropertyFromPropertiesSystem(String key)
+	{
+		if(PropertiesManager.getPManager()!=null)
+		{
+			return (String) PropertiesManager.getPManager().getProperty(key);
+		}
+		return null;
+	}
 }
