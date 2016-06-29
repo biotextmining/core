@@ -835,4 +835,26 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 	public void setUserLogged(UsersLogged userLogged) {
 		this.userLogged = userLogged;
 	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsInBatchWithLimit(Long resourceId, Integer index,
+			Integer batchSize) throws ResourcesExceptions {
+		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
+		if (resource == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
+
+		Map<String, Serializable> eqRestrictions = new HashMap<String, Serializable>();
+		eqRestrictions.put("resActive", true);
+		eqRestrictions.put("resources", resource);
+		List<ResourceElements> resourcesElements = resourcesManagerDao.getResourcesElememtsDao().findByAttributesWithPagniation(eqRestrictions, index, batchSize);
+
+		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
+
+		for (ResourceElements resourceElement : resourcesElements) {
+			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			elementSet.addElementResource(resourceElement_);
+		}
+
+		return elementSet;
+	}
 }
