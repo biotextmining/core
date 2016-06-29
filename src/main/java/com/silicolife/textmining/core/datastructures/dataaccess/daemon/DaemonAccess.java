@@ -863,4 +863,10 @@ public class DaemonAccess implements IDataAccess {
 		
 	}
 
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsInBatchWithLimit(
+			IResource<IResourceElement> resource, Integer index, Integer pagination) throws ANoteException {
+		return resourcesElementAccessImpl.getResourceElementsInBatchWithLimit(resource.getId(), index, pagination);
+	}
+
 }

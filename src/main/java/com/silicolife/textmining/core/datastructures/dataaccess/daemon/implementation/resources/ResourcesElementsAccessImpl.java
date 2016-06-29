@@ -64,7 +64,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		ParameterizedTypeReference<DaemonResponse<Set<AnoteClass>>> responseType = new ParameterizedTypeReference<DaemonResponse<Set<AnoteClass>>>() {};
 		Map<String, Long> uriVariables = new HashMap<String, Long>();
 		uriVariables.put("resourceId", resourceId);
-		
+
 		ResponseEntity<DaemonResponse<Set<AnoteClass>>> response = webClient.get("resourceElements/getResourceClassContent", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
@@ -74,11 +74,11 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 			for (AnoteClass anoteClass : anoteClassImpl) {
 				anoteClasses.add(anoteClass);
 			}
-	
+
 			return anoteClasses;
 		}	
 	}
-	
+
 	/**
 	 * Add elements to a resource
 	 * 
@@ -92,7 +92,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		ParameterizedTypeReference<DaemonResponse<ResourceManagerReport>> responseType = new ParameterizedTypeReference<DaemonResponse<ResourceManagerReport>>() {};
 		Map<String, Long> uriVariables = new HashMap<String, Long>();
 		uriVariables.put("resourceId", resourceId);
-		
+
 		ResponseEntity<DaemonResponse<ResourceManagerReport>> response = webClient.post("resourceElements/addResourceElements", responseType, elem, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
@@ -101,7 +101,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 			return report;
 		}
 	}
-	
+
 	/**
 	 * Get resources elements by resource id
 	 * 
@@ -115,18 +115,18 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >> responseType = new ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >>() {};
 		Map<String, Long> uriVariables = new HashMap<String, Long>();
 		uriVariables.put("resourceId", resourceId);
-		
+
 		ResponseEntity<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl>>> response = webClient.get("resourceElements/getResourceElements", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
 		} else {
-		
+
 			IResourceElementSet<? extends IResourceElement> resourceElements = response.getBody().getContent();
 			return (IResourceElementSet<IResourceElement>) resourceElements;
 		}
 	}
-	
-	
+
+
 	/**
 	 * Get resource elements by a class
 	 * 
@@ -147,12 +147,12 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
 		} else {
-		
+
 			IResourceElementSet<? extends IResourceElement> resourceElements = response.getBody().getContent();
 			return (IResourceElementSet<IResourceElement>) resourceElements;
 		}
 	}
-	
+
 	/**
 	 * Get resource content by resource id
 	 * 
@@ -165,17 +165,17 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		ParameterizedTypeReference<DaemonResponse<ResourceContentImpl>> responseType = new ParameterizedTypeReference<DaemonResponse<ResourceContentImpl>>() {};
 		Map<String, Long> uriVariables = new HashMap<String, Long>();
 		uriVariables.put("resourceId",resourceId);
-		
+
 		ResponseEntity<DaemonResponse<ResourceContentImpl>> response = webClient.get("resourceElements/getResourceContent", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
 		} else {
-		
+
 			IResourceContent resourceContent = response.getBody().getContent();
 			return resourceContent;
 		}
 	}
-	
+
 	/**
 	 * Get resource element external id
 	 * 
@@ -188,22 +188,22 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		ParameterizedTypeReference<DaemonResponse<List<ExternalIDImpl>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<ExternalIDImpl>>>() {};
 		Map<String, Long> uriVariables = new HashMap<String, Long>();
 		uriVariables.put("resourceElementId", resourceElementId);
-		
+
 		ResponseEntity<DaemonResponse<List<ExternalIDImpl>>> response = webClient.get("resourceElements/getResourceElementExternalIds", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
 		} else {
-			
+
 			List<IExternalID> externalIds = new ArrayList<IExternalID>();
 			List<ExternalIDImpl> externalIdsImpl = response.getBody().getContent();
 			for (ExternalIDImpl resourceImpl : externalIdsImpl) {
 				externalIds.add(resourceImpl);
 			}
-	
+
 			return externalIds;
 		}
 	}
-	
+
 	/**
 	 * Add resource element wothout validation
 	 * 
@@ -217,7 +217,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		ParameterizedTypeReference<DaemonResponse<ResourceManagerReport>> responseType = new ParameterizedTypeReference<DaemonResponse<ResourceManagerReport>>() {};
 		Map<String, Long> uriVariables = new HashMap<String, Long>();
 		uriVariables.put("resourceId", resourceId);
-		
+
 		ResponseEntity<DaemonResponse<ResourceManagerReport>> response = webClient.post("resourceElements/addResourceElementsWithoutValidation", responseType, elem, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
@@ -226,8 +226,8 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 			return report;
 		}	
 	}
-	
-	
+
+
 	/**
 	 * Check if resource element exist in resource
 	 * 
@@ -242,7 +242,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
 		uriVariables.add("resourceId", String.valueOf(resourceId));
 		uriVariables.add("term",term);
-		
+
 		ResponseEntity<DaemonResponse<Boolean>> response = webClient.get("resourceElements/checkResourceElementExistsInResource", responseType, uriVariables);
 
 		if (response.getStatusCode() != HttpStatus.OK) {
@@ -253,7 +253,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		}
 	}
 
-	
+
 	/**
 	 * Remove resoruce class
 	 * 
@@ -268,7 +268,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		Map<String, Long> uriVariables = new LinkedHashMap<String, Long>();
 		uriVariables.put("resourceId", resourceId);
 		uriVariables.put("classId", classId);
-		
+
 		ResponseEntity<DaemonResponse<Boolean>> response = webClient.get("resourceElements/removeResourceClass", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
@@ -277,7 +277,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 			return boo;
 		}	
 	} 
-	
+
 	/**
 	 * Add Synonyms
 	 * 
@@ -293,7 +293,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		Map<String, Long> uriVariables = new LinkedHashMap<String, Long>();
 		uriVariables.put("resourceId", resourceId);
 		uriVariables.put("resourceElmentId", resourceElmentId);
-		
+
 		ResponseEntity<DaemonResponse<ResourceManagerReport>> response = webClient.post("resourceElements/addResourceElementSynonyms", responseType, newSynonyms, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
@@ -301,9 +301,9 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 			IResourceManagerReport report = response.getBody().getContent();
 			return report;
 		}	
-		
+
 	}
-	
+
 	/**
 	 * Add external ids
 	 * 
@@ -319,7 +319,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		Map<String, Long> uriVariables = new LinkedHashMap<String, Long>();
 		uriVariables.put("resourceId", resourceId);
 		uriVariables.put("resourceElmentId", resourceElmentId);
-		
+
 		ResponseEntity<DaemonResponse<ResourceManagerReport>> response = webClient.post("resourceElements/addResourceElementExternalIDs", responseType, externalIDs, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
@@ -327,9 +327,9 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 			IResourceManagerReport report = response.getBody().getContent();
 			return report;
 		}	
-		
+
 	}
-	
+
 	/**
 	 * Update resource element
 	 * 
@@ -340,7 +340,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 	public IResourceManagerReport updateResourceElement(IResourceElement elem) throws DaemonException{
 		checkAndForceLoginIfNecessary();
 		ParameterizedTypeReference<DaemonResponse<ResourceManagerReport>> responseType = new ParameterizedTypeReference<DaemonResponse<ResourceManagerReport>>() {};
-		
+
 		ResponseEntity<DaemonResponse<ResourceManagerReport>> response = webClient.put("resourceElements/updateResourceElement", responseType, elem);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
@@ -349,7 +349,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 			return report;
 		}
 	}
-	
+
 	/**
 	 * Update resource element synonym
 	 * 
@@ -377,7 +377,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 			return report;
 		}	
 	}
-	
+
 	/**
 	 * Remove synonym from reosurce element
 	 * 
@@ -392,7 +392,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
 		uriVariables.add("resourceElmentId", String.valueOf(resourceElmentId));
 		uriVariables.add("synonym", synonym);
-		
+
 		ResponseEntity<DaemonResponse<Boolean>> response = webClient.post("resourceElements/removeResourceElementSynonym", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
@@ -401,7 +401,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 			return boo;
 		}	
 	}
-	
+
 	/**
 	 * Remove external id from resource element
 	 * 
@@ -415,7 +415,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		ParameterizedTypeReference<DaemonResponse<Boolean>> responseType = new ParameterizedTypeReference<DaemonResponse<Boolean>>() {};
 		Map<String, Long> uriVariables = new HashMap<String, Long>();
 		uriVariables.put("resourceElmentId", resourceElmentId);
-		
+
 		ResponseEntity<DaemonResponse<Boolean>> response = webClient.post("resourceElements/removeResourceElementExternalID", responseType, extID, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
@@ -423,7 +423,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 			Boolean boo = response.getBody().getContent();
 			return boo;
 		}
-	
+
 	}
 
 	/**
@@ -438,7 +438,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		ParameterizedTypeReference<DaemonResponse<Boolean>> responseType = new ParameterizedTypeReference<DaemonResponse<Boolean>>() {};
 		MultiValueMap<String, Long> uriVariables = new LinkedMultiValueMap<String, Long>();
 		uriVariables.add("resourceElmentId", resourceElmentId);
-		
+
 		ResponseEntity<DaemonResponse<Boolean>> response = webClient.post("resourceElements/removeResourceElementAllExternalID", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
@@ -446,10 +446,10 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 			Boolean boo = response.getBody().getContent();
 			return boo;
 		}
-		
+
 	}
-	
-	
+
+
 	/**
 	 * Get resource max priority
 	 * 
@@ -462,7 +462,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		ParameterizedTypeReference<DaemonResponse<Integer>> responseType = new ParameterizedTypeReference<DaemonResponse<Integer>>() {};
 		Map<String, Long> uriVariables = new HashMap<String, Long>();
 		uriVariables.put("resourceId", resourceId);
-		
+
 		ResponseEntity<DaemonResponse<Integer>> response = webClient.get("resourceElements/getResourceMaxPriorety", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
@@ -471,7 +471,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 			return priority;
 		}
 	}
-	
+
 
 	/**
 	 * Add resource element relations
@@ -489,7 +489,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		uriVariables.add("resourceElmentIda", String.valueOf(resourceElmentIda));
 		uriVariables.add("resourceElmentIdb", String.valueOf(resourceElmentIdb));
 		uriVariables.add("relationType", relationType);
-		
+
 		ResponseEntity<DaemonResponse<Boolean>> response = webClient.post("resourceElements/addResourceElementsRelation", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
@@ -497,7 +497,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 			Boolean boo = response.getBody().getContent();
 			return boo;
 		}
-		
+
 
 	}
 
@@ -513,18 +513,18 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		ParameterizedTypeReference<DaemonResponse<List<ResourceElementsRelationImpl>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<ResourceElementsRelationImpl>>>() {};
 		Map<String, Long> uriVariables = new HashMap<String, Long>();
 		uriVariables.put("resourceId", resourceId);
-		
+
 		ResponseEntity<DaemonResponse<List<ResourceElementsRelationImpl>>> response = webClient.get("resourceElements/getResourceElementsRelations", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
 		} else {
-			
+
 			List<IResourceElementsRelation> resourceElementRelation = new ArrayList<IResourceElementsRelation>();
 			List<ResourceElementsRelationImpl> resourceElementRelationImpl = response.getBody().getContent();
 			for (ResourceElementsRelationImpl resourceImpl : resourceElementRelationImpl) {
 				resourceElementRelation.add(resourceImpl);
 			}
-	
+
 			return resourceElementRelation;
 		}	
 	}
@@ -537,19 +537,19 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 	 * @throws DaemonException
 	 */
 	public IResource<IResourceElement> getResourceFromResourceElement(Long resourceElementId) throws DaemonException{
-	
+
 		checkAndForceLoginIfNecessary();
 		ParameterizedTypeReference<DaemonResponse<ResourceImpl>> responseType = new ParameterizedTypeReference<DaemonResponse<ResourceImpl>>(){};
 		Map<String, Long> uriVariables = new HashMap<String, Long>();
 		uriVariables.put("resourceElementId", resourceElementId);
-		
+
 		ResponseEntity<DaemonResponse<ResourceImpl>> response = webClient.get("resourceElements/getResourceFromResourceElement", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
 		} else {
-			
+
 			ResourceImpl resource = response.getBody().getContent();	
-			
+
 			IResource<IResourceElement> resourceElement = null;
 			ResourcesTypeEnum typeEnum = ResourcesTypeEnum.valueOf(resource.getType());
 			switch(typeEnum){
@@ -573,7 +573,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 				break;
 			}
 
-			
+
 			return resourceElement;
 		}
 	}
@@ -590,7 +590,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		ParameterizedTypeReference<DaemonResponse<ResourceElementImpl>> responseType = new ParameterizedTypeReference<DaemonResponse<ResourceElementImpl>>(){};
 		Map<String, Long> uriVariables = new HashMap<String, Long>();
 		uriVariables.put("resourceElementId", resourceElementId);
-		
+
 		ResponseEntity<DaemonResponse<ResourceElementImpl>> response = webClient.get("resourceElements/getResourceElemenById", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
@@ -615,17 +615,17 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
 		uriVariables.add("resourceId", String.valueOf(resourceId));
 		uriVariables.add("name", name);
-		
+
 		ResponseEntity<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl>>> response = webClient.get("resourceElements/getResourceElementsByName", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
 		} else {
-		
+
 			IResourceElementSet<? extends IResourceElement> resourceElements = response.getBody().getContent();
 			return (IResourceElementSet<IResourceElement>) resourceElements;
 		}
 	}
-	
+
 	/**
 	 * Inactive resource element
 	 * 
@@ -668,6 +668,25 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		} else {
 			Boolean boo = response.getBody().getContent();
 			return boo;
+		}
+	}
+
+	public IResourceElementSet<IResourceElement> getResourceElementsInBatchWithLimit(long resourceId, int index,
+			int pagination) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >> responseType = new ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >>() {};
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("resourceId", String.valueOf(resourceId));
+		uriVariables.add("index", String.valueOf(index));
+		uriVariables.add("pagination", String.valueOf(pagination));
+
+		ResponseEntity<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl>>> response = webClient.get("resourceElements/getResourceElementsInBatchWithLimit", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+
+			IResourceElementSet<? extends IResourceElement> resourceElements = response.getBody().getContent();
+			return (IResourceElementSet<IResourceElement>) resourceElements;
 		}
 	}
 }

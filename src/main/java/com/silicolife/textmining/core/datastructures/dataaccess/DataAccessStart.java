@@ -799,4 +799,11 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsInBatchWithLimit(
+			IResource<IResourceElement> resource, Integer index, Integer pagination) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -86,6 +86,8 @@ public interface IResourceElementAccess {
 	 */
 	public IResourceElementSet<IResourceElement> getResourceElements(IResource<IResourceElement> resource) throws ANoteException;
 	
+	public IResourceElementSet<IResourceElement> getResourceElementsInBatchWithLimit(IResource<IResourceElement> resource, Integer index, Integer pagination) throws ANoteException;
+	
 	/**
 	 * Get All Resource Elements Relation
 	 * 

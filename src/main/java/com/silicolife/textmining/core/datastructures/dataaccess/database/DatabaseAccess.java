@@ -1761,4 +1761,18 @@ public class DatabaseAccess implements IDataAccess {
 
 	}
 
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsInBatchWithLimit(
+			IResource<IResourceElement> resource, Integer index, Integer pagination) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IResourceElementSet<IResourceElement> resourceElement = resourcesElementService.getResourceElementsInBatchWithLimit(resource.getId(), index, pagination);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resourceElement;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
 }
