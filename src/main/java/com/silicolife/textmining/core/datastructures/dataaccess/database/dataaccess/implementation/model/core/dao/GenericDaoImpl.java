@@ -33,7 +33,6 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 
 	@Override
 	public T findById(Serializable id) {
-		@SuppressWarnings("unchecked")
 		T T = (T) sessionFactory.getCurrentSession().get(klass, id);
 		return T;
 	}
@@ -179,5 +178,16 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 	@Override
 	public void clearSession() {
 		sessionFactory.getCurrentSession().clear();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> findByAttributesWithPagniation(Map<String, Serializable> eqRestrictions, int index, int limit) {
+		Criteria c = sessionFactory.getCurrentSession().createCriteria(klass);
+		for (Map.Entry<String, Serializable> entry : eqRestrictions.entrySet())
+			c.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		c.setFirstResult(index);
+		c.setMaxResults(limit);
+		c.setFetchSize(limit);
+		return c.list();
 	}
 }
