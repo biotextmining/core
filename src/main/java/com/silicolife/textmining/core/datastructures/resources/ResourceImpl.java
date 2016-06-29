@@ -122,7 +122,17 @@ public class ResourceImpl extends Observable implements IResource<IResourceEleme
 	 */
 	@JsonIgnore
 	public IResourceElementSet<IResourceElement> getResourceElements() throws ANoteException {
-		return InitConfiguration.getDataAccess().getResourceElements(this);
+		int index = 0;
+		int size = 100000;
+		IResourceElementSet<IResourceElement> elements = new ResourceElementSetImpl<>();
+		IResourceElementSet<IResourceElement> tempelements = InitConfiguration.getDataAccess().getResourceElementsInBatchWithLimit(this, index, size);
+		while(tempelements.size() != 0){
+			elements.addAllElementResource(tempelements.getResourceElements());
+			index = index + size;
+			tempelements = InitConfiguration.getDataAccess().getResourceElementsInBatchWithLimit(this, index, size);
+		}
+		return elements;
+		//		return InitConfiguration.getDataAccess().getResourceElements(this);
 	}
 	
 	@JsonIgnore
