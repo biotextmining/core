@@ -90,12 +90,13 @@ public class NormalizationForm {
 			}
 			catch (IOException e) {
 			}
-		}else{
+		}
+		if(textRulesChangesProperties==null){
 			textRulesChangesProperties = new Properties();
 		}
 		for(String prop:textRulesChangesProperties.stringPropertyNames()) {
 			text = text.replaceAll(prop, textRulesChangesProperties.getProperty(prop));
-			System.out.println(prop+"\t"+textRulesChangesProperties.getProperty(prop));
+//			System.out.println(prop+"\t"+textRulesChangesProperties.getProperty(prop));
 		}
 		return text;
 	}
