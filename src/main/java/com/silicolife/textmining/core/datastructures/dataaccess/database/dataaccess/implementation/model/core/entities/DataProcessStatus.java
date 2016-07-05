@@ -99,8 +99,8 @@ public class DataProcessStatus implements java.io.Serializable {
 		this.dpsProgress = dpsProgress;
 	}
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "dps_create_date", length = 10)
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "dps_create_date", length = 19)
 	public Date getDpsCreateDate() {
 		return this.dpsCreateDate;
 	}
@@ -109,8 +109,8 @@ public class DataProcessStatus implements java.io.Serializable {
 		this.dpsCreateDate = dpsCreateDate;
 	}
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "dps_update_date", length = 10)
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "dps_update_date", length = 19)
 	public Date getDpsUpdateDate() {
 		return this.dpsUpdateDate;
 	}

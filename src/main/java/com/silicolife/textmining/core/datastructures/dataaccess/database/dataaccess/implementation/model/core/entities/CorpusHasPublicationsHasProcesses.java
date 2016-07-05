@@ -83,8 +83,8 @@ public class CorpusHasPublicationsHasProcesses implements java.io.Serializable {
 		this.processes = processes;
 	}
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "chphp_create_date", length = 10)
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "chphp_create_date", length = 19)
 	public Date getChphpCreateDate() {
 		return this.chphpCreateDate;
 	}
@@ -93,8 +93,8 @@ public class CorpusHasPublicationsHasProcesses implements java.io.Serializable {
 		this.chphpCreateDate = chphpCreateDate;
 	}
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "chphp_update_date", length = 10)
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "chphp_update_date", length = 19)
 	public Date getChphpUpdateDate() {
 		return this.chphpUpdateDate;
 	}
