@@ -51,6 +51,9 @@ public class ExceptionsCodes {
 	public static final String codeCorpusPublicationAlreadyExists = "alreadycorpuspublication";
 	public static final String msgCorpusPublicationAlreadyExists = "Publication already exist in Corpus";
 	
+	public static final String codeCorpusPublicationNotExists = "notexistscorpuspublication";
+	public static final String msgCorpusPublicationNotExists = "Publication not exist in Corpus";
+	
 	public static final String codePublicationAlreadyFullText = "publicationalreadyhasfulltext";
 	public static final String msgPublicationAlreadyFullText = "Publciation already contains full text";
 	
@@ -59,6 +62,9 @@ public class ExceptionsCodes {
 
 	public static final String codeProcessAlreadyInOneCorpus = "ProcessAlreadyInOneCorpus";
 	public static final String msgProcessAlreadyInOneCorpus = "Process Already in a Corpus";
+	
+	public static final String codeProcessNotInCorpus = "ProcessNotExistsForCorpus";
+	public static final String msgProcessNotInCorpus = "Process not exists for a Corpus";
 
 	public static final String msgClassExists = "ClassAlreadyExists";
 	public static final String codeClassExists = "Class already exists";
