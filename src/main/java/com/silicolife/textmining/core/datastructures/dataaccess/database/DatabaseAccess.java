@@ -1775,4 +1775,18 @@ public class DatabaseAccess implements IDataAccess {
 		}
 	}
 
+	@Override
+	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(IIEProcess process, Integer paginationIndex,
+			Integer paginationSize) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IDocumentSet documents = corpusService.getCorpusPublicationsNotProcessedPaginated(process.getCorpus().getId(), process.getID(), paginationIndex, paginationSize);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return documents;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
 }

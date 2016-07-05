@@ -806,4 +806,11 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(IIEProcess process, Integer paginationIndex,
+			Integer paginationSize) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

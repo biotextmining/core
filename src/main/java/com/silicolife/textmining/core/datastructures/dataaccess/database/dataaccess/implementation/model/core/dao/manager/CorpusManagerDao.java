@@ -9,6 +9,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Corpus;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasProcesses;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublications;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublicationsHasProcesses;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusProperties;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.PublicationFields;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.PublicationHasLabels;
@@ -25,19 +26,21 @@ public class CorpusManagerDao extends PublicationsManagerDao {
 	private GenericDao<CorpusHasProcesses> corpusHasProcessesDao;
 	private GenericDao<CorpusHasPublications> corpusHasPublicationsDao;
 	private CorpusAuxDao corpusAuxDao;
+	private GenericDao<CorpusHasPublicationsHasProcesses> corpusHasPublicationsHasProcessesDao;
 
 	@Autowired
 	public CorpusManagerDao(GenericDao<PublicationSources> publicationSourcesDao, GenericDao<PublicationHasSources> publicationHasSourcesDao,
 			GenericDao<Publications> publicationsDao, GenericDao<PublicationFields> publicationFieldsDao, GenericDao<PublicationLabels> publicationLabelsDao,
 			GenericDao<PublicationHasLabels> publicationHasLabelsDao, PublicationsAuxDao publicationsAuxDao, GenericDao<Corpus> corpusDao,
 			GenericDao<CorpusProperties> corpusPropertiesDao, GenericDao<CorpusHasProcesses> corpusHasProcessesDao, GenericDao<CorpusHasPublications> corpusHasPublicationsDao,
-			CorpusAuxDao corpusAuxDao) {
+			CorpusAuxDao corpusAuxDao, GenericDao<CorpusHasPublicationsHasProcesses> corpusHasPublicationsHasProcessesDao) {
 		super(publicationSourcesDao, publicationHasSourcesDao, publicationsDao, publicationFieldsDao, publicationLabelsDao, publicationHasLabelsDao, publicationsAuxDao);
 		this.corpusDao = corpusDao;
 		this.corpusPropertiesDao = corpusPropertiesDao;
 		this.corpusHasProcessesDao = corpusHasProcessesDao;
 		this.corpusHasPublicationsDao = corpusHasPublicationsDao;
 		this.corpusAuxDao = corpusAuxDao;
+		this.corpusHasPublicationsHasProcessesDao = corpusHasPublicationsHasProcessesDao;
 	}
 
 	public GenericDao<Corpus> getCorpusDao() {
@@ -58,5 +61,9 @@ public class CorpusManagerDao extends PublicationsManagerDao {
 
 	public CorpusAuxDao getCorpusAuxDao() {
 		return corpusAuxDao;
+	}
+	
+	public GenericDao<CorpusHasPublicationsHasProcesses> getCorpusHasPublicationsHasProcessesDao() {
+		return corpusHasPublicationsHasProcessesDao;
 	}
 }

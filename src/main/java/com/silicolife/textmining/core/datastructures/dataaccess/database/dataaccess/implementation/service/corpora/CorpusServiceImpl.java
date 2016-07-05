@@ -55,7 +55,7 @@ public class CorpusServiceImpl implements ICorpusService {
 	private ProcessesManagerDao processesManagerDao;
 	private UsersManagerDao usersManagerDao;
 	private UsersLogged userLogged;
-	
+
 	private final static String corpusStr = ResourcesTypeUtils.corpus.getName();
 	private final static String processStr = ResourcesTypeUtils.processes.getName();
 
@@ -70,21 +70,21 @@ public class CorpusServiceImpl implements ICorpusService {
 
 	@Override
 	public List<ICorpus> getAllCorpus() {
-		
+
 		AuthUsers user = userLogged.getCurrentUserLogged();
 		/**
 		 * get all corpus from a user
 		 */
-		
+
 		List<Corpus> corpus = corpusManagerDao.getCorpusAuxDao().findQueriesByAttributes(user.getAuId(), corpusStr);
-		
+
 		List<ICorpus> corpus_ = new ArrayList<ICorpus>();
 		for (Corpus corpusObj : corpus) {
 			ICorpus corpusObj_ = CorpusWrapper.convertToAnoteStructure(corpusObj);
 			corpus_.add(corpusObj_);
 		}
-//		if (corpus_.size() == 0)
-//			return null;
+		//		if (corpus_.size() == 0)
+		//			return null;
 
 		return corpus_;
 	}
@@ -105,12 +105,12 @@ public class CorpusServiceImpl implements ICorpusService {
 	public Boolean createCorpus(ICorpus corpus_) {
 
 		Corpus corpus = CorpusWrapper.convertToDaemonStructure(corpus_);
-		
+
 		/*
 		 * save corpus
 		 */
 		corpusManagerDao.getCorpusDao().save(corpus);
-		
+
 		/*
 		 * save corpus preferences
 		 */
@@ -136,7 +136,7 @@ public class CorpusServiceImpl implements ICorpusService {
 	@Transactional(readOnly = false)
 	@Override
 	public boolean updateCorpus(ICorpus corpus_) throws CorpusException {
-		
+
 		Corpus corpus = corpusManagerDao.getCorpusDao().findById(corpus_.getId());
 		if (corpus == null)
 			throw new CorpusException(ExceptionsCodes.codeNoCorpus, ExceptionsCodes.msgNoCorpus);
@@ -145,7 +145,7 @@ public class CorpusServiceImpl implements ICorpusService {
 		 */
 		corpus.setCrpCorpusName(corpus_.getDescription());
 		corpus.setCrpNotes(corpus_.getNotes());
-//		corpus.setCrpActive(corpus_.is);
+		//		corpus.setCrpActive(corpus_.is);
 		AuthUsers user = userLogged.getCurrentUserLogged();
 		corpusManagerDao.getCorpusDao().update(corpus);
 		/*
@@ -170,23 +170,23 @@ public class CorpusServiceImpl implements ICorpusService {
 			documentSet.addDocument(publication_.getId(), publication_);
 		}
 
-//		if (documentSet.size() == 0)
-//			return null;
+		//		if (documentSet.size() == 0)
+		//			return null;
 
 		return documentSet;
 	}
-	
+
 	@Override
 	public Long getCorpusPublicationsCount(Long corpusId) throws CorpusException {
 		Corpus corpus = corpusManagerDao.getCorpusDao().findById(corpusId);
 		if (corpus == null)
 			throw new CorpusException(ExceptionsCodes.codeNoCorpus, ExceptionsCodes.msgNoCorpus);
-		
+
 		Long count = corpusManagerDao.getPublicationsAuxDao().countPublicationsByCorpusId(corpusId);
 		return count;
 
 	}
-	
+
 	@Override
 	public IDocumentSet getCorpusPublicationsPaginated(Long corpusId, Integer paginationIndex, Integer paginationSize) throws CorpusException {
 		Corpus corpus = corpusManagerDao.getCorpusDao().findById(corpusId);
@@ -200,29 +200,29 @@ public class CorpusServiceImpl implements ICorpusService {
 			documentSet.addDocument(publication_.getId(), publication_);
 		}
 
-//		if (documentSet.size() == 0)
-//			return null;
+		//		if (documentSet.size() == 0)
+		//			return null;
 
 		return documentSet;
 	}
 
 	@Override
 	public List<IIEProcess> getCorpusProcesses(Long corpusId) throws CorpusException {
-		
+
 		AuthUsers user = userLogged.getCurrentUserLogged();
 
 		Corpus corpus = corpusManagerDao.getCorpusDao().findById(corpusId);
 		if (corpus == null)
 			throw new CorpusException(ExceptionsCodes.codeNoCorpus, ExceptionsCodes.msgNoCorpus);
-		
+
 		List<IIEProcess> processes_ = new ArrayList<IIEProcess>();
 		List<Processes> processes = corpusManagerDao.getCorpusAuxDao().findProcessesByCorpusId(corpusId,user.getAuId(), processStr);
 		for (Processes process : processes) {
 			IIEProcess process_ = ProcessWrapper.convertToAnoteStructure(process);
 			processes_.add(process_);
 		}
-//		if (processes_.size() == 0)
-//			return null;
+		//		if (processes_.size() == 0)
+		//			return null;
 
 		return processes_;
 	}
@@ -271,11 +271,11 @@ public class CorpusServiceImpl implements ICorpusService {
 		Publications publication = corpusManagerDao.getPublicationsDao().findById(publicationID);
 		if (publication == null)
 			throw new CorpusException(ExceptionsCodes.codeNoPublication, ExceptionsCodes.msgNoPublication);
-		
+
 		CorpusHasPublicationsId id = new CorpusHasPublicationsId(corpusId, publicationID);
 		if(corpusManagerDao.getCorpusHasPublicationsDao().findById(id)!=null)
 			throw new CorpusException(ExceptionsCodes.codeCorpusPublicationAlreadyExists, ExceptionsCodes.msgCorpusPublicationAlreadyExists);	
-		
+
 		CorpusHasPublications corpushaspublication = new CorpusHasPublications(id , corpus, publication);
 		corpusManagerDao.getCorpusHasPublicationsDao().save(corpushaspublication);
 		/*
@@ -284,7 +284,7 @@ public class CorpusServiceImpl implements ICorpusService {
 		AuthUsers user = userLogged.getCurrentUserLogged();
 		AuthUserLogs log = new AuthUserLogs(user, new Date(), "create", "corpus_has_publication", null, "Association between corpus and publication");
 		usersManagerDao.getAuthUserLogsDao().save(log);
-		
+
 		return true;
 	}
 
@@ -316,12 +316,12 @@ public class CorpusServiceImpl implements ICorpusService {
 			usersManagerDao.getAuthUserDataObjectsDao().delete(userObject);
 
 		}
-		
+
 		AuthUserLogs log = new AuthUserLogs(user, new Date(), "Remove/inactive", "corpus/users_has_data_object", null, "remove/inactive corpus");
 		usersManagerDao.getAuthUserLogsDao().save(log);
-		
+
 		return true;
-		
+
 	}
 
 	@Override
@@ -358,6 +358,34 @@ public class CorpusServiceImpl implements ICorpusService {
 	@Override
 	public void setUserLogged(UsersLogged userLogged) {
 		this.userLogged = userLogged;
+	}
+
+	@Override
+	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(Long corpusId, Long processId,
+			Integer paginationIndex, Integer paginationSize) throws CorpusException {
+		Corpus corpus = corpusManagerDao.getCorpusDao().findById(corpusId);
+		if (corpus == null)
+			throw new CorpusException(ExceptionsCodes.codeNoCorpus, ExceptionsCodes.msgNoCorpus);
+		Processes processes = processesManagerDao.getProcessesDao().findById(processId);
+		if (processes == null)
+			throw new CorpusException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
+		
+		CorpusHasProcessesId corpusHasProcessid = new CorpusHasProcessesId(corpusId, processId);
+		CorpusHasProcesses corpusHasProcess = corpusManagerDao.getCorpusHasProcessesDao().findById(corpusHasProcessid);
+		if(corpusHasProcess==null)
+			throw new CorpusException(ExceptionsCodes.codeProcessNotInCorpus, ExceptionsCodes.msgProcessNotInCorpus);
+		
+		IDocumentSet documentSet = new DocumentSetImpl();
+		List<Publications> publications = corpusManagerDao.getPublicationsAuxDao().findPublicationsByCorpusIdAndProcessIdNotProcessedPaginated(corpusId, processId, paginationIndex, paginationSize);
+		for (Publications publication : publications) {
+			IPublication publication_ = PublicationsWrapper.convertToAnoteStructure(publication);
+			documentSet.addDocument(publication_.getId(), publication_);
+		}
+
+		//		if (documentSet.size() == 0)
+		//			return null;
+
+		return documentSet;
 	}
 
 }

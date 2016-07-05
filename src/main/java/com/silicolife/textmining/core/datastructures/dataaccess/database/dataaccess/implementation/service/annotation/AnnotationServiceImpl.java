@@ -33,6 +33,10 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUsers;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Classes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Corpus;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublications;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublicationsHasProcesses;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublicationsHasProcessesId;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublicationsId;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Processes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.annotation.AnnotationsWrapper;
@@ -106,7 +110,12 @@ public class AnnotationServiceImpl implements IAnnotationService{
 				annotationManagerdao.getAnnotationPropertiesDao().save(annotationProperty);
 			}
 		}
-
+		
+		/*
+		 * Document in corpus is processed
+		 */
+		addDocumentInCorpusAsProcessed(corpusId, processId, documentID, processes);
+		
 		/*
 		 * log
 		 */
@@ -115,6 +124,33 @@ public class AnnotationServiceImpl implements IAnnotationService{
 		usersManagerDao.getAuthUserLogsDao().save(log);
 		
 		return true;
+	}
+
+	private void addDocumentInCorpusAsProcessed(Long corpusId, Long processId, Long documentID, Processes processes)
+			throws AnnotationException {
+		CorpusHasPublicationsHasProcessesId corpusPublicationProcessAssociationId = new CorpusHasPublicationsHasProcessesId();
+		corpusPublicationProcessAssociationId.setChphpCorpusId(corpusId);
+		corpusPublicationProcessAssociationId.setChphpProcessesId(processId);
+		corpusPublicationProcessAssociationId.setChphpPublicationId(documentID);
+		CorpusHasPublicationsHasProcesses corpusPublicationProcessAssociation = corpusManagerDao.getCorpusHasPublicationsHasProcessesDao().findById(corpusPublicationProcessAssociationId);
+		if(corpusPublicationProcessAssociation == null){
+			corpusPublicationProcessAssociation = new CorpusHasPublicationsHasProcesses();
+			corpusPublicationProcessAssociation.setId(corpusPublicationProcessAssociationId);
+			corpusPublicationProcessAssociation.setProcesses(processes);
+			
+			CorpusHasPublicationsId id = new CorpusHasPublicationsId(corpusId, documentID);
+			CorpusHasPublications corpusHasPublications = corpusManagerDao.getCorpusHasPublicationsDao().findById(id);
+			if(corpusHasPublications==null){
+				throw new AnnotationException(ExceptionsCodes.codeCorpusPublicationNotExists, ExceptionsCodes.msgCorpusPublicationNotExists);	
+			}
+			corpusPublicationProcessAssociation.setCorpusHasPublications(corpusHasPublications);
+			corpusPublicationProcessAssociation.setChphpCreateDate(new Date());
+			corpusPublicationProcessAssociation.setChphpUpdateDate(new Date());
+			corpusManagerDao.getCorpusHasPublicationsHasProcessesDao().save(corpusPublicationProcessAssociation);
+		}else{
+			corpusPublicationProcessAssociation.setChphpUpdateDate(new Date());
+			corpusManagerDao.getCorpusHasPublicationsHasProcessesDao().update(corpusPublicationProcessAssociation);
+		}
 	}
 
 	@Override
@@ -225,6 +261,11 @@ public class AnnotationServiceImpl implements IAnnotationService{
 				annotationManagerdao.getAnnotationPropertiesDao().save(annotationProperty);
 			}	
 		}
+		
+		/*
+		 * Document in corpus is processed
+		 */
+		addDocumentInCorpusAsProcessed(corpusId, processId, documentID, processes);
 		
 		/*
 		 * log

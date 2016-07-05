@@ -869,4 +869,10 @@ public class DaemonAccess implements IDataAccess {
 		return resourcesElementAccessImpl.getResourceElementsInBatchWithLimit(resource.getId(), index, pagination);
 	}
 
+	@Override
+	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(IIEProcess process, Integer paginationIndex,
+			Integer paginationSize) throws ANoteException {
+		return corpusAccessImpl.getCorpusPublicationsNotProcessedPaginated(process.getCorpus().getId(), process.getID(), paginationIndex, paginationSize);
+	}
+
 }

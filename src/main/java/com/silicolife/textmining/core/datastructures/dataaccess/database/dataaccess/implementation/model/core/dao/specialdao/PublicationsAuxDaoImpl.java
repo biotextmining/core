@@ -9,11 +9,15 @@ import org.hibernate.FetchMode;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublications;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublicationsHasProcesses;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.PublicationHasSources;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Queries;
@@ -69,7 +73,7 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 		Long count = (Long) c.uniqueResult();
 		return count;
 	}
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Publications> findPublicationsByCorpusIdPaginated(Long corpusId, Integer paginationIndex, Integer paginationSize) {
@@ -81,11 +85,40 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 		c.add(Restrictions.eq("corpusHasPub.id.chpCorpusId", corpusId));
 		c.setFirstResult(paginationIndex);
 		c.setMaxResults(paginationSize);
+		c.setFetchSize(paginationSize);
+		
+		List<Publications> publications = c.list();
+
+		return publications;
+	}
+	
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Publications> findPublicationsByCorpusIdAndProcessIdNotProcessedPaginated(Long corpusId, Long processId, Integer paginationIndex, Integer paginationSize) {
+
+		DetachedCriteria subQuery = DetachedCriteria.forClass(CorpusHasPublicationsHasProcesses.class, "docsinprocess");
+//		subQuery.createAlias("docsinprocess.id", "docsinprocessid");
+		subQuery.add(Restrictions.eq("docsinprocess.id.chphpCorpusId", corpusId));
+		subQuery.add(Restrictions.eq("docsinprocess.id.chphpProcessesId", processId));
+		subQuery.add(Restrictions.eqProperty("docsinprocess.id.chphpPublicationId", "pub.pubId"));
+		subQuery.setProjection(Projections.property("docsinprocess.id.chphpPublicationId"));
+		
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Publications.class, "pub");
+		c.createAlias("pub.corpusHasPublicationses", "corpusHasPub");
+		c.setFetchMode("corpusHasPub", FetchMode.JOIN);
+		c.add(Restrictions.eq("corpusHasPub.id.chpCorpusId", corpusId));
+		c.add(Subqueries.notExists(subQuery));
+		c.setFirstResult(paginationIndex);
+		c.setMaxResults(paginationSize);
+		c.setFetchSize(paginationSize);
 
 		List<Publications> publications = c.list();
 
 		return publications;
 	}
+	
 
 	@Override
 	public Publications getPublicationFullText(Long publicationId) {

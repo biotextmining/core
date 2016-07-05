@@ -131,4 +131,5 @@ public interface ICorpusService {
 	
 	public void setUserLogged(UsersLogged userLogged);
 
+	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(Long corpusId, Long processId, Integer paginationIndex, Integer paginationSize)throws CorpusException;
 }

@@ -19,4 +19,6 @@ public interface PublicationsAuxDao {
 	public List<Object[]> getPublicationBySource(Long sourceId);
 
 	public List<Object> getQueryPublicationBySource(Long sourceId, Long queryId);
+
+	public List<Publications> findPublicationsByCorpusIdAndProcessIdNotProcessedPaginated(Long corpusId, Long processId, Integer paginationIndex, Integer paginationSize);
 }

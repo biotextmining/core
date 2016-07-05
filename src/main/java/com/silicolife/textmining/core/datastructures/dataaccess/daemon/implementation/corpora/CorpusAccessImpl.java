@@ -301,4 +301,23 @@ public class CorpusAccessImpl extends RestClientAccess {
 			return returned;
 		}
 	}
+	
+	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(Long corpusId, Long processId, Integer paginationIndex, Integer paginationSize) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<DocumentSetImpl>> responseType = new ParameterizedTypeReference<DaemonResponse<DocumentSetImpl>>() {};
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("corpusId", String.valueOf(corpusId));
+		uriVariables.add("processId", String.valueOf(processId));
+		uriVariables.add("paginationIndex", String.valueOf(paginationIndex));
+		uriVariables.add("paginationSize", String.valueOf(paginationSize));
+		
+		ResponseEntity<DaemonResponse<DocumentSetImpl>> response = webClient.get("corpus/getCorpusPublicationsNotProcessedPaginated", responseType, uriVariables);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			IDocumentSet documentSet = response.getBody().getContent();
+			return documentSet;
+		}
+	}
 }

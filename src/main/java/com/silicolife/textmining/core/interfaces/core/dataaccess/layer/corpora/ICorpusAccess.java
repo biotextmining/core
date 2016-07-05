@@ -125,4 +125,17 @@ public interface ICorpusAccess extends IIEProcessAccess, IAnnotationAccess, IAnn
 	 * @throws ANoteException 
 	 */
 	public ICorpusStatistics getCorpusStatistics(ICorpus corpus) throws ANoteException;
+	
+	/**
+	 * 
+	 * Get all unprocessed documents 
+	 * 
+	 * @param corpus
+	 * @param process
+	 * @param paginationIndex
+	 * @param paginationSize
+	 * @return
+	 * @throws ANoteException
+	 */
+	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(IIEProcess process, Integer paginationIndex, Integer paginationSize)throws ANoteException;
 }

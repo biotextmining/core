@@ -36,6 +36,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Corpus;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasProcesses;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublications;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublicationsHasProcesses;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusProperties;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.HyperLinkMenuSourceAssociation;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.HyperLinkMenus;
@@ -121,7 +122,7 @@ public class ManagerDao {
 	private AnnotationManagerDao createAnnotationAuxDao() {
 		if(processesManagerDao==null)
 		{
-			createProcessManagerDao();
+			processesManagerDao = createProcessManagerDao();
 		}
 		GenericDao<AnnotationLogs> annotationLogsDao = new GenericDaoImpl<AnnotationLogs>(sessionFactory, AnnotationLogs.class);
 		GenericDao<AnnotationSides> annotationSidesDao  = new GenericDaoImpl<AnnotationSides>(sessionFactory, AnnotationSides.class);
@@ -157,9 +158,10 @@ public class ManagerDao {
 		GenericDao<CorpusProperties> corpusPropertiesDao = new GenericDaoImpl<CorpusProperties>(sessionFactory, CorpusProperties.class);
 		GenericDao<CorpusHasProcesses> corpusHasProcessesDao = new GenericDaoImpl<CorpusHasProcesses>(sessionFactory, CorpusHasProcesses.class);
 		CorpusAuxDao corpusAuxDao = new CorpusAuxDaoImpl(sessionFactory);
+		GenericDao<CorpusHasPublicationsHasProcesses> corpusHasPublicationsHasProcessesDao = new GenericDaoImpl<CorpusHasPublicationsHasProcesses>(sessionFactory, CorpusHasPublicationsHasProcesses.class);
 		if(queriesManagerDao==null)
 		{
-			createQueriesDao();
+			queriesManagerDao = createQueriesDao();
 		}
 		CorpusManagerDao corpusMAnagerDao = new CorpusManagerDao(
 				queriesManagerDao.getPublicationSourcesDao(),
@@ -173,7 +175,8 @@ public class ManagerDao {
 				corpusPropertiesDao,
 				corpusHasProcessesDao,
 				corpusHasPublicationsDao,
-				corpusAuxDao);
+				corpusAuxDao,
+				corpusHasPublicationsHasProcessesDao);
 		return corpusMAnagerDao;
 	}
 
