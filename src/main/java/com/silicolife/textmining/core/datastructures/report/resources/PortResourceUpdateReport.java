@@ -34,14 +34,14 @@ public class PortResourceUpdateReport {
 	
 	protected void memoryAndProgress(int step, int total) {
 		System.out.println((GlobalOptions.decimalformat.format((double)step/ (double) total * 100)) + " %...");
-		Runtime.getRuntime().gc();
-		System.out.println((Runtime.getRuntime().totalMemory()- Runtime.getRuntime().freeMemory())/(1024*1024) + " MB ");
+//		Runtime.getRuntime().gc();
+//		System.out.println((Runtime.getRuntime().totalMemory()- Runtime.getRuntime().freeMemory())/(1024*1024) + " MB ");
 	}
 	
 	protected void memoryAndProgress(long startTime,int step, int total) {
 		System.out.println((GlobalOptions.decimalformat.format((double)step/ (double) total * 100)) + " %...");
-		Runtime.getRuntime().gc();
-		System.out.println((Runtime.getRuntime().totalMemory()- Runtime.getRuntime().freeMemory())/(1024*1024) + " MB ");
+//		Runtime.getRuntime().gc();
+//		System.out.println((Runtime.getRuntime().totalMemory()- Runtime.getRuntime().freeMemory())/(1024*1024) + " MB ");
 	}
 	
 	public void setResource(IResource<IResourceElement> resource) {
