@@ -813,4 +813,10 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public Set<String> getCorpusPublicationsExternalIDFromSource(ICorpus corpus, String source) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

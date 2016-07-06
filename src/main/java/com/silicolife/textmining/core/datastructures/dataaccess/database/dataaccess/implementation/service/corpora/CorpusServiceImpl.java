@@ -2,6 +2,7 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,6 +28,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublicationsId;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusProperties;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Processes;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.PublicationSources;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.ResourcesTypeUtils;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.RolesEnum;
@@ -386,6 +388,23 @@ public class CorpusServiceImpl implements ICorpusService {
 		//			return null;
 
 		return documentSet;
+	}
+
+	@Override
+	public Set<String> getCorpusPublicationsExternalIDFromSource(Long corpusId, String source) {
+		Set<String> response = new HashSet<String>();
+		PublicationSources publicationSource = corpusManagerDao.getPublicationSourcesDao().findUniqueByAttribute("pssDescription", source);
+		if (publicationSource == null) {
+			return response;
+		}
+		
+		List<Object> objects = corpusManagerDao.getPublicationsAuxDao().getCorpusPublicationBySource(publicationSource.getPssId(), corpusId);
+		for (Object object : objects) {
+			String publicationsExternalID = (String) object;
+			response.add(publicationsExternalID);
+		}
+		
+		return response;
 	}
 
 }

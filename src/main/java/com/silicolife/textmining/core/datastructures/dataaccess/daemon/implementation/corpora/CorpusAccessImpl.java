@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
@@ -318,6 +319,32 @@ public class CorpusAccessImpl extends RestClientAccess {
 		} else {
 			IDocumentSet documentSet = response.getBody().getContent();
 			return documentSet;
+		}
+	}
+	
+	/**
+	 * Connect to daemon and get all spurceExtenalID for a Corpus
+	 * 
+	 * @param id
+	 * @param source
+	 * @return
+	 * @throws DaemonException
+	 */
+	public Set<String> getCorpusPublicationsExternalIDFromSource(Long corpusId, String source) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Set<String>>> responseType = new ParameterizedTypeReference<DaemonResponse<Set<String>>>() {};
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("corpusId", String.valueOf(corpusId));
+		uriVariables.add("source", source);
+
+		ResponseEntity<DaemonResponse<Set<String>>> response = webClient.get("corpus/getCorpusPublicationsExternalIDFromSource", responseType, uriVariables);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
+		} else {
+
+			Set<String> externalSourcesIds = response.getBody().getContent();
+			return externalSourcesIds;
 		}
 	}
 }

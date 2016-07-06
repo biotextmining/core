@@ -1,6 +1,7 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.corpora;
 
 import java.util.List;
+import java.util.Set;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.CorpusException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
@@ -132,4 +133,6 @@ public interface ICorpusService {
 	public void setUserLogged(UsersLogged userLogged);
 
 	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(Long corpusId, Long processId, Integer paginationIndex, Integer paginationSize)throws CorpusException;
+	
+	public Set<String> getCorpusPublicationsExternalIDFromSource(Long corpusId, String source);
 }

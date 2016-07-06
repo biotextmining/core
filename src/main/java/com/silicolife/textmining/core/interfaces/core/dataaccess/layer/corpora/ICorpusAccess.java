@@ -1,6 +1,7 @@
 package com.silicolife.textmining.core.interfaces.core.dataaccess.layer.corpora;
 
 import java.util.List;
+import java.util.Set;
 
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
@@ -138,4 +139,15 @@ public interface ICorpusAccess extends IIEProcessAccess, IAnnotationAccess, IAnn
 	 * @throws ANoteException
 	 */
 	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(IIEProcess process, Integer paginationIndex, Integer paginationSize)throws ANoteException;
+	
+	/**
+	 * 
+	 * Get all external ids with a specific source from corpus publications
+	 * 
+	 * @param corpus
+	 * @param source
+	 * @return
+	 * @throws ANoteException
+	 */
+	public Set<String> getCorpusPublicationsExternalIDFromSource(ICorpus corpus, String source) throws ANoteException;
 }

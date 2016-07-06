@@ -16,7 +16,7 @@ import org.hibernate.criterion.Subqueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublications;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Corpus;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublicationsHasProcesses;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.PublicationHasSources;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
@@ -169,6 +169,24 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 		c.createAlias("pub.publicationHasSourceses", "pubExternalIds");
 		c.setFetchMode("pub.publicationHasSourceses", FetchMode.JOIN);
 		c.add(Restrictions.eq("que.id", queryId));
+		c.add(Restrictions.eq("pubExternalIds.id.phpsPublicationSourceId", sourceId));
+		c.setProjection(Projections.projectionList().add(Projections.property("pubExternalIds.id.phpsPublicationSourceInternalId"), "internalId"));
+		@SuppressWarnings("unchecked")
+		List<Object> response = c.list();
+		return response;
+	}
+
+	@Override
+	public List<Object> getCorpusPublicationBySource(Long sourceId, Long corpusId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Corpus.class, "corp");
+		c.createAlias("corp.corpusHasPublicationses", "corpHasPubs");
+		c.setFetchMode("corp.corpusHasPublicationses", FetchMode.JOIN);
+		c.createAlias("corpHasPubs.publications", "pub");
+		c.setFetchMode("corpHasPubs.publications", FetchMode.JOIN);
+		c.createAlias("pub.publicationHasSourceses", "pubExternalIds");
+		c.setFetchMode("pub.publicationHasSourceses", FetchMode.JOIN);
+		c.add(Restrictions.eq("corp.id", corpusId));
 		c.add(Restrictions.eq("pubExternalIds.id.phpsPublicationSourceId", sourceId));
 		c.setProjection(Projections.projectionList().add(Projections.property("pubExternalIds.id.phpsPublicationSourceInternalId"), "internalId"));
 		@SuppressWarnings("unchecked")

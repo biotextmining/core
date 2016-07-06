@@ -875,4 +875,11 @@ public class DaemonAccess implements IDataAccess {
 		return corpusAccessImpl.getCorpusPublicationsNotProcessedPaginated(process.getCorpus().getId(), process.getID(), paginationIndex, paginationSize);
 	}
 
+	@Override
+	public Set<String> getCorpusPublicationsExternalIDFromSource(ICorpus corpus, String source) throws ANoteException {
+		return corpusAccessImpl.getCorpusPublicationsExternalIDFromSource(corpus.getId(), source);
+	}
+	
+	
+
 }

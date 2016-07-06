@@ -1789,4 +1789,18 @@ public class DatabaseAccess implements IDataAccess {
 		}
 	}
 
+	@Override
+	public Set<String> getCorpusPublicationsExternalIDFromSource(ICorpus corpus, String source) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Set<String> interalIDs = corpusService.getCorpusPublicationsExternalIDFromSource(corpus.getId(), source);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return interalIDs;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
+
 }
