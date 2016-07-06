@@ -1,5 +1,6 @@
 package com.silicolife.textmining.core.datastructures.corpora;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.silicolife.textmining.core.datastructures.process.ConfigurationImpl;
 import com.silicolife.textmining.core.interfaces.core.corpora.ICorpusUpdateConfiguration;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
@@ -21,6 +22,7 @@ public class CorpusUpdateConfigurationImpl extends ConfigurationImpl implements 
 	}
 	
 	@Override
+	@JsonDeserialize(as=CorpusImpl.class)
 	public ICorpus getCorpusToUpdate() {
 		return corpusToUpdate;
 	}
@@ -36,6 +38,11 @@ public class CorpusUpdateConfigurationImpl extends ConfigurationImpl implements 
 
 	public void setPublicationsDirectory(String publicationsDirectory) {
 		this.publicationsDirectory = publicationsDirectory;
+	}
+	
+	@Override
+	public String getConfigurationUID() {
+		return configurationUID;
 	}
 
 }
