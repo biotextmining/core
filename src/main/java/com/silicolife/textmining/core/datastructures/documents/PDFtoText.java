@@ -35,7 +35,7 @@ public class PDFtoText {
 		String text = stripper.getText(doc);
 		parser.clearResources();
 		doc.close();
-		if(text==null || text.isEmpty())
+		if(text==null || text.isEmpty() || verifyValidOCRlenght(text)==false)
 		{
 			try {
 				text =  fileOCR(url);
@@ -43,7 +43,7 @@ public class PDFtoText {
 				text = new String();
 			}
 		}
-		if(text==null || text.isEmpty())
+		if(text==null || text.isEmpty() || verifyValidOCRlenght(text)==false)
 		{
 			try {
 				text =  convertEncryptedPDFDocument(url);
@@ -88,6 +88,14 @@ public class PDFtoText {
 		return result;
 	}
 	
+	
+	private static boolean verifyValidOCRlenght(String text){
+		String newText = text.replaceAll("[/n/t]*", "");
+		if (newText.length()<200){
+			return false;
+		}
+		return true;
+	}
 
 
 }
