@@ -64,8 +64,7 @@ public class PDFtoText {
 			imagesPages.add(pdPage.convertToImage(BufferedImage.TYPE_INT_RGB, imageDPIValue));
 		}
 		document.close();
-		Tesseract tessaract = new Tesseract();
-		tessaract.setDatapath("src/main/resources");
+		Tesseract tessaract = TessaractManager.getInstance().getTessaract();
 		List<IIOImage> pagesToOCR = new ArrayList<>();
 		for(BufferedImage image :imagesPages){
 			List<IIOImage> content = ImageIOHelper.getIIOImageList(image);
@@ -82,15 +81,14 @@ public class PDFtoText {
 	public static String fileOCR (String pdfPath) throws IOException, TesseractException{
 		File imageFile = new File(pdfPath);
 		List<IIOImage> imageList = ImageIOHelper.getIIOImageList(imageFile);
-		ITesseract instance = new Tesseract();
-		instance.setDatapath("src/main/resources");
+		ITesseract instance = TessaractManager.getInstance().getTessaract();
 		String result = instance.doOCR(imageList, null);
 		return result;
 	}
 	
 	
 	private static boolean verifyValidOCRlenght(String text){
-		String newText = text.replaceAll("[/n/t]*", "");
+		String newText = text.replaceAll("\\s", "");
 		if (newText.length()<200){
 			return false;
 		}
