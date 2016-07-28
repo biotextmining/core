@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `resource_elements` (
   `res_resource_id` BIGINT NOT NULL,
   `res_class_id` BIGINT NULL,
   `res_element` VARCHAR(500) NOT NULL,
-  `res_priorety` INT NULL,
+  `res_priorety` INT NULL DEFAULT 0,
   `res_active` TINYINT(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`res_id`),
   INDEX `idx_resource_elements_01` (`res_active` ASC),
