@@ -1,7 +1,6 @@
 package com.silicolife.textmining.core.interfaces.core.document;
 
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
-import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 
 public interface ICorpusPublicationPaginator {
 
@@ -14,7 +13,5 @@ public interface ICorpusPublicationPaginator {
 	public Integer getPaginationSize();
 
 	public Integer getPaginationIndex();
-
-	public ICorpus getCorpus();
 
 }

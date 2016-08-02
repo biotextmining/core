@@ -4,24 +4,24 @@ import com.silicolife.textmining.core.datastructures.init.InitConfiguration;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.document.ICorpusPublicationPaginator;
 import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
-import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
+import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 
-public class CorpusPublicationPaginatorImpl implements ICorpusPublicationPaginator{
+public class UnprocessedPublicationsPaginatorImpl implements ICorpusPublicationPaginator{
 	
 	private Long publicationsCount;
 	private Integer paginationSize;
 	private Integer paginationIndex;
-	private ICorpus corpus;
+	private IIEProcess process;
 
-	public CorpusPublicationPaginatorImpl(ICorpus corpus, Integer paginationSize) throws ANoteException{
+	public UnprocessedPublicationsPaginatorImpl(IIEProcess process, Integer paginationSize) throws ANoteException{
 		this.paginationSize = paginationSize;
 		this.paginationIndex = 0;
-		this.corpus =corpus;
+		this.process =process;
 	}
 
 	
-	public CorpusPublicationPaginatorImpl(ICorpus corpus) throws ANoteException{
-		this(corpus, 1000);
+	public UnprocessedPublicationsPaginatorImpl(IIEProcess process) throws ANoteException{
+		this(process, 1000);
 	}
 
 	@Override
@@ -34,17 +34,15 @@ public class CorpusPublicationPaginatorImpl implements ICorpusPublicationPaginat
 
 	@Override
 	public IDocumentSet nextDocumentSetPage() throws ANoteException{
-		IDocumentSet documentSet = getCorpusPublicationsPaginatedOnDatabase(getCorpus(), getPaginationIndex(), getPaginationSize());
+		IDocumentSet documentSet = getCorpusPublicationsNotProcessedPaginatedOnDatabase(getProcess(), getPaginationIndex(), getPaginationSize());
 		paginationIndex = getPaginationIndex() + getPaginationSize();
 		return documentSet;
 	}
 
-
-
 	@Override
 	public Long getPublicationsCount() throws ANoteException {
 		if(publicationsCount == null){
-			publicationsCount = getCorpusPublicationCountOnDatabase(getCorpus());
+			publicationsCount = getUnprocessdCorpusPublicationCountOnDatabase(getProcess());
 		}
 		return publicationsCount;
 	}
@@ -59,15 +57,15 @@ public class CorpusPublicationPaginatorImpl implements ICorpusPublicationPaginat
 		return paginationIndex;
 	}
 
-	private ICorpus getCorpus() {
-		return corpus;
+	private IIEProcess getProcess() {
+		return process;
 	}
 	
-	protected Long getCorpusPublicationCountOnDatabase(ICorpus corpus) throws ANoteException {
-		return InitConfiguration.getDataAccess().getCorpusPublicationsCount(corpus);
+	protected Long getUnprocessdCorpusPublicationCountOnDatabase(IIEProcess process) throws ANoteException {
+		return InitConfiguration.getDataAccess().countCorpusPublicationsNotProcessed(process);
 	}
 	
-	protected IDocumentSet getCorpusPublicationsPaginatedOnDatabase(ICorpus corpus, Integer paginationIndex, Integer paginationSize) throws ANoteException {
-		return InitConfiguration.getDataAccess().getCorpusPublicationsPaginated(corpus, paginationIndex, paginationSize);
+	protected IDocumentSet getCorpusPublicationsNotProcessedPaginatedOnDatabase(IIEProcess process, Integer paginationIndex, Integer paginationSize) throws ANoteException {
+		return InitConfiguration.getDataAccess().getCorpusPublicationsNotProcessedPaginated(process, paginationIndex, paginationSize);
 	}
 }
