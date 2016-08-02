@@ -9,15 +9,18 @@ import com.silicolife.textmining.core.interfaces.process.IE.ner.INERResumeConfig
 public class NERResumeConfigurationImpl extends IEConfigurationImpl implements INERResumeConfiguration{
 	
 	private IIEProcess iEProcess;
+	public final static String uid = "ner.resume";
 
 	public  NERResumeConfigurationImpl() {
 		super();
+		setConfigurationUID(uid);
 	}
 	
 	public NERResumeConfigurationImpl(IIEProcess iePorcess)
 	{
 		super(iePorcess.getCorpus(),iePorcess.getName(),iePorcess.getNotes());
 		this.iEProcess=iePorcess;
+		setConfigurationUID(uid);
 	}
 	
 	@JsonDeserialize(as=IEProcessImpl.class)
