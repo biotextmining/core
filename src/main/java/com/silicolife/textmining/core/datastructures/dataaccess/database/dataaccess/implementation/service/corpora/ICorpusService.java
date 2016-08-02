@@ -135,4 +135,6 @@ public interface ICorpusService {
 	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(Long corpusId, Long processId, Integer paginationIndex, Integer paginationSize)throws CorpusException;
 	
 	public Set<String> getCorpusPublicationsExternalIDFromSource(Long corpusId, String source);
+
+	public Long countCorpusPublicationsNotProcessed(Long corpusId, Long processId) throws CorpusException;
 }

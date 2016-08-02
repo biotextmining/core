@@ -164,10 +164,10 @@ public class CorpusAccessImpl extends RestClientAccess {
 	public IDocumentSet getCorpusPublicationsPaginated(Long corpusId, Integer paginationIndex, Integer paginationSize) throws DaemonException {
 		checkAndForceLoginIfNecessary();
 		ParameterizedTypeReference<DaemonResponse<DocumentSetImpl>> responseType = new ParameterizedTypeReference<DaemonResponse<DocumentSetImpl>>() {};
-		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
-		uriVariables.add("corpusId", String.valueOf(corpusId));
-		uriVariables.add("paginationIndex", String.valueOf(paginationIndex));
-		uriVariables.add("paginationSize", String.valueOf(paginationSize));
+		Map<String, Long> uriVariables = new HashMap<String, Long>();
+		uriVariables.put("corpusId", corpusId);
+		uriVariables.put("paginationIndex", Long.valueOf(paginationIndex));
+		uriVariables.put("paginationSize", Long.valueOf(paginationSize));
 		
 		ResponseEntity<DaemonResponse<DocumentSetImpl>> response = webClient.get("corpus/getCorpusPublicationsPaginated", responseType, uriVariables);
 
@@ -306,11 +306,11 @@ public class CorpusAccessImpl extends RestClientAccess {
 	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(Long corpusId, Long processId, Integer paginationIndex, Integer paginationSize) throws DaemonException {
 		checkAndForceLoginIfNecessary();
 		ParameterizedTypeReference<DaemonResponse<DocumentSetImpl>> responseType = new ParameterizedTypeReference<DaemonResponse<DocumentSetImpl>>() {};
-		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
-		uriVariables.add("corpusId", String.valueOf(corpusId));
-		uriVariables.add("processId", String.valueOf(processId));
-		uriVariables.add("paginationIndex", String.valueOf(paginationIndex));
-		uriVariables.add("paginationSize", String.valueOf(paginationSize));
+		Map<String, Long> uriVariables = new HashMap<String, Long>();
+		uriVariables.put("corpusId", corpusId);
+		uriVariables.put("processId", processId);
+		uriVariables.put("paginationIndex", Long.valueOf(paginationIndex));
+		uriVariables.put("paginationSize", Long.valueOf(paginationSize));
 		
 		ResponseEntity<DaemonResponse<DocumentSetImpl>> response = webClient.get("corpus/getCorpusPublicationsNotProcessedPaginated", responseType, uriVariables);
 
@@ -345,6 +345,23 @@ public class CorpusAccessImpl extends RestClientAccess {
 
 			Set<String> externalSourcesIds = response.getBody().getContent();
 			return externalSourcesIds;
+		}
+	}
+
+	public Long countCorpusPublicationsNotProcessed(Long corpusId, Long processId) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Long>> responseType = new ParameterizedTypeReference<DaemonResponse<Long>>() {};
+		Map<String, Long> uriVariables = new HashMap<String, Long>();
+		uriVariables.put("corpusId", corpusId);
+		uriVariables.put("processId", processId);
+		
+		ResponseEntity<DaemonResponse<Long>> response = webClient.get("corpus/countCorpusPublicationsNotProcessed", responseType, uriVariables);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			Long count = response.getBody().getContent();
+			return count;
 		}
 	}
 }

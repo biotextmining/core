@@ -1801,6 +1801,18 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}
 	}
-	
+
+	@Override
+	public Long countCorpusPublicationsNotProcessed(IIEProcess process) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Long count = corpusService.countCorpusPublicationsNotProcessed(process.getCorpus().getId(), process.getID());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
 
 }

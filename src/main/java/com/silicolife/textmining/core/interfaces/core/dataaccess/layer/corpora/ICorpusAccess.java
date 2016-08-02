@@ -127,6 +127,16 @@ public interface ICorpusAccess extends IIEProcessAccess, IAnnotationAccess, IAnn
 	 */
 	public ICorpusStatistics getCorpusStatistics(ICorpus corpus) throws ANoteException;
 	
+	
+	/**
+	 * 
+	 * Count all unprocessed documents
+	 * 
+	 * @param process
+	 * @return
+	 */
+	public Long countCorpusPublicationsNotProcessed(IIEProcess process) throws ANoteException;
+	
 	/**
 	 * 
 	 * Get all unprocessed documents 

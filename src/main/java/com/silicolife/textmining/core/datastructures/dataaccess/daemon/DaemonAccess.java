@@ -879,6 +879,11 @@ public class DaemonAccess implements IDataAccess {
 	public Set<String> getCorpusPublicationsExternalIDFromSource(ICorpus corpus, String source) throws ANoteException {
 		return corpusAccessImpl.getCorpusPublicationsExternalIDFromSource(corpus.getId(), source);
 	}
+
+	@Override
+	public Long countCorpusPublicationsNotProcessed(IIEProcess process) throws ANoteException {
+		return corpusAccessImpl.countCorpusPublicationsNotProcessed(process.getCorpus().getId(), process.getID());
+	}
 	
 	
 

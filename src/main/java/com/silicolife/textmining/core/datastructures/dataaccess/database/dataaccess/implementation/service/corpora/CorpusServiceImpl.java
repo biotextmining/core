@@ -361,6 +361,20 @@ public class CorpusServiceImpl implements ICorpusService {
 	public void setUserLogged(UsersLogged userLogged) {
 		this.userLogged = userLogged;
 	}
+	
+	@Override
+	public Long countCorpusPublicationsNotProcessed(Long corpusId, Long processId) throws CorpusException{
+		Corpus corpus = corpusManagerDao.getCorpusDao().findById(corpusId);
+		if (corpus == null)
+			throw new CorpusException(ExceptionsCodes.codeNoCorpus, ExceptionsCodes.msgNoCorpus);
+		Processes processes = processesManagerDao.getProcessesDao().findById(processId);
+		if (processes == null)
+			throw new CorpusException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
+		
+		Long count = corpusManagerDao.getPublicationsAuxDao().countPublicationsNotProcessedInProcess(corpusId, processId);
+		
+		return count;
+	}
 
 	@Override
 	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(Long corpusId, Long processId,

@@ -819,4 +819,10 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public Long countCorpusPublicationsNotProcessed(IIEProcess process) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
