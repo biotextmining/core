@@ -244,7 +244,7 @@ public class DaemonAccess implements IDataAccess {
 	}
 
 	@Override
-	public synchronized void addQueryPublications(IQuery query, List<IPublication> publications) throws ANoteException {
+	public synchronized void addQueryPublications(IQuery query, Set<IPublication> publications) throws ANoteException {
 		Set<Long> pubIds = new HashSet<Long>();
 		for (IPublication pub : publications)
 			pubIds.add(pub.getId());
@@ -306,7 +306,7 @@ public class DaemonAccess implements IDataAccess {
 
 	}
 
-	public synchronized void addPublications(List<IPublication> documents) throws ANoteException {
+	public synchronized void addPublications(Set<IPublication> documents) throws ANoteException {
 		publicationsAccessimpl.addPublications(documents);
 	}
 

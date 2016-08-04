@@ -103,7 +103,7 @@ public class PublicationsServiceImpl implements IPublicationsService {
 
 	@Transactional(readOnly = false)
 	@Override
-	public Boolean create(List<IPublication> publications_) {
+	public Boolean create(Set<IPublication> publications_) {
 		for (IPublication publication_ : publications_) {
 			/*
 			 * save publication

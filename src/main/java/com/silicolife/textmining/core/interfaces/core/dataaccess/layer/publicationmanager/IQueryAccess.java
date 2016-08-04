@@ -36,7 +36,7 @@ public interface IQueryAccess extends IQueryPrivilegesAccess {
 	 * @param publication
 	 * @throws DatabaseLoadDriverException
 	 */
-	public void addQueryPublications(IQuery query, List<IPublication> publications) throws ANoteException;
+	public void addQueryPublications(IQuery query, Set<IPublication> publications) throws ANoteException;
 
 	/**
 	 * Create a new Query

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
@@ -129,7 +130,7 @@ public class PublicationsAccessImpl extends RestClientAccess {
 	 * @return
 	 * @throws DaemonException
 	 */
-	public Boolean addPublications(List<IPublication> documents) throws DaemonException {
+	public Boolean addPublications(Set<IPublication> documents) throws DaemonException {
 		checkAndForceLoginIfNecessary();
 		ParameterizedTypeReference<DaemonResponse<Boolean>> responseType = new ParameterizedTypeReference<DaemonResponse<Boolean>>() {};
 		ResponseEntity<DaemonResponse<Boolean>> response = webClient.post("publications/createPublications", responseType, documents);

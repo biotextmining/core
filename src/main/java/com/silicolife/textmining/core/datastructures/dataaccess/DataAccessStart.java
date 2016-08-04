@@ -114,7 +114,7 @@ public class DataAccessStart implements IDataAccess {
 	}
 
 	@Override
-	public void addQueryPublications(IQuery query, List<IPublication> publications) throws ANoteException {
+	public void addQueryPublications(IQuery query, Set<IPublication> publications) throws ANoteException {
 
 	}
 
@@ -149,7 +149,7 @@ public class DataAccessStart implements IDataAccess {
 	}
 
 	@Override
-	public void addPublications(List<IPublication> documents) throws ANoteException {
+	public void addPublications(Set<IPublication> documents) throws ANoteException {
 
 	}
 

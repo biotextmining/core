@@ -18,7 +18,7 @@ public interface IGeneralDataAccess {
 	 * @param documentType
 	 * @throws DatabaseLoadDriverException
 	 */
-	public void addPublications(List<IPublication> documents) throws ANoteException;
+	public void addPublications(Set<IPublication> documents) throws ANoteException;
 
 	/**
 	 * Get Publication details

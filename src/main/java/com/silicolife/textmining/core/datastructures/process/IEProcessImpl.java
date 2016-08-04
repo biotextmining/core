@@ -100,6 +100,7 @@ public class IEProcessImpl extends Observable implements IIEProcess {
 	}
 
 	@JsonGetter("processType")
+	@JsonDeserialize(as = ProcessTypeImpl.class)
 	@Override
 	public IProcessType getType() {
 		return processType;

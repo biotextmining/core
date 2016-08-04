@@ -3,7 +3,6 @@ package com.silicolife.textmining.core.datastructures.documents.query;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -243,7 +242,7 @@ public class QueryImpl extends Observable implements IQuery {
 		if (publication.getAbstractSection() != null && publication.getAbstractSection().length() > 0)
 			availableAbstracts++;
 		this.publications.add(publication);
-		List<IPublication> publications = new ArrayList<IPublication>();
+		Set<IPublication> publications = new HashSet<>();
 		publications.add(publication);
 		InitConfiguration.getDataAccess().addPublications(publications);
 		InitConfiguration.getDataAccess().addQueryPublications(this, publications);
@@ -263,7 +262,7 @@ public class QueryImpl extends Observable implements IQuery {
 	 * @throws DaemonException
 	 * @throws IOException
 	 */
-	public void addOusidePublications(List<IPublication> publications) throws ANoteException {
+	public void addOusidePublications(Set<IPublication> publications) throws ANoteException {
 		for (IPublication publication : publications) {
 			publicationsSize++;
 			if (publication.getAbstractSection() != null && publication.getAbstractSection().length() > 0)
@@ -291,7 +290,7 @@ public class QueryImpl extends Observable implements IQuery {
 		Set<Long> publicationIDs = new HashSet<Long>();
 		for (IPublication pubQ : publicationAlreayInQuery)
 			publicationIDs.add(pubQ.getId());
-		List<IPublication> publicationsToInsert = new ArrayList<IPublication>();
+		Set<IPublication> publicationsToInsert = new HashSet<>();
 		for (IPublication publication : publications) {
 			if (!publicationIDs.contains(publication.getId())) {
 				publicationsToInsert.add(publication);

@@ -1,6 +1,5 @@
 package com.silicolife.textmining.core.datastructures.process;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,11 +25,11 @@ public abstract class IRProcessImpl implements IIRProcess{
 	}
 	
 
-	protected  void insertPublications(List<IPublication> documentsToInsert)throws ANoteException {
+	protected  void insertPublications(Set<IPublication> documentsToInsert)throws ANoteException {
 		InitConfiguration.getDataAccess().addPublications(documentsToInsert);
 	}
 	
-	protected void insertQueryPublications(IQuery query,List<IPublication> publicationToAdd) throws ANoteException {
+	protected void insertQueryPublications(IQuery query,Set<IPublication> publicationToAdd) throws ANoteException {
 		InitConfiguration.getDataAccess().addQueryPublications(query, publicationToAdd);
 	}
 	

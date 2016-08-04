@@ -2,6 +2,7 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.PublicationManagerException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
@@ -32,7 +33,7 @@ public interface IPublicationsService {
 	 * @param publication
 	 * @return
 	 */
-	public Boolean create(List<IPublication> publications_);
+	public Boolean create(Set<IPublication> publications_);
 
 	/**
 	 * Update publication

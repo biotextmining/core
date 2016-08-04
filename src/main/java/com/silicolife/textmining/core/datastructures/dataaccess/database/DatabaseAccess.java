@@ -351,7 +351,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public synchronized void addQueryPublications(IQuery query, List<IPublication> publications) throws ANoteException {
+	public synchronized void addQueryPublications(IQuery query, Set<IPublication> publications) throws ANoteException {
 		Set<Long> publicationsIds = new HashSet<Long>();
 		for (IPublication pub : publications)
 			publicationsIds.add(pub.getId());
@@ -446,7 +446,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public synchronized void addPublications(List<IPublication> documents) throws ANoteException {
+	public synchronized void addPublications(Set<IPublication> documents) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			publicationsService.create(documents);
