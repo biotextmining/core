@@ -15,19 +15,22 @@ public class ResourcesToNerAnote {
 	private List<ResourceSelectedClassesMap> list; // Resource, selected class(es), all class(es)
 	private NERCaseSensativeEnum caseSensitive;
 	private boolean useOtherResourceInformationInRules;
+	private int sizeOfSmallWordsToBeNotAnnotated;
 	
 	public ResourcesToNerAnote()
 	{
 		this.caseSensitive = NERCaseSensativeEnum.NONE;
 		this.list = new ArrayList<ResourceSelectedClassesMap>();
 		this.useOtherResourceInformationInRules = false;
+		this.sizeOfSmallWordsToBeNotAnnotated = 0;
 	}
 	
-	public ResourcesToNerAnote(NERCaseSensativeEnum caseSensitive,boolean useOtherResourceInformationInRules)
+	public ResourcesToNerAnote(NERCaseSensativeEnum caseSensitive,boolean useOtherResourceInformationInRules, int sizeOfSmallWordsToBeNotAnnotated)
 	{
 		this.caseSensitive = caseSensitive;
 		list = new ArrayList<ResourceSelectedClassesMap>();
 		this.useOtherResourceInformationInRules = useOtherResourceInformationInRules;
+		this.sizeOfSmallWordsToBeNotAnnotated = sizeOfSmallWordsToBeNotAnnotated;
 	}
 	
 	public void add(IResource<IResourceElement> resElem,Set<Long> classContent,Set<Long> selectedClass)
@@ -83,6 +86,12 @@ public class ResourcesToNerAnote {
 		return false;
 	}
 
-	
+	public int getSizeOfSmallWordsToBeNotAnnotated() {
+		return sizeOfSmallWordsToBeNotAnnotated;
+	}
+
+	public void setSizeOfSmallWordsToBeNotAnnotated(int sizeOfSmallWordsToBeNotAnnotated) {
+		this.sizeOfSmallWordsToBeNotAnnotated = sizeOfSmallWordsToBeNotAnnotated;
+	}
 
 }

@@ -39,6 +39,7 @@ public class ElementToNer {
 	private boolean termNormalization;
 	private boolean usingOtherResourceInfoToImproveRuleAnnotstions;
 	private Map<Long, IResourceElement> mapResourceIDsToResourceElements;
+	private int sizeOfSmallWordsToBeNotAnnotated;
 	
 
 	public ElementToNer(ResourcesToNerAnote resourceToNER,boolean termNormalization) throws ANoteException
@@ -53,6 +54,7 @@ public class ElementToNer {
 		mapResourceIDsToResourceElements = new TreeMap<>();
 		this.termNormalization = termNormalization;
 		this.usingOtherResourceInfoToImproveRuleAnnotstions = resourceToNER.isUseOtherResourceInformationInRules();
+		this.sizeOfSmallWordsToBeNotAnnotated = resourceToNER.getSizeOfSmallWordsToBeNotAnnotated();
 	}
 	
 	
@@ -139,12 +141,21 @@ public class ElementToNer {
 			IResourceElementSet<IResourceElement> elems = resource.getResourceElements();
 			for(IResourceElement elem : elems.getResourceElements())
 			{
+
 				IEntityAnnotation annot = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, TermSeparator.termSeparator(elem.getTerm()),NormalizationForm.getNormalizationForm(elem.getTerm()),null);		
-				terms.add(annot);
+				if(sizeOfSmallWordsToBeNotAnnotated == 0){
+					terms.add(annot);
+				}else if(sizeOfSmallWordsToBeNotAnnotated<elem.getTerm().trim().length()){
+					terms.add(annot);
+				}
 				for(String synonym:elem.getSynonyms())
 				{
 					IEntityAnnotation annotSynonym = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, TermSeparator.termSeparator(synonym),NormalizationForm.getNormalizationForm(synonym),null);		
-					terms.add(annotSynonym);
+					if(sizeOfSmallWordsToBeNotAnnotated == 0){
+						terms.add(annotSynonym);
+					}else if(sizeOfSmallWordsToBeNotAnnotated<synonym.trim().length()){
+						terms.add(annotSynonym);
+					}
 				}
 			}
 		}
@@ -154,11 +165,19 @@ public class ElementToNer {
 			for(IResourceElement elem : elems.getResourceElements())
 			{
 				IEntityAnnotation annot = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, elem.getTerm(),NormalizationForm.getNormalizationForm(elem.getTerm()),null);		
-				terms.add(annot);
+				if(sizeOfSmallWordsToBeNotAnnotated == 0){
+					terms.add(annot);
+				}else if(sizeOfSmallWordsToBeNotAnnotated<elem.getTerm().trim().length()){
+					terms.add(annot);
+				}
 				for(String synonym:elem.getSynonyms())
 				{
 					IEntityAnnotation annotSynonym = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, synonym,NormalizationForm.getNormalizationForm(synonym),null);		
-					terms.add(annotSynonym);
+					if(sizeOfSmallWordsToBeNotAnnotated == 0){
+						terms.add(annotSynonym);
+					}else if(sizeOfSmallWordsToBeNotAnnotated<synonym.trim().length()){
+						terms.add(annotSynonym);
+					}
 				}
 			}
 		}
@@ -195,11 +214,19 @@ public class ElementToNer {
 				for(IResourceElement elem : elems.getResourceElements())
 				{
 					IEntityAnnotation annot = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, TermSeparator.termSeparator(elem.getTerm()),NormalizationForm.getNormalizationForm(elem.getTerm()),null);		
-					terms.add(annot);
+					if(sizeOfSmallWordsToBeNotAnnotated == 0){
+						terms.add(annot);
+					}else if(sizeOfSmallWordsToBeNotAnnotated<elem.getTerm().trim().length()){
+						terms.add(annot);
+					}
 					for(String synonym:elem.getSynonyms())
 					{
 						IEntityAnnotation annotSynonym = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, TermSeparator.termSeparator(synonym),NormalizationForm.getNormalizationForm(synonym),null);		
-						terms.add(annotSynonym);
+						if(sizeOfSmallWordsToBeNotAnnotated == 0){
+							terms.add(annotSynonym);
+						}else if(sizeOfSmallWordsToBeNotAnnotated<synonym.trim().length()){
+							terms.add(annotSynonym);
+						}
 					}
 					
 				}
@@ -214,11 +241,19 @@ public class ElementToNer {
 				for(IResourceElement elem : elems.getResourceElements())
 				{
 					IEntityAnnotation annot = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, elem.getTerm(),NormalizationForm.getNormalizationForm(elem.getTerm()),null);		
-					terms.add(annot);
+					if(sizeOfSmallWordsToBeNotAnnotated == 0){
+						terms.add(annot);
+					}else if(sizeOfSmallWordsToBeNotAnnotated<elem.getTerm().trim().length()){
+						terms.add(annot);
+					}
 					for(String synonym:elem.getSynonyms())
 					{
 						IEntityAnnotation annotSynonym = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, synonym,NormalizationForm.getNormalizationForm(synonym),null);		
-						terms.add(annotSynonym);
+						if(sizeOfSmallWordsToBeNotAnnotated == 0){
+							terms.add(annotSynonym);
+						}else if(sizeOfSmallWordsToBeNotAnnotated<synonym.trim().length()){
+							terms.add(annotSynonym);
+						}
 					}
 				}
 				classes = classes.concat(classID+",");
