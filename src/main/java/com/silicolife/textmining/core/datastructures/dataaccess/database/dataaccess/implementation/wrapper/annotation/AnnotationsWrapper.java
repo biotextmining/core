@@ -45,7 +45,6 @@ public class AnnotationsWrapper {
 		Long annAnnotStart = entityAnnotation.getStartOffset();
 		Long annAnnotEnd = entityAnnotation.getEndOffset();
 		String annElement = entityAnnotation.getAnnotationValue();
-		String annNormalizationForm = entityAnnotation.getAnnotationValueNormalization();
 		String annAnnotType = entityAnnotation.getAnnotationType();
 		Long annStartSentenceOffset = entityAnnotation.getSentenceStartOffset();
 		Long annEndSentenceOffset = entityAnnotation.getSentenceEndOffset();
@@ -58,7 +57,6 @@ public class AnnotationsWrapper {
 		annotation.setAnnAnnotStart(annAnnotStart);
 		annotation.setAnnAnnotEnd(annAnnotEnd);
 		annotation.setAnnElement(annElement);
-		annotation.setAnnNormalizationForm(annNormalizationForm);
 		annotation.setAnnAnnotType(annAnnotType);
 		annotation.setAnnActive(true);
 		annotation.setAnnStartSentenceOffset(annStartSentenceOffset);
@@ -69,6 +67,7 @@ public class AnnotationsWrapper {
 		annotation.setProcesses(processes);
 		annotation.setPublications(publications);
 		annotation.setAnnActive(entityAnnotation.isActive());
+		annotation.setAnnAbbreviation(entityAnnotation.isAbreviation());
 		return annotation;
 	}
 	
@@ -81,7 +80,6 @@ public class AnnotationsWrapper {
 			annot.setAnnAnnotStart(annotation.getStartOffset());
 			annot.setAnnAnnotEnd(annotation.getEndOffset());
 			annot.setAnnElement(annotation.getAnnotationValue());
-			annot.setAnnNormalizationForm(annotation.getAnnotationValueNormalization());
 			annot.setAnnAnnotType(annotation.getAnnotationType());
 			annot.setAnnActive(true);
 			annot.setAnnStartSentenceOffset(annotation.getSentenceStartOffset());
@@ -89,6 +87,7 @@ public class AnnotationsWrapper {
 			annot.setAnnNotes(annotation.getNotes());
 			annot.setAnnotationPropertieses(annotationPropertieses);
 			annot.setAnnActive(annotation.isActive());
+			annot.setAnnAbbreviation(annotation.isAbreviation());
 			return annot;
 		}
 
@@ -103,10 +102,10 @@ public class AnnotationsWrapper {
 		if(annot.getResourceElements()!=null)
 			resourceElement = ResourceElementWrapper.convertToAnoteStructure(annot.getResourceElements());
 		String value = annot.getAnnElement();
-		String annotationValueNormalized = annot.getAnnNormalizationForm();
 		Properties properties = AnnotationPropertiesWrapper.convertToAnoteStructure(annot.getAnnotationPropertieses());
 		boolean isactive = annot.isAnnActive();
-		IEntityAnnotation entityAnnotaion = new EntityAnnotationImpl(id, start, end, klass, resourceElement, value, annotationValueNormalized, properties,isactive );
+		boolean isAbbreviation = annot.isAnnAbbreviation();
+		IEntityAnnotation entityAnnotaion = new EntityAnnotationImpl(id, start, end, klass, resourceElement, value, isAbbreviation, properties,isactive );
 		return entityAnnotaion;
 	}
 

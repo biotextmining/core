@@ -27,37 +27,29 @@ public class EntityAnnotationImpl extends AnnotationImpl implements IEntityAnnot
 	private IAnoteClass klass;
 	@JsonDeserialize(as = ResourceElementImpl.class)
 	private IResourceElement resourceElement;
-	private String annotationValueNormalization;
 	private String annotationValue;
+	private boolean abreviation;
 	
-	/**
-	 * 
-	 * @param id
-	 * @param start
-	 * @param end
-	 * @param classAnnotationID
-	 * @param resourceElement
-	 * @param value
-	 * @param annotationValueNormalized
-	 */
-	public EntityAnnotationImpl(long id, long start, long end,IAnoteClass klass,IResourceElement resourceElement,
-			String value,String annotationValueNormalized,Properties properties,boolean active) {
-		super(id, start, end,AnnotationType.ner.name(),properties,active);
-		this.klass=klass;
-		this.annotationValue=value;
-		this.resourceElement=resourceElement;
-		this.setAnnotationValueNormalization(annotationValueNormalized);
-	}
 	
-	public EntityAnnotationImpl(long start, long end,IAnoteClass klass,IResourceElement resourceElement,String value,String annotationValueNormalized,Properties properties)
-	{
-		this(GenerateRandomId.generateID(),start,end,klass,resourceElement,value,annotationValueNormalized,properties,true);
-	}
 
 	public EntityAnnotationImpl() {
 		super();
 	}
 	
+	public EntityAnnotationImpl(long id, long start, long end,IAnoteClass klass,IResourceElement resourceElement,
+			String value,boolean abreviation,Properties properties,boolean active) {
+		super(id, start, end,AnnotationType.ner.name(),properties,active);
+		this.klass=klass;
+		this.annotationValue=value;
+		this.resourceElement=resourceElement;
+		this.abreviation=abreviation;
+	}
+	
+	public EntityAnnotationImpl(long start, long end,IAnoteClass klass,IResourceElement resourceElement,String value,boolean abreviation,Properties properties)
+	{
+		this(GenerateRandomId.generateID(),start,end,klass,resourceElement,value,abreviation,properties,true);
+	}
+
 	@JsonSetter("klass")
 	@Override
 	public void setClass(IAnoteClass newKlass) {
@@ -88,20 +80,10 @@ public class EntityAnnotationImpl extends AnnotationImpl implements IEntityAnnot
 		return resourceElement;
 	}
 	
-	@Override
-	public String getAnnotationValueNormalization() {
-		return annotationValueNormalization;
-	}
-
-	public void setAnnotationValueNormalization(String annotationValueNormalization) {
-		this.annotationValueNormalization = annotationValueNormalization;
-	}
-
-
 	public IEntityAnnotation clone()
 	{
 		IEntityAnnotation ent = new EntityAnnotationImpl(super.getId(),super.getStartOffset(),super.getEndOffset(),
-				getClassAnnotation(),getResourceElement(), getAnnotationValue(),getAnnotationValueNormalization(),getProperties(),isActive());
+				getClassAnnotation(),getResourceElement(), getAnnotationValue(),isAbreviation(),getProperties(),isActive());
 		return ent;		
 	}
 	
@@ -154,5 +136,10 @@ public class EntityAnnotationImpl extends AnnotationImpl implements IEntityAnnot
 	public String toString()
 	{
 		return getAnnotationValue()+ "( "+getStartOffset()+"-"+getEndOffset()+" )";
+	}
+
+	@Override
+	public boolean isAbreviation() {
+		return abreviation;
 	}
 }

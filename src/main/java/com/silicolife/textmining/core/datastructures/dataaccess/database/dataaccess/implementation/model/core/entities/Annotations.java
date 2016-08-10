@@ -29,7 +29,6 @@ public class Annotations implements java.io.Serializable {
 	private long annAnnotStart;
 	private long annAnnotEnd;
 	private String annElement;
-	private String annNormalizationForm;
 	private String annAnnotType;
 	private String annClue;
 	private String annClassificationRe;
@@ -41,6 +40,8 @@ public class Annotations implements java.io.Serializable {
 	private Set<AnnotationLogs> annotationLogses = new HashSet<AnnotationLogs>(0);
 	private Set<AnnotationSides> annotationSidesesForAsAnnotationId = new HashSet<AnnotationSides>(0);
 	private Set<AnnotationSides> annotationSidesesForAsAnnotationSubId = new HashSet<AnnotationSides>(0);
+	private boolean annAbbreviation;
+
 
 	public Annotations() {
 	}
@@ -57,9 +58,9 @@ public class Annotations implements java.io.Serializable {
 	}
 
 	public Annotations(long annId, Classes classes, Corpus corpus, Processes processes, Publications publications, ResourceElements resourceElements, long annAnnotStart,
-			long annAnnotEnd, String annElement, String annNormalizationForm, String annAnnotType, String annClue, String annClassificationRe, boolean annActive,
+			long annAnnotEnd, String annElement, String annAnnotType, String annClue, String annClassificationRe, boolean annActive,
 			Long annStartSentenceOffset, Long annEndSentenceOffset, String annNotes, Set<AnnotationProperties> annotationPropertieses, Set<AnnotationLogs> annotationLogses,
-			Set<AnnotationSides> annotationSidesesForAsAnnotationId, Set<AnnotationSides> annotationSidesesForAsAnnotationSubId) {
+			Set<AnnotationSides> annotationSidesesForAsAnnotationId, Set<AnnotationSides> annotationSidesesForAsAnnotationSubId,boolean annAbbreviation) {
 		this.annId = annId;
 		this.classes = classes;
 		this.corpus = corpus;
@@ -69,7 +70,6 @@ public class Annotations implements java.io.Serializable {
 		this.annAnnotStart = annAnnotStart;
 		this.annAnnotEnd = annAnnotEnd;
 		this.annElement = annElement;
-		this.annNormalizationForm = annNormalizationForm;
 		this.annAnnotType = annAnnotType;
 		this.annClue = annClue;
 		this.annClassificationRe = annClassificationRe;
@@ -81,6 +81,7 @@ public class Annotations implements java.io.Serializable {
 		this.annotationLogses = annotationLogses;
 		this.annotationSidesesForAsAnnotationId = annotationSidesesForAsAnnotationId;
 		this.annotationSidesesForAsAnnotationSubId = annotationSidesesForAsAnnotationSubId;
+		this.annAbbreviation=annAbbreviation;
 	}
 
 	@Id
@@ -170,13 +171,13 @@ public class Annotations implements java.io.Serializable {
 		this.annElement = annElement;
 	}
 
-	@Column(name = "ann_normalization_form", length = 500)
-	public String getAnnNormalizationForm() {
-		return this.annNormalizationForm;
+	@Column(name = "ann_abbreviation")
+	public boolean isAnnAbbreviation() {
+		return annAbbreviation;
 	}
 
-	public void setAnnNormalizationForm(String annNormalizationForm) {
-		this.annNormalizationForm = annNormalizationForm;
+	public void setAnnAbbreviation(boolean annAbbreviation) {
+		this.annAbbreviation = annAbbreviation;
 	}
 
 	@Column(name = "ann_annot_type", nullable = false, length = 4)

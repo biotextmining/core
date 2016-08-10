@@ -36,13 +36,14 @@ public interface IEntityAnnotation extends IAnnotation, Comparable<IEntityAnnota
 	
 	public IEntityAnnotation clone();
 	
-	/**
-	 * Method that returns annotation text value normalized
-	 * 
-	 * @return annotation normalized representation
-	 */
-	public String getAnnotationValueNormalization();
 	
 	public void setClass(IAnoteClass newKlass);
 
+
+	/**
+	 * Define if a NER annotation
+	 * 
+	 * @return
+	 */
+	public boolean isAbreviation();
 }

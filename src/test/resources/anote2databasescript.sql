@@ -178,7 +178,6 @@ CREATE TABLE IF NOT EXISTS `annotations` (
   `ann_resource_element_id` BIGINT NULL,
   `ann_class_id` BIGINT NULL DEFAULT NULL,
   `ann_element` VARCHAR(500) NULL DEFAULT NULL,
-  `ann_normalization_form` VARCHAR(500) NULL DEFAULT NULL,
   `ann_annot_type` ENUM('ner','re') NOT NULL DEFAULT 'ner',
   `ann_clue` VARCHAR(250) NULL,
   `ann_classification_re` VARCHAR(250) NULL,
@@ -186,6 +185,7 @@ CREATE TABLE IF NOT EXISTS `annotations` (
   `ann_start_sentence_offset` BIGINT NULL DEFAULT -1,
   `ann_end_sentence_offset` BIGINT NULL DEFAULT -1,
   `ann_notes` VARCHAR(500) NULL DEFAULT NULL,
+  `ann_abbreviation` TINYINT(1)  NULL DEFAULT 0,
   PRIMARY KEY (`ann_id`),
   INDEX `idx_annotations_01` (`ann_annot_type` ASC),
   INDEX `idx_annotations_02` (`ann_active` ASC),
@@ -1211,7 +1211,8 @@ START TRANSACTION;
 
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (1, '2012-11-13 00:00:00', 'Base Database');
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (2, '2016-06-21 20:00:00', 'Add Data Process Status Update AnnotationLog new fields to ENUMA dd Corpus Process Publication Table');
-
+INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (3, '2016-07-31 20:00:00', 'Bug Fix :Alter Corpus Has Publication has Process foreign key reference');
+INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (4, '2016-08-10 20:00:00', 'Alter Annotation table: remove element normalization and add abbreviation');
 
 COMMIT;
 
