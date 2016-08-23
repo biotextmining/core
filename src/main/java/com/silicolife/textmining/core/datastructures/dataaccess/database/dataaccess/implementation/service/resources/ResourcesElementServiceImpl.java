@@ -224,6 +224,21 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 			}
 		}
 	}
+	
+	public Boolean existResourceElementByResourceCaseSensitive(Long resourceID, String name)
+	{
+		return resourcesManagerDao.getResourcesAuxDao().existResourceElementByResourceCaseSensitive(resourceID, name);
+	}
+	
+	public Boolean existSynonymByResourceCaseSensitive(Long resourceID,String name)
+	{
+		return resourcesManagerDao.getResourcesAuxDao().existSynonymByResourceCaseSensitive(resourceID, name);
+	}
+	
+	public Boolean existResourceElementAndSynonymsByResourceCaseSensitive(Long resourceID, String name)
+	{
+		return existResourceElementByResourceCaseSensitive(resourceID,name) && existSynonymByResourceCaseSensitive(resourceID,name);
+	}
 
 	private void updateResourceElement(IResourceManagerReport report, Resources resource, IResourceElement elem, Classes klass, ResourceElements resourceElement) {
 		Classes conflitklass = null;
@@ -422,12 +437,8 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
 		if (resource == null)
 			throw new ResourcesExceptions("default", "default");
-		Map<String, Serializable> eqRestrictions = new HashMap<String, Serializable>();
-		eqRestrictions.put("resources", resource);
-		eqRestrictions.put("resElement", term);
-		List<ResourceElements> resourceElement = resourcesManagerDao.getResourcesElememtsDao().findByAttributesCaseSensitive(eqRestrictions);
-		List<Synonyms> resourceElementSynonyms = resourcesManagerDao.getResourcesAuxDao().findSynonymsByResourceElement(resource.getResoId(), term);
-		return !(resourceElement.isEmpty() && resourceElementSynonyms.isEmpty());
+
+		return resourcesManagerDao.getResourcesAuxDao().existResourceElementByResourceCaseSensitive(resourceId, term);
 	}
 
 	@Transactional(readOnly=false)
