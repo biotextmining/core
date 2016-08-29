@@ -16,6 +16,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.util.PDFTextStripper;
 
 import com.silicolife.textmining.core.datastructures.textprocessing.NormalizationForm;
+import com.silicolife.textmining.core.datastructures.textprocessing.TermSeparator;
 
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
@@ -51,7 +52,8 @@ public class PDFtoText {
 				text = new String();
 			}
 		}
-		return NormalizationForm.removeOffsetProblemSituation(text);
+		String newText = TermSeparator.termSeparator(text);
+		return NormalizationForm.removeOffsetProblemSituation(newText);
 	}
 	
 	private static String convertEncryptedPDFDocument(String url) throws IOException, TesseractException{

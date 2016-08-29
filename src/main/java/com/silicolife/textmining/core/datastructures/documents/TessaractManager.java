@@ -10,6 +10,7 @@ public class TessaractManager {
 	private TessaractManager(){
 		tessaract = new Tesseract();
 		tessaract.setDatapath("src/main/resources");
+		tessaract.setPageSegMode(1);
 	}
 	
 	public Tesseract getTessaract(){
