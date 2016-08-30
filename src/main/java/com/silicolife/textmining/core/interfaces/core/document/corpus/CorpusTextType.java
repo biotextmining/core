@@ -27,13 +27,13 @@ public enum CorpusTextType {
 		String value = null;
 		switch (corpusTextType) {
 			case Abstract :
-				value = GlobalNames.abstracts;
+				value = CorpusTextType.Abstract.toString();
 				break;
 			case FullText :
-				value = GlobalNames.fullText;
+				value = CorpusTextType.FullText.toString();
 				break;
 			case Hybrid :
-				value = GlobalNames.abstractOrFullText;
+				value = CorpusTextType.Hybrid.toString();
 				break;
 			default :
 				break;

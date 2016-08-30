@@ -29,9 +29,6 @@ public class GlobalNames {
 	/**
 	 * Corpus Properties
 	 */
-	public final static String fullText = "Full Text";
-	public final static String abstracts = "Abstract";
-	public final static String abstractOrFullText = "Abstract or Full Text";
 	public final static String textType = "Text Type";
 	public final static String sourceQueries = "Source Queries";
 	
@@ -87,6 +84,8 @@ public class GlobalNames {
 	public final static String duplicatedFrom ="Duplicated from";
 	
 	public final static String serverXMLsDirectory = "Server XML directory";
+	
+	public final static String readPMCFiles = "Read PMC Files";
 
 
 }

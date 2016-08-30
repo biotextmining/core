@@ -17,6 +17,7 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANote
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocument;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
+import com.silicolife.textmining.core.interfaces.core.document.corpus.CorpusTextType;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.core.document.structure.ISentence;
 import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
@@ -119,7 +120,7 @@ public class AnnotatedDocumentImpl extends PublicationImpl implements IAnnotated
 	}
 
 	private String getTExt() throws ANoteException {
-		if(corpus.getProperties().get(GlobalNames.textType).equals(GlobalNames.abstracts))
+		if(corpus.getProperties().get(GlobalNames.textType).equals(CorpusTextType.Abstract.toString()))
 		{
 			if(OtherConfigurations.getUsingTitleInAbstract() && getTitle()!=null && getTitle().length() > 0)
 			{
@@ -130,11 +131,11 @@ public class AnnotatedDocumentImpl extends PublicationImpl implements IAnnotated
 				return getAbstractSection();
 			}
 		}
-		else if(corpus.getProperties().get(GlobalNames.textType).equals(GlobalNames.fullText))
+		else if(corpus.getProperties().get(GlobalNames.textType).equals(CorpusTextType.FullText.toString()))
 		{
 			return getFullTextContent();
 		}
-		else if(corpus.getProperties().get(GlobalNames.textType).equals(GlobalNames.abstractOrFullText))
+		else if(corpus.getProperties().get(GlobalNames.textType).equals(CorpusTextType.Hybrid.toString()))
 		{
 			String fullTExt = getFullTextContent();
 			if(getFullTextContent() != null && !getFullTextContent().isEmpty())
