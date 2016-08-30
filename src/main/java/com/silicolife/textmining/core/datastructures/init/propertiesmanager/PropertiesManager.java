@@ -248,7 +248,10 @@ public class PropertiesManager {
 		}
 		
 		IPropertyNode pnode = this.getPropertyNode(node);
-		return pnode.getProperty(proppath);
+		if(pnode != null)
+			return pnode.getProperty(proppath);
+		else
+			return null;
 	}
 	/**
 	 * This function saves the property file.
