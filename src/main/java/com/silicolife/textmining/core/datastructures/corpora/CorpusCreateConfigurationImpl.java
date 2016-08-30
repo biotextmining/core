@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.silicolife.textmining.core.datastructures.process.ConfigurationImpl;
+import com.silicolife.textmining.core.datastructures.utils.conf.GlobalNames;
 import com.silicolife.textmining.core.interfaces.core.corpora.ICorpusCreateConfiguration;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.CorpusTextType;
@@ -30,7 +31,11 @@ public class CorpusCreateConfigurationImpl extends ConfigurationImpl implements 
 	public CorpusCreateConfigurationImpl(String corpusName,String notes,Properties properties) {
 		super();
 		this.corpusName = corpusName;
+		this.corpusNotes = notes;
 		this.properties = properties;
+		if(properties.containsKey(GlobalNames.textType)){
+			this.corpusTextType = CorpusTextType.convertStringToCorpusType(properties.getProperty(GlobalNames.textType));
+		}
 		
 	}
 	
