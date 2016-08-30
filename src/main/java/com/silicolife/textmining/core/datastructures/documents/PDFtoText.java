@@ -52,8 +52,7 @@ public class PDFtoText {
 				text = new String();
 			}
 		}
-		String newText = TermSeparator.termSeparator(text);
-		return NormalizationForm.removeOffsetProblemSituation(newText);
+		return NormalizationForm.removeOffsetProblemSituation(text);
 	}
 	
 	private static String convertEncryptedPDFDocument(String url) throws IOException, TesseractException{
