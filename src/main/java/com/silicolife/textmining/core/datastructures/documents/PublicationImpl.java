@@ -266,7 +266,8 @@ public class PublicationImpl extends Observable implements IPublication {
 		if(fullTextContent==null)
 		{
 			try {
-				fullTextContent = InitConfiguration.getDataAccess().getPublicationFullText(this);
+				if(InitConfiguration.getDataAccess() != null)
+					fullTextContent = InitConfiguration.getDataAccess().getPublicationFullText(this);
 			} catch (ANoteException e) {
 				return new String();
 			}
