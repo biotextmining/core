@@ -385,7 +385,9 @@ public class PublicationImpl extends Observable implements IPublication {
 
 	public static String getPublicationExternalIDsStream(IPublication publication) {
 		String result = new String();
-		for (IPublicationExternalSourceLink links : publication.getPublicationExternalIDSource()) {
+		result = result + "ID:" + publication.getId();
+		for (IPublicationExternalSourceLink links : publication.getPublicationExternalIDSource()) 
+		{
 			result = result + " " + links.getSource() + ":" + links.getSourceInternalId();
 		}
 		return result;
