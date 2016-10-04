@@ -120,9 +120,9 @@ public interface IPublication {
 	 * 
 	 * @return
 	 */
-	public boolean isAvailableFreeFullText();
+	public boolean isFreeFullText();
 
-	public void setAvailableFreeFullText(boolean newAvailableFreeFullText);
+	public void setFreeFullText(boolean newAvailableFreeFullText);
 	
 	/**
 	 * Return Document Notes

@@ -14,6 +14,6 @@ public interface IProcess {
 	
 	public IProcessType getType();
 	public IProcessOrigin getProcessOrigin();
-	public long getID();
+	public long getId();
 	public void stop();
 }
