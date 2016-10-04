@@ -5,9 +5,7 @@ package com.silicolife.textmining.core.datastructures.resources;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.silicolife.textmining.core.datastructures.general.AnoteClass;
 import com.silicolife.textmining.core.datastructures.general.ExternalIDImpl;
@@ -69,13 +67,11 @@ public class ResourceElementImpl implements IResourceElement{
 		this.term=newTermName;
 	}
 
-	@JsonGetter("klass")
 	@Override
 	public IAnoteClass getTermClass() {
 		return this.klass;
 	}
 
-	@JsonSetter("klass")
 	@Override
 	public void setClass(IAnoteClass klass) {
 		this.klass = klass;
@@ -100,7 +96,6 @@ public class ResourceElementImpl implements IResourceElement{
 		this.synonyms = synonyms;
 	}
 
-	@JsonGetter("externalIDs")
 	@Override
 	public List<IExternalID> getExtenalIDsImMemory() {
 		if(externalIDs==null)

@@ -3,8 +3,6 @@ package com.silicolife.textmining.core.datastructures.annotation.ner;
 import java.util.List;
 import java.util.Properties;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.silicolife.textmining.core.datastructures.annotation.AnnotationImpl;
 import com.silicolife.textmining.core.datastructures.annotation.AnnotationType;
@@ -50,13 +48,11 @@ public class EntityAnnotationImpl extends AnnotationImpl implements IEntityAnnot
 		this(GenerateRandomId.generateID(),start,end,klass,resourceElement,value,abreviation,properties,true);
 	}
 
-	@JsonSetter("klass")
 	@Override
 	public void setClass(IAnoteClass newKlass) {
 		this.klass=newKlass;
 	}
 
-	@JsonGetter("klass")
 	@Override
 	public IAnoteClass getClassAnnotation() {
 		return klass;
