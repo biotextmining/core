@@ -441,7 +441,7 @@ public class REProcessToNetworkImpl implements IRESchemaToNetwork{
 
 	
 	private static INetwork<INode, IEdge> builtNetwork(boolean directed, IRESchema rePorcess,List<INode> nodes, List<IEdge> edges) {	
-		String label = "ID : "+rePorcess.getID() + " ( "+rePorcess.getType() + " ) ";
+		String label = "ID : "+rePorcess.getId() + " ( "+rePorcess.getType() + " ) ";
 		INetworkMetaData metaData = new NetworkMetaDataImpl("@Note2 - RE Schema", "",GregorianCalendar.getInstance().getTime(), "@Note2 - RE Schema "+label,"@Note2 - RE Schema", ".xgmml");
 		String id = label;
 		String version = "1.0";

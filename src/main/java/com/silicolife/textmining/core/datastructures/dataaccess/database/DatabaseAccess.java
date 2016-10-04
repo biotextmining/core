@@ -587,7 +587,7 @@ public class DatabaseAccess implements IDataAccess {
 	public void registerCorpusProcess(ICorpus corpus, IIEProcess process) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			corpusService.registerCorpusProcess(corpus.getId(), process.getID());
+			corpusService.registerCorpusProcess(corpus.getId(), process.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 		} catch (RuntimeException e) {
 			sessionFactory.getCurrentSession().getTransaction().rollback();
@@ -675,7 +675,7 @@ public class DatabaseAccess implements IDataAccess {
 	public void inactivateProcess(IIEProcess process) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			privilegesService.removePrivilegeLoggedUser(process.getID(), ResourcesTypeUtils.processes.getName());
+			privilegesService.removePrivilegeLoggedUser(process.getId(), ResourcesTypeUtils.processes.getName());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 		} catch (RuntimeException e) {
 			sessionFactory.getCurrentSession().getTransaction().rollback();
@@ -700,7 +700,7 @@ public class DatabaseAccess implements IDataAccess {
 	public List<IEventAnnotation> getAnnotatedDocumentEvents(IAnnotatedDocument annotedDocument) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			List<IEventAnnotation> events = annotationService.getProcessDoumentAnnotationEvents(annotedDocument.getProcess().getID(),annotedDocument.getId());
+			List<IEventAnnotation> events = annotationService.getProcessDoumentAnnotationEvents(annotedDocument.getProcess().getId(),annotedDocument.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return events;
 		} catch (RuntimeException e) {
@@ -713,7 +713,7 @@ public class DatabaseAccess implements IDataAccess {
 	public List<IEntityAnnotation> getAnnotatedDocumentEntities(IAnnotatedDocument annotedDocument) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			List<IEntityAnnotation> entities = annotationService.getProcessDoumentAnnotationEntities(annotedDocument.getId(),annotedDocument.getProcess().getID());
+			List<IEntityAnnotation> entities = annotationService.getProcessDoumentAnnotationEntities(annotedDocument.getId(),annotedDocument.getProcess().getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return entities;
 		} catch (RuntimeException e) {
@@ -726,7 +726,7 @@ public class DatabaseAccess implements IDataAccess {
 	public void addProcessDocumentEntitiesAnnotations(IIEProcess schema, IPublication document, List<IEntityAnnotation> entityAnnotations) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			annotationService.addCorpusProcessDocumentEntityAnootations(schema.getCorpus().getId(), schema.getID(), document.getId(), entityAnnotations);
+			annotationService.addCorpusProcessDocumentEntityAnootations(schema.getCorpus().getId(), schema.getId(), document.getId(), entityAnnotations);
 			sessionFactory.getCurrentSession().getTransaction().commit();
 		} catch (RuntimeException e) {
 			sessionFactory.getCurrentSession().getTransaction().rollback();
@@ -738,7 +738,7 @@ public class DatabaseAccess implements IDataAccess {
 	public void addProcessDocumentEventAnnoations(IIEProcess process, IPublication document, List<IEventAnnotation> events) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			annotationService.addCorpusProcessDocumentEventsAnootations(process.getCorpus().getId(), process.getID(), document.getId(), events);
+			annotationService.addCorpusProcessDocumentEventsAnootations(process.getCorpus().getId(), process.getId(), document.getId(), events);
 			sessionFactory.getCurrentSession().getTransaction().commit();
 		} catch (RuntimeException e) {
 			sessionFactory.getCurrentSession().getTransaction().rollback();
@@ -792,7 +792,7 @@ public class DatabaseAccess implements IDataAccess {
 	public SortedSet<IAnnotationLog> getProcessDocumentLogs(IIEProcess process, IPublication document) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			SortedSet<IAnnotationLog> sortedLog = annotationService.getProcessDocumentLogs(process.getID(), document.getId());
+			SortedSet<IAnnotationLog> sortedLog = annotationService.getProcessDocumentLogs(process.getId(), document.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return sortedLog;
 		} catch (RuntimeException e) {
@@ -805,7 +805,7 @@ public class DatabaseAccess implements IDataAccess {
 	public SortedSet<IAnnotationLog> getSchemaLogs(IIEProcess process) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			SortedSet<IAnnotationLog> sortedLog = annotationService.getProcessLogs(process.getID());
+			SortedSet<IAnnotationLog> sortedLog = annotationService.getProcessLogs(process.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return sortedLog;
 		} catch (RuntimeException e) {
@@ -819,7 +819,7 @@ public class DatabaseAccess implements IDataAccess {
 	public List<IAnnotation> getAnnotationsRelatedToAnnotationLogs(IIEProcess ieProcess) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			IManualCurationAnnotations manualCurationAnnoattions = annotationService.getProcessDocumentAnnotationsAssociatedToLogs(ieProcess.getID());
+			IManualCurationAnnotations manualCurationAnnoattions = annotationService.getProcessDocumentAnnotationsAssociatedToLogs(ieProcess.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return manualCurationAnnoattions.getAnnotations();
 		} catch (RuntimeException e) {
@@ -1207,7 +1207,7 @@ public class DatabaseAccess implements IDataAccess {
 	public void updatePublicationAvailableFreeFullText(IPublication pub) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			publicationsService.updatePublicationAvailableFreeFullText(pub.getId(), pub.isAvailableFreeFullText());
+			publicationsService.updatePublicationAvailableFreeFullText(pub.getId(), pub.isFreeFullText());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 		} catch (RuntimeException e) {
 			sessionFactory.getCurrentSession().getTransaction().rollback();
@@ -1527,7 +1527,7 @@ public class DatabaseAccess implements IDataAccess {
 	public IIEProcessStatistics getIEProcessStatistics(IIEProcess ieProcessImpl) throws ANoteException{	
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			IIEProcessStatistics statistcs = processService.getProcessStatistics(ieProcessImpl.getID());
+			IIEProcessStatistics statistcs = processService.getProcessStatistics(ieProcessImpl.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return statistcs;
 		} catch (RuntimeException e) {
@@ -1541,7 +1541,7 @@ public class DatabaseAccess implements IDataAccess {
 			IAnnotatedDocument annotatedDocument) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			IAnnotatedDocumentStatistics statistcs = annotationService.getProcessDocumentStatistics(annotatedDocument.getId(),annotatedDocument.getProcess().getID());
+			IAnnotatedDocumentStatistics statistcs = annotationService.getProcessDocumentStatistics(annotatedDocument.getId(),annotatedDocument.getProcess().getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return statistcs;
 		} catch (RuntimeException e) {
@@ -1567,7 +1567,7 @@ public class DatabaseAccess implements IDataAccess {
 	public Boolean hasPermission(IIEProcess process, List<String> permission) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			Boolean hasRoles = privilegesService.hasPermission(process.getID(), ResourcesTypeUtils.processes.getName(), permission);
+			Boolean hasRoles = privilegesService.hasPermission(process.getId(), ResourcesTypeUtils.processes.getName(), permission);
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return hasRoles;
 		} catch (RuntimeException e) {
@@ -1780,7 +1780,7 @@ public class DatabaseAccess implements IDataAccess {
 			Integer paginationSize) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			IDocumentSet documents = corpusService.getCorpusPublicationsNotProcessedPaginated(process.getCorpus().getId(), process.getID(), paginationIndex, paginationSize);
+			IDocumentSet documents = corpusService.getCorpusPublicationsNotProcessedPaginated(process.getCorpus().getId(), process.getId(), paginationIndex, paginationSize);
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return documents;
 		} catch (RuntimeException e) {
@@ -1806,7 +1806,7 @@ public class DatabaseAccess implements IDataAccess {
 	public Long countCorpusPublicationsNotProcessed(IIEProcess process) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			Long count = corpusService.countCorpusPublicationsNotProcessed(process.getCorpus().getId(), process.getID());
+			Long count = corpusService.countCorpusPublicationsNotProcessed(process.getCorpus().getId(), process.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return count;
 		} catch (RuntimeException e) {

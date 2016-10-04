@@ -18,7 +18,7 @@ public class NERSchemaImpl extends IEProcessImpl implements INERSchema{
 	}
 
 	public NERSchemaImpl(IIEProcess newProcess) {
-		this(newProcess.getID(),newProcess.getCorpus(), newProcess.getName(), newProcess.getNotes(),newProcess.getType(),newProcess.getProcessOrigin(), newProcess.getProperties());
+		this(newProcess.getId(),newProcess.getCorpus(), newProcess.getName(), newProcess.getNotes(),newProcess.getType(),newProcess.getProcessOrigin(), newProcess.getProperties());
 	}
 
 	@Override

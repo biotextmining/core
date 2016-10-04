@@ -1,45 +1,40 @@
 package com.silicolife.textmining.core.datastructures.documents.corpus;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpusStatistics;
 
 public class CorpusStatisticsImpl implements ICorpusStatistics{
 	
-	private int documents;
-	private int processes;
+	private int documentsNumber;
+	private int processesNumber;
 	
 	
-	public CorpusStatisticsImpl(int documents,int processes)
+	public CorpusStatisticsImpl(int documentsNumber,int processesNumber)
 	{
-		this.documents=documents;
-		this.processes=processes;
+		this.processesNumber=processesNumber;
+		this.processesNumber=processesNumber;
 	}
 	
 	public CorpusStatisticsImpl()
 	{
 	}
 	
-	@JsonGetter("documents")
 	@Override
 	public int getDocumentNumber() {
-		return documents;
+		return documentsNumber;
 	}
 
-	@JsonGetter("processes")
 	@Override
 	public int getProcessesNumber() {
-		return processes;
+		return processesNumber;
 	}
 
-	@JsonSetter("documents")
-	public void setDocumentsNumber(int documents) {
-		this.documents = documents;
+	public void setDocumentsNumber(int documentsNumber) {
+		this.documentsNumber = documentsNumber;
 	}
 
-	@JsonSetter("processes")
-	public void setProcessesNumber(int processes) {
-		this.processes = processes;
+	public void setProcessesNumber(int processesNumber) {
+		this.processesNumber = processesNumber;
 	}
 
 }

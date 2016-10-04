@@ -1,8 +1,6 @@
 package com.silicolife.textmining.core.datastructures.documents.structure;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.PublicationFieldTypeEnum;
 import com.silicolife.textmining.core.interfaces.core.document.structure.IPublicationField;
 
@@ -11,16 +9,16 @@ public class PublicationFieldImpl implements IPublicationField {
 	private long start;
 	private long end;
 	private String name;
-	private PublicationFieldTypeEnum fieldType;
+	private PublicationFieldTypeEnum fieldTypeEnumString;
 
 	public PublicationFieldImpl() {
 	}
 
-	public PublicationFieldImpl(long start, long end, String name, PublicationFieldTypeEnum fieldType) {
+	public PublicationFieldImpl(long start, long end, String name, PublicationFieldTypeEnum fieldTypeEnumString) {
 		this.start = start;
 		this.end = end;
 		this.name = name;
-		this.fieldType = fieldType;
+		this.fieldTypeEnumString = fieldTypeEnumString;
 	}
 
 	@Override
@@ -53,21 +51,23 @@ public class PublicationFieldImpl implements IPublicationField {
 	@JsonIgnore
 	@Override
 	public PublicationFieldTypeEnum getFieldType() {
-		return fieldType;
+		return fieldTypeEnumString;
 	}
 
-	@JsonGetter("fieldType")
 	public String getFieldTypeEnumString() {
-		return fieldType.toString();
+		return fieldTypeEnumString.toString();
+	}
+
+	public void setFieldTypeEnumString(PublicationFieldTypeEnum fieldTypeEnumString) {
+		this.fieldTypeEnumString = fieldTypeEnumString;
 	}
 
 	@JsonIgnore
 	public void setFieldType(PublicationFieldTypeEnum fieldType) {
-		this.fieldType = fieldType;
+		this.fieldTypeEnumString = fieldType;
 	}
 
-	@JsonSetter("fieldType")
 	public void setFieldTypeEnumString(String fieldType) {
-		this.fieldType = PublicationFieldTypeEnum.valueOf(fieldType);
+		this.fieldTypeEnumString = PublicationFieldTypeEnum.valueOf(fieldType);
 	}
 }

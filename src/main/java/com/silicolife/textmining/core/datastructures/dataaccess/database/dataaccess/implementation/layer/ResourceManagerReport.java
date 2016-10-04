@@ -3,8 +3,6 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.silicolife.textmining.core.datastructures.report.resources.ResourceUpdateConflitsImpl;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.resources.IResourceManagerReport;
@@ -12,32 +10,30 @@ import com.silicolife.textmining.core.interfaces.core.report.resources.IResource
 
 public class ResourceManagerReport implements IResourceManagerReport{
 	
-	private int termNumber;
-	private int synonymsNumber; 
+	private int termsAdded;
+	private int synonymsAdded; 
 	private int conflitNumber;
-	private int externalIDNumber;
+	private int externalIDAdded;
 	@JsonDeserialize(contentAs = ResourceUpdateConflitsImpl.class)
 	private List<IResourceUpdateConflits> conflits; 
 	
 	public ResourceManagerReport()
 	{
-		this.termNumber = 0;
-		this.synonymsNumber = 0;
+		this.termsAdded = 0;
+		this.synonymsAdded = 0;
 		this.conflitNumber = 0;
-		this.externalIDNumber = 0;
+		this.externalIDAdded = 0;
 		this.conflits = new ArrayList<IResourceUpdateConflits>();
 	}
 
 
-	@JsonGetter("synonymsNumber")
 	@Override
 	public int getSynonymsAdded() {
-		return synonymsNumber;
+		return synonymsAdded;
 	}
 	
-	@JsonSetter("synonymsNumber")
 	public void setSynonymsAdded(int synonymsNumber) {
-		this.synonymsNumber = synonymsNumber;
+		this.synonymsAdded = synonymsNumber;
 	}
 	
 	public void setConflits(List<IResourceUpdateConflits> conflits) {
@@ -58,42 +54,38 @@ public class ResourceManagerReport implements IResourceManagerReport{
 		this.conflitNumber = conflitNumber;
 	}
 
-	@JsonGetter("externalIDNumber")
 	@Override
 	public int getExternalIDAdded() {
-		return externalIDNumber;
+		return externalIDAdded;
 	}
 
-	@JsonSetter("externalIDNumber")
 	public void setExternalIDAdded(int externalIDsNumber) {
-		this.externalIDNumber = externalIDsNumber;
+		this.externalIDAdded = externalIDsNumber;
 	}
 	
-	@JsonGetter("termNumber")
 	@Override
 	public int getTermsAdded() {
-		return termNumber;
+		return termsAdded;
 	}
 
-	@JsonSetter("termNumber")
-	public void setTermsAdded(int termNumber) {
-		this.termNumber = termNumber;
+	public void setTermsAdded(int termsAdded) {
+		this.termsAdded = termsAdded;
 	}
 
 	@Override
 	public void addTerms(int termNumbers) {
-		this.termNumber +=termNumbers;
+		this.termsAdded +=termNumbers;
 	}
 
 	@Override
 	public void addSynonyms(int synonymsNumber) {
-		this.synonymsNumber +=	synonymsNumber;	
+		this.synonymsAdded +=	synonymsNumber;	
 	}
 
 
 	@Override
 	public void addExternalID(int externaIDNumber) {
-		this.externalIDNumber += externaIDNumber;
+		this.externalIDAdded += externaIDNumber;
 	}
 
 

@@ -1,7 +1,5 @@
 package com.silicolife.textmining.core.interfaces.core.document.corpus;
 
-import com.silicolife.textmining.core.datastructures.utils.conf.GlobalNames;
-
 public enum CorpusTextType {
 	Abstract,
 	FullText,

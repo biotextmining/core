@@ -16,7 +16,7 @@ public class RESchemaImpl extends IEProcessImpl implements IRESchema{
 	}
 
 	public RESchemaImpl(IIEProcess newProcess) {
-		this(newProcess.getID(),newProcess.getCorpus(), newProcess.getName(), newProcess.getNotes(),newProcess.getType(),newProcess.getProcessOrigin(), newProcess.getProperties());
+		this(newProcess.getId(),newProcess.getCorpus(), newProcess.getName(), newProcess.getNotes(),newProcess.getType(),newProcess.getProcessOrigin(), newProcess.getProperties());
 	}
 
 }

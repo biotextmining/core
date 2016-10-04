@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.deserializes.MapPublicationsDeserialize;
 import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
@@ -28,34 +26,32 @@ public class DocumentSetImpl implements Serializable, IDocumentSet{
 	 * Instance class that contain a information for each article
 	 */
 	@JsonDeserialize(using = MapPublicationsDeserialize.class)
-	private Map<Long,IPublication> documents; //id -> document
+	private Map<Long,IPublication> allDocuments; //id -> document
 
 	/**
 	 * Constructors
 	 */
 	public DocumentSetImpl() 
 	{
-		this.documents=new HashMap<Long, IPublication>();
+		this.allDocuments=new HashMap<Long, IPublication>();
 	}
 	
 	public DocumentSetImpl(IDocumentSet docs) 
 	{
-		this.documents=new HashMap<Long, IPublication>();
+		this.allDocuments=new HashMap<Long, IPublication>();
 		for(IPublication doc:docs)
 		{
-			this.documents.put(doc.getId(), doc);
+			this.allDocuments.put(doc.getId(), doc);
 		}
 	}
 	
-	@JsonGetter("documents")
 	@Override
 	public Map<Long, IPublication> getAllDocuments() {
-		return documents;
+		return allDocuments;
 	}	
 	
-	@JsonSetter("documents")
-	public void setAllDocuments(Map<Long, IPublication> documents) {
-		this.documents = documents;
+	public void setAllDocuments(Map<Long, IPublication> allDocuments) {
+		this.allDocuments = allDocuments;
 	}
 
 	/**
@@ -63,7 +59,7 @@ public class DocumentSetImpl implements Serializable, IDocumentSet{
 	@JsonIgnore
 	public void addDocument(long publicationID,IPublication document)
 	{
-		this.documents.put(publicationID,document);
+		this.allDocuments.put(publicationID,document);
 	}
 	
 	/**
@@ -71,7 +67,7 @@ public class DocumentSetImpl implements Serializable, IDocumentSet{
 	@JsonIgnore
 	public void removeDocument(long publicationID)
 	{
-		this.documents.remove(publicationID);
+		this.allDocuments.remove(publicationID);
 	}
 	
 	/**
@@ -79,16 +75,16 @@ public class DocumentSetImpl implements Serializable, IDocumentSet{
 	@JsonIgnore
 	public IPublication getDocument(long publicationID)
 	{
-		return this.documents.get(publicationID);
+		return this.allDocuments.get(publicationID);
 	}
 	
 	@JsonIgnore
 	public Iterator<IPublication> iterator() {
-		return this.documents.values().iterator();
+		return this.allDocuments.values().iterator();
 	}
 	
 	@JsonIgnore
 	public int size() {
-		return this.documents.size();
+		return this.allDocuments.size();
 	}	
 }

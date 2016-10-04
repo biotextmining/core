@@ -162,7 +162,7 @@ public class PublicationsWrapper {
 		String externalLink = publications_.getExternalLink();
 		if(externalLink.trim().equals(""))
 			externalLink = null;
-		Boolean freefulltextAvailable = publications_.isAvailableFreeFullText();
+		Boolean freefulltextAvailable = publications_.isFreeFullText();
 
 		String notes = publications_.getNotes();
 		if(notes.trim().equals(""))

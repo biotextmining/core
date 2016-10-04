@@ -61,7 +61,7 @@ public class ProcessesAccessImpl extends RestClientAccess {
 		checkAndForceLoginIfNecessary();
 		ICorpus corpusInstance = new CorpusImpl(process.getCorpus().getId(), 
 												process.getCorpus().getDescription(), process.getCorpus().getNotes(), process.getCorpus().getProperties());
-		IEProcessImpl processInstance = new IEProcessImpl(process.getID(), corpusInstance, 
+		IEProcessImpl processInstance = new IEProcessImpl(process.getId(), corpusInstance, 
 												process.getName(), process.getNotes(), process.getType(),
 												process.getProcessOrigin(), process.getProperties());
 		
@@ -87,7 +87,7 @@ public class ProcessesAccessImpl extends RestClientAccess {
 		checkAndForceLoginIfNecessary();
 		ICorpus corpusInstance = new CorpusImpl(process.getCorpus().getId(), 
 												process.getCorpus().getDescription(), process.getCorpus().getNotes(), process.getCorpus().getProperties());
-		IEProcessImpl processInstance = new IEProcessImpl(process.getID(), corpusInstance, 
+		IEProcessImpl processInstance = new IEProcessImpl(process.getId(), corpusInstance, 
 															process.getName(), process.getNotes(), process.getType(),
 															process.getProcessOrigin(), process.getProperties());
 		

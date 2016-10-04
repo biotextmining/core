@@ -107,7 +107,7 @@ public class ProcessesServiceImpl implements IProcessesService {
 	@Transactional(readOnly = false)
 	@Override
 	public Boolean updateIEProcess(IIEProcess processes_) throws ProcessException {
-		Processes processs = processesManagerDao.getProcessesDao().findById(processes_.getID());
+		Processes processs = processesManagerDao.getProcessesDao().findById(processes_.getId());
 		if (processs == null)
 			throw new ProcessException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
 		processs.setProName(processes_.getName());

@@ -362,7 +362,7 @@ public class DaemonAccess implements IDataAccess {
 
 	@Override
 	public void registerCorpusProcess(ICorpus corpus, IIEProcess process) throws ANoteException {
-		 corpusAccessImpl.registerCorpusProcess(corpus.getId(), process.getID());
+		 corpusAccessImpl.registerCorpusProcess(corpus.getId(), process.getId());
 	}
 
 	@Override
@@ -401,7 +401,7 @@ public class DaemonAccess implements IDataAccess {
 
 	@Override
 	public void inactivateProcess(IIEProcess process) throws ANoteException {
-		userAccessPrivilegesImpl.deletePrivileges(process.getID(), ResourcesTypeUtils.processes.getName());
+		userAccessPrivilegesImpl.deletePrivileges(process.getId(), ResourcesTypeUtils.processes.getName());
 	}
 
 	@Override
@@ -411,22 +411,22 @@ public class DaemonAccess implements IDataAccess {
 
 	@Override
 	public List<IEventAnnotation> getAnnotatedDocumentEvents(IAnnotatedDocument annotedDocument) throws ANoteException {
-		return annotationAccessImpl.getProcessDoumentAnnotationEvents(annotedDocument.getProcess().getID(), annotedDocument.getId());
+		return annotationAccessImpl.getProcessDoumentAnnotationEvents(annotedDocument.getProcess().getId(), annotedDocument.getId());
 	}
 
 	@Override
 	public List<IEntityAnnotation> getAnnotatedDocumentEntities(IAnnotatedDocument annotedDocument) throws ANoteException {
-		return annotationAccessImpl.getProcessDoumentAnnotationEntities(annotedDocument.getProcess().getID(), annotedDocument.getId());
+		return annotationAccessImpl.getProcessDoumentAnnotationEntities(annotedDocument.getProcess().getId(), annotedDocument.getId());
 	}
 
 	@Override
 	public void addProcessDocumentEntitiesAnnotations(IIEProcess schema, IPublication document, List<IEntityAnnotation> entityAnnotations) throws ANoteException {
-		annotationAccessImpl.addCorpusProcessDocumentEntityAnootations(schema.getCorpus().getId(), schema.getID(), document.getId(), entityAnnotations);
+		annotationAccessImpl.addCorpusProcessDocumentEntityAnootations(schema.getCorpus().getId(), schema.getId(), document.getId(), entityAnnotations);
 	}
 
 	@Override
 	public void addProcessDocumentEventAnnoations(IIEProcess process, IPublication document, List<IEventAnnotation> events) throws ANoteException {
-		annotationAccessImpl.addCorpusProcessDocumentEventsAnootations(process.getCorpus().getId(), process.getID(), document.getId(), events);
+		annotationAccessImpl.addCorpusProcessDocumentEventsAnootations(process.getCorpus().getId(), process.getId(), document.getId(), events);
 	}
 
 	@Override
@@ -455,18 +455,18 @@ public class DaemonAccess implements IDataAccess {
 
 	@Override
 	public SortedSet<IAnnotationLog> getProcessDocumentLogs(IIEProcess process, IPublication document) throws ANoteException {
-		return annotationAccessImpl.getProcessDocumentLogs(process.getID(), document.getId());
+		return annotationAccessImpl.getProcessDocumentLogs(process.getId(), document.getId());
 	}
 
 	@Override
 	public SortedSet<IAnnotationLog> getSchemaLogs(IIEProcess process) throws ANoteException {
-		return annotationAccessImpl.getProcessLogs(process.getID());
+		return annotationAccessImpl.getProcessLogs(process.getId());
 	}
 
 
 	@Override
 	public List<IAnnotation> getAnnotationsRelatedToAnnotationLogs(IIEProcess ieProcess) throws ANoteException {
-		return annotationAccessImpl.getProcessDocumentAnnotationsAssociatedToLogs(ieProcess.getID());
+		return annotationAccessImpl.getProcessDocumentAnnotationsAssociatedToLogs(ieProcess.getId());
 	}
 
 	@Override
@@ -627,7 +627,7 @@ public class DaemonAccess implements IDataAccess {
 
 	@Override
 	public void updatePublicationAvailableFreeFullText(IPublication pub) throws ANoteException {
-		publicationsAccessimpl.updatePublicationAvailableFreeFullText(pub.getId(), pub.isAvailableFreeFullText());
+		publicationsAccessimpl.updatePublicationAvailableFreeFullText(pub.getId(), pub.isFreeFullText());
 	}
 
 	@Override
@@ -739,12 +739,12 @@ public class DaemonAccess implements IDataAccess {
 
 	@Override
 	public IIEProcessStatistics getIEProcessStatistics(IIEProcess ieProcessImpl) throws ANoteException {
-		return processAccessImpl.getIEProcessStatistics(ieProcessImpl.getID());
+		return processAccessImpl.getIEProcessStatistics(ieProcessImpl.getId());
 	}
 
 	@Override
 	public IAnnotatedDocumentStatistics getProcessDocumentStatistics(IAnnotatedDocument annotatedDocument) throws ANoteException {
-		return annotationAccessImpl.getProcessDocumentStatistics(annotatedDocument.getId(), annotatedDocument.getProcess().getID());
+		return annotationAccessImpl.getProcessDocumentStatistics(annotatedDocument.getId(), annotatedDocument.getProcess().getId());
 	}
 
 	@Override
@@ -754,7 +754,7 @@ public class DaemonAccess implements IDataAccess {
 
 	@Override
 	public Boolean hasPermission(IIEProcess obj, List<String> fullgrant) throws ANoteException {
-		Boolean hasPermission = userAccessPrivilegesImpl.hasPermission(obj.getID(), ResourcesTypeUtils.processes.getName(), fullgrant);
+		Boolean hasPermission = userAccessPrivilegesImpl.hasPermission(obj.getId(), ResourcesTypeUtils.processes.getName(), fullgrant);
 		return hasPermission;
 	}
 
@@ -872,7 +872,7 @@ public class DaemonAccess implements IDataAccess {
 	@Override
 	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(IIEProcess process, Integer paginationIndex,
 			Integer paginationSize) throws ANoteException {
-		return corpusAccessImpl.getCorpusPublicationsNotProcessedPaginated(process.getCorpus().getId(), process.getID(), paginationIndex, paginationSize);
+		return corpusAccessImpl.getCorpusPublicationsNotProcessedPaginated(process.getCorpus().getId(), process.getId(), paginationIndex, paginationSize);
 	}
 
 	@Override
@@ -882,7 +882,7 @@ public class DaemonAccess implements IDataAccess {
 
 	@Override
 	public Long countCorpusPublicationsNotProcessed(IIEProcess process) throws ANoteException {
-		return corpusAccessImpl.countCorpusPublicationsNotProcessed(process.getCorpus().getId(), process.getID());
+		return corpusAccessImpl.countCorpusPublicationsNotProcessed(process.getCorpus().getId(), process.getId());
 	}
 	
 	

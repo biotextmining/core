@@ -30,7 +30,7 @@ public class IEProcessImpl extends Observable implements IIEProcess {
 	@JsonDeserialize(as = CorpusImpl.class)
 	private ICorpus corpus;
 	@JsonDeserialize(as = ProcessTypeImpl.class)
-	private IProcessType processType;
+	private IProcessType type;
 	@JsonDeserialize(as = ProcessOriginImpl.class)
 	private IProcessOrigin processOrigin;
 	
@@ -41,7 +41,7 @@ public class IEProcessImpl extends Observable implements IIEProcess {
 	public IEProcessImpl(long id, ICorpus corpus, String name, String notes, IProcessType processType, IProcessOrigin processOrigin, Properties properties) {
 		this.id = id;
 		this.name = name;
-		this.processType = processType;
+		this.type = processType;
 		this.processOrigin = processOrigin;
 		this.properties = properties;
 		this.corpus = corpus;
@@ -51,14 +51,12 @@ public class IEProcessImpl extends Observable implements IIEProcess {
 		this(GenerateRandomId.generateID(), corpus, description, notes, type, origin, properties);
 	}
 
-	@JsonGetter("id")
 	@Override
-	public long getID() {
+	public long getId() {
 		return this.id;
 	}
 	
-	@JsonSetter("id")
-	public void setID(long id) {
+	public void setId(long id) {
 		 this.id = id;
 	}
 	
@@ -103,12 +101,12 @@ public class IEProcessImpl extends Observable implements IIEProcess {
 	@JsonDeserialize(as = ProcessTypeImpl.class)
 	@Override
 	public IProcessType getType() {
-		return processType;
+		return type;
 	}
 
 	@JsonSetter("processType")
 	public void setType(IProcessType processType) {
-		this.processType = processType;
+		this.type = processType;
 	}
 
 	@Override
@@ -133,9 +131,9 @@ public class IEProcessImpl extends Observable implements IIEProcess {
 
 	@JsonIgnore
 	public int compareTo(IEProcessImpl process) {
-		if (this.id == process.getID()) {
+		if (this.id == process.getId()) {
 			return 0;
-		} else if (this.id < process.getID()) {
+		} else if (this.id < process.getId()) {
 			return -1;
 		} else {
 			return 1;
@@ -145,7 +143,7 @@ public class IEProcessImpl extends Observable implements IIEProcess {
 	@JsonIgnore
 	public String toString() {
 		String all = new String();
-		all = getName() + "(" + getID()+ ") ";
+		all = getName() + "(" + getId()+ ") ";
 		return all;
 	}
 

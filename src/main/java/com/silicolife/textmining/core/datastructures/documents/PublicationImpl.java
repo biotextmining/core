@@ -13,7 +13,6 @@ import com.silicolife.textmining.core.datastructures.documents.structure.Publica
 import com.silicolife.textmining.core.datastructures.init.InitConfiguration;
 import com.silicolife.textmining.core.datastructures.init.general.GeneralDefaultSettings;
 import com.silicolife.textmining.core.datastructures.init.propertiesmanager.PropertiesManager;
-import com.silicolife.textmining.core.datastructures.language.LanguageProperties;
 import com.silicolife.textmining.core.datastructures.utils.FileHandling;
 import com.silicolife.textmining.core.datastructures.utils.GenerateRandomId;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
@@ -77,7 +76,7 @@ public class PublicationImpl extends Observable implements IPublication {
 
 	public PublicationImpl(IPublication pub) {
 		this(pub.getId(), pub.getTitle(), pub.getAuthors(), pub.getType(), pub.getYeardate(), pub.getFulldate(), pub.getStatus(), pub.getJournal(), pub.getVolume(),
-				pub.getIssue(), pub.getPages(), pub.getAbstractSection(), pub.getExternalLink(), pub.isAvailableFreeFullText(), pub.getNotes(), pub.getRelativePath(), pub
+				pub.getIssue(), pub.getPages(), pub.getAbstractSection(), pub.getExternalLink(), pub.isFreeFullText(), pub.getNotes(), pub.getRelativePath(), pub
 						.getPublicationExternalIDSource(), pub.getPublicationFields(), pub.getPublicationLabels());
 		setSourceURL(pub.getSourceURL());
 	}
@@ -234,11 +233,11 @@ public class PublicationImpl extends Observable implements IPublication {
 	}
 
 	@Override
-	public boolean isAvailableFreeFullText() {
+	public boolean isFreeFullText() {
 		return freeFullText;
 	}
 
-	public void setAvailableFreeFullText(boolean freeFullText) {
+	public void setFreeFullText(boolean freeFullText) {
 		this.freeFullText = freeFullText;
 	}
 
@@ -342,7 +341,7 @@ public class PublicationImpl extends Observable implements IPublication {
 		for (IPublicationExternalSourceLink externalSourceLinks : this.publicationExternalIDSource)
 			result = result + externalSourceLinks.getSource() + ": " + externalSourceLinks.getSourceInternalId() + " ";
 		if (getAbstractSection() != null && getAbstractSection().length() > 0)
-			result = result + LanguageProperties.getLanguageStream("pt.uminho.anote2.general.abstract") + " : " + getAbstractSection() + ") ";
+			result = result + "Abstract : " + getAbstractSection() + ") ";
 		return result;
 	}
 

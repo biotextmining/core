@@ -51,7 +51,7 @@ public class ProcessWrapper {
 	}
 
 	public static Processes convertToDaemonStructure(IIEProcess processes_) {
-		Long id = processes_.getID();
+		Long id = processes_.getId();
 		String name = processes_.getName();
 		String notes = "";// processes_.getNotes();
 		IProcessOrigin processOrigin_ = processes_.getProcessOrigin();
