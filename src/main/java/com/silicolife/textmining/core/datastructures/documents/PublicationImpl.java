@@ -40,7 +40,7 @@ public class PublicationImpl extends Observable implements IPublication {
 	private boolean freeFullText;
 	private String relativePath;
 	private String notes;
-	private String fullTextContent; // plain text
+	protected String fullTextContent; // plain text
 	private String sourceURL;
 	
 	@JsonDeserialize(contentAs = PublicationExternalSourceLinkImpl.class)
