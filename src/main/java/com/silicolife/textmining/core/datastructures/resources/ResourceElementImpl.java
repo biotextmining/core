@@ -21,7 +21,7 @@ public class ResourceElementImpl implements IResourceElement{
 	private long id;
 	private String term;
 	@JsonDeserialize(as = AnoteClass.class)
-	private IAnoteClass klass;
+	private IAnoteClass termClass;
 	@JsonDeserialize(contentAs = ExternalIDImpl.class)
 	private List<IExternalID> externalIDs;
 	private List<String> synonyms;
@@ -32,7 +32,7 @@ public class ResourceElementImpl implements IResourceElement{
 		super();
 		this.id = id;
 		this.term = term;
-		this.klass=klass;
+		this.termClass=klass;
 		this.externalIDs = externalIDs;
 		this.synonyms = synonyms;
 		this.priority = priority;
@@ -69,12 +69,12 @@ public class ResourceElementImpl implements IResourceElement{
 
 	@Override
 	public IAnoteClass getTermClass() {
-		return this.klass;
+		return this.termClass;
 	}
 
 	@Override
-	public void setClass(IAnoteClass klass) {
-		this.klass = klass;
+	public void setTermClass(IAnoteClass klass) {
+		this.termClass = klass;
 	}
 	
 	@Override
@@ -137,7 +137,7 @@ public class ResourceElementImpl implements IResourceElement{
 				{
 					return -2;
 				}
-				return this.klass.getName().compareTo(elem.getTermClass().getName());
+				return this.termClass.getName().compareTo(elem.getTermClass().getName());
 			}
 			else
 				return term;

@@ -38,7 +38,7 @@ public interface IResourceElement extends Cloneable,ITermBDID, Comparable<IResou
 	public void setPriority(int priority);
 	public boolean hasExternalID(IExternalID ext);
 	
-	public void setClass(IAnoteClass klass);
+	public void setTermClass(IAnoteClass klass);
 	
 	public void generateNewId();
 

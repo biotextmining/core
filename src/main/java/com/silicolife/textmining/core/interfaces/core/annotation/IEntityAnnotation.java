@@ -37,7 +37,7 @@ public interface IEntityAnnotation extends IAnnotation, Comparable<IEntityAnnota
 	public IEntityAnnotation clone();
 	
 	
-	public void setClass(IAnoteClass newKlass);
+	public void setClassAnnotation(IAnoteClass newKlass);
 
 
 	/**

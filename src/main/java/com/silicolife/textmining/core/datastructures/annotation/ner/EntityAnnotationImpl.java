@@ -22,7 +22,7 @@ import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 public class EntityAnnotationImpl extends AnnotationImpl implements IEntityAnnotation{
 
 	@JsonDeserialize(as = AnoteClass.class)
-	private IAnoteClass klass;
+	private IAnoteClass classAnnotation;
 	@JsonDeserialize(as = ResourceElementImpl.class)
 	private IResourceElement resourceElement;
 	private String annotationValue;
@@ -34,28 +34,29 @@ public class EntityAnnotationImpl extends AnnotationImpl implements IEntityAnnot
 		super();
 	}
 	
-	public EntityAnnotationImpl(long id, long start, long end,IAnoteClass klass,IResourceElement resourceElement,
+	public EntityAnnotationImpl(long id, long start, long end,IAnoteClass classAnnotation,IResourceElement resourceElement,
 			String value,boolean abreviation,Properties properties,boolean active) {
 		super(id, start, end,AnnotationType.ner.name(),properties,active);
-		this.klass=klass;
+		this.classAnnotation=classAnnotation;
 		this.annotationValue=value;
 		this.resourceElement=resourceElement;
 		this.abreviation=abreviation;
 	}
 	
-	public EntityAnnotationImpl(long start, long end,IAnoteClass klass,IResourceElement resourceElement,String value,boolean abreviation,Properties properties)
+
+	public EntityAnnotationImpl(long start, long end,IAnoteClass classAnnotation,IResourceElement resourceElement,String value,boolean abreviation,Properties properties)
 	{
-		this(GenerateRandomId.generateID(),start,end,klass,resourceElement,value,abreviation,properties,true);
+		this(GenerateRandomId.generateID(),start,end,classAnnotation,resourceElement,value,abreviation,properties,true);
 	}
 
 	@Override
-	public void setClass(IAnoteClass newKlass) {
-		this.klass=newKlass;
+	public void setClassAnnotation(IAnoteClass classAnnotation) {
+		this.classAnnotation=classAnnotation;
 	}
 
 	@Override
 	public IAnoteClass getClassAnnotation() {
-		return klass;
+		return classAnnotation;
 	}
 	
 	public void setAnnotationValue(String annotationValue) {
@@ -138,4 +139,9 @@ public class EntityAnnotationImpl extends AnnotationImpl implements IEntityAnnot
 	public boolean isAbreviation() {
 		return abreviation;
 	}
+	
+	public void setAbreviation(boolean abreviation) {
+		this.abreviation = abreviation;
+	}
+
 }
