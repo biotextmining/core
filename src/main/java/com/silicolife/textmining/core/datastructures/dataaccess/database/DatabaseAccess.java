@@ -86,6 +86,9 @@ import com.silicolife.textmining.core.interfaces.resource.content.IResourceConte
 import com.silicolife.textmining.core.interfaces.resource.ontologies.IResourceElementsRelation;
 
 public class DatabaseAccess implements IDataAccess {
+	
+	public static String driverMyslq = "org.mariadb.jdbc.Driver";
+
 
 	private IDatabase db;
 	private SessionFactory sessionFactory;
@@ -130,7 +133,7 @@ public class DatabaseAccess implements IDataAccess {
 
 		configuration = new Configuration().configure(file);
 
-		configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
+		configuration.setProperty("hibernate.connection.driver_class", driverMyslq);
 		configuration.setProperty("hibernate.connection.url", db.getDataBaseURL());
 		configuration.setProperty("hibernate.connection.username", db.getUser());
 		configuration.setProperty("hibernate.connection.password", db.getPwd());

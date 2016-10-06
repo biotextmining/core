@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.ADatabase;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.DatabaseAccess;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.UpdateDatabaseHelp;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.queriessql.QueriesGeneral;
 import com.silicolife.textmining.core.datastructures.init.InitConfiguration;
@@ -28,10 +29,11 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANote
  *
  */
 public class MySQLDatabase extends ADatabase {
+	
 
 	public MySQLDatabase(String host, String port, String schema, String user, String pwd) {
 		super(host, port, schema, user, pwd, DataBaseTypeEnum.MYSQL);
-		this.setDriverClassName("com.mysql.jdbc.Driver");
+		this.setDriverClassName(DatabaseAccess.driverMyslq);
 	}
 
 	public void openConnection() throws SQLException {
