@@ -8,9 +8,16 @@
 	<packaging>jar</packaging>
 
 	<name>core</name>
-	<url>http://maven.apache.org</url>
+	<url>http://anote-project.org</url>
 
-
+    <licenses>
+        <license>
+            <name>LGPLv3</name>
+            <url>https://www.gnu.org/licenses/lgpl-3.0.en.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.7</maven.compiler.source>
