@@ -47,6 +47,18 @@ public interface IResourceElementAccess {
 	public IResourceManagerReport addResourceElementSynomyns(IResource<IResourceElement> resource,IResourceElement elem,List<String> synonyms) throws ANoteException;
 
 	/**
+	 * Add resource Element Synonyms without Validation
+	 * 
+	 * @param destiny
+	 * @param originalElem
+	 * @param synonymsToAdd
+	 * @return 
+	 * @throws ANoteException
+	 */
+	public IResourceManagerReport addResourceElementSynomynsWithoutValidation(IResource<IResourceElement> destiny,IResourceElement originalElem, List<String> synonymsToAdd) throws ANoteException;
+	
+	
+	/**
 	 * Add Resource Element External Ids
 	 * 
 	 * @param elem

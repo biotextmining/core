@@ -825,4 +825,11 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public IResourceManagerReport addResourceElementSynomynsWithoutValidation(IResource<IResourceElement> destiny,
+			IResourceElement originalElem, List<String> synonymsToAdd) throws ANoteException {
+		return null;
+		
+	}
+
 }

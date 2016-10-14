@@ -689,4 +689,5 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 			return (IResourceElementSet<IResourceElement>) resourceElements;
 		}
 	}
+
 }

@@ -868,4 +868,23 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 
 		return elementSet;
 	}
+
+	@Override
+	public IResourceManagerReport addResourceElementSynonymsWithoutValidation(long resourceId, long resourceElementID,List<String> synonyms) throws ResourcesExceptions {
+		IResourceManagerReport report = new ResourceManagerReport();
+		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
+		if (resource == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
+		ResourceElements resouElemnt = resourcesManagerDao.getResourcesElememtsDao().findById(resourceElementID);
+		if (resouElemnt == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoResourceElement, ExceptionsCodes.msgNoResourceElement);	
+		
+		for (String syn : synonyms) {
+			SynonymsId id = new SynonymsId(resouElemnt.getResId(), syn, true);
+			Synonyms synObj = new Synonyms(id, resouElemnt);
+			resourcesManagerDao.getResourcesElememtsSynonymsDao().save(synObj);
+			report.addSynonyms(1);
+		}		
+		return report;
+	}
 }

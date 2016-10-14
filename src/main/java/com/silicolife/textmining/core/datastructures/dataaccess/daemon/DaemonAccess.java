@@ -884,6 +884,13 @@ public class DaemonAccess implements IDataAccess {
 	public Long countCorpusPublicationsNotProcessed(IIEProcess process) throws ANoteException {
 		return corpusAccessImpl.countCorpusPublicationsNotProcessed(process.getCorpus().getId(), process.getId());
 	}
+
+	@Override
+	public IResourceManagerReport addResourceElementSynomynsWithoutValidation(IResource<IResourceElement> resource,
+			IResourceElement originalElem, List<String> synonyms) throws ANoteException {
+		return null;
+		
+	}
 	
 	
 

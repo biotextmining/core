@@ -1818,4 +1818,18 @@ public class DatabaseAccess implements IDataAccess {
 		}
 	}
 
+	@Override
+	public IResourceManagerReport addResourceElementSynomynsWithoutValidation(IResource<IResourceElement> resource,
+			IResourceElement elem, List<String> synonyms) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IResourceManagerReport report = resourcesElementService.addResourceElementSynonymsWithoutValidation(resource.getId(),elem.getId(),synonyms);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return report;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}		
+	}
+
 }
