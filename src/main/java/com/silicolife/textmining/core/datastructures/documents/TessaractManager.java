@@ -11,6 +11,7 @@ public class TessaractManager {
 		tessaract = new Tesseract();
 		tessaract.setDatapath("src/main/resources");
 		tessaract.setPageSegMode(1);
+		tessaract.setTessVariable("textord_min_linesize", "2.5");
 	}
 	
 	public Tesseract getTessaract(){

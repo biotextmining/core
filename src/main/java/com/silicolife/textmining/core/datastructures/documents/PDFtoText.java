@@ -16,7 +16,6 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.util.PDFTextStripper;
 
 import com.silicolife.textmining.core.datastructures.textprocessing.NormalizationForm;
-import com.silicolife.textmining.core.datastructures.textprocessing.TermSeparator;
 
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
