@@ -67,4 +67,6 @@ public interface IResourcesElementService {
 	public void setUserLogged(UsersLogged userLogged);
 	
 	public IResourceElementSet<IResourceElement> getResourceElementsInBatchWithLimit(Long resourceId, Integer index, Integer batchSize) throws ResourcesExceptions;  //
+	
+	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID extID) throws ResourcesExceptions; //
 }

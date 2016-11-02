@@ -18,6 +18,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implement
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.processes.ProcessesAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.publicationmanager.PublicationsAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.publicationmanager.QueryAccessImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.resources.LuceneResourcesElementsAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.resources.ResourcesAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.resources.ResourcesElementsAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.runserverprocesses.RunSercerProcessesAccessImpl;
@@ -91,6 +92,7 @@ public class DaemonAccess implements IDataAccess {
 	private ResourcesAccessImpl resourcesAccessImpl;
 	private ResourcesElementsAccessImpl resourcesElementAccessImpl;
 	private RunSercerProcessesAccessImpl runServerProcessesImpl;
+	private LuceneResourcesElementsAccessImpl luceneResourcesElementsAccessImpl;
 
 	public DaemonAccess(IDaemon daemonConfigurations) {
 		this.daemonConfigurations = daemonConfigurations;
@@ -108,6 +110,7 @@ public class DaemonAccess implements IDataAccess {
 		userAccessPrivilegesImpl = new UserPrevilegesAccessImpl();
 		userLogged = new UsersLoggedImpl();
 		runServerProcessesImpl = new RunSercerProcessesAccessImpl();
+		luceneResourcesElementsAccessImpl = new LuceneResourcesElementsAccessImpl();
 	}
 
 	public IDaemon getDaemonConfigurations() {
@@ -138,6 +141,7 @@ public class DaemonAccess implements IDataAccess {
 			resourcesAccessImpl.setRestClient(webClient);
 			resourcesElementAccessImpl.setRestClient(webClient);
 			runServerProcessesImpl.setRestClient(webClient);
+			luceneResourcesElementsAccessImpl.setRestClient(webClient);
 		}
 	}
 
@@ -441,16 +445,6 @@ public class DaemonAccess implements IDataAccess {
 
 	@Override
 	public void updateEventsAnnotations(List<IEventAnnotation> list) throws ANoteException {
-	}
-
-	@Override
-	public Map<Long, IEntityAnnotation> getEntitiesAnnotationsByIDs(List<Long> entitiesIDs) throws ANoteException {
-		return null;
-	}
-
-	@Override
-	public Map<Long, IEventAnnotation> getEventAnnotationsByIDs(List<Long> eventsIDs) throws ANoteException {
-		return null;
 	}
 
 	@Override
@@ -883,6 +877,40 @@ public class DaemonAccess implements IDataAccess {
 	@Override
 	public Long countCorpusPublicationsNotProcessed(IIEProcess process) throws ANoteException {
 		return corpusAccessImpl.countCorpusPublicationsNotProcessed(process.getCorpus().getId(), process.getId());
+	}
+
+	@Override
+	public boolean rebuildLuceneIndex() throws ANoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByTermUsingLucene(String term)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsBySynonymUsingLucene(String synonym)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByTermFromResourceUsingLucene(String term,
+			IResource<IResourceElement> resource) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID externalId)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

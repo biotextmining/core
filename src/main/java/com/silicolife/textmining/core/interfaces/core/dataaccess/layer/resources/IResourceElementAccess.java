@@ -242,6 +242,16 @@ public interface IResourceElementAccess {
 	 * @throws ANoteException 
 	 */
 	public IResource<IResourceElement> getResourceFromResourceElementByID(Long resourceElementID) throws ANoteException;
+	
+	/**
+	 * 
+	 * Get Resource Elements by External ID
+	 * 
+	 * @param externalId
+	 * @return
+	 * @throws ANoteException
+	 */
+	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID externalId) throws ANoteException;
 
 
 

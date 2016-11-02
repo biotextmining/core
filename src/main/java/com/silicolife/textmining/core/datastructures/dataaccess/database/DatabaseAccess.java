@@ -13,8 +13,12 @@ import java.util.SortedSet;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
 import org.hibernate.service.ServiceRegistry;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.manager.LuceneManagerDao;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.resources.ResourcesElementLuceneServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLoggedImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.ManagerDao;
@@ -107,6 +111,9 @@ public class DatabaseAccess implements IDataAccess {
 	private IClusteringService clusteringService;
 	private IHyperLinkService hyperLinkService;
 	private ISystemService systemService;
+	
+	private LuceneManagerDao luceneManagerDao;
+	private ResourcesElementLuceneServiceImpl luceneResourcesElementService;
 
 	private IUserService userService;
 	private UsersLogged userLogged = new UsersLoggedImpl();
@@ -160,6 +167,9 @@ public class DatabaseAccess implements IDataAccess {
 
 		clusteringService = new ClusteringServiceImpl(managerDao.getClusterManagerDao(), managerDao.getUsersManagerDao(), managerDao.getQueriesManagerDao(), userLogged);
 		systemService = new SystemServiceImpl(managerDao.getSystemServiceDao());
+		
+		luceneManagerDao = new LuceneManagerDao(sessionFactory);
+		luceneResourcesElementService = new ResourcesElementLuceneServiceImpl(luceneManagerDao.getResourcesLuceneManagerDao(), managerDao.getResourcesManagerDao());
 	}
 
 	@Override
@@ -777,18 +787,6 @@ public class DatabaseAccess implements IDataAccess {
 	@Override
 	public void updateEventsAnnotations(List<IEventAnnotation> list) throws ANoteException {
 
-	}
-
-	@Override
-	public Map<Long, IEntityAnnotation> getEntitiesAnnotationsByIDs(List<Long> entitiesIDs) throws ANoteException {
-
-		return null;
-	}
-
-	@Override
-	public Map<Long, IEventAnnotation> getEventAnnotationsByIDs(List<Long> eventsIDs) throws ANoteException {
-
-		return null;
 	}
 
 	@Override
@@ -1817,5 +1815,76 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}
 	}
+	
 
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID externalId)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IResourceElementSet<IResourceElement> resoruceelements = resourcesElementService.getResourceElementsByExternalID(externalId);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resoruceelements;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
+	@Override
+	public boolean rebuildLuceneIndex() throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
+			fullTextSession.createIndexer().startAndWait();
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return true;
+		} catch (RuntimeException | InterruptedException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByTermUsingLucene(String term) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getAllResourceElementsByTerm(term);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return elemnts;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsBySynonymUsingLucene(String synonym)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getAllResourceElementsBySynonym(synonym);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return elemnts;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByTermFromResourceUsingLucene(String term,
+			IResource<IResourceElement> resource) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getResourceElementsFromResourceByTerm(term, resource.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return elemnts;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	
 }

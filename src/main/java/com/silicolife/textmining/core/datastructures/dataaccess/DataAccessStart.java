@@ -278,18 +278,6 @@ public class DataAccessStart implements IDataAccess {
 	}
 
 	@Override
-	public Map<Long, IEntityAnnotation> getEntitiesAnnotationsByIDs(List<Long> entitiesIDs) throws ANoteException {
-
-		return null;
-	}
-
-	@Override
-	public Map<Long, IEventAnnotation> getEventAnnotationsByIDs(List<Long> eventsIDs) throws ANoteException {
-
-		return null;
-	}
-
-	@Override
 	public SortedSet<IAnnotationLog> getProcessDocumentLogs(IIEProcess process, IPublication document) throws ANoteException {
 
 		return null;
@@ -821,6 +809,39 @@ public class DataAccessStart implements IDataAccess {
 
 	@Override
 	public Long countCorpusPublicationsNotProcessed(IIEProcess process) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByTermUsingLucene(String term) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean rebuildLuceneIndex() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsBySynonymUsingLucene(String synonym)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByTermFromResourceUsingLucene(String term,
+			IResource<IResourceElement> resource) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID externalId)
+			throws ANoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}

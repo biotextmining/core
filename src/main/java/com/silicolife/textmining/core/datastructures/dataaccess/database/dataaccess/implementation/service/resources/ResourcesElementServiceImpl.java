@@ -868,4 +868,28 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 
 		return elementSet;
 	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID extID)
+			throws ResourcesExceptions {
+		Sources source = resourcesManagerDao.getResourcesElememtsSourcesDao().findUniqueByAttribute("souDescription", extID.getSource().getSource());
+
+		if (source == null) {
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoSource, ExceptionsCodes.msgNoSource);
+		}
+		
+		List<ResourceElementExtenalIds> resourceElementExtenalIds = resourcesManagerDao.getResourcesAuxDao().getResourceElementExternalIdBySourceAndExternalId(source.getSouId(), extID.getExternalID());
+		
+		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
+		
+		for(ResourceElementExtenalIds resourceElementExtenalId : resourceElementExtenalIds){
+			ResourceElements resourceElement = resourceElementExtenalId.getResourceElements();
+			if(resourceElement.isResActive()){
+				IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+				elementSet.addElementResource(resourceElement_);
+			}
+		}
+
+		return elementSet;
+	}
 }

@@ -1,7 +1,6 @@
 package com.silicolife.textmining.core.interfaces.core.dataaccess.layer.corpora;
 
 import java.util.List;
-import java.util.Map;
 
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
@@ -39,10 +38,10 @@ public interface IAnnotationAccess {
 	 * process)
 	 * 
 	 * @param document
-	 * @param schema
+	 * @param process
 	 * @param entityAnnotations
 	 */
-	public void addProcessDocumentEntitiesAnnotations(IIEProcess schema,IPublication document,List<IEntityAnnotation> entityAnnotations) throws ANoteException;
+	public void addProcessDocumentEntitiesAnnotations(IIEProcess process, IPublication document, List<IEntityAnnotation> entityAnnotations) throws ANoteException;
 	
 
 	/**
@@ -52,7 +51,7 @@ public interface IAnnotationAccess {
 	 * @throws DaemonException
 	 * @throws DatabaseLoadDriverException
 	 */
-	public void addProcessDocumentEventAnnoations(IIEProcess process,IPublication document, List<IEventAnnotation> events) throws ANoteException;
+	public void addProcessDocumentEventAnnoations(IIEProcess process, IPublication document, List<IEventAnnotation> events) throws ANoteException;
 
 	/**
 	 * Delete annotation
@@ -73,7 +72,6 @@ public interface IAnnotationAccess {
 	 */
 	public void updateEntityAnnotations(List<IEntityAnnotation> list) throws ANoteException;
 
-
 	/**
 	 * Edit relations
 	 * 
@@ -82,24 +80,6 @@ public interface IAnnotationAccess {
 	 * @throws DatabaseLoadDriverException
 	 */
 	public void updateEventsAnnotations(List<IEventAnnotation> list) throws ANoteException;
-	
-	/**
-	 * Get Entities Annotations from a list of id's
-	 * 
-	 * @param entitiesID
-	 * @return
-	 * @throws DatabaseLoadDriverException
-	 */
-	public Map<Long,IEntityAnnotation> getEntitiesAnnotationsByIDs(List<Long> entitiesIDs) throws ANoteException;
-
-	/**
-	 * Get Event annotations from a list of id's
-	 * 
-	 * @param eventsID
-	 * @return
-	 * @throws DatabaseLoadDriverException
-	 */
-	public Map<Long, IEventAnnotation> getEventAnnotationsByIDs(List<Long> eventsIDs) throws ANoteException;
 	
 	/**
 	 * get Process Document statistics
