@@ -69,12 +69,12 @@ public class RestClient {
 
 		return instance;
 	}
-	
+
 	public static RestClient newInstance(String protocol, String host, int port, String relativePath) throws DaemonException {
 		instance = new RestClient(protocol, host, port, relativePath);
 		return instance;
 	}
-	
+
 	/**
 	 * To save last interation server time
 	 * 
@@ -85,8 +85,8 @@ public class RestClient {
 			this.lastOperationTime = lastOperationTime;
 		}
 	}
-	
-	
+
+
 	/**
 	 * Get Last Operation time
 	 * 
@@ -102,7 +102,7 @@ public class RestClient {
 		uriComponents.scheme(protocol);
 		uriComponents.host(host);
 		uriComponents.port(port);
-		
+
 		return uriComponents;
 	}
 
@@ -119,11 +119,13 @@ public class RestClient {
 		};
 
 		UriComponents uriComp = getUriComponent().replacePath(relativePath + "/" + login).build();
-		HttpHeaders headers = new HttpHeaders();
+		HttpHeaders headers = getHeaderToken();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+
 		MultiValueMap<String, String> loginMap = new LinkedMultiValueMap<String, String>();
-		loginMap.add("j_username", username);
-		loginMap.add("j_password", password);
+		loginMap.add("username", username);
+		loginMap.add("password", password);
 
 		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(loginMap, headers);
 
@@ -169,6 +171,9 @@ public class RestClient {
 			for (Cookie cookie : cookies) {
 				if (cookie.getName().equals("JSESSIONID")) {
 					requestHeaders.add("Cookie", "JSESSIONID=" + cookie.getValue());
+				}
+				if (cookie.getName().equals("XSRF-TOKEN")){
+					requestHeaders.add("X-XSRF-TOKEN", cookie.getValue());
 				}
 			}
 		}
@@ -244,7 +249,7 @@ public class RestClient {
 		UriComponentsBuilder newURI = getUriComponent().replacePath(relativePath + "/" + method);
 		newURI.queryParams(uriPostVariables);
 		UriComponents uriComp = newURI.build();
-		
+
 		HttpHeaders headerToken = getHeaderToken();
 
 		HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(uriPostVariables, headerToken);
@@ -367,7 +372,7 @@ public class RestClient {
 			throw new DaemonException(ExceptionsCodes.codeRestClient, e.getMessage(), e);
 		}
 	}
-	
+
 	public RestAccessTemplate getTemplate() {
 		return template;
 	}
