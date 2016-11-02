@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Classes;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ResourceElementExtenalIds;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ResourceElementRelations;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ResourceElements;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Resources;
@@ -269,6 +270,19 @@ public class ResourcesAuxDaoImpl implements ResourcesAuxDao {
 		c.add(Restrictions.eq("resourcesElementA.resources.resoId", resourceID));	
 		result = c.list();
 		return result;
+	}
+
+	@Override
+	public List<ResourceElementExtenalIds> getResourceElementExternalIdBySourceAndExternalId(Long sourceId,
+			String externalId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(ResourceElementExtenalIds.class, "externalID");
+		c.add(Restrictions.sqlRestriction("rele_external_id" + " = ? collate utf8_bin", externalId, new StringType()));
+		c.add(Restrictions.eq("externalID.id.releSourceId", sourceId));
+		c.add(Restrictions.eq("externalID.releActive", true));
+		@SuppressWarnings("unchecked")
+		List<ResourceElementExtenalIds> externalIds = c.list();
+		return externalIds;
 	}
 
 //	@Override

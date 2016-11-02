@@ -891,6 +891,13 @@ public class DaemonAccess implements IDataAccess {
 		return null;
 		
 	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID externalId)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 

@@ -824,6 +824,13 @@ public class DataAccessStart implements IDataAccess {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID externalId)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
 	public IResourceManagerReport addResourceElementSynomynsWithoutValidation(IResource<IResourceElement> destiny,

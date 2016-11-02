@@ -1831,5 +1831,19 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}		
 	}
+	
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID externalId)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IResourceElementSet<IResourceElement> resoruceelements = resourcesElementService.getResourceElementsByExternalID(externalId);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resoruceelements;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
 
 }

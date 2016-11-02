@@ -162,7 +162,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 
 		return content;
 	}
-	
+
 	private void addResourceElement(IResourceManagerReport report, Resources resource, IResourceElement elem) {
 		IAnoteClass klassStr = elem.getTermClass();
 		Classes klass = null;
@@ -185,15 +185,15 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 		eqRestrictions.put("resources.resoId", resource.getResoId());
 		eqRestrictions.put("resElement", elem.getTerm());
 		eqRestrictions.put("resActive", true);
-		
+
 		boolean existResourceElement = resourcesManagerDao.getResourcesAuxDao().existResourceElementByResourceCaseSensitive(resource.getResoId(), elem.getTerm());
-		
+
 		if (existResourceElement) {
 			List<ResourceElements> resourceElement = resourcesManagerDao.getResourcesElememtsDao().findByAttributesCaseSensitiveWithLimit(eqRestrictions, 1);
 			updateResourceElement(report, resource, elem, klass, resourceElement.get(0));
 		}else{
 			boolean existSynonym = resourcesManagerDao.getResourcesAuxDao().existSynonymByResourceCaseSensitive(resource.getResoId(), elem.getTerm());
-		
+
 			if (existSynonym) {
 
 				List<Synonyms> resourceElementSynonyms = resourcesManagerDao.getResourcesAuxDao().findSynonymsByResourceElementWithLimit(resource.getResoId(),
@@ -224,17 +224,17 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 			}
 		}
 	}
-	
+
 	public Boolean existResourceElementByResourceCaseSensitive(Long resourceID, String name)
 	{
 		return resourcesManagerDao.getResourcesAuxDao().existResourceElementByResourceCaseSensitive(resourceID, name);
 	}
-	
+
 	public Boolean existSynonymByResourceCaseSensitive(Long resourceID,String name)
 	{
 		return resourcesManagerDao.getResourcesAuxDao().existSynonymByResourceCaseSensitive(resourceID, name);
 	}
-	
+
 	public Boolean existResourceElementAndSynonymsByResourceCaseSensitive(Long resourceID, String name)
 	{
 		return existResourceElementByResourceCaseSensitive(resourceID,name) && existSynonymByResourceCaseSensitive(resourceID,name);
@@ -245,7 +245,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 		Classes class_ = resourceElement.getClasses();
 		if(class_==null || klass==null)
 		{
-			
+
 		}
 		else if (class_.getClaName().toLowerCase().equals(klass.getClaName().toLowerCase())) {
 			addSynonyms(report, resource, elem, resourceElement);
@@ -380,7 +380,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 		ResourceElements resElement = addResourceElements(report, resource, elem, klass);
 		addSynonymsWithoutValidation(report, resource, elem, resElement);
 		addExternalIdsWithouValidation(report, elem, resElement);
-		
+
 	}
 
 	private void addExternalIdsWithouValidation(IResourceManagerReport report, IResourceElement elem, ResourceElements resElement) {
@@ -415,7 +415,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 			resourcesManagerDao.getResourcesElememtsSynonymsDao().save(synObj);
 			report.addSynonyms(1);
 		}
-		
+
 	}
 
 	@Override
@@ -444,7 +444,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 	@Transactional(readOnly=false)
 	@Override
 	public Boolean removeResourceClass(Long resourceId, Long classID) throws ResourcesExceptions {
-	
+
 		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
 		if (resource == null)
 			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
@@ -460,14 +460,14 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 			elem.setResActive(false);
 			resourcesManagerDao.getResourcesElememtsDao().update(elem);
 		}
-		
+
 		AuthUsers user = userLogged.getCurrentUserLogged();
 		/*
 		 * log
 		 */
 		AuthUserLogs log = new AuthUserLogs(user, new Date(), "update", "resources_elements", null, "update resource Elements");
 		usersManagerDao.getAuthUserLogsDao().save(log);
-		
+
 		return true;
 	}
 
@@ -557,7 +557,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 
 		return report;
 	}
-	
+
 	@Transactional(readOnly = false)
 	@Override
 	public IResourceManagerReport updateResourceElement(IResourceElement elem) throws ResourcesExceptions {
@@ -588,14 +588,14 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 			throw new ResourcesExceptions(ExceptionsCodes.codeNoResourceElement, ExceptionsCodes.msgNoResourceElement);
 		resouResource.setResActive(false);
 		resourcesManagerDao.getResourcesElememtsDao().update(resouResource);
-		
+
 		AuthUsers user = userLogged.getCurrentUserLogged();
 		/*
 		 * log
 		 */
 		AuthUserLogs log = new AuthUserLogs(user, new Date(), "update", "resources_elements", null, "update resource element");
 		usersManagerDao.getAuthUserLogsDao().save(log);
-		
+
 		return true;
 	}
 
@@ -618,7 +618,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 		 */
 		AuthUserLogs log = new AuthUserLogs(user, new Date(), "update", "resources_elements/synonyms", null, "update synonym");
 		usersManagerDao.getAuthUserLogsDao().save(log);
-		
+
 		return true;
 	}
 
@@ -634,7 +634,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceID);
 		if (resource == null)
 			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
-		
+
 		for (Synonyms syn : resouResource.getSynonymses()) {
 			if (syn.getId().getSynSynonym().equals(oldSynonym)) {
 
@@ -642,7 +642,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 				eqRestrictions.put("resources", resource);
 				eqRestrictions.put("resElement", newSynonym);
 				eqRestrictions.put("resActive", true);
-				
+
 				List<ResourceElements> resourceElement = resourcesManagerDao.getResourcesElememtsDao().findByAttributesCaseSensitive(eqRestrictions);
 				List<Synonyms> resourceElementSynonyms = resourcesManagerDao.getResourcesAuxDao().findSynonymsByResourceElement(resource.getResoId(), newSynonym);
 				if (!resourceElement.isEmpty()) {
@@ -660,7 +660,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 				}
 			}
 		}
-		
+
 		AuthUsers user = userLogged.getCurrentUserLogged();
 		/*
 		 * log
@@ -691,7 +691,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 		 */
 		AuthUserLogs log = new AuthUserLogs(user, new Date(), "update", "synonyms", null, "update resource");
 		usersManagerDao.getAuthUserLogsDao().save(log);
-		
+
 		return true;
 	}
 
@@ -715,7 +715,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 				usersManagerDao.getAuthUserLogsDao().save(log);
 			}
 		}
-		
+
 		return true;
 	}
 
@@ -736,7 +736,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 		 */
 		AuthUserLogs log = new AuthUserLogs(user, new Date(), "update", "resource_element_external_ids", null, "update resource");
 		usersManagerDao.getAuthUserLogsDao().save(log);
-		
+
 		return true;
 	}
 
@@ -745,7 +745,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceID);
 		if (resource == null)
 			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
-		
+
 		int maxInt = resourcesManagerDao.getResourcesAuxDao().getResourceMaxPriorety(resourceID);
 		return maxInt;
 	}
@@ -759,7 +759,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 		ResourceElements resouElemntB = resourcesManagerDao.getResourcesElememtsDao().findById(resourceElmentIDb);
 		if (resouElemntB == null)
 			throw new ResourcesExceptions(ExceptionsCodes.codeNoResourceElement, ExceptionsCodes.msgNoResourceElement);		
-		 
+
 		ResourceElementRelationTypes type = resourcesManagerDao.getResourcesElememtsRelationTypeDao().findUniqueByAttribute("rerRelationType", relationType);
 		if(type==null)
 		{
@@ -774,16 +774,16 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 			ResourceElementRelations relations = new ResourceElementRelations(id , type, resouElemntA, resouElemntB);
 			resourcesManagerDao.getResourcesElememtsRelationsDao().save(relations);
 		}
-		
+
 		AuthUsers user = userLogged.getCurrentUserLogged();
 		/*
 		 * log
 		 */
 		AuthUserLogs log = new AuthUserLogs(user, new Date(), "create", "resource_element_relations", null, "create relations");
 		usersManagerDao.getAuthUserLogsDao().save(log);
-		
+
 		return true;
-		
+
 	}
 
 	@Override
@@ -823,15 +823,15 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 		eqRestrictions.put("resActive", true);
 		eqRestrictions.put("resources", resource);
 		eqRestrictions.put("resElement", name);
-		
+
 		List<ResourceElements> resourcesElements = resourcesManagerDao.getResourcesElememtsDao().findByAttributes(eqRestrictions);
-		
+
 		List<Synonyms> synonymElements = resourcesManagerDao.getResourcesAuxDao().findSynonymsByResourceElement(resource.getResoId(), name);
 
 		for(Synonyms syn :synonymElements){
 			resourcesElements.add(syn.getResourceElements());
 		}
-		
+
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
 
 		for (ResourceElements resourceElement : resourcesElements) {
@@ -870,6 +870,30 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 	}
 
 	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID extID)
+			throws ResourcesExceptions {
+		Sources source = resourcesManagerDao.getResourcesElememtsSourcesDao().findUniqueByAttribute("souDescription", extID.getSource().getSource());
+
+		if (source == null) {
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoSource, ExceptionsCodes.msgNoSource);
+		}
+
+		List<ResourceElementExtenalIds> resourceElementExtenalIds = resourcesManagerDao.getResourcesAuxDao().getResourceElementExternalIdBySourceAndExternalId(source.getSouId(), extID.getExternalID());
+
+		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
+
+		for(ResourceElementExtenalIds resourceElementExtenalId : resourceElementExtenalIds){
+			ResourceElements resourceElement = resourceElementExtenalId.getResourceElements();
+			if(resourceElement.isResActive()){
+				IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+				elementSet.addElementResource(resourceElement_);
+			}
+		}
+
+		return elementSet;
+	}
+
+	@Override
 	public IResourceManagerReport addResourceElementSynonymsWithoutValidation(long resourceId, long resourceElementID,List<String> synonyms) throws ResourcesExceptions {
 		IResourceManagerReport report = new ResourceManagerReport();
 		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
@@ -878,7 +902,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 		ResourceElements resouElemnt = resourcesManagerDao.getResourcesElememtsDao().findById(resourceElementID);
 		if (resouElemnt == null)
 			throw new ResourcesExceptions(ExceptionsCodes.codeNoResourceElement, ExceptionsCodes.msgNoResourceElement);	
-		
+
 		for (String syn : synonyms) {
 			SynonymsId id = new SynonymsId(resouElemnt.getResId(), syn, true);
 			Synonyms synObj = new Synonyms(id, resouElemnt);

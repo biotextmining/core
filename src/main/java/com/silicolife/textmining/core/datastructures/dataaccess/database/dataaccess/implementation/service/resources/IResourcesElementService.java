@@ -68,5 +68,7 @@ public interface IResourcesElementService {
 	
 	public IResourceElementSet<IResourceElement> getResourceElementsInBatchWithLimit(Long resourceId, Integer index, Integer batchSize) throws ResourcesExceptions;  //
 
+ 	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID extID) throws ResourcesExceptions; //
+	
 	public IResourceManagerReport addResourceElementSynonymsWithoutValidation(long id, long id2, List<String> synonyms) throws ResourcesExceptions;
 }
