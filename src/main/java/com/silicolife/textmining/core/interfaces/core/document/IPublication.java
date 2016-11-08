@@ -200,5 +200,5 @@ public interface IPublication {
 
 	public void setPublicationLabels(List<IPublicationLabel> publicationLabels);
 
-
+	public void setIssue(String issue);
 }
