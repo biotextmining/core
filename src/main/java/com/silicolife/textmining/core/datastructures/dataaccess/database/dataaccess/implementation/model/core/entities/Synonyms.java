@@ -15,7 +15,6 @@ import javax.persistence.Table;
 import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.FieldBridge;
-import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.bridges.SynonymsIdBridge;
@@ -53,8 +52,9 @@ public class Synonyms implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ContainedIn
+
 	@ManyToOne(fetch = FetchType.LAZY)
+	@ContainedIn
 	@JoinColumn(name = "syn_resource_element_id", nullable = false, insertable = false, updatable = false)
 	public ResourceElements getResourceElements() {
 		return this.resourceElements;

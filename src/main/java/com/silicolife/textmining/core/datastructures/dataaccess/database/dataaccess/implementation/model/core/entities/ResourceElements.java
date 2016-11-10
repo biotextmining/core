@@ -14,14 +14,27 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.lucene.analysis.core.KeywordTokenizerFactory;
+import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
+import org.apache.lucene.analysis.core.StopFilterFactory;
+import org.apache.lucene.analysis.ngram.EdgeNGramFilterFactory;
+import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
 import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Analyzer;
+import org.hibernate.search.annotations.AnalyzerDef;
+import org.hibernate.search.annotations.AnalyzerDefs;
+import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.FieldBridge;
+import org.hibernate.search.annotations.Fields;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
+import org.hibernate.search.annotations.Parameter;
 import org.hibernate.search.annotations.Store;
+import org.hibernate.search.annotations.TokenFilterDef;
+import org.hibernate.search.annotations.TokenizerDef;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.bridges.ResourcesBridge;
 
@@ -30,6 +43,37 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
  */
 @Entity
 @Indexed
+@AnalyzerDefs({
+
+	@AnalyzerDef(name = "keywordEdgeAnalyzer",
+
+			// Split input into keywords
+	tokenizer = @TokenizerDef(factory = KeywordTokenizerFactory.class),
+
+	filters = {
+				@TokenFilterDef(factory = LowerCaseFilterFactory.class),
+				@TokenFilterDef(factory = StopFilterFactory.class),
+				@TokenFilterDef(factory = EdgeNGramFilterFactory.class, params = {
+						@Parameter(name = "minGramSize", value = "3"),
+						@Parameter(name = "maxGramSize", value = "30") 
+				}) 
+	}),
+
+	@AnalyzerDef(name = "tokenEdgeAnalyzer",
+
+	// Split input into tokens
+	tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
+
+	filters = {
+			@TokenFilterDef(factory = LowerCaseFilterFactory.class),
+			@TokenFilterDef(factory = StopFilterFactory.class),
+			@TokenFilterDef(factory = EdgeNGramFilterFactory.class, params = {
+					@Parameter(name = "minGramSize", value = "4"),
+					@Parameter(name = "maxGramSize", value = "8") 
+			})
+	})
+})
+
 @Table(name = "resource_elements")
 public class ResourceElements implements java.io.Serializable {
 
@@ -104,7 +148,13 @@ public class ResourceElements implements java.io.Serializable {
 		this.resources = resources;
 	}
 
-	@Field(index=Index.YES, analyze=Analyze.NO, store=Store.NO)
+	@Fields( {
+		@Field(index=Index.YES, analyze=Analyze.NO, store=Store.NO),
+		@Field(name = "keywordEdgeNGram_res_element", index = Index.YES, store = Store.NO,
+		analyze = Analyze.YES, analyzer = @Analyzer(definition = "keywordEdgeAnalyzer"), boost = @Boost(2)),
+		@Field(name = "tokenEdgeNGram_res_element", index = Index.YES, store = Store.NO,
+		analyze = Analyze.YES, analyzer = @Analyzer(definition = "tokenEdgeAnalyzer"))
+	})
 	@Column(name = "res_element", nullable = false, length = 500)
 	public String getResElement() {
 		return this.resElement;
@@ -123,6 +173,7 @@ public class ResourceElements implements java.io.Serializable {
 		this.resPriorety = resPriorety;
 	}
 
+	@Field(index=Index.YES, analyze=Analyze.NO, store=Store.NO)
 	@Column(name = "res_active", nullable = false)
 	public boolean isResActive() {
 		return this.resActive;
@@ -141,6 +192,7 @@ public class ResourceElements implements java.io.Serializable {
 		this.annotationses = annotationses;
 	}
 
+	@IndexedEmbedded
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "resourceElements")
 	public Set<ResourceElementExtenalIds> getResourceElementExtenalIdses() {
 		return this.resourceElementExtenalIdses;

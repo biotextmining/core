@@ -6,7 +6,10 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Analyzer;
+import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Fields;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Store;
 
@@ -38,7 +41,13 @@ public class SynonymsId implements java.io.Serializable {
 		this.synResourceElementId = synResourceElementId;
 	}
 
-	@Field(index=Index.YES, analyze=Analyze.NO, store=Store.NO)
+	@Fields( {
+		@Field(index=Index.YES, analyze=Analyze.NO, store=Store.NO),
+		@Field(name = "keywordEdgeNGram_syn_synonym", index = Index.YES, store = Store.NO,
+		analyze = Analyze.YES, analyzer = @Analyzer(definition = "keywordEdgeAnalyzer"), boost = @Boost(2)),
+		@Field(name = "tokenEdgeNGram_syn_synonym", index = Index.YES, store = Store.NO,
+		analyze = Analyze.YES, analyzer = @Analyzer(definition = "tokenEdgeAnalyzer"))
+	})
 	@Column(name = "syn_synonym", nullable = false, length = 500)
 	public String getSynSynonym() {
 		return this.synSynonym;
@@ -48,6 +57,7 @@ public class SynonymsId implements java.io.Serializable {
 		this.synSynonym = synSynonym;
 	}
 
+	@Field(index=Index.YES, analyze=Analyze.NO, store=Store.NO)
 	@Column(name = "syn_active", nullable = false)
 	public boolean isSynActive() {
 		return this.synActive;
