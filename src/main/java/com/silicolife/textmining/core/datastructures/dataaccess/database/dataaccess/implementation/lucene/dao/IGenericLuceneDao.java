@@ -2,10 +2,19 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface IGenericLuceneDao<T> {
-	
-	public List<T> findBySentenceOnField(String sentence, String field);
 
-	public List<T> findByAttributes(Map<String, String> eqSentenceOnField);
+	public List<T> findExactByAttributes(Map<String, String> eqSentenceOnField);
+	
+	public List<T> findStartingUsingWildcardAndExactByAttributes(Map<String, String> startSentenceOnField, Map<String, String> eqSentenceOnField);
+	
+	public List<T> findMultiFieldSameAttributesAndExactByAttributes(Map<String, Set<String>> attributeForMultipleFieldsMap, Map<String, String> eqSentenceOnField);
+	
+	public List<T> findExactByAttributesPaginated(Map<String, String> eqSentenceOnField, int index, int paginationSize);
+	
+	public List<T> findStartingUsingWildcardAndExactByAttributesPaginated(Map<String, String> startSentenceOnField, Map<String, String> eqSentenceOnField, int index, int paginationSize);
+	
+	public List<T> findMultiFieldSameAttributesAndExactByAttributesPaginated(Map<String, Set<String>> attributeForMultipleFieldsMap, Map<String, String> eqSentenceOnField, int index, int paginationSize);
 }
