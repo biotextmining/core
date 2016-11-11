@@ -178,6 +178,12 @@ public class ResourceElementImpl implements IResourceElement{
 	}
 
 	@Override
+	public String toString() {
+		return "ResourceElementImpl [id=" + id + ", term=" + term + ", termClass=" + termClass + ", externalIDs="
+				+ externalIDs + ", synonyms=" + synonyms + ", priority=" + priority + ", isActive=" + isActive + "]";
+	}
+
+	@Override
 	public boolean hasExternalID(IExternalID ext) {
 		try {
 			if(this.getExtenalIDs().size()>0)

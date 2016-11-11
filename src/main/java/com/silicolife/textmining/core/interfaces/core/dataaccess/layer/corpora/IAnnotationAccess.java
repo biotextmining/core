@@ -11,6 +11,7 @@ import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumen
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
+import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 
 public interface IAnnotationAccess {
 	
@@ -107,7 +108,16 @@ public interface IAnnotationAccess {
 	 * @param annotatedDocument
 	 * @return
 	 */
-	public IAnnotatedDocumentStatistics getProcessDocumentStatistics(IAnnotatedDocument annotatedDocument) throws ANoteException;;
+	public IAnnotatedDocumentStatistics getProcessDocumentStatistics(IAnnotatedDocument annotatedDocument) throws ANoteException;
+	
+	/**
+	 * 
+	 * 
+	 * @param resourceElement
+	 * @return
+	 * @throws ANoteException
+	 */
+	public List<IPublication> getPublicationByResourceElement(IResourceElement resourceElement) throws ANoteException;
 
 
 }

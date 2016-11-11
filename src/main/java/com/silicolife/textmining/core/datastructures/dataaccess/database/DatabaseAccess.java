@@ -1846,4 +1846,17 @@ public class DatabaseAccess implements IDataAccess {
 		}
 	}
 
+	@Override
+	public List<IPublication> getPublicationByResourceElement(IResourceElement resourceElement) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IPublication> publications = annotationService.getPublicationByResourceElement(resourceElement.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return publications;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
 }

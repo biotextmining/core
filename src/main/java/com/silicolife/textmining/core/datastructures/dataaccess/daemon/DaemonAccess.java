@@ -895,8 +895,12 @@ public class DaemonAccess implements IDataAccess {
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID externalId)
 			throws ANoteException {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<IPublication> getPublicationByResourceElement(IResourceElement resourceElement) throws ANoteException {
+		return annotationAccessImpl.getPublicationByResourceElement(resourceElement.getId());
 	}
 	
 	

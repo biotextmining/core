@@ -26,6 +26,7 @@ import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotatio
 import com.silicolife.textmining.core.interfaces.core.annotation.IManualCurationAnnotations;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
+import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 
 /**
  * Class which implements all annotation daemon access methods
@@ -335,5 +336,27 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			Boolean boo = response.getBody().getContent();
 			return boo;
 		}
+	}
+
+	/**
+	 * Return publication with annotation based on resourceElementID given by any process
+	 * 
+	 * @param resourceElementID
+	 * @return
+	 * @throws DaemonException
+	 */
+	public List<IPublication> getPublicationByResourceElement(Long resourceElementID) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<List<IPublication>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<IPublication>>>() {};	
+		Map<String, Long> uriVariables = new HashMap<String, Long>();
+		uriVariables.put("resourceElementID", resourceElementID);
+		
+		ResponseEntity<DaemonResponse<List<IPublication>>> response = webClient.get("annotation/getPublicationByResourceElement", responseType, uriVariables);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
+		} else {
+			return response.getBody().getContent();
+		}	
 	}
 }

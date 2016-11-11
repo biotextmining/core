@@ -839,4 +839,9 @@ public class DataAccessStart implements IDataAccess {
 		
 	}
 
+	@Override
+	public List<IPublication> getPublicationByResourceElement(IResourceElement resourceElement) throws ANoteException {
+		return null;
+	}
+
 }
