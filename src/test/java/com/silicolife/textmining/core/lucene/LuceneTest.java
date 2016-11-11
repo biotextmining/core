@@ -1,6 +1,8 @@
 package com.silicolife.textmining.core.lucene;
 
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -16,7 +18,7 @@ import com.silicolife.textmining.core.interfaces.resource.IResourceElementSet;
 
 public class LuceneTest {
 
-//	@Test
+	@Test
 	public void rebuildIndex() throws InvalidDatabaseAccess, ANoteException {
 		DatabaseConnectionInit.init("localhost","3306","textminingcarbontest","root","admin");
 		InitConfiguration.getDataAccess().rebuildLuceneIndex();
@@ -26,7 +28,7 @@ public class LuceneTest {
 	public void testIndex() throws InvalidDatabaseAccess, ANoteException{
 		DatabaseConnectionInit.init("localhost","3306","textminingcarbontest","root","admin");
 		long startime = GregorianCalendar.getInstance().getTimeInMillis();
-		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getAllResourceElementsByTermUsingLucene("Bacterium coli commune");
+		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getAllResourceElementsByExactTermUsingLucene("Bacterium coli commune");
 		long endtime = GregorianCalendar.getInstance().getTimeInMillis();
 		System.out.println(endtime-startime);
 		for(IResourceElement elem : elemts.getResourceElements()){
@@ -39,7 +41,7 @@ public class LuceneTest {
 	public void testIndex2() throws InvalidDatabaseAccess, ANoteException{
 		DatabaseConnectionInit.init("localhost","3306","textminingcarbontest","root","admin");
 		long startime = GregorianCalendar.getInstance().getTimeInMillis();
-		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getAllResourceElementsBySynonymUsingLucene("e. coli");
+		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getAllResourceElementsByExactSynonymUsingLucene("e. coli");
 		long endtime = GregorianCalendar.getInstance().getTimeInMillis();
 		System.out.println(endtime-startime);
 		for(IResourceElement elem : elemts.getResourceElements()){
@@ -48,12 +50,12 @@ public class LuceneTest {
 		
 	}
 	
-	@Test
+//	@Test
 	public void testIndex3() throws InvalidDatabaseAccess, ANoteException{
 		DatabaseConnectionInit.init("localhost","3306","textminingcarbontest","root","admin");
-		IResource<IResourceElement> resource = InitConfiguration.getDataAccess().getResourceByID(3685732426240829176L);
+		IResource<IResourceElement> resource = InitConfiguration.getDataAccess().getResourceByID(5727281589065523363L);
 		long startime = GregorianCalendar.getInstance().getTimeInMillis();
-		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getResourceElementsByTermFromResourceUsingLucene("Bacterium coli commune", resource);
+		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getAllResourceElementsByExactTermFromResourceUsingLucene("Bacterium coli commune", resource);
 		long endtime = GregorianCalendar.getInstance().getTimeInMillis();
 		System.out.println(endtime-startime);
 		for(IResourceElement elem : elemts.getResourceElements()){
@@ -62,5 +64,57 @@ public class LuceneTest {
 		
 	}
 	
+//	@Test
+	public void testIndex4() throws InvalidDatabaseAccess, ANoteException{
+		DatabaseConnectionInit.init("localhost","3306","textminingcarbontest","root","admin");
+//		IResource<IResourceElement> resource = InitConfiguration.getDataAccess().getResourceByID(3685732426240829176L);
+		long startime = GregorianCalendar.getInstance().getTimeInMillis();
+		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getAllResourceElementsByPartialTermUsingLucene("Bacteriu");
+		long endtime = GregorianCalendar.getInstance().getTimeInMillis();
+		System.out.println(endtime-startime);
+		System.out.println(elemts.size());
+		Set<String> notStart = new HashSet<>();
+		for(IResourceElement elem : elemts.getResourceElements()){
+			if(elem.getTerm().startsWith("Bacteriu")){
+				
+			}else if(elem.getTerm().startsWith("bacteriu")){
+				
+			}else{
+				notStart.add(elem.getTerm());
+			}
+			
+		}
+		
+		System.out.println(notStart);
+		
+	}
+	
+	
+//	@Test
+	public void testIndex5() throws InvalidDatabaseAccess, ANoteException{
+		DatabaseConnectionInit.init("localhost","3306","textminingcarbontest","root","admin");
+//		IResource<IResourceElement> resource = InitConfiguration.getDataAccess().getResourceByID(3685732426240829176L);
+		long startime = GregorianCalendar.getInstance().getTimeInMillis();
+		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getAllResourceElementsByPartialSynonymUsingLucene("lens neutral proteinase");
+		long endtime = GregorianCalendar.getInstance().getTimeInMillis();
+		System.out.println(endtime-startime);
+		System.out.println(elemts.size());
+//		Set<String> notStart = new HashSet<>();
+		for(IResourceElement elem : elemts.getResourceElements()){
+			System.out.println(elem.getId());
+//			if(elem.getTerm().startsWith("Bacteriu")){
+//				
+//			}else if(elem.getTerm().startsWith("bacteriu")){
+//				
+//			}else{
+//				notStart.add(elem.getTerm());
+//			}
+//			
+		}
+//		
+//		System.out.println(notStart);
+		
+		
+	}
 
 }

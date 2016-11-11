@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.IGenericLuceneDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ResourceElements;
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Synonyms;
 
 @Repository
 public class ResourcesLuceneManagerDao {
@@ -13,8 +12,7 @@ public class ResourcesLuceneManagerDao {
 	private IGenericLuceneDao<ResourceElements> resourcesElememtsLuceneDao;
 
 	@Autowired
-	public ResourcesLuceneManagerDao(IGenericLuceneDao<ResourceElements> resourcesElememtsLuceneDao,
-			IGenericLuceneDao<Synonyms> resourcesElememtsSynonymsLuceneDao){
+	public ResourcesLuceneManagerDao(IGenericLuceneDao<ResourceElements> resourcesElememtsLuceneDao){
 		this.resourcesElememtsLuceneDao = resourcesElememtsLuceneDao;
 	}
 

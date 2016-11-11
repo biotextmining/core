@@ -5,7 +5,6 @@ import org.hibernate.SessionFactory;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.GenericLuceneDaoImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.IGenericLuceneDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ResourceElements;
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Synonyms;
 
 public class LuceneManagerDao {
 	
@@ -19,8 +18,7 @@ public class LuceneManagerDao {
 	
 	public ResourcesLuceneManagerDao createResourcesLuceneDao(){
 		IGenericLuceneDao<ResourceElements> resourcesElememtsLuceneDao = new GenericLuceneDaoImpl<ResourceElements>(sessionFactory, ResourceElements.class);
-		IGenericLuceneDao<Synonyms> resourcesElememtsSynonymsLuceneDao = new GenericLuceneDaoImpl<Synonyms>(sessionFactory, Synonyms.class);
-		ResourcesLuceneManagerDao resourcesLuceneManagerDao = new ResourcesLuceneManagerDao(resourcesElememtsLuceneDao, resourcesElememtsSynonymsLuceneDao);
+		ResourcesLuceneManagerDao resourcesLuceneManagerDao = new ResourcesLuceneManagerDao(resourcesElememtsLuceneDao);
 		return resourcesLuceneManagerDao;
 	}
 
