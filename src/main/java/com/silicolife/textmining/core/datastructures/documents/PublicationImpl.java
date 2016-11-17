@@ -340,7 +340,9 @@ public class PublicationImpl extends Observable implements IPublication {
 		result = result + "(" + getId() + ") ";
 		for (IPublicationExternalSourceLink externalSourceLinks : this.publicationExternalIDSource)
 			result = result + externalSourceLinks.getSource() + ": " + externalSourceLinks.getSourceInternalId() + " ";
-		if (getAbstractSection() != null && getAbstractSection().length() > 0)
+		if (getTitle() != null && !getTitle().isEmpty())
+			result = result + "Title : " + getTitle() + ") ";
+		if (getAbstractSection() != null && !getAbstractSection().isEmpty())
 			result = result + "Abstract : " + getAbstractSection() + ") ";
 		return result;
 	}
