@@ -186,6 +186,7 @@ public class MySQLDatabase extends ADatabase {
 	public void updateDatabase(String updateFolder,String databaseversionfile) throws SQLException, ANoteException {
 		int databaseVersion = InitConfiguration.getDataAccess().getDatabaseVersion();
 		int newVersionID = UpdateDatabaseHelp.readDatabaseFileDataBase(databaseversionfile);
+		boolean update = false;
 		for (int i = databaseVersion + 1; i <= newVersionID; i++) {
 			String path = updateFolder + "/" + GlobalOptions.mysqlDatbaseUpdateStartNameFile + i + GlobalOptions.mysqlDatbaseUpdateEndNameFile;
 			String filePathComments = updateFolder + "/" + GlobalOptions.mysqlDatbaseUpdateStartNameFile + i
@@ -200,7 +201,10 @@ public class MySQLDatabase extends ADatabase {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			update = true;
 		}
+		if(update)
+			InitConfiguration.getDataAccess().rebuildLuceneIndex();
 	}
 
 	@Override

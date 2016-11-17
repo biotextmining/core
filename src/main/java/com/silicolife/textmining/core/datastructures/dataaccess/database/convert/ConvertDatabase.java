@@ -91,7 +91,7 @@ public class ConvertDatabase {
 		System.out.println("Database Converted");
 	}
 
-	private void loadData(File tmpDirectory2, IDatabase target) throws FileNotFoundException, SQLException, IOException {
+	private void loadData(File tmpDirectory2, IDatabase target) throws FileNotFoundException, SQLException, IOException, ANoteException {
 		for(File file:tmpDirectory2.listFiles())
 		{
 			if(file.isFile() && file.getAbsolutePath().endsWith(".sql"))
@@ -121,7 +121,7 @@ public class ConvertDatabase {
 		ps.close();
 	}
 
-	private void createDatabase(IDatabase target) throws SQLException, FileNotFoundException, IOException {
+	private void createDatabase(IDatabase target) throws SQLException, FileNotFoundException, IOException, ANoteException {
 		System.out.println("Create Database");
 		target.createDataBase();
 		System.out.println("Fill Database");

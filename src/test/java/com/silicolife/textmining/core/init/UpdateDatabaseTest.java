@@ -72,8 +72,9 @@ public class UpdateDatabaseTest {
 	 * @throws SQLException
 	 * @throws FileNotFoundException
 	 * @throws IOException
+	 * @throws ANoteException 
 	 */
-	private static boolean fillDatabase(IDatabase database) throws SQLException, FileNotFoundException, IOException
+	private static boolean fillDatabase(IDatabase database) throws SQLException, FileNotFoundException, IOException, ANoteException
 	{
 		if(!database.isfill())
 		{

@@ -51,6 +51,9 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.users.UserServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.PermissionsUtilsEnum;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.ResourcesTypeUtils;
+import com.silicolife.textmining.core.datastructures.init.InitConfiguration;
+import com.silicolife.textmining.core.datastructures.init.general.GeneralDefaultSettings;
+import com.silicolife.textmining.core.datastructures.init.propertiesmanager.PropertiesManager;
 import com.silicolife.textmining.core.datastructures.resources.ResourceElementSetImpl;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationLog;
@@ -145,6 +148,18 @@ public class DatabaseAccess implements IDataAccess {
 		configuration.setProperty("hibernate.connection.username", db.getUser());
 		configuration.setProperty("hibernate.connection.password", db.getPwd());
 		configuration.setProperty("hibernate.default_catalog", db.getSchema());
+		configuration.setProperty("hibernate.search.default.directory_provider", "filesystem");
+		if(configuration.getProperty("hibernate.search.default.indexBase")==null)
+		{
+			String luceneIndexBaseDir = InitConfiguration.getPropertyValueFromInitOrProperties(GeneralDefaultSettings.LUCENEINDEXBASEDIRECTORY).toString();
+			String luceneIndex = luceneIndexBaseDir + "/" +db.getSchema();
+			configuration.setProperty("hibernate.search.default.indexBase", luceneIndex);
+		}
+		else
+		{
+			String luceneIndex = configuration.getProperty("hibernate.search.default.indexBase") + "/" +db.getSchema();
+			configuration.setProperty("hibernate.search.default.indexBase", luceneIndex);
+		}
 
 		servReg = new StandardServiceRegistryBuilder().configure(file).applySettings(configuration.getProperties()).build();
 		sessionFactory = configuration.buildSessionFactory(servReg);

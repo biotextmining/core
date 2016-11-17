@@ -1,0 +1,1 @@
+-- Lucene index created

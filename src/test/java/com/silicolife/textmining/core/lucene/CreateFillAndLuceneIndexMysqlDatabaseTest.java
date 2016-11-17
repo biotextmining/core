@@ -1,40 +1,55 @@
-package com.silicolife.textmining.core.init;
+package com.silicolife.textmining.core.lucene;
 
 import static org.junit.Assert.assertTrue;
 
-import java.net.Proxy;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Properties;
 
-import com.silicolife.textmining.core.datastructures.dataaccess.database.DatabaseAccess;
+import org.junit.Test;
+
 import com.silicolife.textmining.core.datastructures.dataaccess.database.DatabaseFactory;
 import com.silicolife.textmining.core.datastructures.init.InitConfiguration;
 import com.silicolife.textmining.core.datastructures.init.exception.InvalidDatabaseAccess;
-import com.silicolife.textmining.core.datastructures.init.general.GeneralDefaultSettings;
-import com.silicolife.textmining.core.interfaces.core.dataaccess.IDataAccess;
+import com.silicolife.textmining.core.init.DatabaseConnectionInit;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.database.DataBaseTypeEnum;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.database.IDatabase;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 
-
-public class DatabaseConnectionInit {
+public class CreateFillAndLuceneIndexMysqlDatabaseTest{
 	
-	public static void init(String host,String port,String schema,String username,String password) throws InvalidDatabaseAccess, ANoteException
+	
+	@Test
+	public void createUpdateDatabase() throws InvalidDatabaseAccess, FileNotFoundException, SQLException, IOException, ANoteException
 	{
-		IDatabase dabaseAcess = factoryDatabase(host,port,schema,username,password);
-		Properties properties = new Properties();
-		properties.put("Using-Title-In-Abstract", "true");
-		properties.put("Free-Full-Text-Only", "true");
-		properties.put(GeneralDefaultSettings.LUCENEINDEXBASEDIRECTORY, "src/test/resources/");
-		Proxy proxy = null;
-		String hibernateFilePath = "src/test/resources/hibernate.cfg.xml";
-		IDataAccess dataAccess = new DatabaseAccess(dabaseAcess,hibernateFilePath);
-		InitConfiguration.init(dataAccess,proxy,properties );
-		dataAccess.login("admin", "admin");
-		InitConfiguration.getDataAccess().checkLogin("admin", "admin");
-		assertTrue(true);
+		IDatabase database = createDatabase("localhost","3306","todelete","root","admin");
+		if(database==null)
+		{
+	        assertTrue(false);
+		}		
+        assertTrue(fillDatabase(database));
+        DatabaseConnectionInit.init("localhost","3306","todelete","root","admin");
+        InitConfiguration.getDataAccess().getAllResourceElementsByExactSynonymUsingLucene("batatas");
 	}
 	
+	/**
+	 * Fill Database
+	 * 
+	 * @param database
+	 * @return
+	 * @throws SQLException
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static boolean fillDatabase(IDatabase database) throws SQLException, FileNotFoundException, IOException
+	{
+		if(!database.isfill())
+		{
+			database.fillDataBaseTables("src/test/resources/anote2databasescript.sql");
+			return true;
+		}
+		return false;
+	}
 	
 	/**
 	 * Create Database  
@@ -43,7 +58,7 @@ public class DatabaseConnectionInit {
 	 * @throws InvalidDatabaseAccess
 	 * @throws SQLException 
 	 */
-	private static IDatabase factoryDatabase(String host,String port,String schema,String username,String password) throws InvalidDatabaseAccess
+	public static IDatabase createDatabase(String host,String port,String schema,String username,String password) throws InvalidDatabaseAccess, SQLException
 	{
 		DataBaseTypeEnum databaseType = DataBaseTypeEnum.MYSQL;
 		if (host.trim().equals("") || port.trim().equals("") || schema.trim().equals("")) {
@@ -62,6 +77,8 @@ public class DatabaseConnectionInit {
 			return null;
 		} else {
 			IDatabase databaseAdded = DatabaseFactory.createDatabase(databaseType, host, port, schema, username, password);
+			databaseAdded.createDataBase();
+			checkConnection(databaseAdded);
 			return databaseAdded;
 		}
 	}
@@ -72,7 +89,7 @@ public class DatabaseConnectionInit {
 	 * @param databaseAdded
 	 * @return
 	 */
-	private boolean checkConnection(IDatabase databaseAdded) {
+	private static boolean checkConnection(IDatabase databaseAdded) {
 		try {
 			databaseAdded.openConnection();
 			if (databaseAdded.getConnection() != null) {
