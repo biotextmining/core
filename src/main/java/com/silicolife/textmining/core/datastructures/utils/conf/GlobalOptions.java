@@ -124,6 +124,8 @@ public class GlobalOptions {
 
 	public static String tranformationTextFile = "src/main/resources/tranformationTextFile.prop";
 
+	public static String LUCENEINDEXBASEDIRECTORY = "conf/database/luceneindex";
+
 	public static Integer getDoublePrecision() {
 		return 2;
 	}
