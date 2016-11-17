@@ -52,8 +52,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.PermissionsUtilsEnum;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.ResourcesTypeUtils;
 import com.silicolife.textmining.core.datastructures.init.InitConfiguration;
-import com.silicolife.textmining.core.datastructures.init.general.GeneralDefaultSettings;
-import com.silicolife.textmining.core.datastructures.init.propertiesmanager.PropertiesManager;
+import com.silicolife.textmining.core.datastructures.init.dataaccess.DataAccessDefaultSettings;
 import com.silicolife.textmining.core.datastructures.resources.ResourceElementSetImpl;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationLog;
@@ -151,7 +150,7 @@ public class DatabaseAccess implements IDataAccess {
 		configuration.setProperty("hibernate.search.default.directory_provider", "filesystem");
 		if(configuration.getProperty("hibernate.search.default.indexBase")==null)
 		{
-			String luceneIndexBaseDir = InitConfiguration.getPropertyValueFromInitOrProperties(GeneralDefaultSettings.LUCENEINDEXBASEDIRECTORY).toString();
+			String luceneIndexBaseDir = InitConfiguration.getPropertyValueFromInitOrProperties(DataAccessDefaultSettings.LUCENEINDEXBASEDIRECTORY).toString();
 			String luceneIndex = luceneIndexBaseDir + "/" +db.getSchema();
 			configuration.setProperty("hibernate.search.default.indexBase", luceneIndex);
 		}

@@ -198,7 +198,7 @@ public class InitConfiguration {
 		String result = properties.getProperty(key);
 		if(result==null)
 		{
-			return getPropertyFromPropertiesSystem(key);
+			return getPropertyValue(key);
 		}
 		return result;
 	}
