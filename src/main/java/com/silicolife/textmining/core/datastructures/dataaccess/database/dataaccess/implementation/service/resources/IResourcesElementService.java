@@ -71,4 +71,5 @@ public interface IResourcesElementService {
  	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID extID) throws ResourcesExceptions; //
 	
 	public IResourceManagerReport addResourceElementSynonymsWithoutValidation(long id, long id2, List<String> synonyms) throws ResourcesExceptions;
+
 }

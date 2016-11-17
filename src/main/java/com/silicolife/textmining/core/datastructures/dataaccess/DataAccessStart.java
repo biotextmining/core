@@ -278,18 +278,6 @@ public class DataAccessStart implements IDataAccess {
 	}
 
 	@Override
-	public Map<Long, IEntityAnnotation> getEntitiesAnnotationsByIDs(List<Long> entitiesIDs) throws ANoteException {
-
-		return null;
-	}
-
-	@Override
-	public Map<Long, IEventAnnotation> getEventAnnotationsByIDs(List<Long> eventsIDs) throws ANoteException {
-
-		return null;
-	}
-
-	@Override
 	public SortedSet<IAnnotationLog> getProcessDocumentLogs(IIEProcess process, IPublication document) throws ANoteException {
 
 		return null;
@@ -824,13 +812,6 @@ public class DataAccessStart implements IDataAccess {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID externalId)
-			throws ANoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public IResourceManagerReport addResourceElementSynomynsWithoutValidation(IResource<IResourceElement> destiny,
@@ -841,6 +822,190 @@ public class DataAccessStart implements IDataAccess {
 
 	@Override
 	public List<IPublication> getPublicationByResourceElement(IResourceElement resourceElement) throws ANoteException {
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactTermUsingLucene(String term) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID externalId)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean rebuildLuceneIndex() throws ANoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialTermUsingLucene(String term)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermUsingLucenePaginated(String term,
+			int index, int paginationSize) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactSynonymUsingLucene(String synonym)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialSynonymUsingLucene(String synonym)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonymUsingLucenePaginated(String synonym,
+			int index, int paginationSize) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactTermFromResourceUsingLucene(String term,
+			IResource<IResourceElement> resource) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialTermFromResourceUsingLucene(
+			String partialTerm, IResource<IResourceElement> resource) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermFromResourceUsingLucenePaginated(
+			String partialTerm, IResource<IResourceElement> resource, int index, int paginationSize)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactSynonymFromResourceUsingLucene(
+			String synonym, IResource<IResourceElement> resource) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialSynonymFromResourceUsingLucene(
+			String partialSynonym, IResource<IResourceElement> resource) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonymFromResourceUsingLucenePaginated(
+			String partialSynonym, IResource<IResourceElement> resource, int index, int paginationSize)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactExternalIdUsingLucene(String externalId)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactExternalIdFromResourceUsingLucene(
+			String externalId, IResource<IResourceElement> resource) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactExternalIdFromSourceUsingLucene(
+			String externalId, ISource source) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactExternalIdFromResourceAndSourceUsingLucene(
+			String externalId, IResource<IResourceElement> resource, ISource source) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialExternalIdUsingLucene(
+			String partialExternalId) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialExternalIdFromResourceUsingLucene(
+			String partialExternalId, IResource<IResourceElement> resource) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialExternalIdFromSourceUsingLucene(
+			String partialExternalId, ISource source) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialExternalIdFromResourceAndSourceUsingLucene(
+			String partialExternalId, IResource<IResourceElement> resource, ISource source) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdUsingLucenePaginated(
+			String partialExternalId, int index, int paginationSize) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdFromResourceUsingLucenePaginated(
+			String partialExternalId, IResource<IResourceElement> resource, int index, int paginationSize)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdFromSourceUsingLucenePaginated(
+			String partialExternalId, ISource source, int index, int paginationSize) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdFromResourceAndSourceUsingLucenePaginated(
+			String partialExternalId, IResource<IResourceElement> resource, ISource source, int index,
+			int paginationSize) throws ANoteException {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

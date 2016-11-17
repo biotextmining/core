@@ -39,5 +39,4 @@ public interface ResourcesAuxDao {
 	public List<ResourceElementRelations> getResourceElementsRelations(Long resourceID);
 	
  	public List<ResourceElementExtenalIds> getResourceElementExternalIdBySourceAndExternalId(Long sourceId, String externalId);
-
 }

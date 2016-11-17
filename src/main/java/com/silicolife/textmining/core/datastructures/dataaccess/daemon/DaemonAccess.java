@@ -18,6 +18,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implement
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.processes.ProcessesAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.publicationmanager.PublicationsAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.publicationmanager.QueryAccessImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.resources.LuceneResourcesElementsAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.resources.ResourcesAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.resources.ResourcesElementsAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.runserverprocesses.RunSercerProcessesAccessImpl;
@@ -91,6 +92,7 @@ public class DaemonAccess implements IDataAccess {
 	private ResourcesAccessImpl resourcesAccessImpl;
 	private ResourcesElementsAccessImpl resourcesElementAccessImpl;
 	private RunSercerProcessesAccessImpl runServerProcessesImpl;
+	private LuceneResourcesElementsAccessImpl luceneResourcesElementsAccessImpl;
 
 	public DaemonAccess(IDaemon daemonConfigurations) {
 		this.daemonConfigurations = daemonConfigurations;
@@ -108,6 +110,7 @@ public class DaemonAccess implements IDataAccess {
 		userAccessPrivilegesImpl = new UserPrevilegesAccessImpl();
 		userLogged = new UsersLoggedImpl();
 		runServerProcessesImpl = new RunSercerProcessesAccessImpl();
+		luceneResourcesElementsAccessImpl = new LuceneResourcesElementsAccessImpl();
 	}
 
 	public IDaemon getDaemonConfigurations() {
@@ -138,6 +141,7 @@ public class DaemonAccess implements IDataAccess {
 			resourcesAccessImpl.setRestClient(webClient);
 			resourcesElementAccessImpl.setRestClient(webClient);
 			runServerProcessesImpl.setRestClient(webClient);
+			luceneResourcesElementsAccessImpl.setRestClient(webClient);
 		}
 	}
 
@@ -441,16 +445,6 @@ public class DaemonAccess implements IDataAccess {
 
 	@Override
 	public void updateEventsAnnotations(List<IEventAnnotation> list) throws ANoteException {
-	}
-
-	@Override
-	public Map<Long, IEntityAnnotation> getEntitiesAnnotationsByIDs(List<Long> entitiesIDs) throws ANoteException {
-		return null;
-	}
-
-	@Override
-	public Map<Long, IEventAnnotation> getEventAnnotationsByIDs(List<Long> eventsIDs) throws ANoteException {
-		return null;
 	}
 
 	@Override
@@ -884,25 +878,201 @@ public class DaemonAccess implements IDataAccess {
 	public Long countCorpusPublicationsNotProcessed(IIEProcess process) throws ANoteException {
 		return corpusAccessImpl.countCorpusPublicationsNotProcessed(process.getCorpus().getId(), process.getId());
 	}
-
-	@Override
-	public IResourceManagerReport addResourceElementSynomynsWithoutValidation(IResource<IResourceElement> resource,
-			IResourceElement originalElem, List<String> synonyms) throws ANoteException {
-		return null;
-		
-	}
-
-	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID externalId)
-			throws ANoteException {
-		return null;
-	}
-
+	
 	@Override
 	public List<IPublication> getPublicationByResourceElement(IResourceElement resourceElement) throws ANoteException {
 		return annotationAccessImpl.getPublicationByResourceElement(resourceElement.getId());
 	}
 	
-	
+
+	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID externalId)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean rebuildLuceneIndex() throws ANoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactTermUsingLucene(String term)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialTermUsingLucene(String term)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermUsingLucenePaginated(String term,
+			int index, int paginationSize) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactSynonymUsingLucene(String synonym)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialSynonymUsingLucene(String synonym)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonymUsingLucenePaginated(String synonym,
+			int index, int paginationSize) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactTermFromResourceUsingLucene(String term,
+			IResource<IResourceElement> resource) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialTermFromResourceUsingLucene(
+			String partialTerm, IResource<IResourceElement> resource) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermFromResourceUsingLucenePaginated(
+			String partialTerm, IResource<IResourceElement> resource, int index, int paginationSize)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactSynonymFromResourceUsingLucene(
+			String synonym, IResource<IResourceElement> resource) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialSynonymFromResourceUsingLucene(
+			String partialSynonym, IResource<IResourceElement> resource) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonymFromResourceUsingLucenePaginated(
+			String partialSynonym, IResource<IResourceElement> resource, int index, int paginationSize)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactExternalIdUsingLucene(String externalId)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactExternalIdFromResourceUsingLucene(
+			String externalId, IResource<IResourceElement> resource) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactExternalIdFromSourceUsingLucene(
+			String externalId, ISource source) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactExternalIdFromResourceAndSourceUsingLucene(
+			String externalId, IResource<IResourceElement> resource, ISource source) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialExternalIdUsingLucene(
+			String partialExternalId) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialExternalIdFromResourceUsingLucene(
+			String partialExternalId, IResource<IResourceElement> resource) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialExternalIdFromSourceUsingLucene(
+			String partialExternalId, ISource source) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialExternalIdFromResourceAndSourceUsingLucene(
+			String partialExternalId, IResource<IResourceElement> resource, ISource source) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdUsingLucenePaginated(
+			String partialExternalId, int index, int paginationSize) throws ANoteException {
+		// TODO Auto-generated method stub
+		throw new ANoteException("Method not implemented yet");
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdFromResourceUsingLucenePaginated(
+			String partialExternalId, IResource<IResourceElement> resource, int index, int paginationSize)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		throw new ANoteException("Method not implemented yet");
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdFromSourceUsingLucenePaginated(
+			String partialExternalId, ISource source, int index, int paginationSize) throws ANoteException {
+		// TODO Auto-generated method stub
+		throw new ANoteException("Method not implemented yet");
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdFromResourceAndSourceUsingLucenePaginated(
+			String partialExternalId, IResource<IResourceElement> resource, ISource source, int index,
+			int paginationSize) throws ANoteException {
+		// TODO Auto-generated method stub
+		throw new ANoteException("Method not implemented yet");
+	}
+
+	@Override
+	public IResourceManagerReport addResourceElementSynomynsWithoutValidation(IResource<IResourceElement> destiny,
+			IResourceElement originalElem, List<String> synonymsToAdd) throws ANoteException {
+		throw new ANoteException("Method not implemented yet");
+	}
 
 }
