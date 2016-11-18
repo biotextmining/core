@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import com.silicolife.textmining.core.datastructures.init.InitConfiguration;
 import com.silicolife.textmining.core.datastructures.init.exception.InvalidDatabaseAccess;
+import com.silicolife.textmining.core.datastructures.init.exception.InvalidDemonConnectionException;
+import com.silicolife.textmining.core.init.DaemonConnectionInit;
 import com.silicolife.textmining.core.init.DatabaseConnectionInit;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.resource.IResource;
@@ -18,9 +20,15 @@ import com.silicolife.textmining.core.interfaces.resource.IResourceElementSet;
 
 public class LuceneTest {
 
-	@Test
+//	@Test
 	public void rebuildIndex() throws InvalidDatabaseAccess, ANoteException {
 		DatabaseConnectionInit.init("localhost","3306","textminingcarbontest","root","admin");
+		InitConfiguration.getDataAccess().rebuildLuceneIndex();
+	}
+	
+	@Test
+	public void rebuildIndexDaemon() throws InvalidDemonConnectionException, ANoteException {
+		DaemonConnectionInit.init("http","8080","localhost","anote2daemon");
 		InitConfiguration.getDataAccess().rebuildLuceneIndex();
 	}
 	

@@ -15,10 +15,11 @@ import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implement
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.corpora.CorpusAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.general.ClassesAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.hyperlinks.HyperlinkAccessImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.lucene.LuceneAccessImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.lucene.resources.LuceneResourcesElementsAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.processes.ProcessesAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.publicationmanager.PublicationsAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.publicationmanager.QueryAccessImpl;
-import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.resources.LuceneResourcesElementsAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.resources.ResourcesAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.resources.ResourcesElementsAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.runserverprocesses.RunSercerProcessesAccessImpl;
@@ -92,6 +93,7 @@ public class DaemonAccess implements IDataAccess {
 	private ResourcesAccessImpl resourcesAccessImpl;
 	private ResourcesElementsAccessImpl resourcesElementAccessImpl;
 	private RunSercerProcessesAccessImpl runServerProcessesImpl;
+	private LuceneAccessImpl luceneAccessImpl;
 	private LuceneResourcesElementsAccessImpl luceneResourcesElementsAccessImpl;
 
 	public DaemonAccess(IDaemon daemonConfigurations) {
@@ -110,6 +112,7 @@ public class DaemonAccess implements IDataAccess {
 		userAccessPrivilegesImpl = new UserPrevilegesAccessImpl();
 		userLogged = new UsersLoggedImpl();
 		runServerProcessesImpl = new RunSercerProcessesAccessImpl();
+		luceneAccessImpl = new LuceneAccessImpl();
 		luceneResourcesElementsAccessImpl = new LuceneResourcesElementsAccessImpl();
 	}
 
@@ -141,6 +144,7 @@ public class DaemonAccess implements IDataAccess {
 			resourcesAccessImpl.setRestClient(webClient);
 			resourcesElementAccessImpl.setRestClient(webClient);
 			runServerProcessesImpl.setRestClient(webClient);
+			luceneAccessImpl.setRestClient(webClient);
 			luceneResourcesElementsAccessImpl.setRestClient(webClient);
 		}
 	}
@@ -893,8 +897,7 @@ public class DaemonAccess implements IDataAccess {
 
 	@Override
 	public boolean rebuildLuceneIndex() throws ANoteException {
-		// TODO Auto-generated method stub
-		return false;
+		return luceneAccessImpl.rebuildLuceneIndex();
 	}
 
 	@Override

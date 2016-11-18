@@ -13,11 +13,12 @@ import java.util.SortedSet;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.search.FullTextSession;
-import org.hibernate.search.Search;
 import org.hibernate.service.ServiceRegistry;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.manager.LuceneManagerDao;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.ILuceneService;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.LuceneServiceImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.resources.IResourcesElementLuceneService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.resources.ResourcesElementLuceneServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLoggedImpl;
@@ -115,14 +116,14 @@ public class DatabaseAccess implements IDataAccess {
 	private ISystemService systemService;
 	
 	private LuceneManagerDao luceneManagerDao;
-	private ResourcesElementLuceneServiceImpl luceneResourcesElementService;
+	private ILuceneService luceneService;
+	private IResourcesElementLuceneService luceneResourcesElementService;
 
 	private IUserService userService;
 	private UsersLogged userLogged = new UsersLoggedImpl();
 	private boolean alreadyConfigurate = false;
 
 	private String hibernateFilePath;
-
 
 	public DatabaseAccess(IDatabase db,String hibernateFilePath) {
 		this.db = db;
@@ -183,6 +184,7 @@ public class DatabaseAccess implements IDataAccess {
 		systemService = new SystemServiceImpl(managerDao.getSystemServiceDao());
 		
 		luceneManagerDao = new LuceneManagerDao(sessionFactory);
+		luceneService = new LuceneServiceImpl(sessionFactory);
 		luceneResourcesElementService = new ResourcesElementLuceneServiceImpl(luceneManagerDao.getResourcesLuceneManagerDao(), managerDao.getResourcesManagerDao());
 	}
 
@@ -1876,11 +1878,10 @@ public class DatabaseAccess implements IDataAccess {
 	public boolean rebuildLuceneIndex() throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
-			fullTextSession.createIndexer().startAndWait();
+			boolean result = luceneService.rebuildLuceneIndex();
 			sessionFactory.getCurrentSession().getTransaction().commit();
-			return true;
-		} catch (RuntimeException | InterruptedException e) {
+			return result;
+		} catch (RuntimeException e) {
 			sessionFactory.getCurrentSession().getTransaction().rollback();
 			throw new ANoteException(e);
 		}

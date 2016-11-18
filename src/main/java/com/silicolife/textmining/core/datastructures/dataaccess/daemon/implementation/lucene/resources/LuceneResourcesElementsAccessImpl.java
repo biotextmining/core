@@ -1,4 +1,4 @@
-package com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.resources;
+package com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.lucene.resources;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.RestClientAccess;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
