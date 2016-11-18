@@ -70,7 +70,7 @@ public class ClusterLabelImpl implements IClusterLabel {
 	@Override
 	public String toString() {
 		String result = getName() + " (" + clusterPublications.size() + ")";
-		if (score != null || score == 0)
+		if (score != null)
 			result = result + " Score: " + GlobalOptions.decimalformat.format(getScore());
 		return result;
 	}

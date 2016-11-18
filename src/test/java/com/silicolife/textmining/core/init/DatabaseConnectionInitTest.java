@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.DatabaseAccess;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.DatabaseFactory;
 import com.silicolife.textmining.core.datastructures.init.InitConfiguration;
+import com.silicolife.textmining.core.datastructures.init.dataaccess.DataAccessDefaultSettings;
 import com.silicolife.textmining.core.datastructures.init.exception.InvalidDatabaseAccess;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.IDataAccess;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.database.DataBaseTypeEnum;
@@ -20,7 +21,7 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANote
 
 public class DatabaseConnectionInitTest {
 	
-	@Test
+//	@Test
 	public void testDatabaseconnection() throws InvalidDatabaseAccess
 	{
 		IDatabase dabaseAcess = factoryDatabase("localhost","3306","createdatest","root","admin");
@@ -30,8 +31,11 @@ public class DatabaseConnectionInitTest {
 	@Test
 	public void initUsingDatabasConfigurationCheckLogin() throws InvalidDatabaseAccess, ANoteException
 	{
-		IDatabase dabaseAcess = factoryDatabase("localhost","3306","createdatest","root","admin");
+		IDatabase dabaseAcess = factoryDatabase("localhost","3306","anote2_v22","root","admin");
 		Properties properties = new Properties();
+		properties.put(DataAccessDefaultSettings.LUCENEINDEXBASEDIRECTORY, "src/test/resources/");
+		properties.put("Using-Title-In-Abstract", "true");
+		properties.put("Free-Full-Text-Only", "true");
 		Proxy proxy = null;
 		String hibernateFilePath = "src/test/resources/hibernate.cfg.xml";
 		IDataAccess dataAccess = new DatabaseAccess(dabaseAcess,hibernateFilePath);
