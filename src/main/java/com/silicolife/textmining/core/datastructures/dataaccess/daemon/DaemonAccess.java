@@ -1,5 +1,6 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.daemon;
 
+import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -146,6 +147,22 @@ public class DaemonAccess implements IDataAccess {
 			runServerProcessesImpl.setRestClient(webClient);
 			luceneAccessImpl.setRestClient(webClient);
 			luceneResourcesElementsAccessImpl.setRestClient(webClient);
+			initConnection();
+		}
+	}
+	
+	private void initConnection() throws ANoteException{
+		Boolean connection = testConnection(daemonConfigurations);
+		if(!connection){
+			throw new DaemonException(new UnknownHostException());
+		}
+		
+		ParameterizedTypeReference<DaemonResponse<String>> responseType = new ParameterizedTypeReference<DaemonResponse<String>>() {};
+		
+		ResponseEntity<DaemonResponse<String>> responde = webClient.get("getVersion", responseType);
+		
+		if(responde.getStatusCode()!=org.springframework.http.HttpStatus.OK){
+			throw new DaemonException(new UnknownHostException());
 		}
 	}
 
