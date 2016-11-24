@@ -137,6 +137,11 @@ public class DatabaseAccess implements IDataAccess {
 			alreadyConfigurate = true;
 		}
 	}
+	
+	public void setUserLoggedOnServices(UsersLogged userLogged)
+	{
+
+	}
 
 	private void setHibernateConfiguration(IDatabase db) {
 		File file = new File(hibernateFilePath);

@@ -1095,4 +1095,10 @@ public class DaemonAccess implements IDataAccess {
 		throw new ANoteException("Method not implemented yet");
 	}
 
+	@Override
+	public void setUserLoggedOnServices(UsersLogged userLogged) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -24,6 +24,8 @@ public interface IDataAccess extends IPublicationManagerAccess, IGeneralDataAcce
 	 * @return
 	 */
 	public IUser getUser();
+	
+	public void setUserLoggedOnServices(UsersLogged userLogged);
 
 	public void setUser(UsersLogged userLogged) throws ANoteException;
 

@@ -1009,4 +1009,10 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public void setUserLoggedOnServices(UsersLogged userLogged) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
