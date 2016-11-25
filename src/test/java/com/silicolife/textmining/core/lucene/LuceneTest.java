@@ -22,11 +22,11 @@ public class LuceneTest {
 
 //	@Test
 	public void rebuildIndex() throws InvalidDatabaseAccess, ANoteException {
-		DatabaseConnectionInit.init("localhost","3306","textminingcarbontest","root","admin");
+		DatabaseConnectionInit.init("localhost","3306","maria","root","admin");
 		InitConfiguration.getDataAccess().rebuildLuceneIndex();
 	}
 	
-	@Test
+//	@Test
 	public void rebuildIndexDaemon() throws InvalidDemonConnectionException, ANoteException {
 		DaemonConnectionInit.init("http","8080","localhost","anote2daemon");
 		InitConfiguration.getDataAccess().rebuildLuceneIndex();
@@ -34,9 +34,9 @@ public class LuceneTest {
 	
 //	@Test
 	public void testIndex() throws InvalidDatabaseAccess, ANoteException{
-		DatabaseConnectionInit.init("localhost","3306","textminingcarbontest","root","admin");
+		DatabaseConnectionInit.init("localhost","3306","maria","root","admin");
 		long startime = GregorianCalendar.getInstance().getTimeInMillis();
-		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getAllResourceElementsByExactTermUsingLucene("Bacterium coli commune");
+		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getResourceElementsByExactTerm("fructosyllysine(1+)");
 		long endtime = GregorianCalendar.getInstance().getTimeInMillis();
 		System.out.println(endtime-startime);
 		for(IResourceElement elem : elemts.getResourceElements()){
@@ -45,11 +45,11 @@ public class LuceneTest {
 		
 	}
 	
-//	@Test
+	@Test
 	public void testIndex2() throws InvalidDatabaseAccess, ANoteException{
-		DatabaseConnectionInit.init("localhost","3306","textminingcarbontest","root","admin");
+		DatabaseConnectionInit.init("localhost","3306","sisbitmpipeline","root","admin");
 		long startime = GregorianCalendar.getInstance().getTimeInMillis();
-		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getAllResourceElementsByExactSynonymUsingLucene("e. coli");
+		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getResourceElementsByExactSynonym("leucyl aminopeptidase");
 		long endtime = GregorianCalendar.getInstance().getTimeInMillis();
 		System.out.println(endtime-startime);
 		for(IResourceElement elem : elemts.getResourceElements()){
@@ -60,10 +60,10 @@ public class LuceneTest {
 	
 //	@Test
 	public void testIndex3() throws InvalidDatabaseAccess, ANoteException{
-		DatabaseConnectionInit.init("localhost","3306","textminingcarbontest","root","admin");
+		DatabaseConnectionInit.init("localhost","3306","maria","root","admin");
 		IResource<IResourceElement> resource = InitConfiguration.getDataAccess().getResourceByID(5727281589065523363L);
 		long startime = GregorianCalendar.getInstance().getTimeInMillis();
-		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getAllResourceElementsByExactTermFromResourceUsingLucene("Bacterium coli commune", resource);
+		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getResourceElementsFromResourceByExactTerm(resource, "Bacterium coli commune");
 		long endtime = GregorianCalendar.getInstance().getTimeInMillis();
 		System.out.println(endtime-startime);
 		for(IResourceElement elem : elemts.getResourceElements()){
@@ -74,23 +74,24 @@ public class LuceneTest {
 	
 //	@Test
 	public void testIndex4() throws InvalidDatabaseAccess, ANoteException{
-		DatabaseConnectionInit.init("localhost","3306","textminingcarbontest","root","admin");
+		DatabaseConnectionInit.init("localhost","3306","maria","root","admin");
 //		IResource<IResourceElement> resource = InitConfiguration.getDataAccess().getResourceByID(3685732426240829176L);
 		long startime = GregorianCalendar.getInstance().getTimeInMillis();
-		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getAllResourceElementsByPartialTermUsingLucene("Bacteriu");
+		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getResourceElementsByPartialTerm("acid");
 		long endtime = GregorianCalendar.getInstance().getTimeInMillis();
 		System.out.println(endtime-startime);
 		System.out.println(elemts.size());
 		Set<String> notStart = new HashSet<>();
 		for(IResourceElement elem : elemts.getResourceElements()){
-			if(elem.getTerm().startsWith("Bacteriu")){
-				
-			}else if(elem.getTerm().startsWith("bacteriu")){
-				
-			}else{
-				notStart.add(elem.getTerm());
-			}
-			
+//			if(elem.getTerm().startsWith("Bacteriu")){
+//				
+//			}else if(elem.getTerm().startsWith("bacteriu")){
+//				
+//			}else{
+//				notStart.add(elem.getTerm());
+//			}
+			System.out.println(elem.getId());
+
 		}
 		
 		System.out.println(notStart);
@@ -100,10 +101,10 @@ public class LuceneTest {
 	
 //	@Test
 	public void testIndex5() throws InvalidDatabaseAccess, ANoteException{
-		DatabaseConnectionInit.init("localhost","3306","textminingcarbontest","root","admin");
+		DatabaseConnectionInit.init("localhost","3306","maria","root","admin");
 //		IResource<IResourceElement> resource = InitConfiguration.getDataAccess().getResourceByID(3685732426240829176L);
 		long startime = GregorianCalendar.getInstance().getTimeInMillis();
-		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getAllResourceElementsByPartialSynonymUsingLucene("lens neutral proteinase");
+		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getAllResourceElementsByPartialSynonymUsingLucene("acid");
 		long endtime = GregorianCalendar.getInstance().getTimeInMillis();
 		System.out.println(endtime-startime);
 		System.out.println(elemts.size());
@@ -122,6 +123,32 @@ public class LuceneTest {
 //		
 //		System.out.println(notStart);
 		
+		
+	}
+	
+//	@Test
+	public void testIndex6() throws InvalidDatabaseAccess, ANoteException{
+		DatabaseConnectionInit.init("localhost","3306","maria","root","admin");
+//		IResource<IResourceElement> resource = InitConfiguration.getDataAccess().getResourceByID(3685732426240829176L);
+		long startime = GregorianCalendar.getInstance().getTimeInMillis();
+		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getResourceElementsByPartialTermPaginated("acid",0,100);
+		long endtime = GregorianCalendar.getInstance().getTimeInMillis();
+		System.out.println(endtime-startime);
+		System.out.println(elemts.size());
+		Set<String> notStart = new HashSet<>();
+		for(IResourceElement elem : elemts.getResourceElements()){
+//			if(elem.getTerm().startsWith("Bacteriu")){
+//				
+//			}else if(elem.getTerm().startsWith("bacteriu")){
+//				
+//			}else{
+//				notStart.add(elem.getTerm());
+//			}
+			System.out.println(elem.getId());
+
+		}
+		
+		System.out.println(notStart);
 		
 	}
 

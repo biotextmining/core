@@ -29,7 +29,7 @@ public class CreateFillAndLuceneIndexMysqlDatabaseTest{
 		}		
         assertTrue(fillDatabase(database));
         DatabaseConnectionInit.init("localhost","3306","todelete","root","admin");
-        InitConfiguration.getDataAccess().getAllResourceElementsByExactSynonymUsingLucene("batatas");
+        InitConfiguration.getDataAccess().getResourceElementsByExactSynonym("batatas");
 	}
 	
 	/**
