@@ -1893,7 +1893,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactTermUsingLucene(String term) throws ANoteException {
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactTerm(String term) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getAllResourceElementsByExactTerm(term);
@@ -1906,7 +1906,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactSynonymUsingLucene(String synonym)
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactSynonym(String synonym)
 			throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
@@ -1920,8 +1920,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactTermFromResourceUsingLucene(String term,
-			IResource<IResourceElement> resource) throws ANoteException {
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactTerm(IResource<IResourceElement> resource,String term) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getAllResourceElementsFromResourceByExactTerm(term, resource.getId());
@@ -1934,7 +1933,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialTermUsingLucene(
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTerm(
 			String partialterm) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
@@ -1962,8 +1961,8 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactSynonymFromResourceUsingLucene(
-			String synonym, IResource<IResourceElement> resource) throws ANoteException {
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactSynonym(
+			IResource<IResourceElement> resource,String synonym) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getAllResourceElementsFromResourceByExactSynonym(synonym, resource.getId());
@@ -1976,8 +1975,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialTermFromResourceUsingLucene(
-			String partialTerm, IResource<IResourceElement> resource) throws ANoteException {
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialTerm(IResource<IResourceElement> resource,String partialTerm) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getAllResourceElementsFromResourceByPartialTerm(partialTerm, resource.getId());
@@ -1990,8 +1988,8 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialSynonymFromResourceUsingLucene(
-			String partialSynonym, IResource<IResourceElement> resource) throws ANoteException {
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonym(
+			IResource<IResourceElement> resource,String partialSynonym) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getAllResourceElementsFromResourceByPartialSynonym(partialSynonym, resource.getId());
@@ -2004,7 +2002,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermUsingLucenePaginated(
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermPaginated(
 			String partialTerm, int index, int paginationSize) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
@@ -2032,8 +2030,8 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermFromResourceUsingLucenePaginated(
-			String partialTerm, IResource<IResourceElement> resource, int index, int paginationSize)
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialTermPaginated(
+			IResource<IResourceElement> resource,String partialTerm, int index, int paginationSize)
 			throws ANoteException {
 		
 		try {
@@ -2049,7 +2047,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonymFromResourceUsingLucenePaginated(
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonymUsingPaginated(
 			String partialSynonym, IResource<IResourceElement> resource, int index, int paginationSize)
 			throws ANoteException {
 		try {
@@ -2065,7 +2063,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactExternalIdUsingLucene(String externalId)
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactExternalId(String externalId)
 			throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
@@ -2080,7 +2078,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactExternalIdFromResourceUsingLucene(
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactExternalId(
 			String externalId, IResource<IResourceElement> resource) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
@@ -2095,7 +2093,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialExternalIdUsingLucene(String partialExternalId)
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalId(String partialExternalId)
 			throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
@@ -2110,8 +2108,8 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialExternalIdFromResourceUsingLucene(
-			String partialExternalId, IResource<IResourceElement> resource) throws ANoteException {
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalId(
+			IResource<IResourceElement> resource,String partialExternalId) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService
@@ -2125,7 +2123,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdUsingLucenePaginated(
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdPaginated(
 			String partialExternalId, int index, int paginationSize) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
@@ -2140,8 +2138,8 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdFromResourceUsingLucenePaginated(
-			String partialExternalId, IResource<IResourceElement> resource, int index, int paginationSize)
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalIdPaginated(
+			IResource<IResourceElement> resource,String partialExternalId,  int index, int paginationSize)
 			throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
@@ -2156,7 +2154,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactExternalIdFromSourceUsingLucene(
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactExternalIdFromSource(
 			String externalId, ISource source) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
@@ -2171,8 +2169,8 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactExternalIdFromResourceAndSourceUsingLucene(
-			String externalId, IResource<IResourceElement> resource, ISource source) throws ANoteException {
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactExternalIdAndSource(
+			IResource<IResourceElement> resource, ISource source,String externalId) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService
@@ -2186,7 +2184,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialExternalIdFromSourceUsingLucene(
+	public IResourceElementSet<IResourceElement> getResourceElementsFromSourceByPartialExternalId(
 			String partialExternalId, ISource source) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
@@ -2201,8 +2199,8 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialExternalIdFromResourceAndSourceUsingLucene(
-			String partialExternalId, IResource<IResourceElement> resource, ISource source) throws ANoteException {
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalIdAndSource(
+			IResource<IResourceElement> resource, ISource source,String partialExternalId) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService
@@ -2216,8 +2214,8 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdFromSourceUsingLucenePaginated(
-			String partialExternalId, ISource source, int index, int paginationSize) throws ANoteException {
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdFromSourcePaginated(
+			ISource source,String partialExternalId,int index, int paginationSize) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService
@@ -2231,8 +2229,8 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdFromResourceAndSourceUsingLucenePaginated(
-			String partialExternalId, IResource<IResourceElement> resource, ISource source, int index,
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalIdAndSourcePaginated(
+			IResource<IResourceElement> resource, ISource source,String partialExternalId,  int index,
 			int paginationSize) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();

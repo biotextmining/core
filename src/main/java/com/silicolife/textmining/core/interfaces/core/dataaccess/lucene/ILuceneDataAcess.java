@@ -5,6 +5,13 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.layer.IL
 
 public interface ILuceneDataAcess extends ILuceneResourceElementDataAccess{
 
+	/**
+	 * Rebuild lucene index. 
+	 * The rebuild could be made in database already filled with data and when index clauses changed
+	 * 
+	 * @return
+	 * @throws ANoteException
+	 */
 	public boolean rebuildLuceneIndex() throws ANoteException;
 	
 }
