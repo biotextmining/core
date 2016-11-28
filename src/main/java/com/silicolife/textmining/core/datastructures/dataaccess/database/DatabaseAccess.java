@@ -1896,7 +1896,7 @@ public class DatabaseAccess implements IDataAccess {
 	public IResourceElementSet<IResourceElement> getResourceElementsByExactTerm(String term) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getAllResourceElementsByExactTerm(term);
+			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getResourceElementsByExactTerm(term);
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return elemnts;
 		} catch (RuntimeException e) {
@@ -1910,7 +1910,7 @@ public class DatabaseAccess implements IDataAccess {
 			throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getAllResourceElementsByExactSynonym(synonym);
+			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getResourceElementsByExactSynonym(synonym);
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return elemnts;
 		} catch (RuntimeException e) {
@@ -1923,7 +1923,7 @@ public class DatabaseAccess implements IDataAccess {
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactTerm(IResource<IResourceElement> resource,String term) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getAllResourceElementsFromResourceByExactTerm(term, resource.getId());
+			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getResourceElementsFromResourceByExactTerm(term, resource.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return elemnts;
 		} catch (RuntimeException e) {
@@ -1937,7 +1937,7 @@ public class DatabaseAccess implements IDataAccess {
 			String partialterm) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getAllResourceElementsByPartialTerm(partialterm);
+			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getResourceElementsByPartialTerm(partialterm);
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return elemnts;
 		} catch (RuntimeException e) {
@@ -1947,11 +1947,10 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialSynonymUsingLucene(
-			String partialSynonym) throws ANoteException {
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonym(String partialSynonym) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getAllResourceElementsByPartialSynonym(partialSynonym);
+			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getResourceElementsByPartialSynonym(partialSynonym);
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return elemnts;
 		} catch (RuntimeException e) {
@@ -1965,7 +1964,7 @@ public class DatabaseAccess implements IDataAccess {
 			IResource<IResourceElement> resource,String synonym) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getAllResourceElementsFromResourceByExactSynonym(synonym, resource.getId());
+			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getResourceElementsFromResourceByExactSynonym(synonym, resource.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return elemnts;
 		} catch (RuntimeException e) {
@@ -1978,7 +1977,7 @@ public class DatabaseAccess implements IDataAccess {
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialTerm(IResource<IResourceElement> resource,String partialTerm) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getAllResourceElementsFromResourceByPartialTerm(partialTerm, resource.getId());
+			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getResourceElementsFromResourceByPartialTerm(partialTerm, resource.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return elemnts;
 		} catch (RuntimeException e) {
@@ -1992,7 +1991,7 @@ public class DatabaseAccess implements IDataAccess {
 			IResource<IResourceElement> resource,String partialSynonym) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getAllResourceElementsFromResourceByPartialSynonym(partialSynonym, resource.getId());
+			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService.getResourceElementsFromResourceByPartialSynonym(partialSynonym, resource.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return elemnts;
 		} catch (RuntimeException e) {
@@ -2016,7 +2015,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonymUsingLucenePaginated(
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonymPaginated(
 			String partialSynonym, int index, int paginationSize) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
@@ -2047,7 +2046,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonymUsingPaginated(
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonymPaginated(
 			String partialSynonym, IResource<IResourceElement> resource, int index, int paginationSize)
 			throws ANoteException {
 		try {
@@ -2068,7 +2067,7 @@ public class DatabaseAccess implements IDataAccess {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService
-					.getAllResourceElementsByExactExternalID(externalId);
+					.getResourceElementsByExactExternalID(externalId);
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return elemnts;
 		} catch (RuntimeException e) {
@@ -2083,7 +2082,7 @@ public class DatabaseAccess implements IDataAccess {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService
-					.getAllResourceElementsFromResourceByExactExternalID(externalId, resource.getId());
+					.getResourceElementsFromResourceByExactExternalID(externalId, resource.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return elemnts;
 		} catch (RuntimeException e) {
@@ -2098,7 +2097,7 @@ public class DatabaseAccess implements IDataAccess {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService
-					.getAllResourceElementsByPartialExternalID(partialExternalId);
+					.getResourceElementsByPartialExternalID(partialExternalId);
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return elemnts;
 		} catch (RuntimeException e) {
@@ -2113,7 +2112,7 @@ public class DatabaseAccess implements IDataAccess {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService
-					.getAllResourceElementsFromResourceByPartialExternalID(partialExternalId, resource.getId());
+					.getResourceElementsFromResourceByPartialExternalID(partialExternalId, resource.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return elemnts;
 		} catch (RuntimeException e) {
@@ -2159,7 +2158,7 @@ public class DatabaseAccess implements IDataAccess {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService
-					.getAllResourceElementsFromSourceByExactExternalID(externalId, source.getSourceID());
+					.getResourceElementsFromSourceByExactExternalID(externalId, source.getSourceID());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return elemnts;
 		} catch (RuntimeException e) {
@@ -2174,7 +2173,7 @@ public class DatabaseAccess implements IDataAccess {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService
-					.getAllResourceElementsFromResourceAndSourceByExactExternalID(externalId, source.getSourceID(), resource.getId());
+					.getResourceElementsFromResourceAndSourceByExactExternalID(externalId, source.getSourceID(), resource.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return elemnts;
 		} catch (RuntimeException e) {
@@ -2189,7 +2188,7 @@ public class DatabaseAccess implements IDataAccess {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService
-					.getAllResourceElementsFromSourceByPartialExternalID(partialExternalId, source.getSourceID());
+					.getResourceElementsFromSourceByPartialExternalID(partialExternalId, source.getSourceID());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return elemnts;
 		} catch (RuntimeException e) {
@@ -2204,7 +2203,7 @@ public class DatabaseAccess implements IDataAccess {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService
-					.getAllResourceElementsFromResourceAndSourceByPartialExternalID(partialExternalId, source.getSourceID(), resource.getId());
+					.getResourceElementsFromResourceAndSourceByPartialExternalID(partialExternalId, source.getSourceID(), resource.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return elemnts;
 		} catch (RuntimeException e) {

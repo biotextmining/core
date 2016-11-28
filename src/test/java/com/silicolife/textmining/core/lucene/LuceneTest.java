@@ -104,7 +104,7 @@ public class LuceneTest {
 		DatabaseConnectionInit.init("localhost","3306","maria","root","admin");
 //		IResource<IResourceElement> resource = InitConfiguration.getDataAccess().getResourceByID(3685732426240829176L);
 		long startime = GregorianCalendar.getInstance().getTimeInMillis();
-		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getAllResourceElementsByPartialSynonymUsingLucene("acid");
+		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getResourceElementsByPartialSynonym("acid");
 		long endtime = GregorianCalendar.getInstance().getTimeInMillis();
 		System.out.println(endtime-startime);
 		System.out.println(elemts.size());

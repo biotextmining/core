@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.ResourcesExceptions;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.general.ExceptionsCodes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.manager.ResourcesLuceneManagerDao;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.ResourcesManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ResourceElements;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Resources;
@@ -36,7 +37,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactTerm(String term) {
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactTerm(String term) {
 
 		Map<String, String> eqSentenceOnField = new HashMap<>();
 		eqSentenceOnField.put("resElement", term);
@@ -55,7 +56,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	}
 	
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialTerm(
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTerm(
 			String partialString) {
 
 		Set<String> fields = new HashSet<>();
@@ -81,7 +82,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactSynonym(String synonym) {
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactSynonym(String synonym) {
 
 		Map<String, String> eqSentenceOnField = new HashMap<>();
 		eqSentenceOnField.put("synonymses.id.synSynonym", synonym);
@@ -102,7 +103,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialSynonym(
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonym(
 			String partialString) {
 		
 		Set<String> fields = new HashSet<>();
@@ -129,7 +130,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsFromResourceByExactTerm(String term, Long resourceId) throws ResourcesExceptions {
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactTerm(String term, Long resourceId) throws ResourcesExceptions {
 		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
 		if (resource == null)
 			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
@@ -152,7 +153,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsFromResourceByExactSynonym(String synonym,
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactSynonym(String synonym,
 			Long resourceId) throws ResourcesExceptions {
 		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
 		if (resource == null)
@@ -177,7 +178,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsFromResourceByPartialTerm(
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialTerm(
 			String partialString, Long resourceId) throws ResourcesExceptions {
 		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
 		if (resource == null)
@@ -207,7 +208,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsFromResourceByPartialSynonym(
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonym(
 			String partialString, Long resourceId) throws ResourcesExceptions {
 		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
 		if (resource == null)
@@ -356,7 +357,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByExactExternalID(String externalId) {
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactExternalID(String externalId) {
 		
 		Map<String, String> eqSentenceOnField = new HashMap<>();
 		eqSentenceOnField.put("resourceElementExtenalIdses.id.releExternalId", externalId);
@@ -376,7 +377,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsFromSourceByExactExternalID(String externalId,
+	public IResourceElementSet<IResourceElement> getResourceElementsFromSourceByExactExternalID(String externalId,
 			Long sourceId) throws ResourcesExceptions {
 		
 		Sources source = resourcesManagerDao.getResourcesElememtsSourcesDao().findById(sourceId);
@@ -402,7 +403,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsFromResourceByExactExternalID(String externalId,
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactExternalID(String externalId,
 			Long resourceId) throws ResourcesExceptions {
 		
 		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
@@ -428,7 +429,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsFromResourceAndSourceByExactExternalID(String externalId,
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceAndSourceByExactExternalID(String externalId,
 			Long sourceId, Long resourceId) throws ResourcesExceptions {
 		
 		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
@@ -455,7 +456,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialExternalID(String partialString) {
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalID(String partialString) {
 		
 		Map<String, String> startSentenceOnField = new HashMap<>();
 		startSentenceOnField.put("resourceElementExtenalIdses.id.releExternalId", partialString);
@@ -478,7 +479,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsFromSourceByPartialExternalID(
+	public IResourceElementSet<IResourceElement> getResourceElementsFromSourceByPartialExternalID(
 			String partialString, Long sourceId) throws ResourcesExceptions {
 		
 		Map<String, String> startSentenceOnField = new HashMap<>();
@@ -503,7 +504,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsFromResourceByPartialExternalID(
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalID(
 			String partialString, Long resourceId) throws ResourcesExceptions {
 		
 		Map<String, String> startSentenceOnField = new HashMap<>();
@@ -528,7 +529,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsFromResourceAndSourceByPartialExternalID(
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceAndSourceByPartialExternalID(
 			String partialString, Long sourceId, Long resourceId) throws ResourcesExceptions {
 		
 		Map<String, String> startSentenceOnField = new HashMap<>();
@@ -651,6 +652,11 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 		}
 
 		return elementSet;
+	}
+
+	@Override
+	public void setUserLogged(UsersLogged userLogged) {
+		
 	}
 
 }

@@ -488,78 +488,78 @@ public class DataAccessStart implements IDataAccess {
 
 	@Override
 	public IUser getUserByEmail(String email) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IUser getUserByUsername(String username) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public Boolean checkLogin(String username, String password) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public Boolean hasPermission(IResource<IResourceElement> resource,
 			List<String> permission) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public void removeResource(IResource<IResourceElement> resource) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public int getResourceMaxPriority(IResource<IResourceElement> resource)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return 0;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsByClass(
 			IResource<IResourceElement> resource, IAnoteClass Klass) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceContent getResourceContent(IResource<IResourceElement> resource) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public List<IExternalID> getResourceElementExternalIds(
 			IResourceElement resourceElementImpl) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public void insertNewClass(IAnoteClass klass) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public Set<IAnoteClass> getClasses() throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public boolean updateClassName(IAnoteClass oldclassName, String newCLass)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
@@ -567,7 +567,7 @@ public class DataAccessStart implements IDataAccess {
 	public IResourceManagerReport addResourceElementsWithouValidation(
 			IResource<IResourceElement> resource, List<IResourceElement> element)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -575,7 +575,7 @@ public class DataAccessStart implements IDataAccess {
 	public boolean checkResourceElementExistsInResource(
 			IResource<IResourceElement> resource, String term)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
@@ -583,7 +583,7 @@ public class DataAccessStart implements IDataAccess {
 	public IResourceManagerReport addResourceElementSynomyns(
 			IResource<IResourceElement> resource, IResourceElement elem,
 			List<String> synonyms) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -591,97 +591,97 @@ public class DataAccessStart implements IDataAccess {
 	public IResourceManagerReport updateResourceElementSynonym(
 			IResource<IResourceElement> resource, IResourceElement elem,
 			String oldSynonym, String newSynonym) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public void removeResourceElementExternalID(IResourceElement element,
 			IExternalID extID) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public void removeResourceElementAllExternalID(IResourceElement element)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public List<IResource<IResourceElement>> getPrivilegesAllResourcesAdminAccess() throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public List<IResourceElementsRelation> getResourceElementsRelations(
 			IResource<IResourceElement> resource) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public void addCorpusPublication(ICorpus corpus, IPublication publication)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public ICorpusStatistics getCorpusStatistics(ICorpus corpus) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public void updatePublicationFullTextContent(IPublication publication) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public Boolean hasPermission(ICorpus corpus, List<String> ownergrant) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public void updateAnoteKlass(IAnoteClass klass) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public IIEProcessStatistics getIEProcessStatistics(IIEProcess ieProcessImpl) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IAnnotatedDocumentStatistics getProcessDocumentStatistics(
 			IAnnotatedDocument annotatedDocument) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResource<IResourceElement> getResourceFromResourceElementByID(Long resourceElementID) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public Boolean hasPermission(IIEProcess obj, List<String> fullgrant) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public void addProcessDocumentLogs(List<IAnnotationLog> annotationLogs)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		
 	}
 
@@ -689,82 +689,82 @@ public class DataAccessStart implements IDataAccess {
 	public long getResourceElementIDMathingByText(
 			IResource<IResourceElement> resource, IResourceElement elemennt,
 			String text, boolean casesensitive) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return 0;
 	}
 
 	@Override
 	public IHyperLinkMenuItem getHyperLinkMenuItemById(Long id)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public List<IHyperLinkMenuItem> getAllHyperLinkMenuItems()
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public void updateSourcesHyperLinkMenuItem(
 			IHyperLinkMenuItem hyperLinkMenuItem) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public List<ISource> getAllSources() throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public List<ICorpus> getPrivilegesAllCorpusAdminAccess() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public List<IIEProcess> getPrivilegesAllProcessesAdminAccess() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public List<IHyperLinkMenuItem> getHyperLinkMenuItemsForSource(
 			ISource source) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public void saveProperties(Properties properties) {
-		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public Properties loadProperties(Set<String> propertiesIdentifiers) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public void addClusteringLabels(IClusterProcess cluster)throws ANoteException {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public void registerQueryClustering(IQuery query, IClusterProcess clustering) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public void updateQueryClusteringProcess(IClusterProcess clustering) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
@@ -776,40 +776,40 @@ public class DataAccessStart implements IDataAccess {
 
 	@Override
 	public Long getCorpusPublicationsCount(ICorpus corpus) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IDocumentSet getCorpusPublicationsPaginated(ICorpus corpus, Integer paginationIndex, Integer paginationSize)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsInBatchWithLimit(
 			IResource<IResourceElement> resource, Integer index, Integer pagination) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(IIEProcess process, Integer paginationIndex,
 			Integer paginationSize) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public Set<String> getCorpusPublicationsExternalIDFromSource(ICorpus corpus, String source) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public Long countCorpusPublicationsNotProcessed(IIEProcess process) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -827,112 +827,112 @@ public class DataAccessStart implements IDataAccess {
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsByExactTerm(String term) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID externalId)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public boolean rebuildLuceneIndex() throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTerm(String term)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermPaginated(String term,
 			int index, int paginationSize) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsByExactSynonym(String synonym)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialSynonymUsingLucene(String synonym)
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonym(String synonym)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonymUsingLucenePaginated(String synonym,
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonymPaginated(String synonym,
 			int index, int paginationSize) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactTerm(IResource<IResourceElement> resource,String term
 			) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialTerm(IResource<IResourceElement> resource,
 			String partialTerm) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonymUsingPaginated(
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonymPaginated(
 			String partialSynonym, IResource<IResourceElement> resource, int index, int paginationSize)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsByExactExternalId(String externalId)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactExternalId(
 			String externalId, IResource<IResourceElement> resource) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsByExactExternalIdFromSource(
 			String externalId, ISource source) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalId(
 			String partialExternalId) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsFromSourceByPartialExternalId(
 			String partialExternalId, ISource source) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -940,13 +940,13 @@ public class DataAccessStart implements IDataAccess {
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdPaginated(
 			String partialExternalId, int index, int paginationSize) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public void setUserLoggedOnServices(UsersLogged userLogged) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
@@ -954,42 +954,42 @@ public class DataAccessStart implements IDataAccess {
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialTermPaginated(
 			IResource<IResourceElement> resource, String partialTerm, int index, int paginationSize)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactSynonym(
 			IResource<IResourceElement> resource, String synonym) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonym(
 			IResource<IResourceElement> resource, String partialSynonym) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactExternalIdAndSource(
 			IResource<IResourceElement> resource, ISource source, String externalId) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalId(
 			IResource<IResourceElement> resource, String partialExternalId) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalIdAndSource(
 			IResource<IResourceElement> resource, ISource source, String partialExternalId) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -997,14 +997,14 @@ public class DataAccessStart implements IDataAccess {
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalIdPaginated(
 			IResource<IResourceElement> resource, String partialExternalId, int index, int paginationSize)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdFromSourcePaginated(
 			ISource source, String partialExternalId, int index, int paginationSize) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -1012,7 +1012,7 @@ public class DataAccessStart implements IDataAccess {
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalIdAndSourcePaginated(
 			IResource<IResourceElement> resource, ISource source, String partialExternalId, int index,
 			int paginationSize) throws ANoteException {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 

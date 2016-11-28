@@ -671,6 +671,7 @@ public class ResourcesElementsAccessImpl extends RestClientAccess {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public IResourceElementSet<IResourceElement> getResourceElementsInBatchWithLimit(long resourceId, int index,
 			int pagination) throws DaemonException {
 		checkAndForceLoginIfNecessary();

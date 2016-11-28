@@ -105,7 +105,7 @@ public interface ILuceneResourceElementDataAccess {
 	 * @return
 	 * @throws ANoteException
 	 */
-	public IResourceElementSet<IResourceElement> getAllResourceElementsByPartialSynonymUsingLucene(String synonym) throws ANoteException;
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonym(String synonym) throws ANoteException;
 	
 	/**
 	 * Get Resource Element from all Resource with partial or exact synonym match in primary term sliced by pages 
@@ -116,7 +116,7 @@ public interface ILuceneResourceElementDataAccess {
 	 * @return
 	 * @throws ANoteException
 	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonymUsingLucenePaginated(String synonym, int index, int paginationSize) throws ANoteException;
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonymPaginated(String synonym, int index, int paginationSize) throws ANoteException;
 	
 	/**
 	 * Get Resource Element from @param resource with partial or exact synonym match in primary term
@@ -138,7 +138,7 @@ public interface ILuceneResourceElementDataAccess {
 	 * @return
 	 * @throws ANoteException
 	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonymUsingPaginated(String partialSynonym, IResource<IResourceElement> resource, int index, int paginationSize) throws ANoteException;
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonymPaginated(String partialSynonym, IResource<IResourceElement> resource, int index, int paginationSize) throws ANoteException;
 	
 	/**
 	 * Get Resource Element with exact external identifier in any source

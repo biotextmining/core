@@ -6,6 +6,8 @@ import org.hibernate.search.Search;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
+
 @Service
 @Transactional(readOnly = true)
 public class LuceneServiceImpl implements ILuceneService{
@@ -25,6 +27,11 @@ public class LuceneServiceImpl implements ILuceneService{
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public void setUserLogged(UsersLogged userLogged) {
+		
 	}
 
 }
