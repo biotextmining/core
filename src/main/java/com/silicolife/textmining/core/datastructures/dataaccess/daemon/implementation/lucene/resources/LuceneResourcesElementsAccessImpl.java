@@ -1,8 +1,5 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.lucene.resources;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,8 +59,8 @@ public class LuceneResourcesElementsAccessImpl extends RestClientAccess{
 	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTerm(String partialTerm) throws DaemonException{
 		checkAndForceLoginIfNecessary();
 		ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >> responseType = new ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >>() {};
-		Map<String, String> uriVariables = new HashMap<String, String>();
-		uriVariables.put("partialTerm", partialTerm);
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("partialTerm", partialTerm);
 
 		ResponseEntity<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl>>> response = webClient.post("resourceElements/getResourceElementsByPartialTerm", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
@@ -223,13 +220,16 @@ public class LuceneResourcesElementsAccessImpl extends RestClientAccess{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonymPaginated(String partialString, Long resourceId, int index, int paginationSize) throws DaemonException{
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonymPaginated(String partialSynonym, Long resourceId, int index, int paginationSize) throws DaemonException{
 		checkAndForceLoginIfNecessary();
 		ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >> responseType = new ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >>() {};
-		Map<String, Long> uriVariables = new HashMap<String, Long>();
-		uriVariables.put("resourceId", resourceId);
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("partialSynonym", partialSynonym);
+		uriVariables.add("resourceId", String.valueOf(resourceId));
+		uriVariables.add("index", String.valueOf(index));
+		uriVariables.add("paginationSize", String.valueOf(paginationSize));
 
-		ResponseEntity<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl>>> response = webClient.post("resourceElements/getResourceElements", responseType, uriVariables);
+		ResponseEntity<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl>>> response = webClient.post("resourceElements/getResourceElementsFromResourceByPartialSynonymPaginated", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
 		} else {
@@ -312,11 +312,11 @@ public class LuceneResourcesElementsAccessImpl extends RestClientAccess{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalID(String partialExternalID) throws DaemonException{
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalID(String partialExternalId) throws DaemonException{
 		checkAndForceLoginIfNecessary();
 		ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >> responseType = new ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >>() {};
 		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
-		uriVariables.add("partialExternalID", partialExternalID);
+		uriVariables.add("partialExternalId", partialExternalId);
 
 		ResponseEntity<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl>>> response = webClient.post("resourceElements/getResourceElementsByPartialExternalID", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
@@ -365,13 +365,13 @@ public class LuceneResourcesElementsAccessImpl extends RestClientAccess{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceAndSourceByPartialExternalID(Long resourceId, Long sourceId, String partialExternalID) throws DaemonException{
+	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceAndSourceByPartialExternalID(Long resourceId, Long sourceId, String partialExternalId) throws DaemonException{
 		checkAndForceLoginIfNecessary();
 		ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >> responseType = new ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >>() {};
 		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
 		uriVariables.add("resourceId", String.valueOf(resourceId));
 		uriVariables.add("sourceId", String.valueOf(sourceId));
-		uriVariables.add("partialExternalID", partialExternalID);
+		uriVariables.add("partialExternalId", partialExternalId);
 
 		ResponseEntity<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl>>> response = webClient.post("resourceElements/getResourceElementsFromResourceAndSourceByPartialExternalID", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
