@@ -436,6 +436,10 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 		if (resource == null)
 			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
 		
+		Sources source = resourcesManagerDao.getResourcesElememtsSourcesDao().findById(sourceId);
+		if(source == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoSource, ExceptionsCodes.msgNoSource);
+		
 		Map<String, String> eqSentenceOnField = new HashMap<>();
 		eqSentenceOnField.put("resourceElementExtenalIdses.id.releExternalId", externalId);
 		eqSentenceOnField.put("resourceElementExtenalIdses.id.releSourceId", sourceId.toString());
@@ -482,6 +486,10 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	public IResourceElementSet<IResourceElement> getResourceElementsFromSourceByPartialExternalID(
 			String partialString, Long sourceId) throws ResourcesExceptions {
 		
+		Sources source = resourcesManagerDao.getResourcesElememtsSourcesDao().findById(sourceId);
+		if(source == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoSource, ExceptionsCodes.msgNoSource);
+		
 		Map<String, String> startSentenceOnField = new HashMap<>();
 		startSentenceOnField.put("resourceElementExtenalIdses.id.releExternalId", partialString);
 		
@@ -507,6 +515,10 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalID(
 			String partialString, Long resourceId) throws ResourcesExceptions {
 		
+		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
+		if (resource == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
+		
 		Map<String, String> startSentenceOnField = new HashMap<>();
 		startSentenceOnField.put("resourceElementExtenalIdses.id.releExternalId", partialString);
 		
@@ -531,6 +543,14 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceAndSourceByPartialExternalID(
 			String partialString, Long sourceId, Long resourceId) throws ResourcesExceptions {
+		
+		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
+		if (resource == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
+		
+		Sources source = resourcesManagerDao.getResourcesElememtsSourcesDao().findById(sourceId);
+		if(source == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoSource, ExceptionsCodes.msgNoSource);
 		
 		Map<String, String> startSentenceOnField = new HashMap<>();
 		startSentenceOnField.put("resourceElementExtenalIdses.id.releExternalId", partialString);
@@ -582,6 +602,10 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	public IResourceElementSet<IResourceElement> getResourceElementsFromSourceByPartialExternalIDPaginated(
 			String partialString, Long sourceId, int index, int paginationSize) throws ResourcesExceptions {
 		
+		Sources source = resourcesManagerDao.getResourcesElememtsSourcesDao().findById(sourceId);
+		if(source == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoSource, ExceptionsCodes.msgNoSource);
+		
 		Map<String, String> startSentenceOnField = new HashMap<>();
 		startSentenceOnField.put("resourceElementExtenalIdses.id.releExternalId", partialString);
 		
@@ -606,6 +630,11 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	@Override
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalIDPaginated(
 			String partialString, Long resourceId, int index, int paginationSize) throws ResourcesExceptions {
+		
+		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
+		if (resource == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
+		
 		Map<String, String> startSentenceOnField = new HashMap<>();
 		startSentenceOnField.put("resourceElementExtenalIdses.id.releExternalId", partialString);
 		
@@ -632,6 +661,14 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 			String partialString, Long sourceId, Long resourceId, int index, int paginationSize)
 			throws ResourcesExceptions {
 		
+		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
+		if (resource == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
+		
+		Sources source = resourcesManagerDao.getResourcesElememtsSourcesDao().findById(sourceId);
+		if(source == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoSource, ExceptionsCodes.msgNoSource);
+		
 		Map<String, String> startSentenceOnField = new HashMap<>();
 		startSentenceOnField.put("resourceElementExtenalIdses.id.releExternalId", partialString);
 		
@@ -657,6 +694,164 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	@Override
 	public void setUserLogged(UsersLogged userLogged) {
 		
+	}
+
+	@Override
+	public Integer getCountResourceElementsByPartialTerm(String partialString) {
+
+		Set<String> fields = new HashSet<>();
+		fields.add("keywordEdgeNGram_res_element");
+		fields.add("tokenEdgeNGram_res_element");
+		Map<String, Set<String>> attributeForMultipleFieldsMap = new HashMap<>();
+		attributeForMultipleFieldsMap.put(partialString, fields);
+		
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		eqSentenceOnField.put("resActive", "true");
+		
+		return resourcesLuceneManagerDao.getResourcesElememtsLuceneDao()
+				.countMultiFieldSameAttributesAndExactByAttributes(attributeForMultipleFieldsMap, eqSentenceOnField);
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromResourceByPartialTerm(String partialString, Long resourceId)
+			throws ResourcesExceptions {
+		
+		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
+		if (resource == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
+
+		Set<String> fields = new HashSet<>();
+		fields.add("keywordEdgeNGram_res_element");
+		fields.add("tokenEdgeNGram_res_element");
+		Map<String, Set<String>> attributeForMultipleFieldsMap = new HashMap<>();
+		attributeForMultipleFieldsMap.put(partialString, fields);
+		
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		eqSentenceOnField.put("resources", resourceId.toString());
+		eqSentenceOnField.put("resActive", "true");
+
+		return resourcesLuceneManagerDao.getResourcesElememtsLuceneDao()
+				.countMultiFieldSameAttributesAndExactByAttributes(attributeForMultipleFieldsMap, eqSentenceOnField);
+	}
+
+	@Override
+	public Integer getCountResourceElementsByPartialSynonym(String partialString) {
+		
+		Set<String> fields = new HashSet<>();
+		fields.add("synonymses.id.keywordEdgeNGram_syn_synonym");
+		fields.add("synonymses.id.tokenEdgeNGram_syn_synonym");
+		Map<String, Set<String>> attributeForMultipleFieldsMap = new HashMap<>();
+		attributeForMultipleFieldsMap.put(partialString, fields);
+		
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		eqSentenceOnField.put("synonymses.id.synActive", "true");
+		eqSentenceOnField.put("resActive", "true");
+		
+		return resourcesLuceneManagerDao.getResourcesElememtsLuceneDao()
+				.countMultiFieldSameAttributesAndExactByAttributes(attributeForMultipleFieldsMap, eqSentenceOnField);
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromResourceByPartialSynonym(String partialString, Long resourceId)
+			throws ResourcesExceptions {
+		
+		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
+		if (resource == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
+
+		Set<String> fields = new HashSet<>();
+		fields.add("synonymses.id.keywordEdgeNGram_syn_synonym");
+		fields.add("synonymses.id.tokenEdgeNGram_syn_synonym");
+		Map<String, Set<String>> attributeForMultipleFieldsMap = new HashMap<>();
+		attributeForMultipleFieldsMap.put(partialString, fields);
+		
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		eqSentenceOnField.put("synonymses.id.synActive", "true");
+		eqSentenceOnField.put("resources", resourceId.toString());
+		eqSentenceOnField.put("resActive", "true");
+
+		
+		return resourcesLuceneManagerDao.getResourcesElememtsLuceneDao()
+				.countMultiFieldSameAttributesAndExactByAttributes(attributeForMultipleFieldsMap, eqSentenceOnField);
+	}
+
+	@Override
+	public Integer getCountResourceElementsByPartialExternalID(String partialString) {
+		
+		Map<String, String> startSentenceOnField = new HashMap<>();
+		startSentenceOnField.put("resourceElementExtenalIdses.id.releExternalId", partialString);
+		
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		eqSentenceOnField.put("resourceElementExtenalIdses.releActive", "true");
+		eqSentenceOnField.put("resActive", "true");
+		
+		return resourcesLuceneManagerDao.getResourcesElememtsLuceneDao()
+				.countStartingUsingWildcardAndExactByAttributes(startSentenceOnField, eqSentenceOnField);
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromSourceByPartialExternalID(String partialString, Long sourceId)
+			throws ResourcesExceptions {
+
+		Sources source = resourcesManagerDao.getResourcesElememtsSourcesDao().findById(sourceId);
+		if(source == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoSource, ExceptionsCodes.msgNoSource);
+		
+		Map<String, String> startSentenceOnField = new HashMap<>();
+		startSentenceOnField.put("resourceElementExtenalIdses.id.releExternalId", partialString);
+		
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		eqSentenceOnField.put("resourceElementExtenalIdses.id.releSourceId", sourceId.toString());
+		eqSentenceOnField.put("resourceElementExtenalIdses.releActive", "true");
+		eqSentenceOnField.put("resActive", "true");
+		
+		return resourcesLuceneManagerDao.getResourcesElememtsLuceneDao()
+				.countStartingUsingWildcardAndExactByAttributes(startSentenceOnField, eqSentenceOnField);
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromResourceByPartialExternalID(String partialString, Long resourceId)
+			throws ResourcesExceptions {
+		
+		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
+		if (resource == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
+		
+		Map<String, String> startSentenceOnField = new HashMap<>();
+		startSentenceOnField.put("resourceElementExtenalIdses.id.releExternalId", partialString);
+		
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		eqSentenceOnField.put("resources", resourceId.toString());
+		eqSentenceOnField.put("resourceElementExtenalIdses.releActive", "true");
+		eqSentenceOnField.put("resActive", "true");
+		
+		return resourcesLuceneManagerDao.getResourcesElememtsLuceneDao()
+				.countStartingUsingWildcardAndExactByAttributes(startSentenceOnField, eqSentenceOnField);
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromResourceAndSourceByPartialExternalID(String partialString,
+			Long sourceId, Long resourceId) throws ResourcesExceptions {
+		
+		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
+		if (resource == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
+		
+		Sources source = resourcesManagerDao.getResourcesElememtsSourcesDao().findById(sourceId);
+		if(source == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoSource, ExceptionsCodes.msgNoSource);
+		
+		Map<String, String> startSentenceOnField = new HashMap<>();
+		startSentenceOnField.put("resourceElementExtenalIdses.id.releExternalId", partialString);
+		
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		eqSentenceOnField.put("resources", resourceId.toString());
+		eqSentenceOnField.put("resourceElementExtenalIdses.id.releSourceId", sourceId.toString());		
+		eqSentenceOnField.put("resourceElementExtenalIdses.releActive", "true");
+		eqSentenceOnField.put("resActive", "true");
+		
+		return resourcesLuceneManagerDao.getResourcesElememtsLuceneDao()
+				.countStartingUsingWildcardAndExactByAttributes(startSentenceOnField, eqSentenceOnField);
 	}
 
 }

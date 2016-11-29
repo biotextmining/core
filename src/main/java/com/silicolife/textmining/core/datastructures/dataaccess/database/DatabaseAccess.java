@@ -2242,4 +2242,114 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}
 	}
+
+	@Override
+	public Integer getCountResourceElementsByPartialTerm(String partialTerm) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer count = luceneResourcesElementService.getCountResourceElementsByPartialTerm(partialTerm);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromResourceByPartialTerm(IResource<IResourceElement> resource, String partialTerm)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer count = luceneResourcesElementService.getCountResourceElementsFromResourceByPartialTerm(partialTerm, resource.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Integer getCountResourceElementsByPartialSynonym(String partialSynonym) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer count = luceneResourcesElementService.getCountResourceElementsByPartialSynonym(partialSynonym);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromResourceByPartialSynonym(IResource<IResourceElement> resource,
+			String partialSynonym) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer count = luceneResourcesElementService.getCountResourceElementsFromResourceByPartialSynonym(partialSynonym, resource.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Integer getCountResourceElementsByPartialExternalID(String partialExternalId) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer count = luceneResourcesElementService.getCountResourceElementsByPartialExternalID(partialExternalId);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromSourceByPartialExternalID(ISource source, String partialExternalId)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer count = luceneResourcesElementService.getCountResourceElementsFromSourceByPartialExternalID(partialExternalId, source.getSourceID());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromResourceByPartialExternalID(IResource<IResourceElement> resource,
+			String partialExternalId) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer count = luceneResourcesElementService.getCountResourceElementsFromResourceByPartialExternalID(partialExternalId, resource.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromResourceAndSourceByPartialExternalID(
+			IResource<IResourceElement> resource, ISource source, String partialExternalId) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer count = luceneResourcesElementService.getCountResourceElementsFromResourceAndSourceByPartialExternalID(partialExternalId, source.getSourceID(), resource.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
 }

@@ -130,11 +130,6 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		return fullTextQuery.list();
 	}
 
-
-
-
-
-
 	@SuppressWarnings({ "unchecked" })
 	@Override
 	public List<T> findStartingUsingWildcardAndExactByAttributes(Map<String, String> startSentenceOnField, Map<String, String> eqSentenceOnField) {
@@ -182,6 +177,26 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		fullTextQuery.setMaxResults(paginationSize);
 		fullTextQuery.setFetchSize(paginationSize);
 		return fullTextQuery.list();
+	}
+
+	@Override
+	public Integer countExactByAttributes(Map<String, String> eqSentenceOnField) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindExactByAttribute(eqSentenceOnField);
+		return fullTextQuery.getResultSize();
+	}
+
+	@Override
+	public Integer countStartingUsingWildcardAndExactByAttributes(Map<String, String> startSentenceOnField,
+			Map<String, String> eqSentenceOnField) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindStartingUsingWildcardAndExactByAttributes(startSentenceOnField, eqSentenceOnField);
+		return fullTextQuery.getResultSize();
+	}
+
+	@Override
+	public Integer countMultiFieldSameAttributesAndExactByAttributes(
+			Map<String, Set<String>> attributeForMultipleFieldsMap, Map<String, String> eqSentenceOnField) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindMultiFieldSameAttributesAndExactByAttributes(attributeForMultipleFieldsMap, eqSentenceOnField);
+		return fullTextQuery.getResultSize();
 	}
 	
 }

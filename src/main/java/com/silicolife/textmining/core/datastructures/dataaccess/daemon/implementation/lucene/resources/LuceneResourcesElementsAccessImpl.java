@@ -463,5 +463,122 @@ public class LuceneResourcesElementsAccessImpl extends RestClientAccess{
 		}
 	}
 
+	public Integer getCountResourceElementsByPartialTerm(String partialTerm) throws DaemonException{
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Integer>> responseType = new ParameterizedTypeReference<DaemonResponse<Integer>>() {};
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("partialTerm",  partialTerm);
+		
+		ResponseEntity<DaemonResponse<Integer>> response = webClient.post("resourceElements/getCountResourceElementsByPartialTerm", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			return response.getBody().getContent();
+		}
+	}
+	
+	public Integer getCountResourceElementsFromResourceByPartialTerm(Long resourceId, String partialTerm) throws DaemonException{
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Integer>> responseType = new ParameterizedTypeReference<DaemonResponse<Integer>>() {};
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("resourceId", String.valueOf(resourceId));
+		uriVariables.add("partialTerm",  partialTerm);
+		
+		ResponseEntity<DaemonResponse<Integer>> response = webClient.post("resourceElements/getCountResourceElementsFromResourceByPartialTerm", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			return response.getBody().getContent();
+		}
+	}
 
+	
+	public Integer getCountResourceElementsByPartialSynonym(String partialSynonym) throws DaemonException{
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Integer>> responseType = new ParameterizedTypeReference<DaemonResponse<Integer>>() {};
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("partialSynonym",partialSynonym);
+		
+		ResponseEntity<DaemonResponse<Integer>> response = webClient.post("resourceElements/getCountResourceElementsByPartialSynonym", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			return response.getBody().getContent();
+		}
+	}
+	
+	public Integer getCountResourceElementsFromResourceByPartialSynonym(Long resourceId, String partialSynonym) throws DaemonException{
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Integer>> responseType = new ParameterizedTypeReference<DaemonResponse<Integer>>() {};
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("resourceId", String.valueOf(resourceId));
+		uriVariables.add("partialSynonym",partialSynonym);
+		
+		ResponseEntity<DaemonResponse<Integer>> response = webClient.post("resourceElements/getCountResourceElementsFromResourceByPartialSynonym", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			return response.getBody().getContent();
+		}
+	}
+	
+	public Integer getCountResourceElementsByPartialExternalID(String partialExternalId) throws DaemonException{
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Integer>> responseType = new ParameterizedTypeReference<DaemonResponse<Integer>>() {};
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("partialExternalId",partialExternalId);
+		
+		ResponseEntity<DaemonResponse<Integer>> response = webClient.post("resourceElements/getCountResourceElementsByPartialExternalID", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			return response.getBody().getContent();
+		}
+	}
+	
+	public Integer getCountResourceElementsFromSourceByPartialExternalID(Long sourceId, String partialExternalId) throws DaemonException{
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Integer>> responseType = new ParameterizedTypeReference<DaemonResponse<Integer>>() {};
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("sourceId", String.valueOf(sourceId));
+		uriVariables.add("partialExternalId",partialExternalId);
+		
+		ResponseEntity<DaemonResponse<Integer>> response = webClient.post("resourceElements/getCountResourceElementsFromSourceByPartialExternalID", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			return response.getBody().getContent();
+		}
+	}
+	
+	public Integer getCountResourceElementsFromResourceByPartialExternalID(Long resourceId, String partialExternalId) throws DaemonException{
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Integer>> responseType = new ParameterizedTypeReference<DaemonResponse<Integer>>() {};
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("resourceId", String.valueOf(resourceId));
+		uriVariables.add("partialExternalId",partialExternalId);
+		
+		ResponseEntity<DaemonResponse<Integer>> response = webClient.post("resourceElements/getCountResourceElementsFromResourceByPartialExternalID", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			return response.getBody().getContent();
+		}
+	}
+	
+	public Integer getCountResourceElementsFromResourceAndSourceByPartialExternalID(Long resourceId, Long sourceId, String partialExternalId) throws DaemonException{
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Integer>> responseType = new ParameterizedTypeReference<DaemonResponse<Integer>>() {};
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("resourceId", String.valueOf(resourceId));
+		uriVariables.add("sourceId", String.valueOf(sourceId));
+		uriVariables.add("partialExternalId",partialExternalId);
+		
+		ResponseEntity<DaemonResponse<Integer>> response = webClient.post("resourceElements/getCountResourceElementsFromResourceAndSourceByPartialExternalID", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			return response.getBody().getContent();
+		}
+	}
 }

@@ -1075,5 +1075,50 @@ public class DaemonAccess implements IDataAccess {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public Integer getCountResourceElementsByPartialTerm(String partialTerm) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getCountResourceElementsByPartialTerm(partialTerm);
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromResourceByPartialTerm(IResource<IResourceElement> resource,
+			String partialTerm) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getCountResourceElementsFromResourceByPartialTerm(resource.getId(), partialTerm);
+	}
+
+	@Override
+	public Integer getCountResourceElementsByPartialSynonym(String partialSynonym) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getCountResourceElementsByPartialSynonym(partialSynonym);
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromResourceByPartialSynonym(IResource<IResourceElement> resource,
+			String partialSynonym) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getCountResourceElementsFromResourceByPartialSynonym(resource.getId(), partialSynonym);
+	}
+
+	@Override
+	public Integer getCountResourceElementsByPartialExternalID(String partialExternalId) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getCountResourceElementsByPartialExternalID(partialExternalId);
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromSourceByPartialExternalID(ISource source, String partialExternalId)
+			throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getCountResourceElementsFromSourceByPartialExternalID(source.getSourceID(), partialExternalId);
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromResourceByPartialExternalID(IResource<IResourceElement> resource,
+			String partialExternalId) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getCountResourceElementsFromResourceByPartialExternalID(resource.getId(), partialExternalId);
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromResourceAndSourceByPartialExternalID(
+			IResource<IResourceElement> resource, ISource source, String partialExternalId) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getCountResourceElementsFromResourceAndSourceByPartialExternalID(resource.getId(), source.getSourceID(), partialExternalId);
+	}
 	
 }

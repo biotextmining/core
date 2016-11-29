@@ -1016,4 +1016,58 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public Integer getCountResourceElementsByPartialTerm(String partialTerm) throws ANoteException {
+
+		return null;
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromResourceByPartialTerm(IResource<IResourceElement> resource,
+			String partialTerm) throws ANoteException {
+
+		return null;
+	}
+
+	@Override
+	public Integer getCountResourceElementsByPartialSynonym(String partialSynonym) throws ANoteException {
+
+		return null;
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromResourceByPartialSynonym(IResource<IResourceElement> resource,
+			String partialSynonym) throws ANoteException {
+
+		return null;
+	}
+
+	@Override
+	public Integer getCountResourceElementsByPartialExternalID(String partialExternalId) throws ANoteException {
+
+		return null;
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromSourceByPartialExternalID(ISource source, String partialExternalId)
+			throws ANoteException {
+
+		return null;
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromResourceByPartialExternalID(IResource<IResourceElement> resource,
+			String partialExternalId) throws ANoteException {
+
+		return null;
+	}
+
+	@Override
+	public Integer getCountResourceElementsFromResourceAndSourceByPartialExternalID(
+			IResource<IResourceElement> resource, ISource source, String partialExternalId) throws ANoteException {
+
+		return null;
+	}
+
+
 }

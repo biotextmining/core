@@ -25,6 +25,10 @@ public interface IResourcesElementLuceneService {
 	
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialTermPaginated(String partialString, Long resourceId, int index, int paginationSize) throws ResourcesExceptions;
 	
+	public Integer getCountResourceElementsByPartialTerm(String partialString);
+	
+	public Integer getCountResourceElementsFromResourceByPartialTerm(String partialString, Long resourceId) throws ResourcesExceptions;
+	
 	// find by exact synonym
 	
 	public IResourceElementSet<IResourceElement> getResourceElementsByExactSynonym(String synonym);
@@ -42,6 +46,10 @@ public interface IResourcesElementLuceneService {
 	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonymPaginated(String partialString, int index, int paginationSize);
 	
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonymPaginated(String partialString, Long resourceId, int index, int paginationSize) throws ResourcesExceptions;
+	
+	public Integer getCountResourceElementsByPartialSynonym(String partialString);
+	
+	public Integer getCountResourceElementsFromResourceByPartialSynonym(String partialString, Long resourceId) throws ResourcesExceptions;
 	
 	// find by exact external id
 	
@@ -72,6 +80,14 @@ public interface IResourcesElementLuceneService {
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalIDPaginated(String partialString, Long resourceId, int index, int paginationSize) throws ResourcesExceptions;
 	
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceAndSourceByPartialExternalIDPaginated(String partialString, Long sourceId, Long resourceId, int index, int paginationSize) throws ResourcesExceptions;
+	
+	public Integer getCountResourceElementsByPartialExternalID(String partialString);
+	
+	public Integer getCountResourceElementsFromSourceByPartialExternalID(String partialString, Long sourceId) throws ResourcesExceptions;
+	
+	public Integer getCountResourceElementsFromResourceByPartialExternalID(String partialString, Long resourceId) throws ResourcesExceptions;
+	
+	public Integer getCountResourceElementsFromResourceAndSourceByPartialExternalID(String partialString, Long sourceId, Long resourceId) throws ResourcesExceptions;
 	
 	public void setUserLogged(UsersLogged userLogged);
 

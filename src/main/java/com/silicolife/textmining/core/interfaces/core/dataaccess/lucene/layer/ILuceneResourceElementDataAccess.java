@@ -265,6 +265,21 @@ public interface ILuceneResourceElementDataAccess {
 	 */
 	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalIdAndSourcePaginated(IResource<IResourceElement> resource, ISource source,String partialExternalId,  int index, int paginationSize) throws ANoteException;
 
+	public Integer getCountResourceElementsByPartialTerm(String partialTerm) throws ANoteException;
+	
+	public Integer getCountResourceElementsFromResourceByPartialTerm(IResource<IResourceElement> resource, String partialTerm) throws ANoteException;
+	
+	public Integer getCountResourceElementsByPartialSynonym(String partialSynonym) throws ANoteException;
+	
+	public Integer getCountResourceElementsFromResourceByPartialSynonym(IResource<IResourceElement> resource, String partialSynonym) throws ANoteException;
+	
+	public Integer getCountResourceElementsByPartialExternalID(String partialExternalId) throws ANoteException;
+	
+	public Integer getCountResourceElementsFromSourceByPartialExternalID(ISource source, String partialExternalId) throws ANoteException;
+	
+	public Integer getCountResourceElementsFromResourceByPartialExternalID(IResource<IResourceElement> resource, String partialExternalId) throws ANoteException;
+	
+	public Integer getCountResourceElementsFromResourceAndSourceByPartialExternalID(IResource<IResourceElement> resource, ISource source, String partialExternalId) throws ANoteException;
 	
 	
 }
