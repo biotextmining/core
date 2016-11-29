@@ -1077,7 +1077,7 @@ public class DaemonAccess implements IDataAccess {
 	}
 
 	@Override
-	public Integer getCountResourceElementsByPartialTerm(String partialTerm) throws ANoteException {
+	public Integer getResourceElementsCountByPartialTerm(String partialTerm) throws ANoteException {
 		return luceneResourcesElementsAccessImpl.getCountResourceElementsByPartialTerm(partialTerm);
 	}
 
@@ -1088,7 +1088,7 @@ public class DaemonAccess implements IDataAccess {
 	}
 
 	@Override
-	public Integer getCountResourceElementsByPartialSynonym(String partialSynonym) throws ANoteException {
+	public Integer getResourceElementsCountByPartialSynonym(String partialSynonym) throws ANoteException {
 		return luceneResourcesElementsAccessImpl.getCountResourceElementsByPartialSynonym(partialSynonym);
 	}
 

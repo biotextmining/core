@@ -2244,7 +2244,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public Integer getCountResourceElementsByPartialTerm(String partialTerm) throws ANoteException {
+	public Integer getResourceElementsCountByPartialTerm(String partialTerm) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			Integer count = luceneResourcesElementService.getCountResourceElementsByPartialTerm(partialTerm);
@@ -2271,7 +2271,7 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public Integer getCountResourceElementsByPartialSynonym(String partialSynonym) throws ANoteException {
+	public Integer getResourceElementsCountByPartialSynonym(String partialSynonym) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			Integer count = luceneResourcesElementService.getCountResourceElementsByPartialSynonym(partialSynonym);

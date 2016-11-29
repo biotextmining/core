@@ -1017,7 +1017,7 @@ public class DataAccessStart implements IDataAccess {
 	}
 
 	@Override
-	public Integer getCountResourceElementsByPartialTerm(String partialTerm) throws ANoteException {
+	public Integer getResourceElementsCountByPartialTerm(String partialTerm) throws ANoteException {
 
 		return null;
 	}
@@ -1030,7 +1030,7 @@ public class DataAccessStart implements IDataAccess {
 	}
 
 	@Override
-	public Integer getCountResourceElementsByPartialSynonym(String partialSynonym) throws ANoteException {
+	public Integer getResourceElementsCountByPartialSynonym(String partialSynonym) throws ANoteException {
 
 		return null;
 	}
