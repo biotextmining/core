@@ -46,10 +46,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 		List<ResourceElements> resourcesElements = resourcesLuceneManagerDao.getResourcesElememtsLuceneDao().findExactByAttributes(eqSentenceOnField);
 
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -72,10 +74,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				.findMultiFieldSameAttributesAndExactByAttributes(attributeForMultipleFieldsMap, eqSentenceOnField);
 		
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 		
 		return elementSet;
@@ -92,10 +96,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 		List<ResourceElements> resourcesElements = resourcesLuceneManagerDao.getResourcesElememtsLuceneDao().findExactByAttributes(eqSentenceOnField);
 
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -120,10 +126,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				.findMultiFieldSameAttributesAndExactByAttributes(attributeForMultipleFieldsMap, eqSentenceOnField);
 
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -143,10 +151,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 		List<ResourceElements> resourcesElements = resourcesLuceneManagerDao.getResourcesElememtsLuceneDao().findExactByAttributes(eqSentenceOnField);
 
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -168,10 +178,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 		List<ResourceElements> resourcesElements = resourcesLuceneManagerDao.getResourcesElememtsLuceneDao().findExactByAttributes(eqSentenceOnField);
 
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -198,12 +210,13 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				.findMultiFieldSameAttributesAndExactByAttributes(attributeForMultipleFieldsMap, eqSentenceOnField);
 
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
-
 		return elementSet;
 	}
 
@@ -231,10 +244,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				
 
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -256,10 +271,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				.findMultiFieldSameAttributesAndExactByAttributesPaginated(attributeForMultipleFieldsMap, eqSentenceOnField, index, paginationSize);
 		
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 		
 		return elementSet;
@@ -283,10 +300,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				.findMultiFieldSameAttributesAndExactByAttributesPaginated(attributeForMultipleFieldsMap, eqSentenceOnField, index, paginationSize);
 
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -313,10 +332,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				.findMultiFieldSameAttributesAndExactByAttributesPaginated(attributeForMultipleFieldsMap, eqSentenceOnField, index, paginationSize);
 
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -346,10 +367,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				
 
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -367,10 +390,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 		List<ResourceElements> resourcesElements = resourcesLuceneManagerDao.getResourcesElememtsLuceneDao().findExactByAttributes(eqSentenceOnField);
 
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -393,10 +418,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 		List<ResourceElements> resourcesElements = resourcesLuceneManagerDao.getResourcesElememtsLuceneDao().findExactByAttributes(eqSentenceOnField);
 
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -419,10 +446,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 		List<ResourceElements> resourcesElements = resourcesLuceneManagerDao.getResourcesElememtsLuceneDao().findExactByAttributes(eqSentenceOnField);
 
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -450,10 +479,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 		List<ResourceElements> resourcesElements = resourcesLuceneManagerDao.getResourcesElememtsLuceneDao().findExactByAttributes(eqSentenceOnField);
 
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -473,10 +504,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				.findStartingUsingWildcardAndExactByAttributes(startSentenceOnField, eqSentenceOnField);
 		
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-		
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -502,10 +535,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				.findStartingUsingWildcardAndExactByAttributes(startSentenceOnField, eqSentenceOnField);
 		
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-		
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -531,10 +566,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				.findStartingUsingWildcardAndExactByAttributes(startSentenceOnField, eqSentenceOnField);
 		
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-		
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -565,10 +602,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				.findStartingUsingWildcardAndExactByAttributes(startSentenceOnField, eqSentenceOnField);
 		
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-		
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -589,10 +628,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				.findStartingUsingWildcardAndExactByAttributesPaginated(startSentenceOnField, eqSentenceOnField, index, paginationSize);
 		
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-		
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -618,10 +659,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				.findStartingUsingWildcardAndExactByAttributesPaginated(startSentenceOnField, eqSentenceOnField, index, paginationSize);
 		
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-		
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -647,10 +690,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				.findStartingUsingWildcardAndExactByAttributesPaginated(startSentenceOnField, eqSentenceOnField, index, paginationSize);
 		
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-		
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
@@ -682,10 +727,12 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				.findStartingUsingWildcardAndExactByAttributesPaginated(startSentenceOnField, eqSentenceOnField, index, paginationSize);
 		
 		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
-		
+		int priority = 0;
 		for (ResourceElements resourceElement : resourcesElements) {
 			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
 			elementSet.addElementResource(resourceElement_);
+			priority++;
 		}
 
 		return elementSet;
