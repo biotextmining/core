@@ -12,15 +12,21 @@ public interface IGenericLuceneDao<T> {
 	
 	public List<T> findMultiFieldSameAttributesAndExactByAttributes(Map<String, Set<String>> attributeForMultipleFieldsMap, Map<String, String> eqSentenceOnField);
 	
+	public List<T> findSetOfMultiFieldSameAttributesAndSetOfExactByAttributes(Set<Map<String, Set<String>>> setOfAttributeForMultipleFieldsMap, Set<Map<String, String>> setOfEqSentenceOnField);
+	
 	public List<T> findExactByAttributesPaginated(Map<String, String> eqSentenceOnField, int index, int paginationSize);
 	
 	public List<T> findStartingUsingWildcardAndExactByAttributesPaginated(Map<String, String> startSentenceOnField, Map<String, String> eqSentenceOnField, int index, int paginationSize);
 	
 	public List<T> findMultiFieldSameAttributesAndExactByAttributesPaginated(Map<String, Set<String>> attributeForMultipleFieldsMap, Map<String, String> eqSentenceOnField, int index, int paginationSize);
 	
+	public List<T> findSetOfMultiFieldSameAttributesAndSetOfExactByAttributesPaginated(Set<Map<String, Set<String>>> setAttributeForMultipleFieldsMaps, Set<Map<String, String>> setEqSentenceOnFields, int index, int paginationSize);
+	
 	public Integer countExactByAttributes(Map<String, String> eqSentenceOnField);
 	
 	public Integer countStartingUsingWildcardAndExactByAttributes(Map<String, String> startSentenceOnField, Map<String, String> eqSentenceOnField);
 	
 	public Integer countMultiFieldSameAttributesAndExactByAttributes(Map<String, Set<String>> attributeForMultipleFieldsMap, Map<String, String> eqSentenceOnField);
+	
+	public Integer countSetOfMultiFieldSameAttributesAndSetOfExactByAttributes(Set<Map<String, Set<String>>> setOfAttributeForMultipleFieldsMap, Set<Map<String, String>> setOfEqSentenceOnField);
 }

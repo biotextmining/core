@@ -1069,5 +1069,18 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermOrPartialSynonymPaginated(
+			String partialString, int index, int paginationSize) throws ANoteException {
+
+		return null;
+	}
+
+	@Override
+	public Integer getResourceElementsCountByPartialTermOrPartialSynonym(String partialString) throws ANoteException {
+
+		return null;
+	}
+
 
 }

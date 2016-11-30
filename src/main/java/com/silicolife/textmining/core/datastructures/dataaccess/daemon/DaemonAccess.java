@@ -1120,5 +1120,16 @@ public class DaemonAccess implements IDataAccess {
 			IResource<IResourceElement> resource, ISource source, String partialExternalId) throws ANoteException {
 		return luceneResourcesElementsAccessImpl.getCountResourceElementsFromResourceAndSourceByPartialExternalID(resource.getId(), source.getSourceID(), partialExternalId);
 	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermOrPartialSynonymPaginated(
+			String partialString, int index, int paginationSize) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsByPartialTermOrPartialSynonymPaginated(partialString, index, paginationSize);
+	}
+
+	@Override
+	public Integer getResourceElementsCountByPartialTermOrPartialSynonym(String partialString) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsCountByPartialTermOrPartialSynonym(partialString);
+	}
 	
 }

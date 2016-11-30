@@ -901,4 +901,80 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 				.countStartingUsingWildcardAndExactByAttributes(startSentenceOnField, eqSentenceOnField);
 	}
 
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermOrPartialSynonymPaginated(
+			String partialString, int index, int paginationSize) {
+
+		Set<Map<String, Set<String>>> setOfAttributeForMultipleFieldsMap = new HashSet<>();
+		Set<Map<String, String>> setOfEqSentenceOnField = new HashSet<>();
+		
+		Set<String> fields = new HashSet<>();
+		fields.add("keywordEdgeNGram_res_element");
+		fields.add("tokenEdgeNGram_res_element");
+		Map<String, Set<String>> attributeForMultipleFieldsMap = new HashMap<>();
+		attributeForMultipleFieldsMap.put(partialString, fields);
+		setOfAttributeForMultipleFieldsMap.add(attributeForMultipleFieldsMap);
+		
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		eqSentenceOnField.put("resActive", "true");
+		setOfEqSentenceOnField.add(eqSentenceOnField);
+		
+		fields = new HashSet<>();
+		fields.add("synonymses.id.keywordEdgeNGram_syn_synonym");
+		fields.add("synonymses.id.tokenEdgeNGram_syn_synonym");
+		attributeForMultipleFieldsMap = new HashMap<>();
+		attributeForMultipleFieldsMap.put(partialString, fields);
+		
+		eqSentenceOnField = new HashMap<>();
+		eqSentenceOnField.put("synonymses.id.synActive", "true");
+		eqSentenceOnField.put("resActive", "true");
+		setOfEqSentenceOnField.add(eqSentenceOnField);
+		
+		List<ResourceElements> resourcesElements = resourcesLuceneManagerDao.getResourcesElememtsLuceneDao()
+		.findSetOfMultiFieldSameAttributesAndSetOfExactByAttributesPaginated(setOfAttributeForMultipleFieldsMap, setOfEqSentenceOnField, index, paginationSize);
+		
+		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
+		int priority = 0;
+		for (ResourceElements resourceElement : resourcesElements) {
+			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
+			elementSet.addElementResource(resourceElement_);
+			priority++;
+		}
+
+		return elementSet;
+	}
+
+	@Override
+	public Integer getResourceElementsCountByPartialTermOrPartialSynonym(String partialString) {
+
+		Set<Map<String, Set<String>>> setOfAttributeForMultipleFieldsMap = new HashSet<>();
+		Set<Map<String, String>> setOfEqSentenceOnField = new HashSet<>();
+		
+		Set<String> fields = new HashSet<>();
+		fields.add("keywordEdgeNGram_res_element");
+		fields.add("tokenEdgeNGram_res_element");
+		Map<String, Set<String>> attributeForMultipleFieldsMap = new HashMap<>();
+		attributeForMultipleFieldsMap.put(partialString, fields);
+		setOfAttributeForMultipleFieldsMap.add(attributeForMultipleFieldsMap);
+		
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		eqSentenceOnField.put("resActive", "true");
+		setOfEqSentenceOnField.add(eqSentenceOnField);
+		
+		fields = new HashSet<>();
+		fields.add("synonymses.id.keywordEdgeNGram_syn_synonym");
+		fields.add("synonymses.id.tokenEdgeNGram_syn_synonym");
+		attributeForMultipleFieldsMap = new HashMap<>();
+		attributeForMultipleFieldsMap.put(partialString, fields);
+		
+		eqSentenceOnField = new HashMap<>();
+		eqSentenceOnField.put("synonymses.id.synActive", "true");
+		eqSentenceOnField.put("resActive", "true");
+		setOfEqSentenceOnField.add(eqSentenceOnField);
+		
+		return resourcesLuceneManagerDao.getResourcesElememtsLuceneDao()
+				.countSetOfMultiFieldSameAttributesAndSetOfExactByAttributes(setOfAttributeForMultipleFieldsMap, setOfEqSentenceOnField);
+	}
+
 }

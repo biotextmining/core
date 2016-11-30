@@ -2352,4 +2352,32 @@ public class DatabaseAccess implements IDataAccess {
 		}
 	}
 
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermOrPartialSynonymPaginated(
+			String partialString, int index, int paginationSize) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IResourceElementSet<IResourceElement> elemnts = luceneResourcesElementService
+					.getResourceElementsByPartialTermOrPartialSynonymPaginated(partialString, index, paginationSize);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return elemnts;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Integer getResourceElementsCountByPartialTermOrPartialSynonym(String partialString) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer count = luceneResourcesElementService.getResourceElementsCountByPartialTermOrPartialSynonym(partialString);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
 }

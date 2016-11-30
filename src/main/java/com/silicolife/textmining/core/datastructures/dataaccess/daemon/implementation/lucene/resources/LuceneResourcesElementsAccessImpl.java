@@ -581,4 +581,38 @@ public class LuceneResourcesElementsAccessImpl extends RestClientAccess{
 			return response.getBody().getContent();
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermOrPartialSynonymPaginated(
+			String partialString, int index, int paginationSize) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >> responseType = new ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >>() {};
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("partialString",  partialString);
+		uriVariables.add("index",  String.valueOf(index));
+		uriVariables.add("paginationSize", String.valueOf(paginationSize));
+
+		ResponseEntity<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl>>> response = webClient.post("resourceElements/getResourceElementsByPartialTermOrPartialSynonymPaginated", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+
+			IResourceElementSet<? extends IResourceElement> resourceElements = response.getBody().getContent();
+			return (IResourceElementSet<IResourceElement>) resourceElements;
+		}
+	}
+
+	public Integer getResourceElementsCountByPartialTermOrPartialSynonym(String partialString) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Integer>> responseType = new ParameterizedTypeReference<DaemonResponse<Integer>>() {};
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("partialString", partialString);
+		
+		ResponseEntity<DaemonResponse<Integer>> response = webClient.post("resourceElements/getResourceElementsCountByPartialTermOrPartialSynonym", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			return response.getBody().getContent();
+		}
+	}
 }

@@ -299,5 +299,8 @@ public interface ILuceneResourceElementDataAccess {
 	
 	public Integer getCountResourceElementsFromResourceAndSourceByPartialExternalID(IResource<IResourceElement> resource, ISource source, String partialExternalId) throws ANoteException;
 	
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermOrPartialSynonymPaginated(String partialString, int index, int paginationSize) throws ANoteException;
+	
+	public Integer getResourceElementsCountByPartialTermOrPartialSynonym(String partialString) throws ANoteException;
 	
 }

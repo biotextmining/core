@@ -90,5 +90,9 @@ public interface IResourcesElementLuceneService {
 	public Integer getCountResourceElementsFromResourceAndSourceByPartialExternalID(String partialString, Long sourceId, Long resourceId) throws ResourcesExceptions;
 	
 	public void setUserLogged(UsersLogged userLogged);
+	
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermOrPartialSynonymPaginated(String partialString, int index, int paginationSize);
+
+	public Integer getResourceElementsCountByPartialTermOrPartialSynonym(String partialString);
 
 }

@@ -1,5 +1,6 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -144,6 +145,44 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		FullTextQuery fullTextQuery = createFullTextQueryForfindMultiFieldSameAttributesAndExactByAttributes(attributeForMultipleFieldsMap, eqSentenceOnField);
 		return fullTextQuery.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> findSetOfMultiFieldSameAttributesAndSetOfExactByAttributes(
+			Set<Map<String, Set<String>>> setAttributeForMultipleFieldsMaps, Set<Map<String, String>> setEqSentenceOnFields) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindSetOfMultiFieldSameAttributesAndSetOfExactByAttributes(setAttributeForMultipleFieldsMaps, setEqSentenceOnFields);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> findSetOfMultiFieldSameAttributesAndSetOfExactByAttributesPaginated(Set<Map<String, Set<String>>> setAttributeForMultipleFieldsMaps, 
+			Set<Map<String, String>> setEqSentenceOnFields, int index, int paginationSize){
+		FullTextQuery fullTextQuery = createFullTextQueryForfindSetOfMultiFieldSameAttributesAndSetOfExactByAttributes(setAttributeForMultipleFieldsMaps, setEqSentenceOnFields);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+
+	@SuppressWarnings("rawtypes")
+	private FullTextQuery createFullTextQueryForfindSetOfMultiFieldSameAttributesAndSetOfExactByAttributes(
+			Set<Map<String, Set<String>>> setAttributeForMultipleFieldsMaps,
+			Set<Map<String, String>> setEqSentenceOnFields) {
+		FullTextSession fullTextSession = getFullTextSession();
+		QueryBuilder qb = getQueryBuilder(fullTextSession);
+		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
+		Iterator<Map<String, Set<String>>> itmulti = setAttributeForMultipleFieldsMaps.iterator();
+		Iterator<Map<String, String>> iteq = setEqSentenceOnFields.iterator();
+		while(itmulti.hasNext() && iteq.hasNext()){
+			BooleanJunction<BooleanJunction> subCombinedQuery = qb.bool();
+			Map<String, Set<String>> attributeForMultipleFieldsMap = itmulti.next();
+			Map<String, String> eqSentenceOnField = iteq.next();
+			subCombinedQuery = addMustPhraseWithAttributesOnFields(eqSentenceOnField, qb, subCombinedQuery);
+			subCombinedQuery = addMustPhraseWithMultiFieldOnAttribute(attributeForMultipleFieldsMap, qb, subCombinedQuery);
+			combinedQuery.should(subCombinedQuery.createQuery());
+		}
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
+		return fullTextQuery;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -196,6 +235,14 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	public Integer countMultiFieldSameAttributesAndExactByAttributes(
 			Map<String, Set<String>> attributeForMultipleFieldsMap, Map<String, String> eqSentenceOnField) {
 		FullTextQuery fullTextQuery = createFullTextQueryForfindMultiFieldSameAttributesAndExactByAttributes(attributeForMultipleFieldsMap, eqSentenceOnField);
+		return fullTextQuery.getResultSize();
+	}
+
+	@Override
+	public Integer countSetOfMultiFieldSameAttributesAndSetOfExactByAttributes(
+			Set<Map<String, Set<String>>> setOfAttributeForMultipleFieldsMap,
+			Set<Map<String, String>> setOfEqSentenceOnField) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindSetOfMultiFieldSameAttributesAndSetOfExactByAttributes(setOfAttributeForMultipleFieldsMap, setOfEqSentenceOnField);
 		return fullTextQuery.getResultSize();
 	}
 	
