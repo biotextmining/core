@@ -66,6 +66,7 @@ import com.silicolife.textmining.core.interfaces.process.IR.IQuery;
 import com.silicolife.textmining.core.interfaces.resource.IResource;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElementSet;
+import com.silicolife.textmining.core.interfaces.resource.IResourceElementsFilter;
 import com.silicolife.textmining.core.interfaces.resource.content.IResourceContent;
 import com.silicolife.textmining.core.interfaces.resource.ontologies.IResourceElementsRelation;
 
@@ -930,9 +931,9 @@ public class DaemonAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactTerm(
-			IResource<IResourceElement> resource, String term) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getResourceElementsFromResourceByExactTerm(resource.getId(), term);
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByExactTerm(
+			IResourceElementsFilter filter, String term) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsFilteredByExactTerm(filter, term);
 	}
 
 	@Override
@@ -947,16 +948,16 @@ public class DaemonAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialTerm(
-			IResource<IResourceElement> resource, String partialTerm) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getResourceElementsFromResourceByPartialTerm(resource.getId(), partialTerm);
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialTerm(
+			IResourceElementsFilter filter, String partialTerm) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsFilteredByPartialTerm(filter, partialTerm);
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialTermPaginated(
-			IResource<IResourceElement> resource, String partialTerm, int index, int paginationSize)
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialTermPaginated(
+			IResourceElementsFilter filter, String partialTerm, int index, int paginationSize)
 			throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getResourceElementsFromResourceByPartialTermPaginated(resource.getId(), partialTerm, index, paginationSize);
+		return luceneResourcesElementsAccessImpl.getResourceElementsFilteredByPartialTermPaginated(filter, partialTerm, index, paginationSize);
 	}
 
 	@Override
@@ -966,9 +967,9 @@ public class DaemonAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactSynonym(
-			IResource<IResourceElement> resource, String synonym) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getResourceElementsFromResourceByExactSynonym(resource.getId(), synonym);
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByExactSynonym(
+			IResourceElementsFilter filter, String synonym) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsFilteredByExactSynonym(filter, synonym);
 	}
 
 	@Override
@@ -984,16 +985,16 @@ public class DaemonAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonym(
-			IResource<IResourceElement> resource, String partialSynonym) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getResourceElementsFromResourceByPartialSynonym(resource.getId(), partialSynonym);
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialSynonym(
+			IResourceElementsFilter filter, String partialSynonym) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsFilteredByPartialSynonym(filter, partialSynonym);
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonymPaginated(
-			String partialSynonym, IResource<IResourceElement> resource, int index, int paginationSize)
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialSynonymPaginated(IResourceElementsFilter filter,
+			String partialSynonym, int index, int paginationSize)
 			throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getResourceElementsFromResourceByPartialSynonymPaginated(partialSynonym, resource.getId(), index, paginationSize);
+		return luceneResourcesElementsAccessImpl.getResourceElementsFilteredByPartialSynonymPaginated(filter, partialSynonym, index, paginationSize);
 	}
 
 	@Override
@@ -1003,21 +1004,8 @@ public class DaemonAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactExternalId(String externalId,
-			IResource<IResourceElement> resource) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getResourceElementsFromResourceByExactExternalID(externalId, resource.getId());
-	}
-
-	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsByExactExternalIdFromSource(String externalId,
-			ISource source) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getResourceElementsFromSourceByExactExternalID(externalId, source.getSourceID());
-	}
-
-	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactExternalIdAndSource(
-			IResource<IResourceElement> resource, ISource source, String externalId) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getResourceElementsFromResourceAndSourceByExactExternalID(resource.getId(), source.getSourceID(),  externalId);
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByExactExternalId(IResourceElementsFilter filter, String externalId) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsFilteredByExactExternalID(filter, externalId);
 	}
 
 	@Override
@@ -1027,21 +1015,9 @@ public class DaemonAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalId(
-			IResource<IResourceElement> resource, String partialExternalId) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getResourceElementsFromResourceByPartialExternalID(resource.getId(), partialExternalId);
-	}
-
-	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsFromSourceByPartialExternalId(
-			String partialExternalId, ISource source) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getResourceElementsFromSourceByPartialExternalID(partialExternalId, source.getSourceID());
-	}
-
-	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalIdAndSource(
-			IResource<IResourceElement> resource, ISource source, String partialExternalId) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getResourceElementsFromResourceAndSourceByPartialExternalID(resource.getId(), source.getSourceID(), partialExternalId);
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialExternalId(
+			IResourceElementsFilter filter, String partialExternalId) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsFilteredByPartialExternalID(filter, partialExternalId);
 	}
 
 	@Override
@@ -1051,23 +1027,10 @@ public class DaemonAccess implements IDataAccess {
 	}
 
 	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalIdPaginated(
-			IResource<IResourceElement> resource, String partialExternalId, int index, int paginationSize)
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialExternalIdPaginated(
+			IResourceElementsFilter filter, String partialExternalId, int index, int paginationSize)
 			throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getResourceElementsFromResourceByPartialExternalIDPaginated(resource.getId(), partialExternalId, index, paginationSize);
-	}
-
-	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdFromSourcePaginated(
-			ISource source, String partialExternalId, int index, int paginationSize) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getResourceElementsFromSourceByPartialExternalIDPaginated(source.getSourceID(), partialExternalId,  index, paginationSize);
-	}
-
-	@Override
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalIdAndSourcePaginated(
-			IResource<IResourceElement> resource, ISource source, String partialExternalId, int index,
-			int paginationSize) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getResourceElementsFromResourceAndSourceByPartialExternalIDPaginated(resource.getId(), source.getSourceID(), partialExternalId, index, paginationSize);
+		return luceneResourcesElementsAccessImpl.getResourceElementsFilteredByPartialExternalIDPaginated(filter, partialExternalId, index, paginationSize);
 	}
 
 	@Override
@@ -1078,47 +1041,35 @@ public class DaemonAccess implements IDataAccess {
 
 	@Override
 	public Integer getResourceElementsCountByPartialTerm(String partialTerm) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getCountResourceElementsByPartialTerm(partialTerm);
+		return luceneResourcesElementsAccessImpl.getResourceElementsCountByPartialTerm(partialTerm);
 	}
 
 	@Override
-	public Integer getCountResourceElementsFromResourceByPartialTerm(IResource<IResourceElement> resource,
+	public Integer getResourceElementsFilteredCountByPartialTerm(IResourceElementsFilter filter,
 			String partialTerm) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getCountResourceElementsFromResourceByPartialTerm(resource.getId(), partialTerm);
+		return luceneResourcesElementsAccessImpl.getResourceElementsFilteredCountByPartialTerm(filter, partialTerm);
 	}
 
 	@Override
 	public Integer getResourceElementsCountByPartialSynonym(String partialSynonym) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getCountResourceElementsByPartialSynonym(partialSynonym);
+		return luceneResourcesElementsAccessImpl.getResourceElementsCountByPartialSynonym(partialSynonym);
 	}
 
 	@Override
-	public Integer getCountResourceElementsFromResourceByPartialSynonym(IResource<IResourceElement> resource,
+	public Integer getResourceElementsFilteredCountByPartialSynonym(IResourceElementsFilter filter,
 			String partialSynonym) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getCountResourceElementsFromResourceByPartialSynonym(resource.getId(), partialSynonym);
+		return luceneResourcesElementsAccessImpl.getResourceElementsFilteredCountByPartialSynonym(filter, partialSynonym);
 	}
 
 	@Override
-	public Integer getCountResourceElementsByPartialExternalID(String partialExternalId) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getCountResourceElementsByPartialExternalID(partialExternalId);
+	public Integer getResourceElementsCountByPartialExternalID(String partialExternalId) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsCountByPartialExternalID(partialExternalId);
 	}
 
 	@Override
-	public Integer getCountResourceElementsFromSourceByPartialExternalID(ISource source, String partialExternalId)
-			throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getCountResourceElementsFromSourceByPartialExternalID(source.getSourceID(), partialExternalId);
-	}
-
-	@Override
-	public Integer getCountResourceElementsFromResourceByPartialExternalID(IResource<IResourceElement> resource,
-			String partialExternalId) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getCountResourceElementsFromResourceByPartialExternalID(resource.getId(), partialExternalId);
-	}
-
-	@Override
-	public Integer getCountResourceElementsFromResourceAndSourceByPartialExternalID(
-			IResource<IResourceElement> resource, ISource source, String partialExternalId) throws ANoteException {
-		return luceneResourcesElementsAccessImpl.getCountResourceElementsFromResourceAndSourceByPartialExternalID(resource.getId(), source.getSourceID(), partialExternalId);
+	public Integer getResourceElementsFilteredCountByPartialExternalID(
+			IResourceElementsFilter filter, String partialExternalId) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsFilteredCountByPartialExternalID(filter, partialExternalId);
 	}
 
 	@Override

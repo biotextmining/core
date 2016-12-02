@@ -1,10 +1,9 @@
 package com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.layer;
 
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
-import com.silicolife.textmining.core.interfaces.core.general.source.ISource;
-import com.silicolife.textmining.core.interfaces.resource.IResource;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElementSet;
+import com.silicolife.textmining.core.interfaces.resource.IResourceElementsFilter;
 
 
 /**
@@ -32,7 +31,7 @@ public interface ILuceneResourceElementDataAccess {
 	 * @return
 	 * @throws ANoteException
 	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactTerm(IResource<IResourceElement> resource,String term) throws ANoteException;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByExactTerm(IResourceElementsFilter filter, String term) throws ANoteException;
 	
 	
 	
@@ -65,7 +64,7 @@ public interface ILuceneResourceElementDataAccess {
 	 * @return
 	 * @throws ANoteException
 	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialTerm(IResource<IResourceElement> resource,String partialTerm) throws ANoteException;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialTerm(IResourceElementsFilter filter, String partialTerm) throws ANoteException;
 
 	/**
 	 * Get Resource Element from @param resource with exact term match in primary term sliced by pages
@@ -77,7 +76,7 @@ public interface ILuceneResourceElementDataAccess {
 	 * @return
 	 * @throws ANoteException
 	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialTermPaginated(IResource<IResourceElement> resource,String partialTerm,  int index, int paginationSize) throws ANoteException;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialTermPaginated(IResourceElementsFilter filter, String partialTerm,  int index, int paginationSize) throws ANoteException;
 
 	/**
 	 * Get Resource Element from all Resource with exact synonym match in primary term
@@ -96,7 +95,7 @@ public interface ILuceneResourceElementDataAccess {
 	 * @return
 	 * @throws ANoteException
 	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactSynonym(IResource<IResourceElement> resource,String synonym) throws ANoteException;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByExactSynonym(IResourceElementsFilter filter, String synonym) throws ANoteException;
 	
 	/**
 	 * Get Resource Element from all Resource with partial or exact synonym match in primary term
@@ -126,7 +125,7 @@ public interface ILuceneResourceElementDataAccess {
 	 * @return
 	 * @throws ANoteException
 	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonym(IResource<IResourceElement> resource,String partialSynonym) throws ANoteException;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialSynonym(IResourceElementsFilter filter, String partialSynonym) throws ANoteException;
 
 	/**
 	 * Get Resource Element from @param resource with partial or exact synonym match in primary term sliced by pages
@@ -138,7 +137,7 @@ public interface ILuceneResourceElementDataAccess {
 	 * @return
 	 * @throws ANoteException
 	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonymPaginated(String partialSynonym, IResource<IResourceElement> resource, int index, int paginationSize) throws ANoteException;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialSynonymPaginated(IResourceElementsFilter filter, String partialSynonym, int index, int paginationSize) throws ANoteException;
 	
 	/**
 	 * Get Resource Element with exact external identifier in any source
@@ -157,29 +156,7 @@ public interface ILuceneResourceElementDataAccess {
 	 * @return
 	 * @throws ANoteException
 	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactExternalId(String externalId, IResource<IResourceElement> resource) throws ANoteException;
-	
-	/**
-	 * Get Resource Element from all resources with exact external identifier in @param source
-	 * 
-	 * @param externalId
-	 * @param source
-	 * @return
-	 * @throws ANoteException
-	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsByExactExternalIdFromSource(String externalId, ISource source) throws ANoteException;
-	
-	
-	/**
-	 * Get Resource Element from @param resource with exact external identifier in @param source
-	 * 
-	 * @param externalId
-	 * @param resource
-	 * @param source
-	 * @return
-	 * @throws ANoteException
-	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactExternalIdAndSource(IResource<IResourceElement> resource, ISource source,String externalId) throws ANoteException;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByExactExternalId(IResourceElementsFilter filter, String externalId) throws ANoteException;
 	
 	/**
 	 * Get Resource Element with exact or partial external identifier in any source
@@ -198,29 +175,8 @@ public interface ILuceneResourceElementDataAccess {
 	 * @return
 	 * @throws ANoteException
 	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalId( IResource<IResourceElement> resource,String partialExternalId) throws ANoteException;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialExternalId(IResourceElementsFilter filter, String partialExternalId) throws ANoteException;
 	
-	/**
-	 * Get Resource Element from @param resource with exact or similar external identifier in @param source
-	 * 
-	 * @param partialExternalId
-	 * @param source
-	 * @return
-	 * @throws ANoteException
-	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsFromSourceByPartialExternalId(String partialExternalId, ISource source) throws ANoteException;
-	
-	/**
-	 * Get Resource Element from @param resource with exact external identifier in @param source
-	 * 
-	 * @param externalId
-	 * @param resource
-	 * @param source
-	 * @return
-	 * @throws ANoteException
-	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalIdAndSource(IResource<IResourceElement> resource, ISource source,String partialExternalId) throws ANoteException;
-
 	/**
 	 * Get Resource Element with exact or partial external identifier in any source sliced by pages
 	 * 
@@ -238,33 +194,8 @@ public interface ILuceneResourceElementDataAccess {
 	 * @return
 	 * @throws ANoteException
 	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalIdPaginated(IResource<IResourceElement> resource,String partialExternalId , int index, int paginationSize) throws ANoteException;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialExternalIdPaginated(IResourceElementsFilter filter, String partialExternalId , int index, int paginationSize) throws ANoteException;
 	
-	/**
-	 * Get Resource Element from @param resource with exact or similar external identifier in @param source sliced by pages
-	 * 
-	 * @param partialExternalId
-	 * @param source
-	 * @param index
-	 * @param paginationSize
-	 * @return
-	 * @throws ANoteException
-	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIdFromSourcePaginated(ISource source,String partialExternalId,  int index, int paginationSize) throws ANoteException;
-	
-	/**
-	 * Get Resource Element from @param resource with exact external identifier in @param source sliced by pages
-	 * 
-	 * @param partialExternalId
-	 * @param resource
-	 * @param source
-	 * @param index
-	 * @param paginationSize
-	 * @return
-	 * @throws ANoteException
-	 */
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalIdAndSourcePaginated(IResource<IResourceElement> resource, ISource source,String partialExternalId,  int index, int paginationSize) throws ANoteException;
-
 	/**
 	 * Get Number of results for the partial search in Resource Element
 	 * 
@@ -282,23 +213,15 @@ public interface ILuceneResourceElementDataAccess {
 	 * @throws ANoteException
 	 */
 	public Integer getResourceElementsCountByPartialSynonym(String partialSynonym) throws ANoteException;
+	
+	public Integer getResourceElementsFilteredCountByPartialTerm(IResourceElementsFilter filter, String partialTerm) throws ANoteException;
+	
+	public Integer getResourceElementsFilteredCountByPartialSynonym(IResourceElementsFilter filter, String partialSynonym) throws ANoteException;
+	
+	public Integer getResourceElementsCountByPartialExternalID(String partialExternalId) throws ANoteException;
+	
+	public Integer getResourceElementsFilteredCountByPartialExternalID(IResourceElementsFilter filter, String partialExternalId) throws ANoteException;
 
-	
-	
-	
-	public Integer getCountResourceElementsFromResourceByPartialTerm(IResource<IResourceElement> resource, String partialTerm) throws ANoteException;
-	
-	
-	public Integer getCountResourceElementsFromResourceByPartialSynonym(IResource<IResourceElement> resource, String partialSynonym) throws ANoteException;
-	
-	public Integer getCountResourceElementsByPartialExternalID(String partialExternalId) throws ANoteException;
-	
-	public Integer getCountResourceElementsFromSourceByPartialExternalID(ISource source, String partialExternalId) throws ANoteException;
-	
-	public Integer getCountResourceElementsFromResourceByPartialExternalID(IResource<IResourceElement> resource, String partialExternalId) throws ANoteException;
-	
-	public Integer getCountResourceElementsFromResourceAndSourceByPartialExternalID(IResource<IResourceElement> resource, ISource source, String partialExternalId) throws ANoteException;
-	
 	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermOrPartialSynonymPaginated(String partialString, int index, int paginationSize) throws ANoteException;
 	
 	public Integer getResourceElementsCountByPartialTermOrPartialSynonym(String partialString) throws ANoteException;

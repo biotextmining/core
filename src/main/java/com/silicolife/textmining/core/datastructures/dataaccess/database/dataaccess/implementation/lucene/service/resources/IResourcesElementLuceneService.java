@@ -4,6 +4,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElementSet;
+import com.silicolife.textmining.core.interfaces.resource.IResourceElementsFilter;
 
 public interface IResourcesElementLuceneService {
 	
@@ -11,83 +12,67 @@ public interface IResourcesElementLuceneService {
 	
 	public IResourceElementSet<IResourceElement> getResourceElementsByExactTerm(String term);
 	
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactTerm(String term, Long resourceId) throws ResourcesExceptions;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByExactTerm(IResourceElementsFilter filter, String term) throws ResourcesExceptions;
 	
 	// find by partial string in term
 	
 	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTerm(String partialString);
 	
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialTerm(String partialString, Long resourceId) throws ResourcesExceptions;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialTerm(IResourceElementsFilter filter, String partialString) throws ResourcesExceptions;
 	
 	// find by partial string in term paginated
 	
 	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermPaginated(String partialString, int index, int paginationSize);
 	
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialTermPaginated(String partialString, Long resourceId, int index, int paginationSize) throws ResourcesExceptions;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialTermPaginated(IResourceElementsFilter filter, String partialString, int index, int paginationSize) throws ResourcesExceptions;
 	
-	public Integer getCountResourceElementsByPartialTerm(String partialString);
+	public Integer getResourceElementsCountByPartialTerm(String partialString);
 	
-	public Integer getCountResourceElementsFromResourceByPartialTerm(String partialString, Long resourceId) throws ResourcesExceptions;
+	public Integer getResourceElementsFilteredCountByPartialTerm(IResourceElementsFilter filter, String partialString) throws ResourcesExceptions;
 	
 	// find by exact synonym
 	
 	public IResourceElementSet<IResourceElement> getResourceElementsByExactSynonym(String synonym);
 	
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactSynonym(String term, Long resourceId) throws ResourcesExceptions;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByExactSynonym(IResourceElementsFilter filter, String term) throws ResourcesExceptions;
 	
 	// find by partial string in synonym
 
 	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonym(String partialString);
 	
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonym(String partialString, Long resourceId) throws ResourcesExceptions;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialSynonym(IResourceElementsFilter filter, String partialString) throws ResourcesExceptions;
 	
 	// find by partial string in synonym paginated
 	
 	public IResourceElementSet<IResourceElement> getResourceElementsByPartialSynonymPaginated(String partialString, int index, int paginationSize);
 	
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialSynonymPaginated(String partialString, Long resourceId, int index, int paginationSize) throws ResourcesExceptions;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialSynonymPaginated(IResourceElementsFilter filter, String partialString, int index, int paginationSize) throws ResourcesExceptions;
 	
-	public Integer getCountResourceElementsByPartialSynonym(String partialString);
+	public Integer getResourceElementsCountByPartialSynonym(String partialString);
 	
-	public Integer getCountResourceElementsFromResourceByPartialSynonym(String partialString, Long resourceId) throws ResourcesExceptions;
+	public Integer getResourceElementsFilteredCountByPartialSynonym(IResourceElementsFilter filter, String partialString) throws ResourcesExceptions;
 	
 	// find by exact external id
 	
 	public IResourceElementSet<IResourceElement> getResourceElementsByExactExternalID(String externalId);
-	
-	public IResourceElementSet<IResourceElement> getResourceElementsFromSourceByExactExternalID(String externalId, Long sourceId) throws ResourcesExceptions;
-	
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByExactExternalID(String externalId, Long resourceId) throws ResourcesExceptions;
-	
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceAndSourceByExactExternalID(String externalId, Long sourceId, Long resourceId) throws ResourcesExceptions;
+
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByExactExternalID(IResourceElementsFilter filter, String externalId) throws ResourcesExceptions;
 	
 	// find by partial string in external id
 	
 	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalID(String partialString);
 	
-	public IResourceElementSet<IResourceElement> getResourceElementsFromSourceByPartialExternalID(String partialString, Long sourceId) throws ResourcesExceptions;
-	
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalID(String partialString, Long resourceId) throws ResourcesExceptions;
-	
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceAndSourceByPartialExternalID(String partialString, Long sourceId, Long resourceId) throws ResourcesExceptions;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialExternalID(IResourceElementsFilter filter, String partialString) throws ResourcesExceptions;
 	
 	// find by partial string in external id paginated
 	
 	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIDPaginated(String partialString, int index, int paginationSize);
 	
-	public IResourceElementSet<IResourceElement> getResourceElementsFromSourceByPartialExternalIDPaginated(String partialString, Long sourceId, int index, int paginationSize) throws ResourcesExceptions;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialExternalIDPaginated(IResourceElementsFilter filter, String partialString, int index, int paginationSize) throws ResourcesExceptions;
 	
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceByPartialExternalIDPaginated(String partialString, Long resourceId, int index, int paginationSize) throws ResourcesExceptions;
+	public Integer getResourceElementsCountByPartialExternalID(String partialString);
 	
-	public IResourceElementSet<IResourceElement> getResourceElementsFromResourceAndSourceByPartialExternalIDPaginated(String partialString, Long sourceId, Long resourceId, int index, int paginationSize) throws ResourcesExceptions;
-	
-	public Integer getCountResourceElementsByPartialExternalID(String partialString);
-	
-	public Integer getCountResourceElementsFromSourceByPartialExternalID(String partialString, Long sourceId) throws ResourcesExceptions;
-	
-	public Integer getCountResourceElementsFromResourceByPartialExternalID(String partialString, Long resourceId) throws ResourcesExceptions;
-	
-	public Integer getCountResourceElementsFromResourceAndSourceByPartialExternalID(String partialString, Long sourceId, Long resourceId) throws ResourcesExceptions;
+	public Integer getResourceElementsFilteredCountByPartialExternalID(IResourceElementsFilter filter, String partialString) throws ResourcesExceptions;
 	
 	public void setUserLogged(UsersLogged userLogged);
 	

@@ -9,12 +9,14 @@ import org.junit.Test;
 import com.silicolife.textmining.core.datastructures.init.InitConfiguration;
 import com.silicolife.textmining.core.datastructures.init.exception.InvalidDatabaseAccess;
 import com.silicolife.textmining.core.datastructures.init.exception.InvalidDemonConnectionException;
+import com.silicolife.textmining.core.datastructures.resources.ResourceElementsFilterImpl;
 import com.silicolife.textmining.core.init.DaemonConnectionInit;
 import com.silicolife.textmining.core.init.DatabaseConnectionInit;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.resource.IResource;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElementSet;
+import com.silicolife.textmining.core.interfaces.resource.IResourceElementsFilter;
 
 
 
@@ -62,8 +64,10 @@ public class LuceneTest {
 	public void testIndex3() throws InvalidDatabaseAccess, ANoteException{
 		DatabaseConnectionInit.init("localhost","3306","maria","root","admin");
 		IResource<IResourceElement> resource = InitConfiguration.getDataAccess().getResourceByID(5727281589065523363L);
+		IResourceElementsFilter filter = new ResourceElementsFilterImpl();
+		filter.addResource(resource);
 		long startime = GregorianCalendar.getInstance().getTimeInMillis();
-		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getResourceElementsFromResourceByExactTerm(resource, "Bacterium coli commune");
+		IResourceElementSet<IResourceElement> elemts = InitConfiguration.getDataAccess().getResourceElementsFilteredByExactTerm(filter, "Bacterium coli commune");
 		long endtime = GregorianCalendar.getInstance().getTimeInMillis();
 		System.out.println(endtime-startime);
 		for(IResourceElement elem : elemts.getResourceElements()){
