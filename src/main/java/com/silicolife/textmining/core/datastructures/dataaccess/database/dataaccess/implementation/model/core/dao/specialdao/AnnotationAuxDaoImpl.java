@@ -7,8 +7,10 @@ import java.util.Map;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +18,7 @@ import com.silicolife.textmining.core.datastructures.annotation.AnnotationType;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Annotations;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Classes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Processes;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 
 @Repository
 public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
@@ -111,5 +114,19 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 				.uniqueResult()).intValue();
 
 		return totalResult;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Publications> getPublicationsByResourceElement(Long resElemId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Annotations.class, "annnotations");
+		c.add(Restrictions.eq("resourceElements.resId", resElemId));
+//		c.add(Restrictions.eq("annActive", true)); //slowing the query... 
+		ProjectionList projections = Projections.projectionList();
+		projections.add(Projections.property("annnotations.publications.pubId"), "pubId");
+		c.setProjection(projections);
+		c.setResultTransformer(Transformers.aliasToBean(Publications.class));
+      return c.list();
 	}
 }

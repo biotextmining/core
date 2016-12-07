@@ -1,9 +1,11 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao;
 
+import java.util.List;
 import java.util.Map;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Classes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Processes;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 
 public interface AnnotationAuxDao {
 
@@ -16,4 +18,6 @@ public interface AnnotationAuxDao {
 	public Map<Classes, Integer> getProcessProcessClassStatistics(Long processID);
 
 	public Integer getRelationSize(Long processID, Long publicationID);
+	
+	public  List<Publications> getPublicationsByResourceElement(Long resElemId);
 }

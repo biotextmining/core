@@ -45,6 +45,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.general.ClassesWrapper;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsWrapper;
 import com.silicolife.textmining.core.datastructures.documents.AnnotatedDocumentStatisticsImpl;
+import com.silicolife.textmining.core.datastructures.documents.PublicationImpl;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationLog;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
@@ -429,18 +430,15 @@ public class AnnotationServiceImpl implements IAnnotationService{
 		ResourceElements resourceElemen = resourceManagerDao.getResourcesElememtsDao().findById(resourceElementID);
 		if (resourceElemen == null)
 			throw new AnnotationException(ExceptionsCodes.codeNoResourceElement, ExceptionsCodes.msgNoResourceElement);
-		Map<String, Serializable> eqRestrictions = new HashMap<String, Serializable>();
-		eqRestrictions.put("resourceElements", resourceElemen);
-		eqRestrictions.put("annActive", true);
-		List<Annotations> annoations = annotationManagerdao.getAnnotationsDao().findByAttributes(eqRestrictions);
-		Set<Publications> publications = new HashSet<>();
-		for(Annotations annoation:annoations)
-		{
-			publications.add(annoation.getPublications());
-		}
-		List<IPublication> pubresult = new ArrayList<>();
-		for(Publications publication:publications)
-			pubresult.add(PublicationsWrapper.convertToAnoteStructure(publication));
-		return pubresult;
+
+		List<Publications> pubs = annotationManagerdao.getAnnotationAuxDao().getPublicationsByResourceElement(resourceElementID);
+		
+		Set<Publications> setpubs = new HashSet<>();
+		setpubs.addAll(pubs);
+		List<IPublication> publications = new ArrayList<>();
+		for(Publications publication : setpubs)
+			publications.add(PublicationsWrapper.convertToAnoteStructure(publication));
+
+		return publications;
 	}
 }
