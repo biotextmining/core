@@ -1085,5 +1085,14 @@ public class DaemonAccess implements IDataAccess {
 	public Integer getResourceElementsCountByPartialTermOrPartialSynonym(String partialString) throws ANoteException {
 		return luceneResourcesElementsAccessImpl.getResourceElementsCountByPartialTermOrPartialSynonym(partialString);
 	}
+
+	@Override
+	public List<Long> getProcessesIdsByResourceElements(Set<IResourceElement> resourceElements) throws ANoteException {
+		Set<Long> resourceElementsIds = new HashSet<>();
+		for(IResourceElement resourceElement : resourceElements)
+			resourceElementsIds.add(resourceElement.getId());
+		return annotationAccessImpl.getProcessesIdsByResourceElements(resourceElementsIds);
+	}
+	
 	
 }

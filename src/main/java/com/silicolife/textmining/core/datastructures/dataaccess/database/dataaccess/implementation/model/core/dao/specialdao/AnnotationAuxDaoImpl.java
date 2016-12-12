@@ -117,6 +117,7 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 		return totalResult;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Long> getPublicationsIdsByResourceElements(Set<Long> resElemIds) {
 		Session session = sessionFactory.getCurrentSession();
@@ -125,6 +126,19 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 //		c.add(Restrictions.eq("annActive", true)); //slowing the query... 
 		ProjectionList projections = Projections.projectionList();
 		projections.add(Projections.distinct(Projections.property("publications.pubId")), "pubId");
+		c.setProjection(projections);
+      return c.list();
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Long> getProcessesIdsByResourceElements(Set<Long> resElemIds) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Annotations.class, "annnotations");
+		c.add(Restrictions.in("resourceElements.resId", resElemIds));
+//		c.add(Restrictions.eq("annActive", true)); //slowing the query... 
+		ProjectionList projections = Projections.projectionList();
+		projections.add(Projections.distinct(Projections.property("processes.proId")), "proId");
 		c.setProjection(projections);
       return c.list();
 	}

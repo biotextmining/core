@@ -11,7 +11,6 @@ import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotati
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IManualCurationAnnotations;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
-import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
 
 public interface IAnnotationService {
 	
@@ -39,6 +38,8 @@ public interface IAnnotationService {
 	
 	public void setUserLogged(UsersLogged userLogged);
 
-	public List<Long> getPublicationsIdsByResourceElements(Set<Long> resourceElementIds) throws AnnotationException;;
+	public List<Long> getPublicationsIdsByResourceElements(Set<Long> resourceElementIds) throws AnnotationException;
+	
+	public List<Long> getProcessesIdsByResourceElements(Set<Long> resourceElementIds) throws AnnotationException;
 
 }

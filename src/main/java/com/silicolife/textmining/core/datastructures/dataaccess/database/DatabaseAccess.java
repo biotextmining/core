@@ -2263,4 +2263,21 @@ public class DatabaseAccess implements IDataAccess {
 		}
 	}
 
+	@Override
+	public List<Long> getProcessesIdsByResourceElements(Set<IResourceElement> resourceElements)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Set<Long> resourceElementsIds = new HashSet<>();
+			for(IResourceElement resourceElement : resourceElements)
+				resourceElementsIds.add(resourceElement.getId());
+			List<Long> publications = annotationService.getProcessesIdsByResourceElements(resourceElementsIds);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return publications;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
 }

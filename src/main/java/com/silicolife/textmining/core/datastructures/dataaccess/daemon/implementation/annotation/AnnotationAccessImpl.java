@@ -356,4 +356,17 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return response.getBody().getContent();
 		}	
 	}
+
+
+	public List<Long> getProcessesIdsByResourceElements(Set<Long> resourceElementsIds) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<List<Long>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<Long>>>() {};	
+		ResponseEntity<DaemonResponse<List<Long>>> response = webClient.post("annotation/getProcessesIdsByResourceElements", responseType, resourceElementsIds);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
+		} else {
+			return response.getBody().getContent();
+		}	
+	}
 }

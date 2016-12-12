@@ -431,4 +431,13 @@ public class AnnotationServiceImpl implements IAnnotationService{
 
 		return annotationManagerdao.getAnnotationAuxDao().getPublicationsIdsByResourceElements(resourceElementIds);
 	}
+	
+	public List<Long> getProcessesIdsByResourceElements(Set<Long> resourceElementIds) throws AnnotationException{
+		for(Long resourceElementId : resourceElementIds){
+			ResourceElements resourceElemen = resourceManagerDao.getResourcesElememtsDao().findById(resourceElementId);
+			if (resourceElemen == null)
+				throw new AnnotationException(ExceptionsCodes.codeNoResourceElement, ExceptionsCodes.msgNoResourceElement);
+		}
+		return annotationManagerdao.getAnnotationAuxDao().getProcessesIdsByResourceElements(resourceElementIds);
+	}
 }

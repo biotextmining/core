@@ -21,5 +21,7 @@ public interface AnnotationAuxDao {
 
 	public List<Long> getPublicationsIdsByResourceElements(Set<Long> resourceElementIds);
 	
+	public List<Long> getProcessesIdsByResourceElements(Set<Long> resourceElementIds);
+	
 //	public  List<Publications> getPublicationsByResourceElements(Set<Long> resElemIds);
 }
