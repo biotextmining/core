@@ -3,6 +3,7 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -117,14 +118,48 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<Publications> getPublicationsByResourceElement(Long resElemId) {
+	public List<Long> getPublicationsIdsByResourceElements(Set<Long> resElemIds) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria c = session.createCriteria(Annotations.class, "annnotations");
-		c.add(Restrictions.eq("resourceElements.resId", resElemId));
+		c.add(Restrictions.in("resourceElements.resId", resElemIds));
 //		c.add(Restrictions.eq("annActive", true)); //slowing the query... 
 		ProjectionList projections = Projections.projectionList();
-		projections.add(Projections.property("annnotations.publications.pubId"), "pubId");
+		projections.add(Projections.distinct(Projections.property("publications.pubId")), "pubId");
+		c.setProjection(projections);
+      return c.list();
+	}
+	
+	/**
+	 * 
+	 * Method not used due performance issues. However is the way to get a full object form another table.
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Publications> getPublicationsByResourceElements(Set<Long> resElemIds) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Annotations.class, "annnotations");
+		c.createAlias("annnotations.publications", "publications");
+		c.add(Restrictions.in("resourceElements.resId", resElemIds));
+//		c.add(Restrictions.eq("annActive", true)); //slowing the query... 
+		ProjectionList projections = Projections.projectionList();
+		projections.add(Projections.distinct(Projections.property("publications.pubId")), "pubId");
+		projections.add(Projections.property("publications.pubTitle"), "pubTitle");
+		projections.add(Projections.property("publications.pubCategory"), "pubCategory");
+		projections.add(Projections.property("publications.pubYeardate"), "pubYeardate");
+		projections.add(Projections.property("publications.pubFulldate"), "pubFulldate");
+		projections.add(Projections.property("publications.pubStatus"), "pubStatus");
+		projections.add(Projections.property("publications.pubJournal"), "pubJournal");
+		projections.add(Projections.property("publications.pubVolume"), "pubVolume");
+		projections.add(Projections.property("publications.pubIssue"), "pubIssue");
+		projections.add(Projections.property("publications.pubPages"), "pubPages");
+		projections.add(Projections.property("publications.pubAbstract"), "pubAbstract");
+		projections.add(Projections.property("publications.pubExternalLinks"), "pubExternalLinks");
+		projections.add(Projections.property("publications.pubFreeFullText"), "pubFreeFullText");
+		projections.add(Projections.property("publications.pubFullcontent"), "pubFullcontent");
+		projections.add(Projections.property("publications.pubNotes"), "pubNotes");
+//		projections.add(Projections.property("publications.publicationFieldses"), "publicationFieldses");
+//		projections.add(Projections.property("publications.publicationHasLabelses"), "publicationHasLabelses");
+//		projections.add(Projections.property("publications.publicationHasSourceses"), "publicationHasSourceses");
 		c.setProjection(projections);
 		c.setResultTransformer(Transformers.aliasToBean(Publications.class));
       return c.list();

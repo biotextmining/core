@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,15 +42,12 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ResourceElements;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.annotation.AnnotationsWrapper;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.general.ClassesWrapper;
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsWrapper;
 import com.silicolife.textmining.core.datastructures.documents.AnnotatedDocumentStatisticsImpl;
-import com.silicolife.textmining.core.datastructures.documents.PublicationImpl;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationLog;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IManualCurationAnnotations;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
-import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
 import com.silicolife.textmining.core.interfaces.process.ProcessTypeEnum;
 
@@ -426,19 +422,13 @@ public class AnnotationServiceImpl implements IAnnotationService{
 	}
 
 	@Override
-	public List<IPublication> getPublicationByResourceElement(long resourceElementID) throws AnnotationException {
-		ResourceElements resourceElemen = resourceManagerDao.getResourcesElememtsDao().findById(resourceElementID);
-		if (resourceElemen == null)
-			throw new AnnotationException(ExceptionsCodes.codeNoResourceElement, ExceptionsCodes.msgNoResourceElement);
+	public List<Long> getPublicationsIdsByResourceElements(Set<Long> resourceElementIds) throws AnnotationException {
+		for(Long resourceElementId : resourceElementIds){
+			ResourceElements resourceElemen = resourceManagerDao.getResourcesElememtsDao().findById(resourceElementId);
+			if (resourceElemen == null)
+				throw new AnnotationException(ExceptionsCodes.codeNoResourceElement, ExceptionsCodes.msgNoResourceElement);
+		}
 
-		List<Publications> pubs = annotationManagerdao.getAnnotationAuxDao().getPublicationsByResourceElement(resourceElementID);
-		
-		Set<Publications> setpubs = new HashSet<>();
-		setpubs.addAll(pubs);
-		List<IPublication> publications = new ArrayList<>();
-		for(Publications publication : setpubs)
-			publications.add(PublicationsWrapper.convertToAnoteStructure(publication));
-
-		return publications;
+		return annotationManagerdao.getAnnotationAuxDao().getPublicationsIdsByResourceElements(resourceElementIds);
 	}
 }

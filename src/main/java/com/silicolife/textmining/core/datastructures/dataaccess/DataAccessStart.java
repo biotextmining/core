@@ -430,7 +430,7 @@ public class DataAccessStart implements IDataAccess {
 	}
 
 	@Override
-	public List<IPublication> getPublicationByResourceElement(IResourceElement resourceElement) throws ANoteException {
+	public List<Long> getPublicationsIdsByResourceElements(Set<IResourceElement> resourceElements) throws ANoteException {
 
 		return null;
 	}

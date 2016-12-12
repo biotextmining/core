@@ -1868,10 +1868,13 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public List<IPublication> getPublicationByResourceElement(IResourceElement resourceElement) throws ANoteException {
+	public List<Long> getPublicationsIdsByResourceElements(Set<IResourceElement> resourceElements) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			List<IPublication> publications = annotationService.getPublicationByResourceElement(resourceElement.getId());
+			Set<Long> resourceElementsIds = new HashSet<>();
+			for(IResourceElement resourceElement : resourceElements)
+				resourceElementsIds.add(resourceElement.getId());
+			List<Long> publications = annotationService.getPublicationsIdsByResourceElements(resourceElementsIds);
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return publications;
 		} catch (RuntimeException e) {

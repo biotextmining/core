@@ -1,6 +1,7 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.annotation;
 
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.AnnotationException;
@@ -10,7 +11,7 @@ import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotati
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IManualCurationAnnotations;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
-import com.silicolife.textmining.core.interfaces.core.document.IPublication;
+import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
 
 public interface IAnnotationService {
 	
@@ -38,6 +39,6 @@ public interface IAnnotationService {
 	
 	public void setUserLogged(UsersLogged userLogged);
 
-	public List<IPublication> getPublicationByResourceElement(long resourceElementID) throws AnnotationException;;
+	public List<Long> getPublicationsIdsByResourceElements(Set<Long> resourceElementIds) throws AnnotationException;;
 
 }

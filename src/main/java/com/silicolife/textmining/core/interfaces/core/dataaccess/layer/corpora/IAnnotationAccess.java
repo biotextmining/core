@@ -1,6 +1,7 @@
 package com.silicolife.textmining.core.interfaces.core.dataaccess.layer.corpora;
 
 import java.util.List;
+import java.util.Set;
 
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
@@ -8,6 +9,7 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANote
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocument;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
+import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
@@ -97,7 +99,7 @@ public interface IAnnotationAccess {
 	 * @return
 	 * @throws ANoteException
 	 */
-	public List<IPublication> getPublicationByResourceElement(IResourceElement resourceElement) throws ANoteException;
+	public List<Long> getPublicationsIdsByResourceElements(Set<IResourceElement> resourceElements) throws ANoteException;
 
 
 }

@@ -902,8 +902,11 @@ public class DaemonAccess implements IDataAccess {
 	}
 	
 	@Override
-	public List<IPublication> getPublicationByResourceElement(IResourceElement resourceElement) throws ANoteException {
-		return annotationAccessImpl.getPublicationByResourceElement(resourceElement.getId());
+	public List<Long> getPublicationsIdsByResourceElements(Set<IResourceElement> resourceElements) throws ANoteException {
+		Set<Long> resourceElementsIds = new HashSet<>();
+		for(IResourceElement resourceElement : resourceElements)
+			resourceElementsIds.add(resourceElement.getId());
+		return annotationAccessImpl.getPublicationsIdsByResourceElements(resourceElementsIds);
 	}
 
 	@Override

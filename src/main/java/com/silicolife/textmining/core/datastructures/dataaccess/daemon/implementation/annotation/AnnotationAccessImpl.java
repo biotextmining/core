@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -26,7 +27,6 @@ import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotatio
 import com.silicolife.textmining.core.interfaces.core.annotation.IManualCurationAnnotations;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
-import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 
 /**
  * Class which implements all annotation daemon access methods
@@ -345,13 +345,10 @@ public class AnnotationAccessImpl extends RestClientAccess {
 	 * @return
 	 * @throws DaemonException
 	 */
-	public List<IPublication> getPublicationByResourceElement(Long resourceElementID) throws DaemonException {
+	public List<Long> getPublicationsIdsByResourceElements(Set<Long> resourceElementIds) throws DaemonException {
 		checkAndForceLoginIfNecessary();
-		ParameterizedTypeReference<DaemonResponse<List<IPublication>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<IPublication>>>() {};	
-		Map<String, Long> uriVariables = new HashMap<String, Long>();
-		uriVariables.put("resourceElementID", resourceElementID);
-		
-		ResponseEntity<DaemonResponse<List<IPublication>>> response = webClient.get("annotation/getPublicationByResourceElement", responseType, uriVariables);
+		ParameterizedTypeReference<DaemonResponse<List<Long>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<Long>>>() {};	
+		ResponseEntity<DaemonResponse<List<Long>>> response = webClient.post("annotation/getPublicationsIdsByResourceElements", responseType, resourceElementIds);
 
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
