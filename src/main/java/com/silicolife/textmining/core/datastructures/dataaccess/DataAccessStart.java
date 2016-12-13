@@ -1085,4 +1085,10 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public List<IIEProcess> getProcessesByPublication(IPublication publication) throws ANoteException {
+
+		return null;
+	}
+
 }

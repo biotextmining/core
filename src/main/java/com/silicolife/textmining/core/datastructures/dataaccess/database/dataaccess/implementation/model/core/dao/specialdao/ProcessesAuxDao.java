@@ -6,6 +6,8 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 
 public interface ProcessesAuxDao {
 
-	List<Processes> findProcessesByAttributes(long auId, String processstr,String string);
+	List<Processes> findProcessesByAttributes(long auId, String processstr, String string);
+	
+	List<Processes> findProcessesByPublicationIds(Long publicationId);
 
 }

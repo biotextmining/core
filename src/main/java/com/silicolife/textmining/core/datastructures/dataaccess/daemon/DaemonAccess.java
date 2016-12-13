@@ -1093,6 +1093,11 @@ public class DaemonAccess implements IDataAccess {
 			resourceElementsIds.add(resourceElement.getId());
 		return annotationAccessImpl.getProcessesIdsByResourceElements(resourceElementsIds);
 	}
+
+	@Override
+	public List<IIEProcess> getProcessesByPublication(IPublication publication) throws ANoteException {
+		return processAccessImpl.getProcessesByPublication(publication);
+	}
 	
 	
 }

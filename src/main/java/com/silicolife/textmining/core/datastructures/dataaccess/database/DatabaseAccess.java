@@ -2280,4 +2280,17 @@ public class DatabaseAccess implements IDataAccess {
 		}
 	}
 
+	@Override
+	public List<IIEProcess> getProcessesByPublication(IPublication publication) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IIEProcess> processes = processService.getProcessesByPublicationId(publication.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return processes;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
 }

@@ -15,6 +15,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.daemon.webservic
 import com.silicolife.textmining.core.datastructures.process.IEProcessImpl;
 import com.silicolife.textmining.core.datastructures.process.IEProcessStatisticsImpl;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
+import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcessStatistics;
@@ -146,4 +147,24 @@ public class ProcessesAccessImpl extends RestClientAccess {
 			return returned;
 		}
 	}
+
+	public List<IIEProcess> getProcessesByPublication(IPublication publication) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<List<IEProcessImpl>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<IEProcessImpl>>>() {};
+		Map<String, Long> uriVariables = new HashMap<String, Long>();
+		uriVariables.put("publicationId", publication.getId());
+		ResponseEntity<DaemonResponse<List<IEProcessImpl>>> response = webClient.get("processes/getProcessesByPublicationId", responseType, uriVariables);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			List<IIEProcess> returned = new ArrayList<IIEProcess>();
+			List<IEProcessImpl> processes = response.getBody().getContent();
+			for (IEProcessImpl obj : processes) {
+				returned.add(obj);
+			}
+			return returned;
+		}
+	}
+	
 }

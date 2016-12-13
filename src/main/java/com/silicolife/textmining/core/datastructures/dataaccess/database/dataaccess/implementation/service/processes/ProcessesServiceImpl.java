@@ -186,5 +186,19 @@ public class ProcessesServiceImpl implements IProcessesService {
 	public void setUserLogged(UsersLogged userLogged) {
 		this.userLogged = userLogged;
 	}
+
+	@Override
+	public List<IIEProcess> getProcessesByPublicationId(Long publicationId) throws ProcessException  {
+
+		List<Processes> listProcesses = processesManagerDao.getProcessesAuxDao().findProcessesByPublicationIds(publicationId);
+		
+		List<IIEProcess> listProcesses_ = new ArrayList<IIEProcess>();
+		for (Processes process : listProcesses) {
+			IIEProcess process_ = ProcessWrapper.convertToAnoteStructure(process);
+			listProcesses_.add(process_);
+		}
+
+		return listProcesses_;
+	}
 	
 }

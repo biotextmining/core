@@ -37,5 +37,20 @@ public class ProcessesAoxDaoImpl implements ProcessesAuxDao{
 		return result;
 	}
 
+	@Override
+	public List<Processes> findProcessesByPublicationIds(Long publicationId) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlString = "SELECT distinct p.* FROM corpus_has_publications_has_processes as cpp "+
+						   "INNER JOIN processes as p on cpp.chphp_processes_id = p.pro_id " +
+						   "WHERE cpp.chphp_publication_id = ?";
+		SQLQuery qry = session.createSQLQuery(sqlString);
+		qry.setParameter(0, publicationId);
+		qry.addEntity(Processes.class);
+		@SuppressWarnings("unchecked")
+		List<Processes> result = qry.list();
+
+		return result;
+	}
+
 
 }
