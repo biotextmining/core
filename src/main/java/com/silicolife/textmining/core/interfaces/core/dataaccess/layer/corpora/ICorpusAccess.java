@@ -160,4 +160,6 @@ public interface ICorpusAccess extends IIEProcessAccess, IAnnotationAccess, IAnn
 	 * @throws ANoteException
 	 */
 	public Set<String> getCorpusPublicationsExternalIDFromSource(ICorpus corpus, String source) throws ANoteException;
+	
+	public Set<ICorpus> getCorpusByPublication(IPublication publication) throws ANoteException;
 }

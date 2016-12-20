@@ -16,4 +16,6 @@ public interface CorpusAuxDao {
 	public List<Corpus> findQueriesByAttributes(Long auId, String corpusstr);
 
 	public List<Corpus> findCorpusByAttributes(long auId, String corpusstr,String string);
+	
+	public List<Corpus> findCorpusByPublicationId(Long publicationId);
 }

@@ -2293,4 +2293,18 @@ public class DatabaseAccess implements IDataAccess {
 		}
 	}
 
+	@Override
+	public Set<ICorpus> getCorpusByPublication(IPublication publication) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Set<ICorpus> corpus = corpusService.getCorpusByPublicationId(publication.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return corpus;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
+
 }

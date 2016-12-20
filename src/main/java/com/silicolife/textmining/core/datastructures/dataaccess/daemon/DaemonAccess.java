@@ -1098,6 +1098,11 @@ public class DaemonAccess implements IDataAccess {
 	public List<IIEProcess> getProcessesByPublication(IPublication publication) throws ANoteException {
 		return processAccessImpl.getProcessesByPublication(publication);
 	}
+
+	@Override
+	public Set<ICorpus> getCorpusByPublication(IPublication publication) throws ANoteException {
+		return corpusAccessImpl.getCorpusByPublicationId(publication.getId());
+	}
 	
 	
 }

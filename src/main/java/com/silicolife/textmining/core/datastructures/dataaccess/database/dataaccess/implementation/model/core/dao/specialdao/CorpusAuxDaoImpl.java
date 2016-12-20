@@ -108,4 +108,21 @@ public class CorpusAuxDaoImpl implements CorpusAuxDao {
 
 		return result;
 	}
+
+
+
+	@Override
+	public List<Corpus> findCorpusByPublicationId(Long publicationId) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlString = "SELECT distinct c.* FROM textminingcarbontest.corpus as c " +
+							"INNER JOIN corpus_has_publications as cp " +
+							"WHERE c.crp_id = cp.chp_corpus_id and cp.chp_publication_id = ?";
+		SQLQuery qry = session.createSQLQuery(sqlString);
+		qry.setParameter(0, publicationId);
+		qry.addEntity(Corpus.class);
+		@SuppressWarnings("unchecked")
+		List<Corpus> result = qry.list();
+
+		return result;
+	}
 }

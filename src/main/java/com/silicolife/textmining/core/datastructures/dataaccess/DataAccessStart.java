@@ -1091,4 +1091,10 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public Set<ICorpus> getCorpusByPublication(IPublication publication) throws ANoteException {
+
+		return null;
+	}
+
 }

@@ -421,4 +421,21 @@ public class CorpusServiceImpl implements ICorpusService {
 		return response;
 	}
 
+	@Override
+	public Set<ICorpus> getCorpusByPublicationId(Long publicationId) throws CorpusException {
+		Publications publication = corpusManagerDao.getPublicationsDao().findById(publicationId);
+		if(publication == null)
+			throw new CorpusException(ExceptionsCodes.codeCorpusPublicationNotExists, ExceptionsCodes.msgCorpusPublicationNotExists);
+		
+		List<Corpus> listCorpus = corpusManagerDao.getCorpusAuxDao().findCorpusByPublicationId(publicationId);
+		
+		Set<ICorpus> listCorpus_ = new HashSet<ICorpus>();
+		for (Corpus corpus : listCorpus) {
+			ICorpus corpus_ = CorpusWrapper.convertToAnoteStructure(corpus);
+			listCorpus_.add(corpus_);
+		}
+
+		return listCorpus_;
+	}
+
 }

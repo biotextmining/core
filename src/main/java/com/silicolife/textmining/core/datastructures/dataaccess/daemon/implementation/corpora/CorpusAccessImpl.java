@@ -2,6 +2,7 @@ package com.silicolife.textmining.core.datastructures.dataaccess.daemon.implemen
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -362,6 +363,27 @@ public class CorpusAccessImpl extends RestClientAccess {
 		} else {
 			Long count = response.getBody().getContent();
 			return count;
+		}
+	}
+
+	public Set<ICorpus> getCorpusByPublicationId(Long publicationId) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Set<CorpusImpl>>> responseType = new ParameterizedTypeReference<DaemonResponse<Set<CorpusImpl>>>() {};
+		Map<String, Long> uriVariables = new HashMap<String, Long>();
+		uriVariables.put("publicationId", publicationId);
+		
+		ResponseEntity<DaemonResponse<Set<CorpusImpl>>> response = webClient.get("corpus/getCorpusByPublicationId", responseType, uriVariables);
+		
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+
+			Set<ICorpus> returned = new HashSet<ICorpus>();
+			Set<CorpusImpl> corpus = response.getBody().getContent();
+			for (CorpusImpl obj : corpus) {
+				returned.add(obj);
+			}
+			return returned;
 		}
 	}
 }

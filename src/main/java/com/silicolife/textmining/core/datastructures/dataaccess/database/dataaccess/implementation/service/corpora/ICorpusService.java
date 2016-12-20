@@ -137,4 +137,6 @@ public interface ICorpusService {
 	public Set<String> getCorpusPublicationsExternalIDFromSource(Long corpusId, String source);
 
 	public Long countCorpusPublicationsNotProcessed(Long corpusId, Long processId) throws CorpusException;
+
+	public Set<ICorpus> getCorpusByPublicationId(Long publicationId) throws CorpusException;
 }
