@@ -114,7 +114,7 @@ public class CorpusAuxDaoImpl implements CorpusAuxDao {
 	@Override
 	public List<Corpus> findCorpusByPublicationId(Long publicationId) {
 		Session session = sessionFactory.getCurrentSession();
-		String sqlString = "SELECT distinct c.* FROM textminingcarbontest.corpus as c " +
+		String sqlString = "SELECT distinct c.* FROM corpus as c " +
 							"INNER JOIN corpus_has_publications as cp " +
 							"WHERE c.crp_id = cp.chp_corpus_id and cp.chp_publication_id = ?";
 		SQLQuery qry = session.createSQLQuery(sqlString);
