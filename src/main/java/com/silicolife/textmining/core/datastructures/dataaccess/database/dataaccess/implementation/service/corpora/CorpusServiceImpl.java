@@ -1,9 +1,12 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.corpora;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -238,8 +241,12 @@ public class CorpusServiceImpl implements ICorpusService {
 		Processes processes = processesManagerDao.getProcessesDao().findById(processId);
 		if (processes == null)
 			throw new CorpusException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
-		CorpusHasProcesses list = corpusManagerDao.getCorpusHasProcessesDao().findUniqueByAttribute("processes.proId",processes.getProId());
-		if(list!=null)
+		Map<String, Serializable> eqRestrictions = new HashMap<String, Serializable>();
+		eqRestrictions.put("processes.proId", processes.getProId());
+		eqRestrictions.put("corpus.crpId", processes.getProId());
+
+		List<CorpusHasProcesses> list = corpusManagerDao.getCorpusHasProcessesDao().findByAttributes(eqRestrictions);
+		if(!list.isEmpty())
 			throw new CorpusException(ExceptionsCodes.codeProcessAlreadyInOneCorpus, ExceptionsCodes.msgProcessAlreadyInOneCorpus);
 		/*
 		 * save processes
