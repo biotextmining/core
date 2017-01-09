@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.security.Permissions;
 import com.silicolife.textmining.core.datastructures.init.InitConfiguration;
 import com.silicolife.textmining.core.datastructures.utils.GenerateRandomId;
+import com.silicolife.textmining.core.datastructures.utils.conf.GlobalNames;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.CorpusTextType;
@@ -132,7 +133,7 @@ public class CorpusImpl extends Observable implements ICorpus {
 	@JsonIgnore
 	@Override
 	public CorpusTextType getCorpusTextType() {
-		return null;
+		return CorpusTextType.convertStringToCorpusType(getProperties().getProperty(GlobalNames.textType));
 	}
 	
 	public void freememory() {
