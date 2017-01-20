@@ -151,7 +151,7 @@
 		   <version>5.6.0.Beta2</version>
 		</dependency>
 	</dependencies>
-	
+	<!--  
 	<build>
     <plugins>
       <plugin>
@@ -176,4 +176,5 @@
       </plugin>
     </plugins>
   </build>
+  -->
 </project>
