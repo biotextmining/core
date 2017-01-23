@@ -27,7 +27,7 @@ public class CorpusPropertiesWrapper {
 			properties.put(key, value);
 		}
 		if (properties.size() == 0)
-			return null;
+			return new Properties();
 
 		return properties;
 
