@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 /**
  * This class contain method for manager directory and files
@@ -229,8 +230,8 @@ public class FileHandling {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public static Set<String> getFileLinesContent(File filePath) throws FileNotFoundException, IOException {
-		Set<String> files = new HashSet<String>();
+	public static List<String> getFileLinesContent(File filePath) throws FileNotFoundException, IOException {
+		List<String> files = new ArrayList<String>();
 		FileInputStream fstream = new FileInputStream(filePath);
 		DataInputStream in = new DataInputStream(fstream);
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -244,7 +245,7 @@ public class FileHandling {
 	
 	public static String getFileContent(File filePath) throws FileNotFoundException, IOException
 	{
-		Set<String> lines = getFileLinesContent(filePath);
+		List<String> lines = getFileLinesContent(filePath);
 		String content = new String();
 		for(String line:lines)
 		{
