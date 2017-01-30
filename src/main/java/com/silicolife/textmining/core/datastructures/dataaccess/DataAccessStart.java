@@ -11,6 +11,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.ResourcesTypeUtils;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationLog;
+import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
 import com.silicolife.textmining.core.interfaces.core.cluster.IClusterProcess;
@@ -1093,6 +1094,12 @@ public class DataAccessStart implements IDataAccess {
 
 	@Override
 	public Set<ICorpus> getCorpusByPublication(IPublication publication) throws ANoteException {
+
+		return null;
+	}
+
+	@Override
+	public List<Long> getPublicationsIdsByAnnotationsFilter(IAnnotationsFilter filter) throws ANoteException {
 
 		return null;
 	}

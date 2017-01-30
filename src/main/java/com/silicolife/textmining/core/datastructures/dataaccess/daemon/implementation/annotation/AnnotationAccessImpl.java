@@ -22,6 +22,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.daemon.webservic
 import com.silicolife.textmining.core.datastructures.documents.AnnotatedDocumentStatisticsImpl;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationLog;
+import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IManualCurationAnnotations;
@@ -368,5 +369,18 @@ public class AnnotationAccessImpl extends RestClientAccess {
 		} else {
 			return response.getBody().getContent();
 		}	
+	}
+
+
+	public List<Long> getPublicationsIdsByAnnotationsFilter(IAnnotationsFilter filter) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<List<Long>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<Long>>>() {};
+		
+		ResponseEntity<DaemonResponse<List<Long>>> response = webClient.post("annotation/getPublicationsIdsByAnnotationsFilter", responseType, filter);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			return response.getBody().getContent();
+		}
 	}
 }

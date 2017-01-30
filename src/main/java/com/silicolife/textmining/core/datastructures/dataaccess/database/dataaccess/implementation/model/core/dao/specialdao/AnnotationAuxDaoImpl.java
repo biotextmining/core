@@ -8,10 +8,15 @@ import java.util.Set;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +25,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Classes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Processes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
+import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
 
 @Repository
 public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
@@ -177,5 +183,25 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 		c.setProjection(projections);
 		c.setResultTransformer(Transformers.aliasToBean(Publications.class));
       return c.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Long> getPublicationsIdsByAnnotationsFilter(IAnnotationsFilter filter) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Annotations.class, "annnotations");
+		if(!filter.getResourceElementIds().isEmpty())
+			c.add(Restrictions.in("resourceElements.resId", filter.getResourceElementIds()));
+//		c.add(Restrictions.eq("annActive", true)); //slowing the query... 
+		ProjectionList projections = Projections.projectionList();
+		for( Long classId : filter.getAnoteClassIds()){
+			DetachedCriteria subq = DetachedCriteria.forClass(Annotations.class, "annnotations");
+			subq.add(Restrictions.eq("classes.claId", classId));
+			subq.setProjection(Projections.distinct(Projections.property("publications.pubId")));
+			c.add(Subqueries.propertyIn("publications.pubId", subq));
+		}
+		projections.add(Projections.distinct(Projections.property("publications.pubId")), "pubId");
+		c.setProjection(projections);
+		return c.list();
 	}
 }

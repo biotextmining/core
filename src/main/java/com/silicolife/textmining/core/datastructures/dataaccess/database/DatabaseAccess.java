@@ -57,6 +57,7 @@ import com.silicolife.textmining.core.datastructures.init.dataaccess.DataAccessD
 import com.silicolife.textmining.core.datastructures.resources.ResourceElementSetImpl;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationLog;
+import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IManualCurationAnnotations;
@@ -2300,6 +2301,19 @@ public class DatabaseAccess implements IDataAccess {
 			Set<ICorpus> corpus = corpusService.getCorpusByPublicationId(publication.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return corpus;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public List<Long> getPublicationsIdsByAnnotationsFilter(IAnnotationsFilter filter) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<Long> publicationsIds = annotationService.getPublicationsIdsByAnnotationsFilter(filter);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return publicationsIds;
 		} catch (RuntimeException e) {
 			sessionFactory.getCurrentSession().getTransaction().rollback();
 			throw new ANoteException(e);

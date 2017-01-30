@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.AnnotationException;
+import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
@@ -101,7 +102,8 @@ public interface IAnnotationAccess {
 	 */
 	public List<Long> getPublicationsIdsByResourceElements(Set<IResourceElement> resourceElements) throws ANoteException;
 
-	
 	public List<Long> getProcessesIdsByResourceElements(Set<IResourceElement> resourceElements) throws ANoteException;
+	
+	public List<Long> getPublicationsIdsByAnnotationsFilter(IAnnotationsFilter filter) throws ANoteException;
 
 }

@@ -44,6 +44,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.general.ClassesWrapper;
 import com.silicolife.textmining.core.datastructures.documents.AnnotatedDocumentStatisticsImpl;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationLog;
+import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IManualCurationAnnotations;
@@ -439,5 +440,19 @@ public class AnnotationServiceImpl implements IAnnotationService{
 				throw new AnnotationException(ExceptionsCodes.codeNoResourceElement, ExceptionsCodes.msgNoResourceElement);
 		}
 		return annotationManagerdao.getAnnotationAuxDao().getProcessesIdsByResourceElements(resourceElementIds);
+	}
+	
+	public List<Long> getPublicationsIdsByAnnotationsFilter(IAnnotationsFilter filter) throws AnnotationException{
+		for(Long resourceElementId : filter.getResourceElementIds()){
+			ResourceElements resourceElemen = resourceManagerDao.getResourcesElememtsDao().findById(resourceElementId);
+			if (resourceElemen == null)
+				throw new AnnotationException(ExceptionsCodes.codeNoResourceElement, ExceptionsCodes.msgNoResourceElement);
+		}
+		for(Long klassId : filter.getAnoteClassIds()){
+			Classes klass = resourceManagerDao.getClassesDao().findById(klassId);
+			if(klass == null)
+				throw new AnnotationException(ExceptionsCodes.codeNoClass, ExceptionsCodes.msgNoClass);
+		}
+		return annotationManagerdao.getAnnotationAuxDao().getPublicationsIdsByAnnotationsFilter(filter);
 	}
 }
