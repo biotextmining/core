@@ -264,7 +264,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 
 	private void addExternalIds(IResourceManagerReport report, IResourceElement elem, ResourceElements resElement) {
 
-		List<IExternalID> externalIds = elem.getExtenalIDsImMemory();
+		List<IExternalID> externalIds = elem.getExternalIDsInMemory();
 
 		for (IExternalID externalId : externalIds) {
 			Sources source = resourcesManagerDao.getResourcesElememtsSourcesDao().findUniqueByAttribute("souDescription", externalId.getSource().getSource());
@@ -384,7 +384,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 	}
 
 	private void addExternalIdsWithouValidation(IResourceManagerReport report, IResourceElement elem, ResourceElements resElement) {
-		List<IExternalID> externalIds = elem.getExtenalIDsImMemory();
+		List<IExternalID> externalIds = elem.getExternalIDsInMemory();
 		for (IExternalID externalId : externalIds) {
 			Sources source = resourcesManagerDao.getResourcesElememtsSourcesDao().findUniqueByAttribute("souDescription", externalId.getSource().getSource());
 

@@ -23,17 +23,17 @@ public class ResourceElementImpl implements IResourceElement{
 	@JsonDeserialize(as = AnoteClass.class)
 	private IAnoteClass termClass;
 	@JsonDeserialize(contentAs = ExternalIDImpl.class)
-	private List<IExternalID> externalIDs;
+	private List<IExternalID> externalIDsInMemory;
 	private List<String> synonyms;
 	private int priority;
 	private boolean isActive;
 
-	public ResourceElementImpl(long id, String term, IAnoteClass klass,List<IExternalID> externalIDs,List<String> synonyms, int priority, boolean isActive) {
+	public ResourceElementImpl(long id, String term, IAnoteClass klass,List<IExternalID> externalIDsInMemory,List<String> synonyms, int priority, boolean isActive) {
 		super();
 		this.id = id;
 		this.term = term;
 		this.termClass=klass;
-		this.externalIDs = externalIDs;
+		this.externalIDsInMemory = externalIDsInMemory;
 		this.synonyms = synonyms;
 		this.priority = priority;
 		this.isActive = isActive;
@@ -97,15 +97,16 @@ public class ResourceElementImpl implements IResourceElement{
 	}
 
 	@JsonIgnore
-	public List<IExternalID> getExtenalIDsImMemory() {
-		if(externalIDs==null)
+	public List<IExternalID> getExternalIDsInMemory() {
+		if(externalIDsInMemory==null)
 			return new ArrayList<IExternalID>();
-		return externalIDs;
+		return externalIDsInMemory;
 	}
 	
-	public void setExternalIDs(List<IExternalID> externalIDs) {
-		this.externalIDs = externalIDs;
+	public void setExternalIDsInMemory(List<IExternalID> externalIDsInMemory) {
+		this.externalIDsInMemory = externalIDsInMemory;
 	}
+	
 	
 	@Override
 	public boolean isActive() {
@@ -170,17 +171,17 @@ public class ResourceElementImpl implements IResourceElement{
 	 */
 	@JsonIgnore
 	public synchronized List<IExternalID> getExtenalIDs() throws ANoteException {
-		if(externalIDs==null || externalIDs.size() == 0)
+		if(externalIDsInMemory==null || externalIDsInMemory.isEmpty())
 		{
-			externalIDs = InitConfiguration.getDataAccess().getResourceElementExternalIds(this);
+			externalIDsInMemory = InitConfiguration.getDataAccess().getResourceElementExternalIds(this);
 		}
-		return externalIDs;
+		return externalIDsInMemory;
 	}
 
 	@Override
 	public String toString() {
 		return "ResourceElementImpl [id=" + id + ", term=" + term + ", termClass=" + termClass + ", externalIDs="
-				+ externalIDs + ", synonyms=" + synonyms + ", priority=" + priority + ", isActive=" + isActive + "]";
+				+ externalIDsInMemory + ", synonyms=" + synonyms + ", priority=" + priority + ", isActive=" + isActive + "]";
 	}
 
 	@Override
@@ -229,4 +230,6 @@ public class ResourceElementImpl implements IResourceElement{
 			return false;
 		return true;
 	}
+
+
 }

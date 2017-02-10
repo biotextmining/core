@@ -26,7 +26,7 @@ public interface IResourceElement extends Cloneable,ITermBDID, Comparable<IResou
 	 * 
 	 */
 	public List<IExternalID> getExtenalIDs() throws ANoteException;
-	public List<IExternalID> getExtenalIDsImMemory();
+	public List<IExternalID> getExternalIDsInMemory();
 
 	public List<String> getSynonyms();
 
