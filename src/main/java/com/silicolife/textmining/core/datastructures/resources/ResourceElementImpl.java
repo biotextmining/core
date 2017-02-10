@@ -96,7 +96,6 @@ public class ResourceElementImpl implements IResourceElement{
 		this.synonyms = synonyms;
 	}
 
-	@JsonIgnore
 	public List<IExternalID> getExternalIDsInMemory() {
 		if(externalIDsInMemory==null)
 			return new ArrayList<IExternalID>();
