@@ -141,7 +141,7 @@ public class ElementToNer {
 			for(IResourceElement elem : elems.getResourceElements())
 			{
 
-				IEntityAnnotation annot = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, TermSeparator.termSeparator(elem.getTerm()),false,null);		
+				IEntityAnnotation annot = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, TermSeparator.termSeparator(elem.getTerm()),false,false,null);		
 				if(sizeOfSmallWordsToBeNotAnnotated == 0){
 					terms.add(annot);
 				}else if(sizeOfSmallWordsToBeNotAnnotated<elem.getTerm().trim().length()){
@@ -149,7 +149,7 @@ public class ElementToNer {
 				}
 				for(String synonym:elem.getSynonyms())
 				{
-					IEntityAnnotation annotSynonym = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, TermSeparator.termSeparator(synonym),false,null);		
+					IEntityAnnotation annotSynonym = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, TermSeparator.termSeparator(synonym),false,false,null);		
 					if(sizeOfSmallWordsToBeNotAnnotated == 0){
 						terms.add(annotSynonym);
 					}else if(sizeOfSmallWordsToBeNotAnnotated<synonym.trim().length()){
@@ -163,7 +163,7 @@ public class ElementToNer {
 			IResourceElementSet<IResourceElement> elems = resource.getResourceElements();
 			for(IResourceElement elem : elems.getResourceElements())
 			{
-				IEntityAnnotation annot = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, elem.getTerm(),false,null);		
+				IEntityAnnotation annot = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, elem.getTerm(),false,false,null);		
 				if(sizeOfSmallWordsToBeNotAnnotated == 0){
 					terms.add(annot);
 				}else if(sizeOfSmallWordsToBeNotAnnotated<elem.getTerm().trim().length()){
@@ -171,7 +171,7 @@ public class ElementToNer {
 				}
 				for(String synonym:elem.getSynonyms())
 				{
-					IEntityAnnotation annotSynonym = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, synonym,false,null);		
+					IEntityAnnotation annotSynonym = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, synonym,false,false,null);		
 					if(sizeOfSmallWordsToBeNotAnnotated == 0){
 						terms.add(annotSynonym);
 					}else if(sizeOfSmallWordsToBeNotAnnotated<synonym.trim().length()){
@@ -212,7 +212,7 @@ public class ElementToNer {
 				IResourceElementSet<IResourceElement> elems = dictionary.getResourceElementsByClass(ClassPropertiesManagement.getClassGivenClassID(classID));
 				for(IResourceElement elem : elems.getResourceElements())
 				{
-					IEntityAnnotation annot = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, TermSeparator.termSeparator(elem.getTerm()),false,null);		
+					IEntityAnnotation annot = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, TermSeparator.termSeparator(elem.getTerm()),false,false,null);		
 					if(sizeOfSmallWordsToBeNotAnnotated == 0){
 						terms.add(annot);
 					}else if(sizeOfSmallWordsToBeNotAnnotated<elem.getTerm().trim().length()){
@@ -220,7 +220,7 @@ public class ElementToNer {
 					}
 					for(String synonym:elem.getSynonyms())
 					{
-						IEntityAnnotation annotSynonym = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, TermSeparator.termSeparator(synonym),false,null);		
+						IEntityAnnotation annotSynonym = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, TermSeparator.termSeparator(synonym),false,false,null);		
 						if(sizeOfSmallWordsToBeNotAnnotated == 0){
 							terms.add(annotSynonym);
 						}else if(sizeOfSmallWordsToBeNotAnnotated<synonym.trim().length()){
@@ -239,7 +239,7 @@ public class ElementToNer {
 				IResourceElementSet<IResourceElement> elems = dictionary.getResourceElements();
 				for(IResourceElement elem : elems.getResourceElements())
 				{
-					IEntityAnnotation annot = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, elem.getTerm(),false,null);		
+					IEntityAnnotation annot = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, elem.getTerm(),false,false,null);		
 					if(sizeOfSmallWordsToBeNotAnnotated == 0){
 						terms.add(annot);
 					}else if(sizeOfSmallWordsToBeNotAnnotated<elem.getTerm().trim().length()){
@@ -247,7 +247,7 @@ public class ElementToNer {
 					}
 					for(String synonym:elem.getSynonyms())
 					{
-						IEntityAnnotation annotSynonym = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, synonym,false,null);		
+						IEntityAnnotation annotSynonym = new EntityAnnotationImpl(0,0, elem.getTermClass(),elem, synonym,false,false,null);		
 						if(sizeOfSmallWordsToBeNotAnnotated == 0){
 							terms.add(annotSynonym);
 						}else if(sizeOfSmallWordsToBeNotAnnotated<synonym.trim().length()){

@@ -64,7 +64,7 @@ public class ProcessesAccessImpl extends RestClientAccess {
 												process.getCorpus().getDescription(), process.getCorpus().getNotes(), process.getCorpus().getProperties());
 		IEProcessImpl processInstance = new IEProcessImpl(process.getId(), corpusInstance, 
 												process.getName(), process.getNotes(), process.getType(),
-												process.getProcessOrigin(), process.getProperties());
+												process.getProcessOrigin(), process.getVersion(),process.getProperties(),process.getCreateDate(),process.getUpdateDate());
 		
 		ParameterizedTypeReference<DaemonResponse<Boolean>> responseType = new ParameterizedTypeReference<DaemonResponse<Boolean>>() {};
 		ResponseEntity<DaemonResponse<Boolean>> response = webClient.post("processes/createIEProcess", responseType, processInstance);
@@ -90,7 +90,8 @@ public class ProcessesAccessImpl extends RestClientAccess {
 												process.getCorpus().getDescription(), process.getCorpus().getNotes(), process.getCorpus().getProperties());
 		IEProcessImpl processInstance = new IEProcessImpl(process.getId(), corpusInstance, 
 															process.getName(), process.getNotes(), process.getType(),
-															process.getProcessOrigin(), process.getProperties());
+															process.getProcessOrigin(),process.getVersion(), process.getProperties(),
+															process.getCreateDate(),process.getUpdateDate());
 		
 		ParameterizedTypeReference<DaemonResponse<Boolean>> responseType = new ParameterizedTypeReference<DaemonResponse<Boolean>>() {};
 		ResponseEntity<DaemonResponse<Boolean>> response = webClient.put("processes/updateIEProcess", responseType, processInstance);

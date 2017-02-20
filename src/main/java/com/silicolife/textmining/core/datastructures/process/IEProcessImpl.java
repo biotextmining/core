@@ -1,5 +1,6 @@
 package com.silicolife.textmining.core.datastructures.process;
 
+import java.util.Date;
 import java.util.Observable;
 import java.util.Properties;
 import java.util.Set;
@@ -33,22 +34,28 @@ public class IEProcessImpl extends Observable implements IIEProcess {
 	private IProcessType type;
 	@JsonDeserialize(as = ProcessOriginImpl.class)
 	private IProcessOrigin processOrigin;
-	
+	private int version;
+	private Date createDate;
+	private Date updateDate;
+
 	public IEProcessImpl() {
 		super();
 	}
 
-	public IEProcessImpl(long id, ICorpus corpus, String name, String notes, IProcessType processType, IProcessOrigin processOrigin, Properties properties) {
+	public IEProcessImpl(long id, ICorpus corpus, String name, String notes, IProcessType processType, IProcessOrigin processOrigin,int version, Properties properties, Date createDate,Date updateDate) {
 		this.id = id;
 		this.name = name;
 		this.type = processType;
 		this.processOrigin = processOrigin;
 		this.properties = properties;
 		this.corpus = corpus;
+		this.version=version;
+		this.createDate=createDate;
+		this.updateDate=updateDate;
 	}
 
 	public IEProcessImpl(ICorpus corpus, String description, String notes, IProcessType type, IProcessOrigin origin, Properties properties) {
-		this(GenerateRandomId.generateID(), corpus, description, notes, type, origin, properties);
+		this(GenerateRandomId.generateID(), corpus, description, notes, type, origin,1, properties,new Date(),new Date());
 	}
 
 	@Override
@@ -194,5 +201,29 @@ public class IEProcessImpl extends Observable implements IIEProcess {
 		if (id != other.id)
 			return false;
 		return true;
+	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 }

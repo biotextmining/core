@@ -27,34 +27,26 @@ public class EventAnnotationImpl extends AnnotationImpl implements IEventAnnotat
 	@JsonDeserialize(contentAs = EntityAnnotationImpl.class)
 	private List<IEntityAnnotation> entitiesAtRight;
 	private String eventClue;
-	private long ontologicalClassID;
-	private String ontologicalClass;
 	@JsonDeserialize(as = EventPropertiesImpl.class)
 	private IEventProperties eventProperties;
 		
 	public EventAnnotationImpl(long id,long start, long end, String type,
 			List<IEntityAnnotation> left,List<IEntityAnnotation> right,
-			String clue,long ontologicalClassID,String ontologicalClass,
-			IEventProperties eventProperties,boolean active) {
-		super(id,start, end,AnnotationType.re.name(),eventProperties.getProperties(),active);
+			String clue,IEventProperties eventProperties,boolean active,boolean validated) {
+		super(id,start, end,AnnotationType.re.name(),eventProperties.getProperties(),active,validated);
 		this.entitiesAtLeft=left;
 		this.entitiesAtRight=right;
 		this.eventClue=clue;
-		this.ontologicalClass=ontologicalClass;
-		this.ontologicalClassID=ontologicalClassID;
 		this.eventProperties=eventProperties;
 	}
 	
 	public EventAnnotationImpl(long start, long end, String type,
 			List<IEntityAnnotation> left,List<IEntityAnnotation> right,
-			String clue,long ontologicalClassID,String ontologicalClass,
-			IEventProperties eventProperties) {
-		super(start, end,AnnotationType.re.name(),eventProperties.getProperties());
+			String clue,IEventProperties eventProperties,boolean validated) {
+		super(start, end,AnnotationType.re.name(),eventProperties.getProperties(),validated);
 		this.entitiesAtLeft=left;
 		this.entitiesAtRight=right;
 		this.eventClue=clue;
-		this.ontologicalClass=ontologicalClass;
-		this.ontologicalClassID=ontologicalClassID;
 		this.eventProperties=eventProperties;
 	}
 
@@ -92,14 +84,6 @@ public class EventAnnotationImpl extends AnnotationImpl implements IEventAnnotat
 		this.eventClue = eventClue;
 	}
 
-	@Override
-	public long getOntologicalClassID() {
-		return this.ontologicalClassID;
-	}
-	
-	public void setOntologicalClassID(long ontologicalClassID) {
-		this.ontologicalClassID = ontologicalClassID;
-	}
 
 	@Override
 	public IEventProperties getEventProperties() {
@@ -110,16 +94,6 @@ public class EventAnnotationImpl extends AnnotationImpl implements IEventAnnotat
 	@Override
 	public void setEventProperties(IEventProperties eventProperties) {
 		this.eventProperties = eventProperties;
-	}
-	
-	@Override
-	public String getOntologicalClass() {
-		return this.ontologicalClass;
-	}
-	
-
-	public void setOntologicalClass(String ontologicalClass) {
-		this.ontologicalClass = ontologicalClass;
 	}
 
 	public void addEntityAtLeft(IEntityAnnotation ent) {
@@ -158,7 +132,7 @@ public class EventAnnotationImpl extends AnnotationImpl implements IEventAnnotat
 	}
 	
 	public IEventAnnotation clone(){
-		return new EventAnnotationImpl(this.getId(), this.getStartOffset(), this.getEndOffset(), this.getAnnotationType(), this.getEntitiesAtLeft(), this.getEntitiesAtRight(), this.getEventClue(), this.getOntologicalClassID(), this.getOntologicalClass(), this.getEventProperties(),this.isActive());
+		return new EventAnnotationImpl(this.getId(), this.getStartOffset(), this.getEndOffset(), this.getAnnotationType(), this.getEntitiesAtLeft(), this.getEntitiesAtRight(), this.getEventClue(), this.getEventProperties(),this.isActive(),isValidated());
 	}
 	
 	public String toString()

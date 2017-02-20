@@ -4,6 +4,7 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,16 +32,14 @@ public class Annotations implements java.io.Serializable {
 	private String annElement;
 	private String annAnnotType;
 	private String annClue;
-	private String annClassificationRe;
 	private boolean annActive;
-	private Long annStartSentenceOffset;
-	private Long annEndSentenceOffset;
 	private String annNotes;
 	private Set<AnnotationProperties> annotationPropertieses = new HashSet<AnnotationProperties>(0);
 	private Set<AnnotationLogs> annotationLogses = new HashSet<AnnotationLogs>(0);
 	private Set<AnnotationSides> annotationSidesesForAsAnnotationId = new HashSet<AnnotationSides>(0);
 	private Set<AnnotationSides> annotationSidesesForAsAnnotationSubId = new HashSet<AnnotationSides>(0);
 	private boolean annAbbreviation;
+	private boolean annValidated;
 
 
 	public Annotations() {
@@ -58,9 +57,9 @@ public class Annotations implements java.io.Serializable {
 	}
 
 	public Annotations(long annId, Classes classes, Corpus corpus, Processes processes, Publications publications, ResourceElements resourceElements, long annAnnotStart,
-			long annAnnotEnd, String annElement, String annAnnotType, String annClue, String annClassificationRe, boolean annActive,
-			Long annStartSentenceOffset, Long annEndSentenceOffset, String annNotes, Set<AnnotationProperties> annotationPropertieses, Set<AnnotationLogs> annotationLogses,
-			Set<AnnotationSides> annotationSidesesForAsAnnotationId, Set<AnnotationSides> annotationSidesesForAsAnnotationSubId,boolean annAbbreviation) {
+			long annAnnotEnd, String annElement, String annAnnotType, String annClue, boolean annActive,
+			String annNotes, Set<AnnotationProperties> annotationPropertieses, Set<AnnotationLogs> annotationLogses,
+			Set<AnnotationSides> annotationSidesesForAsAnnotationId, Set<AnnotationSides> annotationSidesesForAsAnnotationSubId,boolean annAbbreviation,boolean annValidated) {
 		this.annId = annId;
 		this.classes = classes;
 		this.corpus = corpus;
@@ -72,16 +71,14 @@ public class Annotations implements java.io.Serializable {
 		this.annElement = annElement;
 		this.annAnnotType = annAnnotType;
 		this.annClue = annClue;
-		this.annClassificationRe = annClassificationRe;
 		this.annActive = annActive;
-		this.annStartSentenceOffset = annStartSentenceOffset;
-		this.annEndSentenceOffset = annEndSentenceOffset;
 		this.annNotes = annNotes;
 		this.annotationPropertieses = annotationPropertieses;
 		this.annotationLogses = annotationLogses;
 		this.annotationSidesesForAsAnnotationId = annotationSidesesForAsAnnotationId;
 		this.annotationSidesesForAsAnnotationSubId = annotationSidesesForAsAnnotationSubId;
 		this.annAbbreviation=annAbbreviation;
+		this.setAnnValidated(annValidated);
 	}
 
 	@Id
@@ -198,14 +195,6 @@ public class Annotations implements java.io.Serializable {
 		this.annClue = annClue;
 	}
 
-	@Column(name = "ann_classification_re", length = 250)
-	public String getAnnClassificationRe() {
-		return this.annClassificationRe;
-	}
-
-	public void setAnnClassificationRe(String annClassificationRe) {
-		this.annClassificationRe = annClassificationRe;
-	}
 
 	@Column(name = "ann_active", nullable = false)
 	public boolean isAnnActive() {
@@ -214,24 +203,6 @@ public class Annotations implements java.io.Serializable {
 
 	public void setAnnActive(boolean annActive) {
 		this.annActive = annActive;
-	}
-
-	@Column(name = "ann_start_sentence_offset")
-	public Long getAnnStartSentenceOffset() {
-		return this.annStartSentenceOffset;
-	}
-
-	public void setAnnStartSentenceOffset(Long annStartSentenceOffset) {
-		this.annStartSentenceOffset = annStartSentenceOffset;
-	}
-
-	@Column(name = "ann_end_sentence_offset")
-	public Long getAnnEndSentenceOffset() {
-		return this.annEndSentenceOffset;
-	}
-
-	public void setAnnEndSentenceOffset(Long annEndSentenceOffset) {
-		this.annEndSentenceOffset = annEndSentenceOffset;
 	}
 
 	@Column(name = "ann_notes", length = 500)
@@ -277,6 +248,15 @@ public class Annotations implements java.io.Serializable {
 
 	public void setAnnotationSidesesForAsAnnotationSubId(Set<AnnotationSides> annotationSidesesForAsAnnotationSubId) {
 		this.annotationSidesesForAsAnnotationSubId = annotationSidesesForAsAnnotationSubId;
+	}
+
+	@Column(name = "ann_Validated", nullable = false)
+	public boolean isAnnValidated() {
+		return annValidated;
+	}
+
+	public void setAnnValidated(boolean annValidated) {
+		this.annValidated = annValidated;
 	}
 
 }

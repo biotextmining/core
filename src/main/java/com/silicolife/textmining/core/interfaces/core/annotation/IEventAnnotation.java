@@ -34,21 +34,7 @@ public interface IEventAnnotation extends IAnnotation{
 	 * @return {@link String}
 	 */
 	public String getEventClue(); // Verb
-	
-	/**
-	 * Method that return Event Classification ID;
-	 * 
-	 * @return {@link Integer} 
-	 */
-	public long getOntologicalClassID();
-	
-	/**
-	 * Method that return Event Classification ( if exist).
-	 * 
-	 * @return {@link Integer}
-	 */
-	public String getOntologicalClass();
-	
+		
 	/**
 	 * Method that return {@link IEventProperties}
 	 * 

@@ -10,6 +10,16 @@ import java.util.Properties;
  */
 public interface IAnnotation extends Cloneable{
 
+	
+	/**
+	 * Return DatabaseID for annotation
+	 * 
+	 * @return
+	 */
+	public long getId();
+	
+	public void generateNewId();
+	
 	/**
 	 * Return Annotation Type (NER,RE)
 	 * 
@@ -31,47 +41,23 @@ public interface IAnnotation extends Cloneable{
 	 */
 	public long getEndOffset();
 	
-	/**
-	 * Return DatabaseID for annotation
-	 * 
-	 * @return
-	 */
-	public long getId();
-	
-	
-	public IAnnotation clone();
-	
-	/**
-	 * Get Start Sentence index for annotation
-	 * 
-	 * @return
-	 */
-	public long getSentenceStartOffset();
-	
-	
-	
-	public void setSentenceStartOffset(long sentenceStartOffset);
-	
-	
-	/**
-	 * Get End Sentence index for annotation
-	 * 
-	 * @return
-	 */
-	public long getSentenceEndOffset();
-	
-	
-	public void setSentenceEndOffset(long sentenceEndOffset);
-	
-	
 	public String getNotes();
 	
 	public void setNotes(String notes);
 	
 	public Properties getProperties();
 
-	public void generateNewId();
+	
+	/**
+	 * Method that return if annotation was manual validated
+	 * 
+	 * @return
+	 */
+	public boolean isValidated();
+
 	
 	public boolean isActive();
+	
+	public IAnnotation clone();
 
 }

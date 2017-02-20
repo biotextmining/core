@@ -51,6 +51,9 @@ CREATE TABLE IF NOT EXISTS `processes` (
   `pro_name` VARCHAR(500) NULL,
   `pro_notes` TEXT NULL,
   `pro_active` TINYINT(1) NOT NULL DEFAULT 1,
+  `pro_version` INT(3) NOT NULL DEFAULT 1,
+  `pro_create_date` DATETIME NULL DEFAULT NULL,
+  `pro_update_date` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`pro_id`),
   INDEX `idx_processes_01` (`pro_active` ASC),
   INDEX `idx_processes_02` (`pro_process_type_id` ASC),
@@ -66,7 +69,6 @@ CREATE TABLE IF NOT EXISTS `processes` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `publications`
@@ -180,12 +182,10 @@ CREATE TABLE IF NOT EXISTS `annotations` (
   `ann_element` VARCHAR(500) NULL DEFAULT NULL,
   `ann_annot_type` ENUM('ner','re') NOT NULL DEFAULT 'ner',
   `ann_clue` VARCHAR(250) NULL,
-  `ann_classification_re` VARCHAR(250) NULL,
   `ann_active` TINYINT(1) NOT NULL DEFAULT 1,
-  `ann_start_sentence_offset` BIGINT NULL DEFAULT -1,
-  `ann_end_sentence_offset` BIGINT NULL DEFAULT -1,
   `ann_notes` VARCHAR(500) NULL DEFAULT NULL,
   `ann_abbreviation` TINYINT(1)  NULL DEFAULT 0,
+  `ann_validated` TINYINT(1)  NULL DEFAULT 0,
   PRIMARY KEY (`ann_id`),
   INDEX `idx_annotations_01` (`ann_annot_type` ASC),
   INDEX `idx_annotations_02` (`ann_active` ASC),
@@ -989,6 +989,7 @@ CREATE TABLE IF NOT EXISTS `corpus_has_publications_has_processes` (
   `chphp_processes_id` BIGINT NOT NULL,
   `chphp_create_date` DATETIME NULL,
   `chphp_update_date` DATETIME NULL,
+  `chphp_processes_version` INT(3) NOT NULL DEFAULT 1,
   PRIMARY KEY (`chphp_corpus_id`, `chphp_publication_id`, `chphp_processes_id`),
   INDEX `fk_corpus_has_publications_has_processes_processes1_idx` (`chphp_processes_id` ASC),
   INDEX `fk_corpus_has_publications_has_processes_corpus_has_publica_idx` (`chphp_corpus_id` ASC, `chphp_publication_id` ASC),
@@ -1213,6 +1214,8 @@ INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (2, '2016-06-21 20:00:00', 'Add Data Process Status Update AnnotationLog new fields to ENUMA dd Corpus Process Publication Table');
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (3, '2016-07-31 20:00:00', 'Bug Fix :Alter Corpus Has Publication has Process foreign key reference');
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (4, '2016-08-10 20:00:00', 'Alter Annotation table: remove element normalization and add abbreviation');
+INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (5, '2017-02-07 20:00:00', 'Lucene Index');
+INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (6, '2017-08-10 20:00:00', 'Alter Annotation table: remove start, end offset sentence, relation_classidfication and add manual curated field, Alter Processes table : add version, create and update date: Alter table corpus_has_publication_has_processes: Add version');
 
 COMMIT;
 

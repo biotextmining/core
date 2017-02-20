@@ -1,0 +1,1 @@
+Alter Annotation table: remove start, end offset sentence and relation classification and manual curated boolean; Alter Processes table : add version, create and update date: Alter table corpus_has_publication_has_processes: Add version

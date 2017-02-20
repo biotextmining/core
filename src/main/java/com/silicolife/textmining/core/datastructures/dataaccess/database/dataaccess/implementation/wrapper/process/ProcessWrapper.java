@@ -1,5 +1,6 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.process;
 
+import java.util.Date;
 import java.util.Properties;
 import java.util.Set;
 
@@ -31,6 +32,10 @@ public class ProcessWrapper {
 		String notes = processes.getProNotes();
 		ProcessOrigins processOrigin = processes.getProcessOrigins();
 		ProcessTypes processType = processes.getProcessTypes();
+		Integer version = processes.getProVersion();
+		Date createDate = processes.getProCreateDate();
+		Date update = processes.getProUpdateDate();
+
 		Set<ProcessProperties> processProperties = processes.getProcessPropertieses();
 		Set<CorpusHasProcesses> corpusHasProcesses = processes.getCorpusHasProcesseses();
 		/*
@@ -44,9 +49,7 @@ public class ProcessWrapper {
 			CorpusHasProcesses corpusRecord = corpusHasProcesses.iterator().next();
 			corpus_ = CorpusWrapper.convertToAnoteStructure(corpusRecord.getCorpus());
 		}
-
-		IIEProcess process_ = new IEProcessImpl(id, corpus_, description, notes, processType_, processOrigin_, properties);
-
+		IIEProcess process_ = new IEProcessImpl(id, corpus_, description, notes, processType_, processOrigin_,version, properties,createDate,update);
 		return process_;
 	}
 
@@ -70,6 +73,10 @@ public class ProcessWrapper {
 		processes.setProcessTypes(processType);
 		processes.setProcessOrigins(processOrigin);
 		processes.setProcessPropertieses(processesProperties);
+		processes.setProVersion(processes_.getVersion());
+		processes.setProCreateDate(processes_.getCreateDate());
+		processes.setProUpdateDate(processes_.getUpdateDate());
+		processes.setProActive(true);
 		return processes;
 	}
 }

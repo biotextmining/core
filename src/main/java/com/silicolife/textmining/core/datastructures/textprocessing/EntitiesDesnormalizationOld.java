@@ -146,7 +146,7 @@ public class EntitiesDesnormalizationOld {
 
 			if(annotation.getAnnotationValue().equals(nonNormalizedTokens[tokenIndex])){
 				correctedAnnotations.addAnnotationWhitConflitsAndReplaceIfRangeIsMore(new AnnotationPosition((int)startOffsetNonNormalized, (int)endOffsetNonNormalized),new EntityAnnotationImpl(startOffsetNonNormalized, endOffsetNonNormalized, annotation.getClassAnnotation(), 
-						annotation.getResourceElement(), annotation.getAnnotationValue(), annotation.isAbreviation(), annotation.getProperties()));
+						annotation.getResourceElement(), annotation.getAnnotationValue(), annotation.isAbreviation(),annotation.isValidated(), annotation.getProperties()));
 				annotationIndex++;
 				return true;
 				
@@ -174,7 +174,7 @@ public class EntitiesDesnormalizationOld {
 					}else{
 						correctedAnnotations.addAnnotationWhitConflitsAndReplaceIfRangeIsMore(position,new EntityAnnotationImpl(correctedStart, correctedEnd, 
 								annotation.getClassAnnotation(), annotation.getResourceElement(), 
-								annotationVal, annotation.isAbreviation(), annotation.getProperties()));
+								annotationVal, annotation.isAbreviation(),annotation.isValidated(), annotation.getProperties()));
 						annotationIndex++;
 						added = true;
 					}
@@ -213,7 +213,7 @@ public class EntitiesDesnormalizationOld {
 			long correctedEnd = startOffsetNonNormalized + end;
 			correctedAnnotations.addAnnotationWhitConflitsAndReplaceIfRangeIsMore(new AnnotationPosition((int)tempStartOffset, (int)correctedEnd),new EntityAnnotationImpl(tempStartOffset, correctedEnd, 
 					annotation.getClassAnnotation(), annotation.getResourceElement(), 
-					annotation.getAnnotationValue(), annotation.isAbreviation(), annotation.getProperties()));
+					annotation.getAnnotationValue(), annotation.isAbreviation(),annotation.isValidated(), annotation.getProperties()));
 			tempStartOffset = -1;
 			annotationIndex++;
 			return true;

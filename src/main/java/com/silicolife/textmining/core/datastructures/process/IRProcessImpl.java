@@ -1,5 +1,6 @@
 package com.silicolife.textmining.core.datastructures.process;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,9 +11,15 @@ import com.silicolife.textmining.core.interfaces.process.IR.IIRProcess;
 import com.silicolife.textmining.core.interfaces.process.IR.IQuery;
 
 public abstract class IRProcessImpl implements IIRProcess{
+	
+	private Date createDate;
+	private Date updateDate;
+
 
 	public IRProcessImpl() {
 		super();
+		this.createDate = new Date();
+		this.updateDate = new Date();
 	}
 
 	protected Map<String, Long> getAllPublicationExternalIdFromSource(String source )throws ANoteException {
@@ -36,5 +43,22 @@ public abstract class IRProcessImpl implements IIRProcess{
 
 	protected void updateQueryOnDatabase(IQuery query) throws ANoteException {
 		InitConfiguration.getDataAccess().updateQuery(query);
+	}
+	
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	@Override
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 }

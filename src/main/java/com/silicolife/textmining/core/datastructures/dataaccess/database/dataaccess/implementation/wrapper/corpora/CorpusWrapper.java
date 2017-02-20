@@ -46,6 +46,7 @@ public class CorpusWrapper {
 		}
 		corpus.setCrpNotes(notes);
 		corpus.setCorpusPropertieses(corpusProperties);
+		corpus.setCrpActive(true);
 		return corpus;
 	}
 }

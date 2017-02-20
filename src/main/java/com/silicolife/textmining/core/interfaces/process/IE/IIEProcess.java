@@ -39,5 +39,7 @@ public interface IIEProcess extends IProcess{
 	
 	public String getNotes();
 	
+	public int getVersion();
+	
 	public IIEProcessStatistics getStatistics() throws ANoteException;
 }

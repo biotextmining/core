@@ -2,6 +2,7 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 // Generated 21/jun/2016 18:34:36 by Hibernate Tools 5.1.0.Alpha1
 
 import java.util.Date;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -27,24 +28,27 @@ public class CorpusHasPublicationsHasProcesses implements java.io.Serializable {
 	private Processes processes;
 	private Date chphpCreateDate;
 	private Date chphpUpdateDate;
+	private int chphpProcessesVersion;
 
 	public CorpusHasPublicationsHasProcesses() {
 	}
 
 	public CorpusHasPublicationsHasProcesses(CorpusHasPublicationsHasProcessesId id,
-			CorpusHasPublications corpusHasPublications, Processes processes) {
+			CorpusHasPublications corpusHasPublications, Processes processes,int chphpProcessesVersion) {
 		this.id = id;
 		this.corpusHasPublications = corpusHasPublications;
 		this.processes = processes;
+		this.chphpProcessesVersion = chphpProcessesVersion;
 	}
 	public CorpusHasPublicationsHasProcesses(CorpusHasPublicationsHasProcessesId id,
 			CorpusHasPublications corpusHasPublications, Processes processes, Date chphpCreateDate,
-			Date chphpUpdateDate) {
+			Date chphpUpdateDate,Integer chphpProcessesVersion) {
 		this.id = id;
 		this.corpusHasPublications = corpusHasPublications;
 		this.processes = processes;
 		this.chphpCreateDate = chphpCreateDate;
 		this.chphpUpdateDate = chphpUpdateDate;
+		this.chphpProcessesVersion = chphpProcessesVersion;
 	}
 
 	@EmbeddedId
@@ -102,5 +106,16 @@ public class CorpusHasPublicationsHasProcesses implements java.io.Serializable {
 	public void setChphpUpdateDate(Date chphpUpdateDate) {
 		this.chphpUpdateDate = chphpUpdateDate;
 	}
+
+	@Column(name = "chphp_processes_version")
+	public Integer getChphpProcessesVersion() {
+		return chphpProcessesVersion;
+	}
+
+	public void setChphpProcessesVersion(Integer chphpProcessesVersion) {
+		this.chphpProcessesVersion = chphpProcessesVersion;
+	}
+	
+
 
 }

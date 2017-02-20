@@ -35,8 +35,8 @@ public class EntityAnnotationImpl extends AnnotationImpl implements IEntityAnnot
 	}
 	
 	public EntityAnnotationImpl(long id, long start, long end,IAnoteClass classAnnotation,IResourceElement resourceElement,
-			String value,boolean abreviation,Properties properties,boolean active) {
-		super(id, start, end,AnnotationType.ner.name(),properties,active);
+			String value,boolean abreviation,Properties properties,boolean active,boolean validated) {
+		super(id, start, end,AnnotationType.ner.name(),properties,active,validated);
 		this.classAnnotation=classAnnotation;
 		this.annotationValue=value;
 		this.resourceElement=resourceElement;
@@ -44,9 +44,9 @@ public class EntityAnnotationImpl extends AnnotationImpl implements IEntityAnnot
 	}
 	
 
-	public EntityAnnotationImpl(long start, long end,IAnoteClass classAnnotation,IResourceElement resourceElement,String value,boolean abreviation,Properties properties)
+	public EntityAnnotationImpl(long start, long end,IAnoteClass classAnnotation,IResourceElement resourceElement,String value,boolean abreviation,boolean validated,Properties properties)
 	{
-		this(GenerateRandomId.generateID(),start,end,classAnnotation,resourceElement,value,abreviation,properties,true);
+		this(GenerateRandomId.generateID(),start,end,classAnnotation,resourceElement,value,abreviation,properties,true,abreviation);
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class EntityAnnotationImpl extends AnnotationImpl implements IEntityAnnot
 	public IEntityAnnotation clone()
 	{
 		IEntityAnnotation ent = new EntityAnnotationImpl(super.getId(),super.getStartOffset(),super.getEndOffset(),
-				getClassAnnotation(),getResourceElement(), getAnnotationValue(),isAbreviation(),getProperties(),isActive());
+				getClassAnnotation(),getResourceElement(), getAnnotationValue(),isAbreviation(),getProperties(),isActive(),isValidated());
 		return ent;		
 	}
 	

@@ -1,5 +1,6 @@
 package com.silicolife.textmining.core.datastructures.schemas;
 
+import java.util.Date;
 import java.util.Properties;
 import java.util.Set;
 
@@ -13,12 +14,12 @@ import com.silicolife.textmining.core.interfaces.process.IE.INERSchema;
 
 public class NERSchemaImpl extends IEProcessImpl implements INERSchema{
 
-	public NERSchemaImpl(long id,ICorpus corpus, String description, String notes,IProcessType type, IProcessOrigin origin, Properties properties) {
-		super(id,corpus, description, notes, type, origin, properties);
+	public NERSchemaImpl(long id,ICorpus corpus, String description, String notes,IProcessType type, IProcessOrigin origin,int version, Properties properties,Date createDate,Date updateDate) {
+		super(id,corpus, description, notes, type, origin,version, properties,createDate,updateDate);
 	}
 
 	public NERSchemaImpl(IIEProcess newProcess) {
-		this(newProcess.getId(),newProcess.getCorpus(), newProcess.getName(), newProcess.getNotes(),newProcess.getType(),newProcess.getProcessOrigin(), newProcess.getProperties());
+		this(newProcess.getId(),newProcess.getCorpus(), newProcess.getName(), newProcess.getNotes(),newProcess.getType(),newProcess.getProcessOrigin(),newProcess.getVersion(), newProcess.getProperties(),newProcess.getCreateDate(),newProcess.getUpdateDate());
 	}
 
 	@Override

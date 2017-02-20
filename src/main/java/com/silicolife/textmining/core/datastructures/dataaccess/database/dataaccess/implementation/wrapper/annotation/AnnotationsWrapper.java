@@ -46,9 +46,8 @@ public class AnnotationsWrapper {
 		Long annAnnotEnd = entityAnnotation.getEndOffset();
 		String annElement = entityAnnotation.getAnnotationValue();
 		String annAnnotType = entityAnnotation.getAnnotationType();
-		Long annStartSentenceOffset = entityAnnotation.getSentenceStartOffset();
-		Long annEndSentenceOffset = entityAnnotation.getSentenceEndOffset();
 		String annNotes = entityAnnotation.getNotes();
+		
 		Set<AnnotationProperties> annotationPropertieses = AnnotationPropertiesWrapper.convertToDaemonStructure(entityAnnotation.getProperties(), annotation);
 		annotation.setAnnId(annId);
 		annotation.setClasses(classes);
@@ -59,8 +58,6 @@ public class AnnotationsWrapper {
 		annotation.setAnnElement(annElement);
 		annotation.setAnnAnnotType(annAnnotType);
 		annotation.setAnnActive(true);
-		annotation.setAnnStartSentenceOffset(annStartSentenceOffset);
-		annotation.setAnnEndSentenceOffset(annEndSentenceOffset);
 		annotation.setAnnNotes(annNotes);
 		annotation.setAnnotationPropertieses(annotationPropertieses);
 		annotation.setCorpus(corpus);
@@ -68,6 +65,7 @@ public class AnnotationsWrapper {
 		annotation.setPublications(publications);
 		annotation.setAnnActive(entityAnnotation.isActive());
 		annotation.setAnnAbbreviation(entityAnnotation.isAbreviation());
+		annotation.setAnnValidated(entityAnnotation.isValidated());
 		return annotation;
 	}
 	
@@ -82,12 +80,11 @@ public class AnnotationsWrapper {
 			annot.setAnnElement(annotation.getAnnotationValue());
 			annot.setAnnAnnotType(annotation.getAnnotationType());
 			annot.setAnnActive(true);
-			annot.setAnnStartSentenceOffset(annotation.getSentenceStartOffset());
-			annot.setAnnEndSentenceOffset(annotation.getSentenceEndOffset());
 			annot.setAnnNotes(annotation.getNotes());
 			annot.setAnnotationPropertieses(annotationPropertieses);
 			annot.setAnnActive(annotation.isActive());
 			annot.setAnnAbbreviation(annotation.isAbreviation());
+			annot.setAnnValidated(annotation.isValidated());
 			return annot;
 		}
 
@@ -105,7 +102,8 @@ public class AnnotationsWrapper {
 		Properties properties = AnnotationPropertiesWrapper.convertToAnoteStructure(annot.getAnnotationPropertieses());
 		boolean isactive = annot.isAnnActive();
 		boolean isAbbreviation = annot.isAnnAbbreviation();
-		IEntityAnnotation entityAnnotaion = new EntityAnnotationImpl(id, start, end, klass, resourceElement, value, isAbbreviation, properties,isactive );
+		boolean isValidated = annot.isAnnValidated();
+		IEntityAnnotation entityAnnotaion = new EntityAnnotationImpl(id, start, end, klass, resourceElement, value, isAbbreviation, properties,isactive,isValidated);
 		return entityAnnotaion;
 	}
 
@@ -156,8 +154,6 @@ public class AnnotationsWrapper {
 		Long annAnnotEnd = event.getEndOffset();
 		String annClue = event.getEventClue();
 		String annAnnotType = event.getAnnotationType();
-		Long annStartSentenceOffset = event.getSentenceStartOffset();
-		Long annEndSentenceOffset = event.getSentenceEndOffset();
 		String annNotes = event.getNotes();
 		Set<AnnotationProperties> annotationPropertieses = AnnotationPropertiesWrapper.convertToDaemonStructure(event.getProperties(), annotation);
 		annotation.setAnnAnnotStart(annAnnotStart);
@@ -165,8 +161,6 @@ public class AnnotationsWrapper {
 		annotation.setAnnClue(annClue);
 		annotation.setAnnAnnotType(annAnnotType);
 		annotation.setAnnActive(true);
-		annotation.setAnnStartSentenceOffset(annStartSentenceOffset);
-		annotation.setAnnEndSentenceOffset(annEndSentenceOffset);
 		annotation.setAnnNotes(annNotes);
 		annotation.setAnnotationPropertieses(annotationPropertieses);
 		annotation.setCorpus(corpus);
@@ -174,6 +168,7 @@ public class AnnotationsWrapper {
 		annotation.setPublications(publications);
 		Set<AnnotationSides> annotationSidesesForAsAnnotationId = convertToDaemonStructure(corpus,processes,publications,annotation,event.getEntitiesAtLeft(),event.getEntitiesAtRight());
 		annotation.setAnnotationSidesesForAsAnnotationId(annotationSidesesForAsAnnotationId);
+		annotation.setAnnValidated(event.isValidated());
 		return annotation;
 	}
 
@@ -202,11 +197,11 @@ public class AnnotationsWrapper {
 		long end = annot.getAnnAnnotEnd();
 		String type = annot.getAnnAnnotType();
 		String clue = annot.getAnnClue();
-		long ontologicalClassID = -1;
-		String ontologicalClass = annot.getAnnClassificationRe();
 		Properties properties = AnnotationPropertiesWrapper.convertToAnoteStructure(annot.getAnnotationPropertieses());
 		IEventProperties eventProperties = new EventPropertiesImpl(properties);
 		boolean active = annot.isAnnActive();
+		boolean validated = annot.isAnnValidated();
+
 		List<IEntityAnnotation> left = new ArrayList<IEntityAnnotation>();
 		List<IEntityAnnotation> right = new ArrayList<IEntityAnnotation>();
 		Set<AnnotationSides> setAnnoationSides = annot.getAnnotationSidesesForAsAnnotationId();
@@ -214,7 +209,7 @@ public class AnnotationsWrapper {
 		{
 			convertToAnoteStructure(annotSide,left,right,mapEntityID);
 		}
-		IEventAnnotation event = new EventAnnotationImpl(id, start, end, type , left , right , clue, ontologicalClassID, ontologicalClass , eventProperties,active );
+		IEventAnnotation event = new EventAnnotationImpl(id, start, end, type , left , right , clue , eventProperties,active,validated );
 		return event;
 	}
 

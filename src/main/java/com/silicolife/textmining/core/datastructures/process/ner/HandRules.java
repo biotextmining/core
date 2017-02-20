@@ -142,7 +142,7 @@ public class HandRules {
 					if(!term.isEmpty())
 					{
 						IEntityAnnotation annotation = new EntityAnnotationImpl(pos.getStart()+segment.getStartOffset(), pos.getEnd()+segment.getStartOffset(),
-								handRule.getTermClass(),handRule, term,false,null);
+								handRule.getTermClass(),handRule, term,false,false,null);
 						annotations.addAnnotationWhitConflitsAndReplaceIfRangeIsMoreRule(pos, annotation);
 					}
 				}
@@ -156,7 +156,7 @@ public class HandRules {
 			if(!term.isEmpty())
 			{
 				IEntityAnnotation annotation = new EntityAnnotationImpl(pos.getStart()+segment.getStartOffset(), pos.getEnd()+segment.getStartOffset(),
-						handRule.getTermClass(),handRule, term,false,null);
+						handRule.getTermClass(),handRule, term,false,false,null);
 				annotations.addAnnotationWhitConflitsAndReplaceIfRangeIsMoreRule(pos, annotation);
 			}
 		}
@@ -180,7 +180,7 @@ public class HandRules {
 						// Empty terms are not considered
 						if(!term.isEmpty())
 						{
-							IEntityAnnotation annotation = new EntityAnnotationImpl(pos.getStart(), pos.getEnd(),handRule.getTermClass(),handRule, term,false,null);
+							IEntityAnnotation annotation = new EntityAnnotationImpl(pos.getStart(), pos.getEnd(),handRule.getTermClass(),handRule, term,false,false,null);
 							annotations.addAnnotationWhitConflitsAndReplaceIfRangeIsMoreRule(pos, annotation);
 						}
 					}
@@ -193,7 +193,7 @@ public class HandRules {
 				// Empty terms are not considered
 				if(!term.isEmpty())
 				{
-					IEntityAnnotation annotation = new EntityAnnotationImpl( pos.getStart(), pos.getEnd(),handRule.getTermClass(),handRule, term,false,null);
+					IEntityAnnotation annotation = new EntityAnnotationImpl( pos.getStart(), pos.getEnd(),handRule.getTermClass(),handRule, term,false,false,null);
 					annotations.addAnnotationWhitConflitsAndReplaceIfRangeIsMoreRule(pos, annotation);
 				}
 			}
@@ -249,11 +249,11 @@ public class HandRules {
 		long resourceInfoNumber = extraInfo.getResourceExtraInfoID(handRule,term);
 		if(resourceInfoNumber == -1)
 		{
-			return new EntityAnnotationImpl(pos.getStart(), pos.getEnd(),handRule.getTermClass(),handRule, term,false,null);
+			return new EntityAnnotationImpl(pos.getStart(), pos.getEnd(),handRule.getTermClass(),handRule, term,false,false,null);
 		}
 		else
 		{
-			return new EntityAnnotationImpl(pos.getStart(), pos.getEnd(),handRule.getTermClass(),InitConfiguration.getDataAccess().getResourceElementByID(resourceInfoNumber), term,false,null);
+			return new EntityAnnotationImpl(pos.getStart(), pos.getEnd(),handRule.getTermClass(),InitConfiguration.getDataAccess().getResourceElementByID(resourceInfoNumber), term,false,false,null);
 		}
 	}
 	
@@ -262,12 +262,12 @@ public class HandRules {
 		if(resourceInfoNumber == -1)
 		{
 			return new EntityAnnotationImpl(pos.getStart()+segment.getStartOffset(), pos.getEnd()+segment.getStartOffset(),
-					handRule.getTermClass(),handRule, term,false,null);
+					handRule.getTermClass(),handRule, term,false,false,null);
 		}
 		else
 		{
 			return new EntityAnnotationImpl( pos.getStart()+segment.getStartOffset(), pos.getEnd()+segment.getStartOffset(),
-					handRule.getTermClass(),InitConfiguration.getDataAccess().getResourceElementByID(resourceInfoNumber), term,false,null);
+					handRule.getTermClass(),InitConfiguration.getDataAccess().getResourceElementByID(resourceInfoNumber), term,false,false,null);
 		}
 	}
 }

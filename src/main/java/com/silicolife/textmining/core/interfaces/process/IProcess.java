@@ -1,5 +1,6 @@
 	package com.silicolife.textmining.core.interfaces.process;
 
+import java.util.Date;
 
 /**
  * This interface define each Biomedical text mining operation that can change or create a Corpus
@@ -16,4 +17,7 @@ public interface IProcess {
 	public IProcessOrigin getProcessOrigin();
 	public long getId();
 	public void stop();
+	public Date getCreateDate();
+	public Date getUpdateDate();
+
 }
