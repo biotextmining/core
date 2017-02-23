@@ -3,7 +3,6 @@ package com.silicolife.textmining.core.interfaces.core.dataaccess.layer.corpora;
 import java.util.List;
 import java.util.Set;
 
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.AnnotationException;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;

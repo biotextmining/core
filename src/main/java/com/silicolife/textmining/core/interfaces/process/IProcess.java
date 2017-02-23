@@ -19,5 +19,6 @@ public interface IProcess {
 	public void stop();
 	public Date getCreateDate();
 	public Date getUpdateDate();
+	public void setUpdateDate(Date date);
 
 }

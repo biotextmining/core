@@ -112,6 +112,8 @@ public class ProcessesServiceImpl implements IProcessesService {
 			throw new ProcessException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
 		processs.setProName(processes_.getName());
 		processs.setProNotes(processes_.getNotes());
+		processs.setProVersion(processes_.getVersion());
+		processs.setProUpdateDate(processes_.getUpdateDate());
 		processesManagerDao.getProcessesDao().update(processs);
 		/*
 		 * log
