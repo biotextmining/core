@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.silicolife.textmining.core.datastructures.process.IEConfigurationImpl;
 import com.silicolife.textmining.core.datastructures.process.IEProcessImpl;
+import com.silicolife.textmining.core.datastructures.process.ProcessRunStatusConfigurationEnum;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 import com.silicolife.textmining.core.interfaces.process.IE.re.IREConfiguration;
@@ -20,8 +21,8 @@ public abstract class REConfigurationImpl extends IEConfigurationImpl implements
 		super();
 	}
 	
-	public REConfigurationImpl(String processUID,ICorpus corpus,IIEProcess entityProcess,boolean useManualCurationFromOtherProcess,IIEProcess manualCurationProcess) {
-		super(corpus);
+	public REConfigurationImpl(String processUID,ICorpus corpus,IIEProcess process,ProcessRunStatusConfigurationEnum processRunStatus,IIEProcess entityProcess,boolean useManualCurationFromOtherProcess,IIEProcess manualCurationProcess) {
+		super(corpus,process,processRunStatus);
 		this.entityBasedProcess = entityProcess;
 		this.processUID = processUID;
 		this.useManualCurationFromOtherProcess = useManualCurationFromOtherProcess;

@@ -1,33 +1,27 @@
 package com.silicolife.textmining.core.datastructures.process;
 
-import java.util.Properties;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.silicolife.textmining.core.datastructures.corpora.CorpusImpl;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEConfiguration;
+import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 
 public class IEConfigurationImpl extends ConfigurationImpl implements IIEConfiguration{
 	
 	private ICorpus corpus;
-	private String processNotes;
-	private String processName;
-	private Properties properties;
+	private IIEProcess ieprocess;
+	private ProcessRunStatusConfigurationEnum processRunStatus;
 	
 	
 	public IEConfigurationImpl() {
 		super();
+		this.processRunStatus = ProcessRunStatusConfigurationEnum.createnew;
 	}
 	
-	public IEConfigurationImpl(ICorpus corpus)
-	{
+	public IEConfigurationImpl(ICorpus corpus, IIEProcess ieprocess,ProcessRunStatusConfigurationEnum processRunStatus) {
 		this.corpus = corpus;
-	}
-	
-	public IEConfigurationImpl(ICorpus corpus, String processName, String processNotes) {
-		this(corpus);
-		this.processName=processName;
-		this.processNotes=processNotes;
+		this.ieprocess=ieprocess;
+		this.processRunStatus =processRunStatus;
 	}
 
 	@JsonDeserialize(as=CorpusImpl.class)
@@ -35,36 +29,22 @@ public class IEConfigurationImpl extends ConfigurationImpl implements IIEConfigu
 		return corpus;
 	}
 
+	public ProcessRunStatusConfigurationEnum getProcessRunStatus() {
+		return processRunStatus;
+	}
+
+	public void setProcessRunStatus(ProcessRunStatusConfigurationEnum processRunStatus) {
+		this.processRunStatus = processRunStatus;
+	}
+
+	@JsonDeserialize(as=IEProcessImpl.class)
+	public IIEProcess getIEProcess() {
+		return ieprocess;
+	}
+
 	@Override
 	public void setCorpus(ICorpus corpus) {
-		this.corpus = corpus;
-	}
-
-	@Override
-	public String getProcessNotes() {
-		return processNotes;
-	}
-
-	@Override
-	public void setProcessNotes(String processNotes) {
-		this.processNotes=processNotes;
-	}
-
-	public String getProcessName() {
-		return processName;
-	}
-	
-	public void setProcessName(String processName) {
-		this.processName = processName;
-	}
-
-	@Override
-	public Properties getProperties() {
-		return properties;
-	}
-
-	public void setProperties(Properties properties) {
-		this.properties = properties;
+		this.corpus=corpus;
 	}
 
 }

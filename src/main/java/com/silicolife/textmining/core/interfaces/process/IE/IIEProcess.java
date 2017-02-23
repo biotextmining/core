@@ -21,12 +21,16 @@ public interface IIEProcess extends IProcess{
 	 */
 	public String getName();
 	
+	public void setName(String name);
+	
 	/**
 	 * Return Properties
 	 * 
 	 * @return
 	 */
 	public Properties getProperties();
+	
+	public void setProperties(Properties properties);
 	
 	/**
 	 * Return {@link ICorpus} associated to Process
