@@ -22,9 +22,7 @@ public class GlobalNames {
 	public final static String nerpreProcessingPosTaggingAndStopWords = nerpreProcessingPosTagging+" + "+stopWords;
 	public final static String useOtherResourceInformationInRules = "Use Other Resource Information In Rules";
 	public final static String sizeOfNonAnnotatedSmallWords = "Size of Small Words to be not annotated :";
-
-
-
+	public final static String numberThreads = "Threads :";
 	
 	/**
 	 * Corpus Properties
