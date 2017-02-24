@@ -10,5 +10,7 @@ public interface IIEConfiguration extends IConfiguration{
 	public void setCorpus(ICorpus corpus);
 	public ProcessRunStatusConfigurationEnum getProcessRunStatus();
 	public IIEProcess getIEProcess();
+	public void setIEProcess(IIEProcess ieprocess);
+
 	
 }

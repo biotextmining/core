@@ -2319,6 +2319,19 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}
 	}
+
+	@Override
+	public Boolean removeAllProcessDocumentAnnotations(IIEProcess process, IPublication document) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Boolean result =  annotationService.removeAllProcessDocumentAnnotations(process.getId(),document.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return result;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
 	
 
 }

@@ -57,13 +57,23 @@ public interface IAnnotationAccess {
 	public void addProcessDocumentEventAnnoations(IIEProcess process, IPublication document, List<IEventAnnotation> events) throws ANoteException;
 
 	/**
-	 * Delete annotation
+	 * Inativate annotation
 	 * 
 	 * @param annotationID
 	 * @throws DaemonException
 	 * @throws DatabaseLoadDriverException
 	 */
 	public void inactiveAnnotations(List<Long> annotation) throws ANoteException;
+	
+	/**
+	 * Delete annotation
+	 * 
+	 * @param annotationID
+	 * @return 
+	 * @throws DaemonException
+	 * @throws DatabaseLoadDriverException
+	 */
+	public Boolean removeAllProcessDocumentAnnotations(IIEProcess process, IPublication document) throws ANoteException;
 
 	/**
 	 * Update entity annotations (Like Class)

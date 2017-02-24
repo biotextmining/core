@@ -383,4 +383,20 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return response.getBody().getContent();
 		}
 	}
+
+
+	public Boolean removeAllProcessDocumentAnnotations(Long processId, Long publicationId) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Boolean>> responseType = new ParameterizedTypeReference<DaemonResponse<Boolean>>() {};
+		Map<String, Long> uriVariables = new LinkedHashMap<String, Long>();
+		uriVariables.put("publicationId", publicationId);
+		uriVariables.put("processId", processId);
+		ResponseEntity<DaemonResponse<Boolean>> response = webClient.post("annotation/removeAllProcessDocumentAnnotations", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} 
+		else {
+			return response.getBody().getContent();
+		}	
+	}
 }

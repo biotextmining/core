@@ -1109,6 +1109,12 @@ public class DaemonAccess implements IDataAccess {
 	public List<Long> getPublicationsIdsByAnnotationsFilter(IAnnotationsFilter filter) throws ANoteException {
 		return annotationAccessImpl.getPublicationsIdsByAnnotationsFilter(filter);
 	}
+
+	@Override
+	public Boolean removeAllProcessDocumentAnnotations(IIEProcess process, IPublication document) throws ANoteException {
+		return annotationAccessImpl.removeAllProcessDocumentAnnotations(process.getId(),document.getId());
+		
+	}
 	
 	
 }

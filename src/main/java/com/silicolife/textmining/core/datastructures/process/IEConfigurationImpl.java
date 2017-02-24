@@ -9,7 +9,7 @@ import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 public class IEConfigurationImpl extends ConfigurationImpl implements IIEConfiguration{
 	
 	private ICorpus corpus;
-	private IIEProcess ieprocess;
+	private IIEProcess IEProcess;
 	private ProcessRunStatusConfigurationEnum processRunStatus;
 	
 	
@@ -20,7 +20,7 @@ public class IEConfigurationImpl extends ConfigurationImpl implements IIEConfigu
 	
 	public IEConfigurationImpl(ICorpus corpus, IIEProcess ieprocess,ProcessRunStatusConfigurationEnum processRunStatus) {
 		this.corpus = corpus;
-		this.ieprocess=ieprocess;
+		this.IEProcess=ieprocess;
 		this.processRunStatus =processRunStatus;
 	}
 
@@ -39,12 +39,17 @@ public class IEConfigurationImpl extends ConfigurationImpl implements IIEConfigu
 
 	@JsonDeserialize(as=IEProcessImpl.class)
 	public IIEProcess getIEProcess() {
-		return ieprocess;
+		return IEProcess;
 	}
 
 	@Override
 	public void setCorpus(ICorpus corpus) {
 		this.corpus=corpus;
+	}
+
+	@Override
+	public void setIEProcess(IIEProcess ieprocess) {
+		this.IEProcess=ieprocess;
 	}
 
 }

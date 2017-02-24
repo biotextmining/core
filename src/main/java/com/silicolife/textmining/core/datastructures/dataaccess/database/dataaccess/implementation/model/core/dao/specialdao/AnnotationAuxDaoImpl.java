@@ -9,14 +9,11 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 import org.hibernate.transform.Transformers;
-import org.hibernate.type.IntegerType;
-import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -203,5 +200,19 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 		projections.add(Projections.distinct(Projections.property("publications.pubId")), "pubId");
 		c.setProjection(projections);
 		return c.list();
+	}
+
+	@Override
+	public void removeAllProcessDocumentAnnotations(Processes processes, Publications publications) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Annotations.class, "annnotations");
+		c.add(Restrictions.eq("annnotations.processes", processes));
+		c.add(Restrictions.eq("annnotations.publications", publications));
+		List<?> results = c.list();
+		for(Object result:results)
+		{
+			session.delete(result);
+		}
+		session.flush();
 	}
 }
