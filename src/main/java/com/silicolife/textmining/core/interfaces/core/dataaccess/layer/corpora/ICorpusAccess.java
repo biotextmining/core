@@ -148,7 +148,29 @@ public interface ICorpusAccess extends IIEProcessAccess, IAnnotationAccess, IAnn
 	 * @return
 	 * @throws ANoteException
 	 */
-	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(IIEProcess process, Integer paginationIndex, Integer paginationSize)throws ANoteException;
+	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(IIEProcess process, Integer paginationIndex, Integer paginationSize) throws ANoteException;
+	
+	/**
+	 * 
+	 * Count all outdated documents
+	 * 
+	 * @param process
+	 * @return
+	 * @throws ANoteException
+	 */
+	public Long countCorpusPublicationsOutdated(IIEProcess process) throws ANoteException;
+	
+	/**
+	 * 
+	 * Get all outdated documents from the process
+	 * 
+	 * @param process
+	 * @param paginationIndex
+	 * @param paginationSize
+	 * @return
+	 * @throws ANoteException
+	 */
+	public IDocumentSet getCorpusPublicationsOutdatedPaginated(IIEProcess process, Integer paginationIndex, Integer paginationSize) throws ANoteException;
 	
 	/**
 	 * 

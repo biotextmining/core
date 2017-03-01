@@ -887,12 +887,6 @@ public class DaemonAccess implements IDataAccess {
 	}
 
 	@Override
-	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(IIEProcess process, Integer paginationIndex,
-			Integer paginationSize) throws ANoteException {
-		return corpusAccessImpl.getCorpusPublicationsNotProcessedPaginated(process.getCorpus().getId(), process.getId(), paginationIndex, paginationSize);
-	}
-
-	@Override
 	public Set<String> getCorpusPublicationsExternalIDFromSource(ICorpus corpus, String source) throws ANoteException {
 		return corpusAccessImpl.getCorpusPublicationsExternalIDFromSource(corpus.getId(), source);
 	}
@@ -903,11 +897,28 @@ public class DaemonAccess implements IDataAccess {
 	}
 	
 	@Override
+	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(IIEProcess process, Integer paginationIndex,
+			Integer paginationSize) throws ANoteException {
+		return corpusAccessImpl.getCorpusPublicationsNotProcessedPaginated(process.getCorpus().getId(), process.getId(), paginationIndex, paginationSize);
+	}
+	
+	@Override
 	public List<Long> getPublicationsIdsByResourceElements(Set<IResourceElement> resourceElements) throws ANoteException {
 		Set<Long> resourceElementsIds = new HashSet<>();
 		for(IResourceElement resourceElement : resourceElements)
 			resourceElementsIds.add(resourceElement.getId());
 		return annotationAccessImpl.getPublicationsIdsByResourceElements(resourceElementsIds);
+	}
+	
+	@Override
+	public Long countCorpusPublicationsOutdated(IIEProcess process) throws ANoteException {
+		return corpusAccessImpl.countCorpusPublicationsOutdated(process.getCorpus().getId(), process.getId());
+	}
+
+	@Override
+	public IDocumentSet getCorpusPublicationsOutdatedPaginated(IIEProcess process, Integer paginationIndex,
+			Integer paginationSize) throws ANoteException {
+		return corpusAccessImpl.getCorpusPublicationsOutdatedPaginated(process.getCorpus().getId(), process.getId(), paginationIndex, paginationSize);
 	}
 
 	@Override
@@ -1112,9 +1123,6 @@ public class DaemonAccess implements IDataAccess {
 
 	@Override
 	public Boolean removeAllProcessDocumentAnnotations(IIEProcess process, IPublication document) throws ANoteException {
-		return annotationAccessImpl.removeAllProcessDocumentAnnotations(process.getId(),document.getId());
-		
+		return annotationAccessImpl.removeAllProcessDocumentAnnotations(process.getId(),document.getId());	
 	}
-	
-	
 }
