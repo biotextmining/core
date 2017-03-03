@@ -33,6 +33,8 @@ public interface IAnnotatedDocument extends IPublication{
 	 */
 	public List<IEntityAnnotation> getEntitiesAnnotations() throws ANoteException;
 	
+	public void setEntities(List<IEntityAnnotation> entities);
+	
 	/**
 	 * Method that return all {@link IEventAnnotation} annotation for document
 	 * 
