@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
@@ -205,14 +206,10 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 	@Override
 	public void removeAllProcessDocumentAnnotations(Processes processes, Publications publications) {
 		Session session = sessionFactory.getCurrentSession();
-		Criteria c = session.createCriteria(Annotations.class, "annnotations");
-		c.add(Restrictions.eq("annnotations.processes", processes));
-		c.add(Restrictions.eq("annnotations.publications", publications));
-		List<?> results = c.list();
-		for(Object result:results)
-		{
-			session.delete(result);
-		}
-		session.flush();
+		Query query = session.createQuery("DELETE Annotations WHERE processes.proId = :ann_process_id AND publications.pubId = :ann_publication_id");
+		query.setParameter("ann_process_id", processes.getProId());
+		query.setParameter("ann_publication_id", publications.getPubId());
+		query.executeUpdate();
 	}
+	
 }
