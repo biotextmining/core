@@ -78,6 +78,24 @@ public class Utils {
 
 	}
 	
+	/** Returns the current time of the system */
+	public static int currentMonth() {
+	     
+	    Calendar cal = Calendar.getInstance();
+	    int month = cal.get(Calendar.MONTH);
+	    return month;
+
+	}
+	
+	/** Returns the current time of the system */
+	public static int currentDay() {
+	     
+	    Calendar cal = Calendar.getInstance();
+	    int day = cal.get(Calendar.DAY_OF_MONTH);
+	    return day;
+
+	}
+	
 	/** Swap element of a Hash*/
 	public static Map<? extends Object, ? extends Object> swapHashElements(Map<? extends Object,? extends Object> hash)
 	{
