@@ -1126,7 +1126,7 @@ GROUP BY ann_process_id,ann_element,ann_class_id
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `process_clues_stats`;
 
-CREATE  OR REPLACE VIEW process_clues_stats AS SELECT ann_process_id,ann_clue,COUNT(ann_clue) as numberClues ,ann_classification_re FROM annotations 
+CREATE  OR REPLACE VIEW process_clues_stats AS SELECT ann_process_id,ann_clue,COUNT(ann_clue) as numberClues ,ann_clue FROM annotations 
 WHERE ann_active=1 AND ann_annot_type='re'
 GROUP BY ann_process_id,ann_clue
 
