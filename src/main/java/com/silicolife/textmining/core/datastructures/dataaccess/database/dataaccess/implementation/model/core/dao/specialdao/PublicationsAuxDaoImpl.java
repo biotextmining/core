@@ -165,9 +165,11 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 	public List<Publications> getCorpusPublicationsOutdatedProcessPaginated(Long corpusId, Long processId, Integer paginationIndex, Integer paginationSize){
 		
 		DetachedCriteria subQuery = DetachedCriteria.forClass(CorpusHasPublicationsHasProcesses.class, "docsinprocess");
+		subQuery.createAlias("docsinprocess.processes", "process");
+		subQuery.setFetchMode("process", FetchMode.JOIN);
 		subQuery.add(Restrictions.eq("docsinprocess.id.chphpCorpusId", corpusId));
 		subQuery.add(Restrictions.eq("docsinprocess.id.chphpProcessesId", processId));
-		subQuery.add(Restrictions.neProperty("docsinprocess.processes.proVersion", "docsinprocess.chphpProcessesVersion"));
+		subQuery.add(Restrictions.neProperty("process.proVersion", "docsinprocess.chphpProcessesVersion"));
 		subQuery.add(Restrictions.eqProperty("docsinprocess.id.chphpPublicationId", "pub.pubId"));
 		subQuery.setProjection(Projections.property("docsinprocess.id.chphpPublicationId"));
 		
