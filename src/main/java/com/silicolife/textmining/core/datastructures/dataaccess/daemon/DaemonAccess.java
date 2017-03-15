@@ -591,6 +591,10 @@ public class DaemonAccess implements IDataAccess {
 		if (this.userLogged.getCurrentUserLogged() == null) {
 			login(userLogged.getCurrentUserLogged().getAuUsername(), userLogged.getCurrentUserLogged().getAuPassword());
 		}
+		else
+		{
+			login(userLogged.getCurrentUserLogged().getAuUsername(), userLogged.getCurrentUserLogged().getAuPassword());
+		}
 	}
 
 	@Override

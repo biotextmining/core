@@ -9,8 +9,7 @@ public class DataAccessForceLogin {
 
 	public static void forceLogin() throws CredentialsAccessException {
 		try {
-			InitConfiguration.getDataAccess().logout();
-			InitConfiguration.getDataAccess();
+			InitConfiguration.login();
 		} catch (ANoteException e) {
 			throw new CredentialsAccessException(ExceptionsCodes.codeWrongCredentials, e.getMessage(), e);
 		}

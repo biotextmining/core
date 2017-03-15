@@ -27,7 +27,7 @@ public abstract class RestClientAccess {
 		Date interationServer = webClient.getLastOperationTime();
 		long duration  = now.getTime() - interationServer.getTime();
 		long diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration);
-		if(diffInMinutes + 5 > RestClient.sessiontimeout){
+		if(diffInMinutes >= RestClient.sessiontimeout){
 			try {
 				DataAccessForceLogin.forceLogin();
 			} catch (CredentialsAccessException e) {
