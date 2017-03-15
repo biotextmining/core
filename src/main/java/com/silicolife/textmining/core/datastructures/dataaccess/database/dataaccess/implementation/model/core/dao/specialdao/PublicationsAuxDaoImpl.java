@@ -46,6 +46,37 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 
 		return publications;
 	}
+	
+	@Override
+	public Long countPublicationsByQueryId(Long queryId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Publications.class, "pub");
+		c.setFetchMode("pub.queryHasPublicationses", FetchMode.JOIN);
+		c.createAlias("pub.queryHasPublicationses", "queriesHasPub");
+		c.add(Restrictions.eq("queriesHasPub.id.qhbQueryId", queryId));
+		
+		c.setProjection(Projections.rowCount());
+		Long count = (Long) c.uniqueResult();
+		return count;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Publications> findPublicationsByQueryIdPaginated(Long queryId, Integer paginationIndex, Integer paginationSize) {
+
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Publications.class, "pub");
+		c.setFetchMode("pub.queryHasPublicationses", FetchMode.JOIN);
+		c.createAlias("pub.queryHasPublicationses", "queriesHasPub");
+		c.add(Restrictions.eq("queriesHasPub.id.qhbQueryId", queryId));
+		c.setFirstResult(paginationIndex);
+		c.setMaxResults(paginationSize);
+		c.setFetchSize(paginationSize);
+		
+		List<Publications> publications = c.list();
+
+		return publications;
+	}
 
 	@Override
 	@SuppressWarnings("unchecked")

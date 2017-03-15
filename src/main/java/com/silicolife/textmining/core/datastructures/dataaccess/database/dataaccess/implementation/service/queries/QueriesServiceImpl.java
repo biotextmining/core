@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.CorpusException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.PublicationManagerException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.general.ExceptionsCodes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
@@ -22,6 +23,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUserDataObjectsId;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUserLogs;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUsers;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Corpus;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.PublicationSources;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Queries;
@@ -87,6 +89,34 @@ public class QueriesServiceImpl implements IQueriesService {
 
 		return listPublications_;
 	}
+	
+	@Override
+	public List<IPublication> getQueryPublicationsPaginated(Long queryId, Integer paginationIndex, Integer paginationSize) throws PublicationManagerException {
+		Queries query = queriesManagerDao.getQueriesDao().findById(queryId);
+		if (query == null)
+			throw new PublicationManagerException(ExceptionsCodes.codeNoQuery, ExceptionsCodes.msgNoQuery);
+		List<Publications> listPublications = queriesManagerDao.getPublicationsAuxDao().findPublicationsByQueryIdPaginated(queryId, paginationIndex, paginationSize);
+		List<IPublication> listPublications_ = new ArrayList<IPublication>();
+		for (Publications publication : listPublications) {
+			IPublication publication_ = PublicationsWrapper.convertToAnoteStructure(publication);
+			listPublications_.add(publication_);
+		}
+
+		return listPublications_;
+	}
+	
+	@Override
+	public Long getQueryPublicationsCount(Long queryId) throws PublicationManagerException {
+		Queries query = queriesManagerDao.getQueriesDao().findById(queryId);
+		if (query == null)
+			throw new PublicationManagerException(ExceptionsCodes.codeNoQuery, ExceptionsCodes.msgNoQuery);
+
+		Long count = queriesManagerDao.getPublicationsAuxDao().countPublicationsByQueryId(queryId);
+		return count;
+
+	}
+	
+	
 
 	@Override
 	public List<IQuery> getAllPrivilegesQueriesAdminAccess() {
