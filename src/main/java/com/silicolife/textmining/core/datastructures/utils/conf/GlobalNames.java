@@ -63,6 +63,7 @@ public class GlobalNames {
 	public final static String relationPropertyLemma = "lemma";
 	public final static String relationPropertyDirectionally = "directionally";
 	public final static String relationPropertyPolarity = "polarity";
+	public final static String relationPropertyClassification = "classification";
 
 	/**
 	 * Entities

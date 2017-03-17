@@ -93,4 +93,17 @@ public interface IEventProperties {
 	 */
 	public void setDirectionally(DirectionallyEnum directionally);
 	
+	/**
+	 * Method taht return specific {@link IEventAnnotation} property classification
+	 * 
+	 * @return classification
+	 */
+	public String getClassification();
+	
+	/**
+	 * method that set specific {@link IEventAnnotation} property classification
+	 * 
+	 * @param classification
+	 */
+	public void setClassification(String classification);
 }
