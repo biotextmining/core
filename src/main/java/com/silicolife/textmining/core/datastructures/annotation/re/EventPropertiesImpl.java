@@ -17,7 +17,8 @@ public class EventPropertiesImpl implements IEventProperties{
 	private Properties properties;
 	private static String lemma = "lemma";
 	private static String polarity = "polarity";
-	private static String directionally = "directionally";	
+	private static String directionally = "directionally";
+	private static String classification = "classification";
 	
 	public EventPropertiesImpl()
 	{
@@ -25,6 +26,7 @@ public class EventPropertiesImpl implements IEventProperties{
 		this.properties.put(lemma, new String());
 		this.properties.put(polarity,PolarityEnum.Unknown.name());
 		this.properties.put(directionally,DirectionallyEnum.Unknown.name());
+		this.properties.put(classification, new String());
 	}
 
 	public EventPropertiesImpl(Properties properties)
@@ -88,6 +90,16 @@ public class EventPropertiesImpl implements IEventProperties{
 	@JsonIgnore
 	public void setDirectionally(DirectionallyEnum directionallyEnum) {
 		this.properties.put(directionally, directionallyEnum.name());
+	}
+
+	@Override
+	public String getClassification() {
+		return this.properties.getProperty(classification);
+	}
+
+	@Override
+	public void setClassification(String classificationStr) {
+		this.properties.put(classification, classificationStr);
 	}
 	
 }

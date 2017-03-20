@@ -26,6 +26,10 @@ public interface PublicationsAuxDao {
 
 	public List<Object> getCorpusPublicationBySource(Long sourceId, Long corpusId);
 
+	public Long countCorpusPublicationsOutdatedProcess(Long corpusId, Long processId);
+
+	public List<Publications> getCorpusPublicationsOutdatedProcessPaginated(Long corpusId, Long processId, Integer paginationIndex, Integer paginationSize);
+	
 	public Long countPublicationsByQueryId(Long queryId);
 
 	public List<Publications> findPublicationsByQueryIdPaginated(Long queryId, Integer paginationIndex, Integer paginationSize,

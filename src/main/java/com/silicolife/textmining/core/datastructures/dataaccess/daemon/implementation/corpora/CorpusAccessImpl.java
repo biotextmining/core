@@ -386,4 +386,40 @@ public class CorpusAccessImpl extends RestClientAccess {
 			return returned;
 		}
 	}
+
+	public Long countCorpusPublicationsOutdated(long corpusId, long processId) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Long>> responseType = new ParameterizedTypeReference<DaemonResponse<Long>>() {};
+		Map<String, Long> uriVariables = new HashMap<String, Long>();
+		uriVariables.put("corpusId", corpusId);
+		uriVariables.put("processId", processId);
+		
+		ResponseEntity<DaemonResponse<Long>> response = webClient.get("corpus/countCorpusPublicationsOutdated", responseType, uriVariables);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			Long count = response.getBody().getContent();
+			return count;
+		}
+	}
+
+	public IDocumentSet getCorpusPublicationsOutdatedPaginated(long corpusId, long processId, Integer paginationIndex, Integer paginationSize) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<DocumentSetImpl>> responseType = new ParameterizedTypeReference<DaemonResponse<DocumentSetImpl>>() {};
+		Map<String, Long> uriVariables = new HashMap<String, Long>();
+		uriVariables.put("corpusId", corpusId);
+		uriVariables.put("processId", processId);
+		uriVariables.put("paginationIndex", Long.valueOf(paginationIndex));
+		uriVariables.put("paginationSize", Long.valueOf(paginationSize));
+		
+		ResponseEntity<DaemonResponse<DocumentSetImpl>> response = webClient.get("corpus/getCorpusPublicationsOutdatedPaginated", responseType, uriVariables);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			IDocumentSet documentSet = response.getBody().getContent();
+			return documentSet;
+		}
+	}
 }

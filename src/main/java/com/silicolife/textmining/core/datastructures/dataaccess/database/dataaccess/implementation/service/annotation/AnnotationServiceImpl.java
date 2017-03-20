@@ -148,7 +148,7 @@ public class AnnotationServiceImpl implements IAnnotationService{
 			corpusPublicationProcessAssociation.setCorpusHasPublications(corpusHasPublications);
 			corpusPublicationProcessAssociation.setChphpCreateDate(new Date());
 			corpusPublicationProcessAssociation.setChphpUpdateDate(new Date());
-			corpusPublicationProcessAssociation.setChphpProcessesVersion(1);
+			corpusPublicationProcessAssociation.setChphpProcessesVersion(processes.getProVersion());
 			corpusManagerDao.getCorpusHasPublicationsHasProcessesDao().save(corpusPublicationProcessAssociation);
 		}else{
 			corpusPublicationProcessAssociation.setChphpUpdateDate(new Date());

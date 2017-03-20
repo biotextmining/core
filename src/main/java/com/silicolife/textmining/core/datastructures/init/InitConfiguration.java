@@ -80,6 +80,16 @@ public class InitConfiguration {
 		return initConfiguration;
 	}
 	
+	/**
+	 * Init Text Mining using defined Idataaccess and IProxy and a Properties List
+	 * 
+	 * @return
+	 * @throws ANoteException
+	 */
+	synchronized public static InitConfiguration initForce(IDataAccess dataAccess,Proxy proxy,Properties properties) throws ANoteException{
+		initConfiguration = new InitConfiguration(dataAccess,proxy,properties);	
+		return initConfiguration;
+	}
 
 	/** Method that read a Settings File the keys and return List of conf */
 	public static List<String> getElementByXMLFile(String settingsFilePath, ArrayList<String> keys) {

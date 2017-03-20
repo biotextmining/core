@@ -136,7 +136,7 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 		return publications;
 	}
 	
-	
+	@Override
 	public Long countPublicationsNotProcessedInProcess(Long corpusId, Long processId){
 		DetachedCriteria subQuery = DetachedCriteria.forClass(CorpusHasPublicationsHasProcesses.class, "docsinprocess");
 		subQuery.add(Restrictions.eq("docsinprocess.id.chphpCorpusId", corpusId));
@@ -161,7 +161,6 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 	public List<Publications> findPublicationsByCorpusIdAndProcessIdNotProcessedPaginated(Long corpusId, Long processId, Integer paginationIndex, Integer paginationSize) {
 
 		DetachedCriteria subQuery = DetachedCriteria.forClass(CorpusHasPublicationsHasProcesses.class, "docsinprocess");
-//		subQuery.createAlias("docsinprocess.id", "docsinprocessid");
 		subQuery.add(Restrictions.eq("docsinprocess.id.chphpCorpusId", corpusId));
 		subQuery.add(Restrictions.eq("docsinprocess.id.chphpProcessesId", processId));
 		subQuery.add(Restrictions.eqProperty("docsinprocess.id.chphpPublicationId", "pub.pubId"));
@@ -173,6 +172,57 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 		c.setFetchMode("corpusHasPub", FetchMode.JOIN);
 		c.add(Restrictions.eq("corpusHasPub.id.chpCorpusId", corpusId));
 		c.add(Subqueries.notExists(subQuery));
+		c.setFirstResult(paginationIndex);
+		c.setMaxResults(paginationSize);
+		c.setFetchSize(paginationSize);
+
+		List<Publications> publications = c.list();
+
+		return publications;
+	}
+	
+	@Override
+	public Long countCorpusPublicationsOutdatedProcess(Long corpusId, Long processId){
+		
+		DetachedCriteria subQuery = DetachedCriteria.forClass(CorpusHasPublicationsHasProcesses.class, "docsinprocess");
+		subQuery.createAlias("docsinprocess.processes", "process");
+		subQuery.setFetchMode("process", FetchMode.JOIN);
+		subQuery.add(Restrictions.eq("docsinprocess.id.chphpCorpusId", corpusId));
+		subQuery.add(Restrictions.eq("docsinprocess.id.chphpProcessesId", processId));
+		subQuery.add(Restrictions.neProperty("process.proVersion", "docsinprocess.chphpProcessesVersion"));
+		subQuery.add(Restrictions.eqProperty("docsinprocess.id.chphpPublicationId", "pub.pubId"));
+		subQuery.setProjection(Projections.property("docsinprocess.id.chphpPublicationId"));
+		
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Publications.class, "pub");
+		c.createAlias("pub.corpusHasPublicationses", "corpusHasPub");
+		c.setFetchMode("corpusHasPub", FetchMode.JOIN);
+		c.add(Restrictions.eq("corpusHasPub.id.chpCorpusId", corpusId));
+		c.add(Subqueries.exists(subQuery));
+		c.setProjection(Projections.rowCount());
+		Long count = (Long) c.uniqueResult();
+		return count;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Publications> getCorpusPublicationsOutdatedProcessPaginated(Long corpusId, Long processId, Integer paginationIndex, Integer paginationSize){
+		
+		DetachedCriteria subQuery = DetachedCriteria.forClass(CorpusHasPublicationsHasProcesses.class, "docsinprocess");
+		subQuery.createAlias("docsinprocess.processes", "process");
+		subQuery.setFetchMode("process", FetchMode.JOIN);
+		subQuery.add(Restrictions.eq("docsinprocess.id.chphpCorpusId", corpusId));
+		subQuery.add(Restrictions.eq("docsinprocess.id.chphpProcessesId", processId));
+		subQuery.add(Restrictions.neProperty("process.proVersion", "docsinprocess.chphpProcessesVersion"));
+		subQuery.add(Restrictions.eqProperty("docsinprocess.id.chphpPublicationId", "pub.pubId"));
+		subQuery.setProjection(Projections.property("docsinprocess.id.chphpPublicationId"));
+		
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Publications.class, "pub");
+		c.createAlias("pub.corpusHasPublicationses", "corpusHasPub");
+		c.setFetchMode("corpusHasPub", FetchMode.JOIN);
+		c.add(Restrictions.eq("corpusHasPub.id.chpCorpusId", corpusId));
+		c.add(Subqueries.exists(subQuery));
 		c.setFirstResult(paginationIndex);
 		c.setMaxResults(paginationSize);
 		c.setFetchSize(paginationSize);

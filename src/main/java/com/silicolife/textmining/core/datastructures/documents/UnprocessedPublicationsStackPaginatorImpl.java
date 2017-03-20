@@ -11,13 +11,13 @@ public class UnprocessedPublicationsStackPaginatorImpl implements ICorpusPublica
 	private Integer paginationSize;
 	private IIEProcess process;
 
-	public UnprocessedPublicationsStackPaginatorImpl(IIEProcess process, Integer paginationSize) throws ANoteException{
+	public UnprocessedPublicationsStackPaginatorImpl(IIEProcess process, Integer paginationSize){
 		this.paginationSize = paginationSize;
 		this.process =process;
 	}
 
 	
-	public UnprocessedPublicationsStackPaginatorImpl(IIEProcess process) throws ANoteException{
+	public UnprocessedPublicationsStackPaginatorImpl(IIEProcess process){
 		this(process, 1000);
 	}
 

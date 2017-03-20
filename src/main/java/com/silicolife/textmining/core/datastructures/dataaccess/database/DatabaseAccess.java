@@ -1800,20 +1800,6 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(IIEProcess process, Integer paginationIndex,
-			Integer paginationSize) throws ANoteException {
-		try {
-			sessionFactory.getCurrentSession().beginTransaction();
-			IDocumentSet documents = corpusService.getCorpusPublicationsNotProcessedPaginated(process.getCorpus().getId(), process.getId(), paginationIndex, paginationSize);
-			sessionFactory.getCurrentSession().getTransaction().commit();
-			return documents;
-		} catch (RuntimeException e) {
-			sessionFactory.getCurrentSession().getTransaction().rollback();
-			throw new ANoteException(e);
-		}
-	}
-
-	@Override
 	public Set<String> getCorpusPublicationsExternalIDFromSource(ICorpus corpus, String source) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
@@ -1826,11 +1812,54 @@ public class DatabaseAccess implements IDataAccess {
 		}
 	}
 
+
+	@Override
+	public IDocumentSet getCorpusPublicationsNotProcessedPaginated(IIEProcess process, Integer paginationIndex,
+			Integer paginationSize) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IDocumentSet documents = corpusService.getCorpusPublicationsNotProcessedPaginated(process.getCorpus().getId(), process.getId(), paginationIndex, paginationSize);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return documents;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
 	@Override
 	public Long countCorpusPublicationsNotProcessed(IIEProcess process) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			Long count = corpusService.countCorpusPublicationsNotProcessed(process.getCorpus().getId(), process.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
+	@Override
+	public IDocumentSet getCorpusPublicationsOutdatedPaginated(IIEProcess process, Integer paginationIndex,
+			Integer paginationSize) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IDocumentSet documents = corpusService.getCorpusPublicationsOutdatedPaginated(process.getCorpus().getId(), process.getId(), paginationIndex, paginationSize);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return documents;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
+
+	@Override
+	public Long countCorpusPublicationsOutdated(IIEProcess process) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Long count = corpusService.countCorpusPublicationsOutdated(process.getCorpus().getId(), process.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return count;
 		} catch (RuntimeException e) {
@@ -2332,6 +2361,5 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}
 	}
-	
 
 }

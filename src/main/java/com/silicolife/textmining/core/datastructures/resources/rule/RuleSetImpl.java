@@ -9,6 +9,7 @@ import com.silicolife.textmining.core.datastructures.language.LanguageProperties
 import com.silicolife.textmining.core.datastructures.resources.ResourceImpl;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.report.resources.IResourceMergeReport;
+import com.silicolife.textmining.core.interfaces.resource.IResource;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElementSet;
 import com.silicolife.textmining.core.interfaces.resource.ResourcesTypeEnum;
@@ -29,6 +30,10 @@ public class RuleSetImpl extends ResourceImpl implements IRuleSet{
 	
 	public RuleSetImpl(String name, String info,boolean active) {
 		super(name, info,ResourcesTypeEnum.rule.toString(), active);
+	}
+	
+	public RuleSetImpl(IResource<IResourceElement> resource) {
+		this(resource.getId(),resource.getName(),resource.getInfo(),resource.isActive());
 	}
 	
 	public RuleSetImpl() {

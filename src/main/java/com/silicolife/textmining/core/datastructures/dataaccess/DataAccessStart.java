@@ -1109,4 +1109,15 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public Long countCorpusPublicationsOutdated(IIEProcess process) throws ANoteException {
+		return null;
+	}
+
+	@Override
+	public IDocumentSet getCorpusPublicationsOutdatedPaginated(IIEProcess process, Integer paginationIndex,
+			Integer paginationSize) throws ANoteException {
+		return null;
+	}
+
 }
