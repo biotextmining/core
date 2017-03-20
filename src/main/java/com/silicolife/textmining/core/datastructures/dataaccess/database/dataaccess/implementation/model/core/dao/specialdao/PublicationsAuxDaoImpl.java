@@ -10,6 +10,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
@@ -21,6 +22,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.PublicationHasSources;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Queries;
+import com.silicolife.textmining.core.datastructures.documents.PublicationFieldsEnum;;
 
 @Repository
 public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
@@ -62,13 +64,24 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Publications> findPublicationsByQueryIdPaginated(Long queryId, Integer paginationIndex, Integer paginationSize) {
+	public List<Publications> findPublicationsByQueryIdPaginated(Long queryId, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
 
 		Session session = sessionFactory.getCurrentSession();
 		Criteria c = session.createCriteria(Publications.class, "pub");
 		c.setFetchMode("pub.queryHasPublicationses", FetchMode.JOIN);
 		c.createAlias("pub.queryHasPublicationses", "queriesHasPub");
 		c.add(Restrictions.eq("queriesHasPub.id.qhbQueryId", queryId));
+		//Order order = new Order(sortBy,asc);
+		//c.createAlias("pub."+sortBy, "sortValue");
+		if(!sortBy.equals("none")){
+		String uniqueId = PublicationFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+		String sortAlias = "pub."+uniqueId;
+		
+		if(asc)
+			c.addOrder(Order.asc(sortAlias));
+		else
+			c.addOrder(Order.desc(sortAlias));
+		}
 		c.setFirstResult(paginationIndex);
 		c.setMaxResults(paginationSize);
 		c.setFetchSize(paginationSize);
@@ -206,6 +219,45 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 
 		return response;
 	}
+	
+	@Override
+	public List<Object[]> getPublicationIdBySourceTypeAndId(Long sourceId, String id){
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(PublicationHasSources.class, "pubHasSource");
+		c.createAlias("pubHasSource.publications", "publications");
+		c.setFetchMode("pubHasSource.publications", FetchMode.JOIN);
+		c.add(Restrictions.eq("pubHasSource.id.phpsPublicationSourceId", sourceId));
+		c.add(Restrictions.eq("pubHasSource.id.phpsPublicationSourceInternalId", id));
+		c.setProjection(Projections.projectionList().add(Projections.property("publications.pubId"), "pubId")
+				.add(Projections.property("pubHasSource.id.phpsPublicationSourceInternalId"), "internalId"));
+
+		@SuppressWarnings("unchecked")
+		List<Object[]> response = c.list();
+		
+		return response;
+	}
+	
+	@Override
+	public Publications getPublicationBySourceTypeAndId(Long sourceId, String id){
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Publications.class, "pub");
+		c.createAlias("pub.publicationHasSourceses", "publicationHasSourceses");
+		c.setFetchMode("pub.publicationHasSourceses", FetchMode.JOIN);
+		c.createAlias("publicationHasSourceses.publications", "publications");
+		c.setFetchMode("publicationHasSourceses.publications", FetchMode.JOIN);
+		c.add(Restrictions.eq("publicationHasSourceses.id.phpsPublicationSourceId", sourceId));
+		c.add(Restrictions.eq("publicationHasSourceses.id.phpsPublicationSourceInternalId", id));
+		/*c.setProjection(Projections.projectionList().add(Projections.property("publications.pubId"), "pubId")
+				.add(Projections.property("pubHasSource.id.phpsPublicationSourceInternalId"), "internalId"));*/
+
+		@SuppressWarnings("unchecked")
+		List<Publications> publications = c.list();
+		//List<Object[]> response = c.list();
+		//System.out.println(response);
+		return publications.get(0);
+	}
+	
+	
 	
 	@Override
 	public List<Object> getQueryPublicationBySource(Long sourceId,Long queryId) {

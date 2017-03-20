@@ -91,11 +91,11 @@ public class QueriesServiceImpl implements IQueriesService {
 	}
 	
 	@Override
-	public List<IPublication> getQueryPublicationsPaginated(Long queryId, Integer paginationIndex, Integer paginationSize) throws PublicationManagerException {
+	public List<IPublication> getQueryPublicationsPaginated(Long queryId, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) throws PublicationManagerException {
 		Queries query = queriesManagerDao.getQueriesDao().findById(queryId);
 		if (query == null)
 			throw new PublicationManagerException(ExceptionsCodes.codeNoQuery, ExceptionsCodes.msgNoQuery);
-		List<Publications> listPublications = queriesManagerDao.getPublicationsAuxDao().findPublicationsByQueryIdPaginated(queryId, paginationIndex, paginationSize);
+		List<Publications> listPublications = queriesManagerDao.getPublicationsAuxDao().findPublicationsByQueryIdPaginated(queryId, paginationIndex, paginationSize, asc, sortBy);
 		List<IPublication> listPublications_ = new ArrayList<IPublication>();
 		for (Publications publication : listPublications) {
 			IPublication publication_ = PublicationsWrapper.convertToAnoteStructure(publication);

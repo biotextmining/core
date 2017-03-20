@@ -165,6 +165,43 @@ public class PublicationsServiceImpl implements IPublicationsService {
 
 		return response;
 	}
+	
+	@Override
+	public Long getPublicationIdFromSourceId(String source, String sourceId) {
+		
+		PublicationSources publicationSource = publicationsManagerDao.getPublicationSourcesDao().findUniqueByAttribute("pssDescription", source);
+
+		if (publicationSource == null) {
+			return null;
+		}
+		
+		 publicationsManagerDao.getPublicationsAuxDao().getPublicationBySourceTypeAndId(publicationSource.getPssId(), sourceId);
+		
+		List<Object[]> objects = publicationsManagerDao.getPublicationsAuxDao().getPublicationIdBySourceTypeAndId(publicationSource.getPssId(), sourceId);
+		
+		if(objects==null)
+			return null;
+		else return (Long)objects.get(0)[0];
+		
+	}
+	
+	@Override
+	public IPublication getPublicationFromSourceId(String source, String sourceId) {
+		
+		PublicationSources publicationSource = publicationsManagerDao.getPublicationSourcesDao().findUniqueByAttribute("pssDescription", source);
+
+		if (publicationSource == null) {
+			return null;
+		}
+		
+		 Publications publication = publicationsManagerDao.getPublicationsAuxDao().getPublicationBySourceTypeAndId(publicationSource.getPssId(), sourceId);
+		
+		 IPublication publication_ = PublicationsWrapper.convertToAnoteStructure(publication);
+			return publication_;
+		
+	}
+	
+	
 
 	@Override
 	public List<IPublicationLabel> getAllPublicationLabels() {

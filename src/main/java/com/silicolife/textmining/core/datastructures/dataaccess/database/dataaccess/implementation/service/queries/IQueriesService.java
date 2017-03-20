@@ -121,8 +121,8 @@ public interface IQueriesService {
 
 	public void setUserLogged(UsersLogged userLogged);
 
-	public List<IPublication> getQueryPublicationsPaginated(Long queryId, Integer paginationIndex, Integer paginationSize)
-			throws PublicationManagerException;
-
 	public Long getQueryPublicationsCount(Long queryId) throws PublicationManagerException;
+
+	public List<IPublication> getQueryPublicationsPaginated(Long queryId, Integer paginationIndex, Integer paginationSize,
+			boolean asc, String sortBy) throws PublicationManagerException;
 }

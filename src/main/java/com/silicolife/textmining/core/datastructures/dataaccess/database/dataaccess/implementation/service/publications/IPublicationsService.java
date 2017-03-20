@@ -88,4 +88,8 @@ public interface IPublicationsService {
 	public Boolean updatePublicationAFullTextContent(Long publicationID,String fullTextContent) throws PublicationManagerException;
 	
 	public void setUserLogged(UsersLogged userLogged);
+
+	public Long getPublicationIdFromSourceId(String source, String sourceId);
+
+	public IPublication getPublicationFromSourceId(String source, String sourceId);
 }
