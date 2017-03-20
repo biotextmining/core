@@ -240,6 +240,9 @@ public class FileHandling {
 			
 			files.add(strLine);
 		}
+		br.close();
+		in.close();
+		fstream.close();
 		return files;
 	}
 	
