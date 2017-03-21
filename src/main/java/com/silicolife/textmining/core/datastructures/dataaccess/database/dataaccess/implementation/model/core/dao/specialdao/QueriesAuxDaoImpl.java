@@ -3,13 +3,18 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Queries;
+import com.silicolife.textmining.core.datastructures.documents.PublicationFieldsEnum;
+import com.silicolife.textmining.core.datastructures.documents.query.QueryFieldsEnum;
 
 @Repository
 public class QueriesAuxDaoImpl implements QueriesAuxDao {
@@ -29,6 +34,35 @@ public class QueriesAuxDaoImpl implements QueriesAuxDao {
 		qry.setParameter(0, id);
 		qry.setParameter(1, resourceType);
 		qry.addEntity("queries", Queries.class);
+		@SuppressWarnings("unchecked")
+		List<Queries> result = qry.list();
+
+		return result;
+	}
+	
+	@Override
+	public List<Queries> findQueriesByAttributesPaginated(Long id, String resourceType, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+		String uniqueId = QueryFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+		Session session = sessionFactory.getCurrentSession();
+		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " + "INNER JOIN queries as b ON a.audo_uid_resource = b.qu_id "
+				+ "WHERE audo_user_id = ? AND audo_type_resource = ? ";
+		
+	
+		if(!sortBy.equals("none")){
+			String ord = " DESC";
+			if(asc){
+				ord = " ASC";
+			}
+			sqlString = sqlString+"ORDER BY "+ uniqueId+ord;
+		}
+		
+		sqlString = sqlString+" LIMIT "+paginationSize+" OFFSET "+ paginationIndex;
+		
+		SQLQuery qry = session.createSQLQuery(sqlString);
+		qry.setParameter(0, id);
+		qry.setParameter(1, resourceType);
+		qry.addEntity("queries", Queries.class);
+		
 		@SuppressWarnings("unchecked")
 		List<Queries> result = qry.list();
 

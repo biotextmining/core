@@ -125,4 +125,6 @@ public interface IQueriesService {
 
 	public List<IPublication> getQueryPublicationsPaginated(Long queryId, Integer paginationIndex, Integer paginationSize,
 			boolean asc, String sortBy) throws PublicationManagerException;
+
+	public List<IQuery> getAllQueriesPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
 }

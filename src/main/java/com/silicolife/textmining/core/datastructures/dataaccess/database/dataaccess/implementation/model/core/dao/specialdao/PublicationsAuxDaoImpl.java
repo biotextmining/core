@@ -22,7 +22,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.PublicationHasSources;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Queries;
-import com.silicolife.textmining.core.datastructures.documents.PublicationFieldsEnum;;
+import com.silicolife.textmining.core.datastructures.documents.PublicationFieldsEnum;
 
 @Repository
 public class PublicationsAuxDaoImpl implements PublicationsAuxDao {

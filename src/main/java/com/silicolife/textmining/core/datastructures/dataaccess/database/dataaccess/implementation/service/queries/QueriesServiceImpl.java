@@ -166,6 +166,25 @@ public class QueriesServiceImpl implements IQueriesService {
 
 		return listQueries_;
 	}
+	
+	
+	@Override
+	public List<IQuery> getAllQueriesPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		/**
+		 * get all queries from a user
+		 */
+		List<Queries> listQueries = queriesManagerDao.getQueriesAuxDao().findQueriesByAttributesPaginated(user.getAuId(), queries, paginationIndex, paginationSize, asc, sortBy);
+
+		List<IQuery> listQueries_ = new ArrayList<IQuery>();
+		for (Queries query : listQueries) {
+			IQuery query_ = QueriesWrapper.convertToAnoteStructure(query);
+			listQueries_.add(query_);
+		}
+
+		return listQueries_;
+	}
 
 	@Transactional(readOnly = false)
 	@Override

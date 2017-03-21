@@ -13,4 +13,7 @@ public interface QueriesAuxDao {
 
 	public List<Map<Long, String>> findQueriesPublicationsRelevance(Long queryId);
 
+	public List<Queries> findQueriesByAttributesPaginated(Long id, String resourceType, Integer paginationIndex,
+			Integer paginationSize, boolean asc, String sortBy);
+
 }
