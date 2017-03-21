@@ -16,4 +16,6 @@ public interface QueriesAuxDao {
 	public List<Queries> findQueriesByAttributesPaginated(Long id, String resourceType, Integer paginationIndex,
 			Integer paginationSize, boolean asc, String sortBy);
 
+	public Integer countQueriesByAttributes(Long id, String resourceType);
+
 }

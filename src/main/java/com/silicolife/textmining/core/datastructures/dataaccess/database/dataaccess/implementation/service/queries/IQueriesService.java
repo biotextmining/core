@@ -122,9 +122,33 @@ public interface IQueriesService {
 	public void setUserLogged(UsersLogged userLogged);
 
 	public Long getQueryPublicationsCount(Long queryId) throws PublicationManagerException;
-
+	
+	/**
+	 * Returns publications of a query paginated
+	 * 
+	 * @param queryId
+	 * @param paginationIndex
+	 * @param paginationSize
+	 * @param asc
+	 * @param sortBy
+	 * @return
+	 */
 	public List<IPublication> getQueryPublicationsPaginated(Long queryId, Integer paginationIndex, Integer paginationSize,
 			boolean asc, String sortBy) throws PublicationManagerException;
 
+	/**
+	 * Returns queries of a user paginated
+	 * 
+	 * @param paginationIndex
+	 * @param paginationSize
+	 * @param asc
+	 * @param sortBy
+	 * @return
+	 */
 	public List<IQuery> getAllQueriesPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
+	
+	/**
+	 * Counts all queries of a user
+	 */
+	public Integer countAllQueries();
 }

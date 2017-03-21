@@ -41,14 +41,31 @@ public class QueriesAuxDaoImpl implements QueriesAuxDao {
 	}
 	
 	@Override
+	public Integer countQueriesByAttributes(Long id, String resourceType) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " + "INNER JOIN queries as b ON a.audo_uid_resource = b.qu_id "
+				+ "WHERE audo_user_id = ? AND audo_type_resource = ?";
+		SQLQuery qry = session.createSQLQuery(sqlString);
+		qry.setParameter(0, id);
+		qry.setParameter(1, resourceType);
+		qry.addEntity("queries", Queries.class);
+		@SuppressWarnings("unchecked")
+		List<Queries> result = qry.list();
+		
+		return result.size();
+	}
+	
+	
+	
+	@Override
 	public List<Queries> findQueriesByAttributesPaginated(Long id, String resourceType, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
-		String uniqueId = QueryFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
 		Session session = sessionFactory.getCurrentSession();
 		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " + "INNER JOIN queries as b ON a.audo_uid_resource = b.qu_id "
 				+ "WHERE audo_user_id = ? AND audo_type_resource = ? ";
 		
 	
 		if(!sortBy.equals("none")){
+			String uniqueId = QueryFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
 			String ord = " DESC";
 			if(asc){
 				ord = " ASC";

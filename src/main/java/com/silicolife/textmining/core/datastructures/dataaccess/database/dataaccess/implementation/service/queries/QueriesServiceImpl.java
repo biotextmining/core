@@ -117,6 +117,8 @@ public class QueriesServiceImpl implements IQueriesService {
 	}
 	
 	
+	
+	
 
 	@Override
 	public List<IQuery> getAllPrivilegesQueriesAdminAccess() {
@@ -165,6 +167,12 @@ public class QueriesServiceImpl implements IQueriesService {
 		}
 
 		return listQueries_;
+	}
+	
+	@Override
+	public Integer countAllQueries(){
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		return queriesManagerDao.getQueriesAuxDao().countQueriesByAttributes(user.getAuId(), queries);
 	}
 	
 	
