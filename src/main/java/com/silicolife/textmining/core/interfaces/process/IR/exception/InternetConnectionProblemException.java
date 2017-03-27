@@ -10,6 +10,11 @@ public class InternetConnectionProblemException extends Exception{
 	private Exception e;
 	private Object object;
 	
+	public InternetConnectionProblemException(String message)
+	{
+		super(message);
+	}
+	
 	public InternetConnectionProblemException(Exception e)
 	{
 		super(e);
