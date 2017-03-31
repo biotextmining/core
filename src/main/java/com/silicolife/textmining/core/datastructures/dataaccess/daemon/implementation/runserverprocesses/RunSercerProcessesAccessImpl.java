@@ -44,6 +44,19 @@ public class RunSercerProcessesAccessImpl extends RestClientAccess {
 			Boolean boo = response.getBody().getContent();
 			return boo;
 		}
+	}
+
+
+	public Boolean autoupdate() throws DaemonException{
+		ParameterizedTypeReference<DaemonResponse<Boolean>> responseType = new ParameterizedTypeReference<DaemonResponse<Boolean>>() {};
+		ResponseEntity<DaemonResponse<Boolean>> response = webClient.get("runserverprocesses/autoupdate",responseType);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
+		} else {
+			Boolean boo = response.getBody().getContent();
+			return boo;
+		}
 	}	
 	
 

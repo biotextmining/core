@@ -1129,4 +1129,9 @@ public class DaemonAccess implements IDataAccess {
 	public Boolean removeAllProcessDocumentAnnotations(IIEProcess process, IPublication document) throws ANoteException {
 		return annotationAccessImpl.removeAllProcessDocumentAnnotations(process.getId(),document.getId());	
 	}
+
+	@Override
+	public Boolean autoupdate() throws ANoteException {
+		return runServerProcessesImpl.autoupdate();
+	}
 }

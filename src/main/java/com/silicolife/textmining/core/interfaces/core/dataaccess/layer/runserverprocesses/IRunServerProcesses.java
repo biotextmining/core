@@ -13,5 +13,6 @@ public interface IRunServerProcesses {
 	
 	
 	public Boolean runServerProcesses(String klass, String configuration) throws ANoteException;
+	public Boolean autoupdate() throws ANoteException;
 
 }

@@ -2362,4 +2362,10 @@ public class DatabaseAccess implements IDataAccess {
 		}
 	}
 
+	@Override
+	public Boolean autoupdate() throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
