@@ -3,7 +3,7 @@ package com.silicolife.textmining.core.datastructures.utils.conf;
 public class GlobalSources {
 	
 	public final static String chebi = "Chebi";
-	public final static String entrezgene = "Entrez Gene";
+	public final static String entrezgene = "NCBI Gene";
 	public final static String biocyc = "BioCyc";
 	public final static String geneOntology = "Gene Ontology";
 	public final static String geneOntollogyShortName = "GO";
