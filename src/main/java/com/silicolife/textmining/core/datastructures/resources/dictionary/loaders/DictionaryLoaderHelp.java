@@ -62,21 +62,6 @@ public class DictionaryLoaderHelp extends PortResourceUpdateReport{
 		return new String();
 	}
 
-//	public List<Long> getInsertedTermIDList()
-//	{
-//		return this.insertedTermIDList;
-//	}
-//	
-//	public void resetInsertedList()
-//	{
-//		this.insertedTermIDList = new ArrayList<Long>();;
-//	}
-//	
-//	public Set<Long> getNewClassesAdded()
-//	{
-//		return this.newClassesAdded;
-//	}
-
 	public void addElementToBatch(String term, String klassStr,Set<String> synonyms, List<IExternalID> externalIDs,Integer prioretyOrder) {
 		term = term.trim();
 		if(term.isEmpty()|| term.length()<TableResourcesElements.mimimumElementSize ||term.length()>=TableResourcesElements.elementSize)

@@ -246,6 +246,31 @@ public class FileHandling {
 		return files;
 	}
 	
+	/**
+	 * MEthod that reads a file and return a set of lines text
+	 * 
+	 * @param filePath
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static String getFileFirstLine(File filePath) throws FileNotFoundException, IOException {
+		FileInputStream fstream = new FileInputStream(filePath);
+		DataInputStream in = new DataInputStream(fstream);
+		BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		String strLine;
+		while ((strLine = br.readLine()) != null)   {
+			br.close();
+			in.close();
+			fstream.close();
+			return strLine;
+		}
+		br.close();
+		in.close();
+		fstream.close();
+		return null;
+	}
+	
 	public static String getFileContent(File filePath) throws FileNotFoundException, IOException
 	{
 		List<String> lines = getFileLinesContent(filePath);
