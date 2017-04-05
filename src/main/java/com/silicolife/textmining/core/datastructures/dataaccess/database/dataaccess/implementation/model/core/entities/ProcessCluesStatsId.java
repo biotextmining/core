@@ -58,15 +58,6 @@ public class ProcessCluesStatsId implements java.io.Serializable {
 		this.numberClues = numberClues;
 	}
 
-	@Column(name = "ann_classification_re", length = 250)
-	public String getAnnClassificationRe() {
-		return this.annClassificationRe;
-	}
-
-	public void setAnnClassificationRe(String annClassificationRe) {
-		this.annClassificationRe = annClassificationRe;
-	}
-
 	public boolean equals(Object other) {
 		if ((this == other))
 			return true;
@@ -79,9 +70,7 @@ public class ProcessCluesStatsId implements java.io.Serializable {
 		return (this.getAnnProcessId() == castOther.getAnnProcessId())
 				&& ((this.getAnnClue() == castOther.getAnnClue()) || (this.getAnnClue() != null && castOther.getAnnClue() != null && this.getAnnClue().equals(
 						castOther.getAnnClue())))
-				&& (this.getNumberClues() == castOther.getNumberClues())
-				&& ((this.getAnnClassificationRe() == castOther.getAnnClassificationRe()) || (this.getAnnClassificationRe() != null && castOther.getAnnClassificationRe() != null && this
-						.getAnnClassificationRe().equals(castOther.getAnnClassificationRe())));
+				&& (this.getNumberClues() == castOther.getNumberClues());
 	}
 
 	public int hashCode() {
@@ -90,7 +79,6 @@ public class ProcessCluesStatsId implements java.io.Serializable {
 		result = 37 * result + (int) this.getAnnProcessId();
 		result = 37 * result + (getAnnClue() == null ? 0 : this.getAnnClue().hashCode());
 		result = 37 * result + (int) this.getNumberClues();
-		result = 37 * result + (getAnnClassificationRe() == null ? 0 : this.getAnnClassificationRe().hashCode());
 		return result;
 	}
 

@@ -28,8 +28,7 @@ public class ProcessCluesStats implements java.io.Serializable {
 	@EmbeddedId
 	@AttributeOverrides({ @AttributeOverride(name = "annProcessId", column = @Column(name = "ann_process_id", nullable = false)),
 			@AttributeOverride(name = "annClue", column = @Column(name = "ann_clue", length = 250)),
-			@AttributeOverride(name = "numberClues", column = @Column(name = "numberClues", nullable = false)),
-			@AttributeOverride(name = "annClassificationRe", column = @Column(name = "ann_classification_re", length = 250)) })
+			@AttributeOverride(name = "numberClues", column = @Column(name = "numberClues", nullable = false))})
 	public ProcessCluesStatsId getId() {
 		return this.id;
 	}
