@@ -61,6 +61,8 @@ public interface ICorpusCreateConfiguration extends IConfiguration{
 	 */
 	public boolean isProcessJournalRetrievalBeforeNeeded();
 	
+	public CorpusCreateSourceEnum getCorpusSource();
+	
 	public Properties getProperties();
 	
 }
