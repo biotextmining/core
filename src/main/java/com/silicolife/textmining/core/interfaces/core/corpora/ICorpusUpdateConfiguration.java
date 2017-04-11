@@ -12,5 +12,7 @@ public interface ICorpusUpdateConfiguration extends IConfiguration{
 	public String getPublicationsDirectory();
 	
 	public Properties getProperties();
+	
+	public CorpusCreateSourceEnum getCorpusSource();
 
 }
