@@ -23,14 +23,14 @@ public class CorpusCreateConfigurationImpl extends ConfigurationImpl implements 
 	private boolean processJournalRetrievalBeforeNeeded;
 	private Properties properties;
 	private Set<Long> documentsIDs;
-	private CorpusCreateSourceEnum corpusCreateSourceEnum;
+	private CorpusCreateSourceEnum corpusSource;
 
 	public CorpusCreateConfigurationImpl()
 	{
 		super();
 	}
 
-	public CorpusCreateConfigurationImpl(String corpusName,String notes,Properties properties,CorpusCreateSourceEnum corpusCreateSourceEnum) {
+	public CorpusCreateConfigurationImpl(String corpusName,String notes,Properties properties,CorpusCreateSourceEnum corpusSource) {
 		super();
 		this.corpusName = corpusName;
 		this.corpusNotes = notes;
@@ -38,7 +38,7 @@ public class CorpusCreateConfigurationImpl extends ConfigurationImpl implements 
 		if(properties.containsKey(GlobalNames.textType)){
 			this.corpusTextType = CorpusTextType.convertStringToCorpusType(properties.getProperty(GlobalNames.textType));
 		}
-		
+		this.corpusSource = corpusSource;
 	}
 	
 	public CorpusCreateConfigurationImpl(String corpusName,String notes,Properties properties) {
@@ -142,9 +142,13 @@ public class CorpusCreateConfigurationImpl extends ConfigurationImpl implements 
 		this.documentsIDs = documentsIDs;
 	}
 
-	@Override
+
 	public CorpusCreateSourceEnum getCorpusSource() {
-		return corpusCreateSourceEnum;
+		return corpusSource;
+	}
+
+	public void setCorpusSource(CorpusCreateSourceEnum corpusSource) {
+		this.corpusSource = corpusSource;
 	}
 
 }
