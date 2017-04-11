@@ -41,6 +41,11 @@ public class CorpusCreateConfigurationImpl extends ConfigurationImpl implements 
 		
 	}
 	
+	public CorpusCreateConfigurationImpl(String corpusName,String notes,Properties properties) {
+		this(corpusName, notes, properties, null);
+		
+	}
+	
 	public CorpusCreateConfigurationImpl(String corpusName,String notes, Set<IPublication> docIds,CorpusTextType corpusTextType, boolean processJournalRetrievalBeforeNeeded,CorpusCreateSourceEnum corpusCreateSourceEnum) {
 		this(corpusName,notes,new Properties(),corpusCreateSourceEnum);
 		setDocuments(docIds);
@@ -48,11 +53,19 @@ public class CorpusCreateConfigurationImpl extends ConfigurationImpl implements 
 		this.processJournalRetrievalBeforeNeeded = processJournalRetrievalBeforeNeeded;
 	}
 	
+	public CorpusCreateConfigurationImpl(String corpusName,String notes, Set<IPublication> docIds,CorpusTextType corpusTextType, boolean processJournalRetrievalBeforeNeeded) {
+		this(corpusName, notes, docIds, corpusTextType, processJournalRetrievalBeforeNeeded, CorpusCreateSourceEnum.Other);
+	}
+	
 	public CorpusCreateConfigurationImpl(String corpusName,String notes, Set<IPublication> docIds,CorpusTextType corpusTextType, boolean processJournalRetrievalBeforeNeeded,Properties properties,CorpusCreateSourceEnum corpusCreateSourceEnum) {
 		this(corpusName,notes,properties,corpusCreateSourceEnum);
 		setDocuments(docIds);
 		this.corpusTextType = corpusTextType;
 		this.processJournalRetrievalBeforeNeeded = processJournalRetrievalBeforeNeeded;
+	}
+	
+	public CorpusCreateConfigurationImpl(String corpusName,String notes, Set<IPublication> docIds,CorpusTextType corpusTextType, boolean processJournalRetrievalBeforeNeeded,Properties properties) {
+		this(corpusName, notes, docIds, corpusTextType, processJournalRetrievalBeforeNeeded, properties, CorpusCreateSourceEnum.Other);
 	}
 
 	@Override
