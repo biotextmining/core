@@ -10,13 +10,9 @@ import org.hibernate.FetchMode;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Conjunction;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.Subqueries;
 import org.hibernate.sql.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -149,21 +145,9 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 		subQuery.createAlias("docsprocessed.corpusHasPublications", "allpubs", JoinType.RIGHT_OUTER_JOIN, Restrictions.eq("docsprocessed.id.chphpProcessesId", processId));
 		subQuery.add(Restrictions.eq("allpubs.id.chpCorpusId", corpusId));
 		subQuery.add(Restrictions.isNull("docsprocessed.id.chphpPublicationId"));
-		subQuery.setProjection(Projections.property("allpubs.id.chpPublicationId"));
+		subQuery.setProjection(Projections.count("allpubs.id.chpPublicationId"));
 		
-		List pubsNotProcessed = subQuery.list();
-		
-		if(pubsNotProcessed.isEmpty())
-			return 0L;
-		
-		Criteria c = session.createCriteria(Publications.class, "pub");
-		c.createAlias("pub.corpusHasPublicationses", "corpusHasPub");
-		c.setFetchMode("corpusHasPub", FetchMode.JOIN);
-		c.add(Restrictions.eq("corpusHasPub.id.chpCorpusId", corpusId));
-		c.add(Restrictions.in("pub.pubId", pubsNotProcessed));
-		
-		c.setProjection(Projections.rowCount());
-		Long count = (Long) c.uniqueResult();
+		Long count = (Long) subQuery.uniqueResult();
 		return count;
 	}
 	
@@ -183,7 +167,7 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 		subQuery.setMaxResults(paginationSize);
 		subQuery.setFetchSize(paginationSize);
 		
-		List pubsNotProcessed = subQuery.list();
+		List<Long> pubsNotProcessed = subQuery.list();
 		
 		if(pubsNotProcessed.isEmpty())
 			return new ArrayList<>();
@@ -205,45 +189,48 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 	@Override
 	public Long countCorpusPublicationsOutdatedProcess(Long corpusId, Long processId){
 		
-		DetachedCriteria subQuery = DetachedCriteria.forClass(CorpusHasPublicationsHasProcesses.class, "docsinprocess");
-		subQuery.createAlias("docsinprocess.processes", "process");
-		subQuery.setFetchMode("process", FetchMode.JOIN);
-		subQuery.add(Restrictions.eq("docsinprocess.id.chphpCorpusId", corpusId));
-		subQuery.add(Restrictions.eq("docsinprocess.id.chphpProcessesId", processId));
-		subQuery.add(Restrictions.neProperty("process.proVersion", "docsinprocess.chphpProcessesVersion"));
-		subQuery.add(Restrictions.eqProperty("docsinprocess.id.chphpPublicationId", "pub.pubId"));
-		subQuery.setProjection(Projections.property("docsinprocess.id.chphpPublicationId"));
-		
 		Session session = sessionFactory.getCurrentSession();
-		Criteria c = session.createCriteria(Publications.class, "pub");
-		c.createAlias("pub.corpusHasPublicationses", "corpusHasPub");
-		c.setFetchMode("corpusHasPub", FetchMode.JOIN);
-		c.add(Restrictions.eq("corpusHasPub.id.chpCorpusId", corpusId));
-		c.add(Subqueries.exists(subQuery));
-		c.setProjection(Projections.rowCount());
-		Long count = (Long) c.uniqueResult();
+		
+		Criteria subQuery = session.createCriteria(CorpusHasPublicationsHasProcesses.class, "docsprocessed");
+		subQuery.createAlias("docsprocessed.processes", "process", JoinType.LEFT_OUTER_JOIN, Restrictions.eq("docsprocessed.id.chphpProcessesId", processId));
+		subQuery.createAlias("docsprocessed.corpusHasPublications", "allpubs", JoinType.RIGHT_OUTER_JOIN, Restrictions.eq("docsprocessed.id.chphpProcessesId", processId));
+		subQuery.add(Restrictions.eq("allpubs.id.chpCorpusId", corpusId));
+		subQuery.add(Restrictions.or(Restrictions.isNull("docsprocessed.id.chphpPublicationId"), 
+				                     Restrictions.ltProperty("docsprocessed.chphpProcessesVersion", "process.proVersion")));
+		subQuery.setProjection(Projections.count("allpubs.id.chpPublicationId"));
+		
+		Long count = (Long) subQuery.uniqueResult();
 		return count;
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Publications> getCorpusPublicationsOutdatedProcessPaginated(Long corpusId, Long processId, Integer paginationIndex, Integer paginationSize){
-		
-		DetachedCriteria subQuery = DetachedCriteria.forClass(CorpusHasPublicationsHasProcesses.class, "docsinprocess");
-		subQuery.createAlias("docsinprocess.processes", "process");
-		subQuery.setFetchMode("process", FetchMode.JOIN);
-		subQuery.add(Restrictions.eq("docsinprocess.id.chphpCorpusId", corpusId));
-		subQuery.add(Restrictions.eq("docsinprocess.id.chphpProcessesId", processId));
-		subQuery.add(Restrictions.neProperty("process.proVersion", "docsinprocess.chphpProcessesVersion"));
-		subQuery.add(Restrictions.eqProperty("docsinprocess.id.chphpPublicationId", "pub.pubId"));
-		subQuery.setProjection(Projections.property("docsinprocess.id.chphpPublicationId"));
-		
 		Session session = sessionFactory.getCurrentSession();
+
+		Criteria subQuery = session.createCriteria(CorpusHasPublicationsHasProcesses.class, "docsprocessed");
+		subQuery.createAlias("docsprocessed.processes", "process", JoinType.LEFT_OUTER_JOIN, Restrictions.eq("docsprocessed.id.chphpProcessesId", processId));
+		subQuery.createAlias("docsprocessed.corpusHasPublications", "allpubs", JoinType.RIGHT_OUTER_JOIN, Restrictions.eq("docsprocessed.id.chphpProcessesId", processId));
+		subQuery.add(Restrictions.eq("allpubs.id.chpCorpusId", corpusId));
+		subQuery.add(Restrictions.or(Restrictions.isNull("docsprocessed.id.chphpPublicationId"), 
+				                     Restrictions.ltProperty("docsprocessed.chphpProcessesVersion", "process.proVersion")));
+		subQuery.setProjection(Projections.property("allpubs.id.chpPublicationId"));
+		
+
+		subQuery.setFirstResult(paginationIndex);
+		subQuery.setMaxResults(paginationSize);
+		subQuery.setFetchSize(paginationSize);
+		
+		List<Long> pubsOutdated = subQuery.list();
+		
+		if(pubsOutdated.isEmpty())
+			return new ArrayList<>();
+		
 		Criteria c = session.createCriteria(Publications.class, "pub");
 		c.createAlias("pub.corpusHasPublicationses", "corpusHasPub");
 		c.setFetchMode("corpusHasPub", FetchMode.JOIN);
 		c.add(Restrictions.eq("corpusHasPub.id.chpCorpusId", corpusId));
-		c.add(Subqueries.exists(subQuery));
+		c.add(Restrictions.in("pub.pubId", pubsOutdated));
 		c.setFirstResult(paginationIndex);
 		c.setMaxResults(paginationSize);
 		c.setFetchSize(paginationSize);
