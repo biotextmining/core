@@ -37,6 +37,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.RolesEnum;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.corpora.CorpusWrapper;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.process.ProcessWrapper;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsBatchWrapper;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsWrapper;
 import com.silicolife.textmining.core.datastructures.documents.DocumentSetImpl;
 import com.silicolife.textmining.core.datastructures.documents.corpus.CorpusStatisticsImpl;
@@ -401,7 +402,7 @@ public class CorpusServiceImpl implements ICorpusService {
 		IDocumentSet documentSet = new DocumentSetImpl();
 		List<Publications> publications = corpusManagerDao.getPublicationsAuxDao().findPublicationsByCorpusIdAndProcessIdNotProcessedPaginated(corpusId, processId, paginationIndex, paginationSize);
 		for (Publications publication : publications) {
-			IPublication publication_ = PublicationsWrapper.convertToAnoteStructure(publication);
+			IPublication publication_ = PublicationsBatchWrapper.convertToAnoteStructure(publication);
 			documentSet.addDocument(publication_.getId(), publication_);
 		}
 
@@ -444,7 +445,7 @@ public class CorpusServiceImpl implements ICorpusService {
 		List<Publications> publications = corpusManagerDao.getPublicationsAuxDao().getCorpusPublicationsOutdatedProcessPaginated(corpusId, processId, paginationIndex, paginationSize);
 
 		for (Publications publication : publications) {
-			IPublication publication_ = PublicationsWrapper.convertToAnoteStructure(publication);
+			IPublication publication_ = PublicationsBatchWrapper.convertToAnoteStructure(publication);
 			documentSet.addDocument(publication_.getId(), publication_);
 		}	
 		
