@@ -127,48 +127,48 @@ public class PublicationsWrapper {
 		 */
 		Long id = publications_.getId();
 		String title = publications_.getTitle();
-		if(title.trim().equals(""))
+		if(title == null || title.isEmpty())
 			title = null;
 		String authors = publications_.getAuthors();
-		if(authors.trim().equals(""))
+		if(authors == null || authors.isEmpty())
 			authors = null;
 		String type = publications_.getType();
-		if(type.trim().equals(""))
+		if(type == null || type.isEmpty())
 			type = null;
 		String yearDate = publications_.getYeardate();
-		if(yearDate.trim().equals(""))
+		if(yearDate==null || yearDate.isEmpty())
 			yearDate = null;
 		String fullDate = publications_.getFulldate();
-		if(fullDate.trim().equals(""))
+		if(fullDate == null | fullDate.isEmpty())
 			fullDate = null;
 		String status = publications_.getStatus();
-		if(status.trim().equals(""))
+		if(status == null || status.isEmpty())
 			status = null;
 		String journal = publications_.getJournal();
-		if(journal.trim().equals(""))
+		if(journal == null || journal.isEmpty())
 			journal = null;
 		String volume = publications_.getVolume();
-		if(volume.trim().equals(""))
+		if(volume == null || volume.isEmpty())
 			volume = null;
 		String issue = publications_.getIssue();
-		if(issue.trim().equals(""))
+		if(issue ==  null || issue.isEmpty())
 			issue = null;
 		String pages = publications_.getPages();
-		if(pages.trim().equals(""))
+		if(pages == null || pages.isEmpty())
 			pages = null;
 		String abstractSection = publications_.getAbstractSection();
-		if(abstractSection.trim().equals(""))
+		if(abstractSection ==null || abstractSection.trim().isEmpty())
 			abstractSection = null;
 		String externalLink = publications_.getExternalLink();
-		if(externalLink.trim().equals(""))
+		if(externalLink == null || externalLink.trim().isEmpty())
 			externalLink = null;
 		Boolean freefulltextAvailable = publications_.isFreeFullText();
 
 		String notes = publications_.getNotes();
-		if(notes.trim().equals(""))
+		if(notes == null || notes.trim().isEmpty())
 			notes = null;
 		String relativePath = publications_.getRelativePath();
-		if(relativePath.trim().equals(""))
+		if(relativePath == null || relativePath.trim().isEmpty())
 			relativePath = null;
 
 		Publications publication = new Publications();
