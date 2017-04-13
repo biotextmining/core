@@ -11,5 +11,6 @@ public enum PublicationSourcesDefaultEnum {
 	PUBMED,
 	pmc,
 	patent,
+	uspto,
 	epodoc;
 }
