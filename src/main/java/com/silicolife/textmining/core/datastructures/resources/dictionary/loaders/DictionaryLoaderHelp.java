@@ -152,16 +152,12 @@ public class DictionaryLoaderHelp extends PortResourceUpdateReport{
 				
 				if(!this.alreadyAddedElemnt.contains(term) || !synonymsList.isEmpty())
 				{
-					
 					this.batch.add(resourceElement);
-				}
-			
+				}		
 				this.alreadyAddedElemnt.add(term);
 				this.alreadyAddedElemnt.addAll(synonymsList);
 			}
 		}
-		this.batch.add(resourceElement);
-
 	}
 	
 	public int getBatchSize()
