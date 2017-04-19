@@ -20,6 +20,7 @@ public interface IResourceElement extends Cloneable,ITermBDID, Comparable<IResou
 	public IAnoteClass getTermClass();
 
 	public boolean isActive();
+	
 	/**
 	 * Dictionary and Ontologies
 	 * @throws ANoteException 
@@ -27,8 +28,10 @@ public interface IResourceElement extends Cloneable,ITermBDID, Comparable<IResou
 	 */
 	public List<IExternalID> getExtenalIDs() throws ANoteException;
 	public List<IExternalID> getExternalIDsInMemory();
+	public void setExternalIDsInMemory(List<IExternalID> externalIds);
 
 	public List<String> getSynonyms();
+	public void setSynonyms(List<String> synonyms);
 
 	/**
 	 * Rules

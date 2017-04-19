@@ -114,6 +114,52 @@ public class DictionaryLoaderHelp extends PortResourceUpdateReport{
 	}
 	
 	public void addElementToBatch(IResourceElement resourceElement) {
+		String term = resourceElement.getTerm();
+		List<String> synonyms = resourceElement.getSynonyms();
+		List<IExternalID> externalIDs = resourceElement.getExternalIDsInMemory();
+		if(term.isEmpty()|| term.length()<TableResourcesElements.mimimumElementSize ||term.length()>=TableResourcesElements.elementSize)
+		{
+			term = getSynonym(new HashSet<>(synonyms));
+			resourceElement.setTerm(term);
+		}
+		if(!term.isEmpty() && term.length() >= TableResourcesElements.mimimumElementSize && term.length()< TableResourcesElements.elementSize)
+		{
+			Set<String> synonymsList = new HashSet<>();
+			for(String synonym:synonyms)
+			{
+				if(synonym.trim().length() >= TableResourcesElements.mimimumElementSize && synonym.length()< TableResourcesElements.elementSize && !this.alreadyAddedElemnt.contains(synonym))
+				{
+					synonymsList.add(synonym.trim());
+				}
+			}
+			resourceElement.setSynonyms(new ArrayList<>(synonymsList));
+			List<IExternalID> externalIDLIst  = new ArrayList<>();
+			Set<String> extendalIDsalreadyAddedfortems = new HashSet<>();
+			for(IExternalID externalID:externalIDs)
+			{
+				String internalID = externalID.getExternalID();
+				String source = externalID.getSource().getSource();
+				String merge = internalID+source;
+				merge = merge.toLowerCase();
+				if(!extendalIDsalreadyAddedfortems.contains(merge))
+				{
+					extendalIDsalreadyAddedfortems.add(merge);
+					externalIDLIst.add(externalID);
+				}
+			}
+			resourceElement.setExternalIDsInMemory(externalIDLIst);
+			synchronized (this.alreadyAddedElemnt) {
+				
+				if(!this.alreadyAddedElemnt.contains(term) || !synonymsList.isEmpty())
+				{
+					
+					this.batch.add(resourceElement);
+				}
+			
+				this.alreadyAddedElemnt.add(term);
+				this.alreadyAddedElemnt.addAll(synonymsList);
+			}
+		}
 		this.batch.add(resourceElement);
 
 	}
