@@ -1,6 +1,5 @@
 package com.silicolife.textmining.core.datastructures.documents.corpus;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpusStatistics;
 
 public class CorpusStatisticsImpl implements ICorpusStatistics{
@@ -11,7 +10,7 @@ public class CorpusStatisticsImpl implements ICorpusStatistics{
 	
 	public CorpusStatisticsImpl(int documentsNumber,int processesNumber)
 	{
-		this.processesNumber=processesNumber;
+		this.documentsNumber=documentsNumber;
 		this.processesNumber=processesNumber;
 	}
 	
