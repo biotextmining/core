@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +58,9 @@ import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 @Service
 @Transactional(readOnly = true)
 public class CorpusServiceImpl implements ICorpusService {
+	
+	final static Logger creationLogger = LoggerFactory.getLogger(CorpusServiceImpl.class);
+
 
 	private CorpusManagerDao corpusManagerDao;
 	private ProcessesManagerDao processesManagerDao;
@@ -284,17 +289,21 @@ public class CorpusServiceImpl implements ICorpusService {
 
 		CorpusHasPublicationsId id = new CorpusHasPublicationsId(corpusId, publicationID);
 		if(corpusManagerDao.getCorpusHasPublicationsDao().findById(id)!=null)
-			throw new CorpusException(ExceptionsCodes.codeCorpusPublicationAlreadyExists, ExceptionsCodes.msgCorpusPublicationAlreadyExists);	
-
-		CorpusHasPublications corpushaspublication = new CorpusHasPublications(id , corpus, publication);
-		corpusManagerDao.getCorpusHasPublicationsDao().save(corpushaspublication);
-		/*
-		 * log
-		 */
-		AuthUsers user = userLogged.getCurrentUserLogged();
-		AuthUserLogs log = new AuthUserLogs(user, new Date(), "create", "corpus_has_publication", null, "Association between corpus and publication");
-		usersManagerDao.getAuthUserLogsDao().save(log);
-
+		{
+//			throw new CorpusException(ExceptionsCodes.codeCorpusPublicationAlreadyExists, ExceptionsCodes.msgCorpusPublicationAlreadyExists);
+			creationLogger.warn(ExceptionsCodes.msgCorpusPublicationAlreadyExists +  " " + corpusId + " " +publicationID);
+		}
+		else
+		{
+			CorpusHasPublications corpushaspublication = new CorpusHasPublications(id , corpus, publication);
+			corpusManagerDao.getCorpusHasPublicationsDao().save(corpushaspublication);
+			/*
+			 * log
+			 */
+			AuthUsers user = userLogged.getCurrentUserLogged();
+			AuthUserLogs log = new AuthUserLogs(user, new Date(), "create", "corpus_has_publication", null, "Association between corpus and publication");
+			usersManagerDao.getAuthUserLogsDao().save(log);
+		}
 		return true;
 	}
 
