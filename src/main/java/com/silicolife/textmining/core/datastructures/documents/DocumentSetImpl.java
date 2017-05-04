@@ -86,5 +86,17 @@ public class DocumentSetImpl implements Serializable, IDocumentSet{
 	@JsonIgnore
 	public int size() {
 		return this.allDocuments.size();
+	}
+
+	public int availableAbstracts() {
+		int out = 0;
+		for(IPublication pub:this.allDocuments.values())
+		{
+			if(!pub.getAbstractSection().isEmpty())
+			{
+				out++;
+			}
+		}
+		return out;
 	}	
 }

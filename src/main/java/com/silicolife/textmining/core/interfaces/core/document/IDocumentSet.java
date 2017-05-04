@@ -40,5 +40,7 @@ public interface IDocumentSet extends Iterable<IPublication>{
 	public Map<Long,IPublication> getAllDocuments();
 	
 	public int size();
+	
+	public int availableAbstracts();
 		
 }
