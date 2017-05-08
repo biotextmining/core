@@ -84,6 +84,12 @@ public class ClassPropertiesManagement {
 		InitConfiguration.getDataAccess().updateClassName(klass,newCLass);
 		refreshClasses();
 	}
+	
+	public static void updateClassColor(IAnoteClass klass,String newColor) throws ANoteException {
+		klass.setColor(newColor);
+		InitConfiguration.getDataAccess().updateAnoteKlass(klass);
+		refreshClasses();
+	}
 
 	public static Collection<IAnoteClass> getClasses()
 	{
