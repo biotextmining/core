@@ -41,7 +41,7 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 		Criteria c = session.createCriteria(Annotations.class, "annnotations");
 		c.add(Restrictions.eq("annnotations.processes", processs));
 		c.add(Restrictions.eq("annnotations.annAnnotType", AnnotationType.ner.name()));
-
+		c.add(Restrictions.eq("annnotations.annActive", true));
 		Integer totalResult = ((Number) c.setProjection(Projections.rowCount())
 				.uniqueResult()).intValue();
 
@@ -54,7 +54,7 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 		Criteria c = session.createCriteria(Annotations.class, "annnotations");
 		c.add(Restrictions.eq("annnotations.processes", processs));
 		c.add(Restrictions.eq("annnotations.annAnnotType", AnnotationType.re.name()));
-
+		c.add(Restrictions.eq("annnotations.annActive", true));
 		Integer totalResult = ((Number) c.setProjection(Projections.rowCount())
 				.uniqueResult()).intValue();
 
@@ -69,6 +69,7 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 		c.createAlias("classes.annotationses", "anotation");
 		c.add(Restrictions.eq("anotation.publications.pubId", publicationID));
 		c.add(Restrictions.eq("anotation.processes.proId", processID));
+		c.add(Restrictions.eq("anotation.annActive", true));
 		c.setProjection(Projections.projectionList()
 				.add(Projections.groupProperty("claId"), "claId")
 				.add(Projections.count("claId"), "classNumber"));
@@ -92,6 +93,7 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 		Criteria c = session.createCriteria(Classes.class, "classes");
 		c.createAlias("classes.annotationses", "anotation");
 		c.add(Restrictions.eq("anotation.processes.proId", processID));
+		c.add(Restrictions.eq("anotation.annActive", true));
 		c.setProjection(Projections.projectionList()
 				.add(Projections.groupProperty("claId"), "claId")
 				.add(Projections.count("claId"), "classNumber"));
@@ -115,6 +117,7 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 		c.add(Restrictions.eq("annnotations.publications.pubId", publicationID));
 		c.add(Restrictions.eq("annnotations.processes.proId", processID));
 		c.add(Restrictions.eq("annnotations.annAnnotType", AnnotationType.re.name()));
+		c.add(Restrictions.eq("anotation.annActive", true));
 		Integer totalResult = ((Number) c.setProjection(Projections.rowCount())
 				.uniqueResult()).intValue();
 
