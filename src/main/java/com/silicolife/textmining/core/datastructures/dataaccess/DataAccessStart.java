@@ -1122,8 +1122,27 @@ public class DataAccessStart implements IDataAccess {
 
 	@Override
 	public Boolean autoupdate() throws ANoteException {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Long getNextHyperLinkMenuItemID() throws ANoteException {
+		return null;
+	}
+
+	@Override
+	public void addHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws ANoteException {
+		
+	}
+
+	@Override
+	public void removeHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws ANoteException {
+		
+	}
+
+	@Override
+	public void updateHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws ANoteException {
+		
 	}
 
 }

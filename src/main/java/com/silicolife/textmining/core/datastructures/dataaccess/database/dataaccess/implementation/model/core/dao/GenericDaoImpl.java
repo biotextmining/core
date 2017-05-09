@@ -114,6 +114,12 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 		sessionFactory.getCurrentSession().evict(object);
 
 	}
+	
+	@Override
+	public T merge(Object object) {
+		T castedObj = (T) sessionFactory.getCurrentSession().merge(object);
+		return castedObj;	
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -190,4 +196,6 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 		c.setFetchSize(limit);
 		return c.list();
 	}
+
+
 }

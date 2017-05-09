@@ -2368,4 +2368,53 @@ public class DatabaseAccess implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public Long getNextHyperLinkMenuItemID() throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Long result = hyperLinkService.getNextHyperLinkMenusItemID();
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return result;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public void addHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			hyperLinkService.addHyperLinkMenuItem(hyperLinkMenuItem);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
+	@Override
+	public void updateHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			hyperLinkService.updateHyperLinkMenuItem(hyperLinkMenuItem);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public void removeHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			hyperLinkService.removeHyperLinkMenuItem(hyperLinkMenuItem.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
 }

@@ -1134,4 +1134,27 @@ public class DaemonAccess implements IDataAccess {
 	public Boolean autoupdate() throws ANoteException {
 		return runServerProcessesImpl.autoupdate();
 	}
+
+	@Override
+	public Long getNextHyperLinkMenuItemID() throws ANoteException {
+		return hyperLinkAccessImpl.getNextHyperLinkMenuItemID();
+	}
+
+	@Override
+	public void addHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws ANoteException {
+		hyperLinkAccessImpl.addHyperLinkMenuItem(hyperLinkMenuItem);
+		
+	}
+
+	@Override
+	public void removeHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws ANoteException {
+		hyperLinkAccessImpl.removeHyperLinkMenuItem(hyperLinkMenuItem.getId());
+		
+	}
+
+	@Override
+	public void updateHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws ANoteException {
+		hyperLinkAccessImpl.updateHyperLinkMenuItem(hyperLinkMenuItem);
+		
+	}
 }

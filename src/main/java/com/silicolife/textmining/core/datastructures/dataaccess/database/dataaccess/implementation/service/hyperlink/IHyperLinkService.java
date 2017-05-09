@@ -27,5 +27,13 @@ public interface IHyperLinkService {
 
 	public List<IHyperLinkMenuItem> getHyperLinkMenuItemsForSource(long sourceID) throws HyperLinkMenuException;
 	
+	public Long getNextHyperLinkMenusItemID() throws HyperLinkMenuException;
+	
 	public void setUserLogged(UsersLogged userLogged);
+
+	public Boolean addHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws HyperLinkMenuException;
+
+	public Boolean removeHyperLinkMenuItem(long menuId) throws HyperLinkMenuException;
+
+	public Boolean updateHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws HyperLinkMenuException;
 }

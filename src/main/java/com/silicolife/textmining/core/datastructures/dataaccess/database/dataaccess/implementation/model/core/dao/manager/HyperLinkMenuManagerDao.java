@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.GenericDao;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.HyperLinkMenusAuxDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.HyperLinkMenuSourceAssociation;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.HyperLinkMenus;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.HyperLinkSubmenus;
@@ -16,16 +17,18 @@ public class HyperLinkMenuManagerDao {
 	private GenericDao<HyperLinkSubmenus> hyperLinkSubmenusDao;
 	private GenericDao<HyperLinkMenuSourceAssociation> hyperLinkMenuSourceAssociationDao;
 	private GenericDao<Sources> sourcesDao;
+	private HyperLinkMenusAuxDao hyperLinkMenusAuxDao;
 
 	
 	@Autowired
 	public HyperLinkMenuManagerDao(GenericDao<HyperLinkMenus> hyperLinkMenusDao, GenericDao<HyperLinkSubmenus> hyperLinkSubmenusDao, 
-			GenericDao<HyperLinkMenuSourceAssociation> hyperLinkMenuSourceAssociationDao, GenericDao<Sources> sourcesDao){
+			GenericDao<HyperLinkMenuSourceAssociation> hyperLinkMenuSourceAssociationDao, GenericDao<Sources> sourcesDao, HyperLinkMenusAuxDao hyperLinkMenusAuxDao){
 		super();
 		this.hyperLinkMenusDao = hyperLinkMenusDao;
 		this.hyperLinkSubmenusDao= hyperLinkSubmenusDao;
 		this.hyperLinkMenuSourceAssociationDao = hyperLinkMenuSourceAssociationDao;
 		this.sourcesDao = sourcesDao;
+		this.hyperLinkMenusAuxDao = hyperLinkMenusAuxDao;
 	}
 
 
@@ -42,9 +45,13 @@ public class HyperLinkMenuManagerDao {
 	public GenericDao<HyperLinkMenuSourceAssociation> getHyperLinkMenuSourceAssociationDao() {
 		return hyperLinkMenuSourceAssociationDao;
 	}
-
-
+	
 	public GenericDao<Sources> getSourcesDao() {
 		return sourcesDao;
 	}
+	
+	public HyperLinkMenusAuxDao getHyperLinkMenusAuxDao(){
+		return hyperLinkMenusAuxDao;
+	}
+
 }

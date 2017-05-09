@@ -143,4 +143,57 @@ public class HyperlinkAccessImpl extends RestClientAccess {
 			return returned;
 		}
 	}
+
+	public Long getNextHyperLinkMenuItemID() throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Long>> responseType = new ParameterizedTypeReference<DaemonResponse<Long>>() {};
+		ResponseEntity<DaemonResponse<Long>> response = webClient.get("hyperlink/getNextHyperLinkMenuItemID", responseType);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			Long returned = response.getBody().getContent();
+			return returned;
+		}
+	}
+
+	public Boolean addHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Boolean>> responseType = new ParameterizedTypeReference<DaemonResponse<Boolean>>() {};
+		ResponseEntity<DaemonResponse<Boolean>> response = webClient.post("hyperlink/addHyperLinkMenuItem", responseType, hyperLinkMenuItem);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			Boolean boo = response.getBody().getContent();
+			return boo;
+		}
+		
+	}
+
+	public Boolean removeHyperLinkMenuItem(long menuId) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Boolean>> responseType = new ParameterizedTypeReference<DaemonResponse<Boolean>>() {};
+		Map<String, Long> uriVariables = new HashMap<String, Long>();
+		uriVariables.put("menuId", menuId);
+		
+		ResponseEntity<DaemonResponse<Boolean>> response = webClient.get("hyperlink/removeHyperLinkMenuItem", responseType, uriVariables);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			return response.getBody().getContent();
+		}
+	}
+
+	public Boolean updateHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Boolean>> responseType = new ParameterizedTypeReference<DaemonResponse<Boolean>>() {};
+		ResponseEntity<DaemonResponse<Boolean>> response = webClient.post("hyperlink/updateHyperLinkMenuItem", responseType, hyperLinkMenuItem);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			Boolean boo = response.getBody().getContent();
+			return boo;
+		}
+	}
 }

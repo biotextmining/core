@@ -10,6 +10,8 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.ClustersProcessAuxDaoImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.CorpusAuxDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.CorpusAuxDaoImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.HyperLinkMenusAuxDao;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.HyperLinkMenusAuxDaoImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.ProcessesAoxDaoImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.ProcessesAuxDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.PublicationsAuxDao;
@@ -103,7 +105,8 @@ public class ManagerDao {
 		GenericDao<HyperLinkSubmenus> hyperLinkSubmenusDao = new GenericDaoImpl<HyperLinkSubmenus>(sessionFactory, HyperLinkSubmenus.class);
 		GenericDao<HyperLinkMenuSourceAssociation> hyperLinkMenuSourceAssociationDao = new GenericDaoImpl<HyperLinkMenuSourceAssociation>(sessionFactory, HyperLinkMenuSourceAssociation.class);
 		GenericDao<Sources> sourcesDao = new GenericDaoImpl<Sources>(sessionFactory, Sources.class);
-		return new HyperLinkMenuManagerDao(hyperLinkMenusDao, hyperLinkSubmenusDao, hyperLinkMenuSourceAssociationDao,sourcesDao);
+		HyperLinkMenusAuxDao hyperLinkMenusAuxDao= new HyperLinkMenusAuxDaoImpl(sessionFactory);
+		return new HyperLinkMenuManagerDao(hyperLinkMenusDao, hyperLinkSubmenusDao, hyperLinkMenuSourceAssociationDao, sourcesDao, hyperLinkMenusAuxDao);
 	}
 
 	

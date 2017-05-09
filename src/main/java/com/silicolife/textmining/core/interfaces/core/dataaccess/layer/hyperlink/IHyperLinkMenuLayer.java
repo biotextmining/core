@@ -18,4 +18,11 @@ public interface IHyperLinkMenuLayer {
 	
 	public List<IHyperLinkMenuItem> getHyperLinkMenuItemsForSource(ISource source) throws ANoteException;
 
+	public Long getNextHyperLinkMenuItemID() throws ANoteException;
+	
+	public void addHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws ANoteException;
+	
+	public void removeHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws ANoteException;
+
+	public void updateHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws ANoteException;
 }

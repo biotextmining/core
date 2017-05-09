@@ -46,6 +46,8 @@ public interface GenericDao<T> {
 	public void refresh(Object object);
 
 	public void evict(Object object);
+	
+	public T merge(Object object);
 
 	public T findUniqueByAttributeCaseSensitive(String attribute, Serializable value);
 }

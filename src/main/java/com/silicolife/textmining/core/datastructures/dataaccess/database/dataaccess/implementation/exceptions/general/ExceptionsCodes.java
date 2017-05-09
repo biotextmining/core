@@ -66,24 +66,26 @@ public class ExceptionsCodes {
 	public static final String codeProcessNotInCorpus = "ProcessNotExistsForCorpus";
 	public static final String msgProcessNotInCorpus = "Process not exists for a Corpus";
 
-	public static final String msgClassExists = "ClassAlreadyExists";
-	public static final String codeClassExists = "Class already exists";
+	public static final String codeClassExists = "ClassAlreadyExists";
+	public static final String msgClassExists = "Class already exists";
 	
 	public static final String codeClassNameExists = "ClassNameAlreadyExists";
 	public static final String msgClassNameExists = "Class with name already exists";
 	
-	public static final String msgNoNullClass = "nonullclass";
-	public static final String codeNoNullClass = "Entity class can not be null";
+	public static final String codeNoNullClass = "nonullclass";
+	public static final String msgNoNullClass = "Entity class can not be null";
 
-	public static final String msgNoAnnotation = "noannotation";
-	public static final String codeNoAnnotation = "Annotation do not exist";
+	public static final String codeNoAnnotation = "noannotation";
+	public static final String msgNoAnnotation = "Annotation do not exist";
 	
-	public static final String msgNoHyperLinkMenuItem = "nohyperlinkmenuitem";
-	public static final String codeNoHyperLinkMenuItem = "Hyperlink menu item do not exist";
+	public static final String codeNoHyperLinkMenuItem = "nohyperlinkmenuitem";
+	public static final String msgNoHyperLinkMenuItem = "Hyperlink menu item do not exist";
 	
+	public static final String codeHyperLinkMenuItemExists = "hyperlinkmenuitemExists";
+	public static final String msgHyperLinkMenuItemExists = "Hyperlink menu item id already exists";
 	
-	public static final String msgNoSource = "nosource";
-	public static final String codeNoSource = "Source does not exists";
+	public static final String codeNoSource = "nosource";
+	public static final String msgNoSource= "Source does not exists";
 	
 	
 	public static final String codeNoClusteringProcess = "codeNoClusteringProcess";

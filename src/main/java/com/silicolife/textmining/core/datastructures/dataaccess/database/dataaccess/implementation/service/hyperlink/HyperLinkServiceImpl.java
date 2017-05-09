@@ -3,8 +3,10 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.HyperLinkMenuSourceAssociation;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.HyperLinkMenuSourceAssociationId;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.HyperLinkMenus;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.HyperLinkSubmenus;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Sources;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.hyperlink.HyperLinkMenuWrapper;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.resources.SourcesWrapper;
@@ -113,6 +116,92 @@ public class HyperLinkServiceImpl implements IHyperLinkService{
 	@Override
 	public void setUserLogged(UsersLogged userLogged) {
 		this.userLogged = userLogged;
+	}
+
+	@Override
+	public Long getNextHyperLinkMenusItemID() throws HyperLinkMenuException{
+		return hyperLinkMenuDao.getHyperLinkMenusAuxDao().getNextHyperLinkMenusItemID();
+	}
+
+	@Transactional(readOnly = false)
+	@Override
+	public Boolean addHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws HyperLinkMenuException {
+		HyperLinkMenus hyperLinkMenu = hyperLinkMenuDao.getHyperLinkMenusDao().findById(hyperLinkMenuItem.getId());
+		if(hyperLinkMenu != null)
+			throw new HyperLinkMenuException(ExceptionsCodes.codeHyperLinkMenuItemExists, ExceptionsCodes.msgHyperLinkMenuItemExists);
+		
+		HyperLinkMenus hyperLinkMenuItem_ = HyperLinkMenuWrapper.convertToDaemonStructure(hyperLinkMenuItem);
+		hyperLinkMenuDao.getHyperLinkMenusDao().save(hyperLinkMenuItem_);
+		
+//		Set<HyperLinkMenuSourceAssociation> sources = HyperLinkMenuSourcesWrapper.convertToDaemonStructure(hyperLinkMenuItem.getSourcesLinkage(), hyperLinkMenuItem_);
+		for(HyperLinkMenuSourceAssociation association : hyperLinkMenuItem_.getHyperLinkMenuSourceAssociations())
+			hyperLinkMenuDao.getHyperLinkMenuSourceAssociationDao().save(association);
+//		
+//		Set<HyperLinkSubmenus> submenus = HyperLinkSubMenuItemWrapper.convertToDaemonStructure(hyperLinkMenuItem.getSubitems(), hyperLinkMenuItem_);
+		for(HyperLinkSubmenus submenu : hyperLinkMenuItem_.getHyperLinkSubmenusesForHyliHyperLinkSubmenuId())
+			hyperLinkMenuDao.getHyperLinkSubmenusDao().save(submenu);
+		
+		return true;
+	}
+	
+	@Transactional(readOnly = false)
+	@Override
+	public Boolean updateHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws HyperLinkMenuException {
+		HyperLinkMenus hyperLinkMenu = hyperLinkMenuDao.getHyperLinkMenusDao().findById(hyperLinkMenuItem.getId());
+		if(hyperLinkMenu == null)
+			throw new HyperLinkMenuException(ExceptionsCodes.codeNoHyperLinkMenuItem, ExceptionsCodes.msgNoHyperLinkMenuItem);
+		hyperLinkMenuDao.getHyperLinkMenusDao().evict(hyperLinkMenu);
+		
+		HyperLinkMenus hyperLinkMenuItem_ = HyperLinkMenuWrapper.convertToDaemonStructure(hyperLinkMenuItem);
+		
+		hyperLinkMenuDao.getHyperLinkMenusDao().update(hyperLinkMenuItem_);
+
+//		Set<HyperLinkMenuSourceAssociation> sources = HyperLinkMenuSourcesWrapper.convertToDaemonStructure(hyperLinkMenuItem.getSourcesLinkage(), hyperLinkMenuItem_);
+		for(HyperLinkMenuSourceAssociation association : hyperLinkMenuItem_.getHyperLinkMenuSourceAssociations())
+			hyperLinkMenuDao.getHyperLinkMenuSourceAssociationDao().saveOrUpdate(association);
+		
+//		Set<HyperLinkSubmenus> submenus = HyperLinkSubMenuItemWrapper.convertToDaemonStructure(hyperLinkMenuItem.getSubitems(), hyperLinkMenuItem_);
+		for(HyperLinkSubmenus submenu : hyperLinkMenuItem_.getHyperLinkSubmenusesForHyliHyperLinkSubmenuId())
+			hyperLinkMenuDao.getHyperLinkSubmenusDao().saveOrUpdate(submenu);
+
+		return true;
+	}
+
+	@Transactional(readOnly = false)
+	@Override
+	public Boolean removeHyperLinkMenuItem(long menuId) throws HyperLinkMenuException {
+		HyperLinkMenus hyperLinkMenu = hyperLinkMenuDao.getHyperLinkMenusDao().findById(menuId);
+		if(hyperLinkMenu == null)
+			throw new HyperLinkMenuException(ExceptionsCodes.codeNoHyperLinkMenuItem, ExceptionsCodes.msgNoHyperLinkMenuItem);
+		
+		deleteMenuAndSubMenus(hyperLinkMenu);
+		
+		return true;
+	}
+
+	private void deleteMenuAndSubMenus(HyperLinkMenus hyperLinkMenu) {
+		for(HyperLinkMenuSourceAssociation association : hyperLinkMenu.getHyperLinkMenuSourceAssociations())
+			hyperLinkMenuDao.getHyperLinkMenuSourceAssociationDao().delete(association);
+		
+		Set<Long> subMenuIdsToDelete = new HashSet<>();
+		
+		for(HyperLinkSubmenus submenuassociation : hyperLinkMenu.getHyperLinkSubmenusesForHyliHyperLinkMenuId()){
+			hyperLinkMenuDao.getHyperLinkSubmenusDao().delete(submenuassociation);
+			subMenuIdsToDelete.add(submenuassociation.getId().getHyliHyperLinkSubmenuId());
+		}
+		
+		for(HyperLinkSubmenus submenuassociation : hyperLinkMenu.getHyperLinkSubmenusesForHyliHyperLinkSubmenuId()){
+			hyperLinkMenuDao.getHyperLinkSubmenusDao().delete(submenuassociation);
+			subMenuIdsToDelete.add(submenuassociation.getId().getHyliHyperLinkSubmenuId());
+		}
+		
+		hyperLinkMenuDao.getHyperLinkMenusDao().delete(hyperLinkMenu);
+		
+		for(Long subMenuIdToDelete : subMenuIdsToDelete){
+			HyperLinkMenus submenu = hyperLinkMenuDao.getHyperLinkMenusDao().findById(subMenuIdToDelete);
+			if(submenu != null)
+				deleteMenuAndSubMenus(submenu);
+		}
 	}
 	
 }
