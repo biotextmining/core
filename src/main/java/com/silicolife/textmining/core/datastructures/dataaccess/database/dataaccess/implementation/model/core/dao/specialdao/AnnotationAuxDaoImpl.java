@@ -42,8 +42,10 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 		c.add(Restrictions.eq("annnotations.processes", processs));
 		c.add(Restrictions.eq("annnotations.annAnnotType", AnnotationType.ner.name()));
 		c.add(Restrictions.eq("annnotations.annActive", true));
-		Integer totalResult = ((Number) c.setProjection(Projections.rowCount())
-				.uniqueResult()).intValue();
+		Number result = (Number) c.setProjection(Projections.rowCount()).uniqueResult();
+		if(result == null)
+			return 0;
+		Integer totalResult = result.intValue();
 
 		return totalResult;
 	}
@@ -55,8 +57,10 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 		c.add(Restrictions.eq("annnotations.processes", processs));
 		c.add(Restrictions.eq("annnotations.annAnnotType", AnnotationType.re.name()));
 		c.add(Restrictions.eq("annnotations.annActive", true));
-		Integer totalResult = ((Number) c.setProjection(Projections.rowCount())
-				.uniqueResult()).intValue();
+		Number result = (Number) c.setProjection(Projections.rowCount()).uniqueResult();
+		if(result == null)
+			return 0;
+		Integer totalResult = result.intValue();
 
 		return totalResult;
 	}
@@ -117,9 +121,11 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 		c.add(Restrictions.eq("annnotations.publications.pubId", publicationID));
 		c.add(Restrictions.eq("annnotations.processes.proId", processID));
 		c.add(Restrictions.eq("annnotations.annAnnotType", AnnotationType.re.name()));
-		c.add(Restrictions.eq("anotation.annActive", true));
-		Integer totalResult = ((Number) c.setProjection(Projections.rowCount())
-				.uniqueResult()).intValue();
+		c.add(Restrictions.eq("annnotations.annActive", true));
+		Number result = (Number) c.setProjection(Projections.rowCount()).uniqueResult();
+		if(result == null)
+			return 0;
+		Integer totalResult = result.intValue();
 
 		return totalResult;
 	}
