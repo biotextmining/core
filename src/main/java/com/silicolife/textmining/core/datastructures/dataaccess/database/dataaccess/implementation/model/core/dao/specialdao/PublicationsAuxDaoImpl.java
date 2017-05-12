@@ -310,8 +310,6 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 
 		@SuppressWarnings("unchecked")
 		List<Publications> publications = c.list();
-		//List<Object[]> response = c.list();
-		//System.out.println(response);
 		return publications.get(0);
 	}
 	
