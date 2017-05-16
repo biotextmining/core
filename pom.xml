@@ -126,7 +126,7 @@
 		</dependency>
 
 		<!-- Dependencies for tessaract -->
-
+<!-- 
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcpkix-jdk15on</artifactId>
@@ -136,11 +136,11 @@
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk15on</artifactId>
 			<version>1.52</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>net.sourceforge.tess4j</groupId>
 			<artifactId>tess4j</artifactId>
-			<version>3.2.0</version>
+			<version>3.3.1</version>
 		</dependency>
 
 		<!-- Dependencies for Lucene -->
@@ -154,13 +154,6 @@
 
 	<build>
 		<resources>
-			<resource>
-				<directory>src/main/resources/tessdata</directory>
-				<excludes>
-					<exclude>eng.*</exclude>
-				</excludes>
-				<filtering>false</filtering>
-			</resource>
 			<resource>
 				<directory>src/main/resources/nlpmodels</directory>
 				<excludes>

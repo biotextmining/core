@@ -1,6 +1,9 @@
 package com.silicolife.textmining.core.datastructures.documents;
 
+import java.io.File;
+
 import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.util.LoadLibs;
 
 public class TessaractManager {
 	
@@ -9,7 +12,8 @@ public class TessaractManager {
 
 	private TessaractManager(){
 		tessaract = new Tesseract();
-		tessaract.setDatapath("src/main/resources");
+		File tessDataFolder = LoadLibs.extractTessResources("tessdata"); 
+		tessaract.setDatapath(tessDataFolder.getParent());
 		tessaract.setPageSegMode(1);
 		tessaract.setTessVariable("textord_min_linesize", "2.5");
 	}
