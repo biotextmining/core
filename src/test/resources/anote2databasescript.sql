@@ -418,8 +418,7 @@ CREATE TABLE IF NOT EXISTS `sources` (
   `sou_description` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`sou_id`),
   UNIQUE INDEX `idx_sources_uk` (`sou_description` ASC))
-ENGINE = InnoDB
-AUTO_INCREMENT = 20;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -561,8 +560,7 @@ CREATE TABLE IF NOT EXISTS `hyper_link_menus` (
   `hyl_icon` BLOB NULL,
   `hyl_menu_level` ENUM('1','2') NOT NULL DEFAULT 1,
   PRIMARY KEY (`hyl_id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 20;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
