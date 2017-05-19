@@ -17,7 +17,8 @@ public class SQLLiteDatabase extends ADatabase implements IDatabase{
 	public SQLLiteDatabase(String host, String port, String schema, String user, String pwd)
 	{
 		super(host,port,schema,user,pwd,DataBaseTypeEnum.MYSQL);
-		this.setDriverClassName("org.sqlite.JDBC");		
+		this.setDriverClassName("org.sqlite.JDBC");
+		this.setDialectClassName("org.hibernate.dialect.SQLiteDialect");
 	}
 	
 	

@@ -19,7 +19,8 @@ public class HQSQLDatabase extends ADatabase implements IDatabase{
 	public HQSQLDatabase(String host, String port, String schema, String user,
 			String pass) {
 		super(host, port, schema, user, pass,DataBaseTypeEnum.MYSQL);
-		this.setDriverClassName("org.hsqldb.jdbcDriver");	
+		this.setDriverClassName("org.hsqldb.jdbcDriver");
+		this.setDialectClassName("org.hibernate.dialect.HSQLDialect");
 	}
 
 	@Override

@@ -24,6 +24,7 @@ public abstract class ADatabase implements IDatabase {
 	private String pwd;
 	private Connection connection;
 	private String driverClassName;
+	private String dialectClassName;
 	public static final long timeout = 10000000;
 	public static long starttime = 0;
 	private DataBaseTypeEnum databaseType;
@@ -190,6 +191,14 @@ public abstract class ADatabase implements IDatabase {
 
 	public void setDriverClassName(String driverClassName) {
 		this.driverClassName = driverClassName;
+	}
+	
+	public String getDialectClassName() {
+		return dialectClassName;
+	}
+	
+	public void setDialectClassName(String dialectClassName){
+		this.dialectClassName = dialectClassName;
 	}
 	
 	public DataBaseTypeEnum getDataBaseType()

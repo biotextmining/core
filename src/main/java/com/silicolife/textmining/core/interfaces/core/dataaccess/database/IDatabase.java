@@ -45,10 +45,33 @@ public interface IDatabase {
 	public void shutDownDatabase() throws SQLException;
 
 	/**
+	 * Method that gives the driver class name;
+	 * 
+	 * @return
+	 */
+	public String getDriverClassName();
+	
+	/**
 	 * Method that change driver database
+	 * 
+	 * @param driverName
 	 */
 	public void setDriverClassName(String driverName);
 
+	/**
+	 * Method that gives the dialect class name;
+	 * 
+	 * @return
+	 */
+	public String getDialectClassName();
+	
+	/**
+	 * Method that change database dialect
+	 * 
+	 * @param dialectName
+	 */
+	public void setDialectClassName(String dialectName);
+	
 	/**
 	 * Method that return a Connection at database
 	 * 

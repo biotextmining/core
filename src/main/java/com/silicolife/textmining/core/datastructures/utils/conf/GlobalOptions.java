@@ -10,6 +10,7 @@ public class GlobalOptions {
 	public static final String languageFilesDirectory = "conf/language/";
 	public static final String languagePathFile = languageFilesDirectory + "/language_"+language+".lang";
 	public static final String alternativelanguagePathFile = "src/main/resources" + "/language_"+language+".lang";
+	public static final String h2DatbaseUpdateStartNameFile = "h2_anote2_db_update_";
 	public static final String mysqlDatbaseUpdateStartNameFile = "anote2_db_update_";
 	public static final String mysqlDatbaseUpdateEndNameFile = ".sql";
 	public static final String mysqlDatbaseUpdateEndNameInfoFile = ".info";

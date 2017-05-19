@@ -6,14 +6,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.ADatabase;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.UpdateDatabaseHelp;
-import com.silicolife.textmining.core.datastructures.dataaccess.database.queriessql.QueriesGeneral;
 import com.silicolife.textmining.core.datastructures.init.InitConfiguration;
 import com.silicolife.textmining.core.datastructures.utils.FileHandling;
 import com.silicolife.textmining.core.datastructures.utils.conf.GlobalOptions;
@@ -22,18 +20,17 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.database.IDatab
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 
 /**
- * Class that represent a Mysql Database Server
+ * Class that represent a H2 Database 
  * 
- * @author Hugo Costa
  *
  */
-public class MySQLDatabase extends ADatabase {
+public class H2EmbeddedDatabase extends ADatabase {
 	
 
-	public MySQLDatabase(String host, String port, String schema, String user, String pwd) {
-		super(host, port, schema, user, pwd, DataBaseTypeEnum.MYSQL);
-		this.setDriverClassName("org.mariadb.jdbc.Driver");
-		this.setDialectClassName("org.hibernate.dialect.MySQLDialect");
+	public H2EmbeddedDatabase(String embeddedPath, String schema, String user, String pwd) {
+		super(embeddedPath, null, schema, user, pwd, DataBaseTypeEnum.H2Embedded);
+		this.setDriverClassName("org.h2.Driver");
+		this.setDialectClassName("org.hibernate.dialect.H2Dialect");
 	}
 
 	public void openConnection() throws SQLException {
@@ -52,7 +49,7 @@ public class MySQLDatabase extends ADatabase {
 			}
 			setLoadDriver(true);
 		}
-		String url_db_connection = "jdbc:mysql://" + this.getHost() + ":" + this.getPort() + "/" + this.getSchema();
+		String url_db_connection = "jdbc:h2:file:" + this.getHost() + "/" + this.getSchema() + ";AUTO_RECONNECT=TRUE";
 		this.setConnection(DriverManager.getConnection(url_db_connection, this.getUser(), this.getPwd()));
 	}
 
@@ -72,13 +69,13 @@ public class MySQLDatabase extends ADatabase {
 			}
 			setLoadDriver(true);
 		}
-		String url_db_connection = "jdbc:mysql://" + this.getHost() + ":" + this.getPort() + "/" + this.getSchema();
+		String url_db_connection = "jdbc:h2:file:" + this.getHost() + "/" + this.getSchema() + ";AUTO_RECONNECT=TRUE";
 		return DriverManager.getConnection(url_db_connection, this.getUser(), this.getPwd());
 	}
 
 	@Override
 	public boolean existDatabase() throws SQLException {
-		IDatabase dbtest = new MySQLDatabase(this.getHost(), this.getPort(), "INFORMATION_SCHEMA", getUser(), getPwd());
+		IDatabase dbtest = new H2EmbeddedDatabase(getHost(), getSchema(), getUser(), getPwd());
 		dbtest.openConnection();
 		ResultSet result = null;
 		Connection connect = dbtest.getConnection();
@@ -96,19 +93,15 @@ public class MySQLDatabase extends ADatabase {
 	}
 
 	public boolean createDataBase() throws SQLException {
-		IDatabase dbtest = new MySQLDatabase(this.getHost(), this.getPort(), "mysql", getUser(), getPwd());
-		PreparedStatement createDatbase;
-		createDatbase = dbtest.getConnection().prepareStatement(QueriesGeneral.createDatabse + getSchema() + " DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ");
-		createDatbase.execute();
+		IDatabase dbtest = new H2EmbeddedDatabase(getHost(), getSchema(), getUser(), getPwd());
+		dbtest.getConnection().close();
 		return true;
 
 	}
 
 	public boolean createDataBase(String user, String password) throws SQLException {
-		IDatabase dbtest = new MySQLDatabase(this.getHost(), this.getPort(), "mysql", user, password);
-		PreparedStatement createDatbase;
-		createDatbase = dbtest.getConnection().prepareStatement(QueriesGeneral.createDatabse + getSchema() + " DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ");
-		createDatbase.execute();
+		IDatabase dbtest = new H2EmbeddedDatabase(getHost(), getSchema(), user, password);
+		dbtest.getConnection().close();
 		return true;
 	}
 
@@ -188,9 +181,8 @@ public class MySQLDatabase extends ADatabase {
 		int newVersionID = UpdateDatabaseHelp.readDatabaseFileDataBase(databaseversionfile);
 		boolean update = false;
 		for (int i = databaseVersion + 1; i <= newVersionID; i++) {
-			String path = updateFolder + "/" + GlobalOptions.mysqlDatbaseUpdateStartNameFile + i + GlobalOptions.mysqlDatbaseUpdateEndNameFile;
-			String filePathComments = updateFolder + "/" + GlobalOptions.mysqlDatbaseUpdateStartNameFile + i
-					+ GlobalOptions.mysqlDatbaseUpdateEndNameInfoFile;
+			String path = updateFolder + "/" + GlobalOptions.h2DatbaseUpdateStartNameFile + i + GlobalOptions.mysqlDatbaseUpdateEndNameFile;
+			String filePathComments = updateFolder + "/" + GlobalOptions.h2DatbaseUpdateStartNameFile + i + GlobalOptions.mysqlDatbaseUpdateEndNameInfoFile;
 			String comments = "";
 			try {
 				comments = FileHandling.getFileContent(new File(filePathComments));
@@ -220,7 +212,7 @@ public class MySQLDatabase extends ADatabase {
 
 	@Override
 	public String getDataBaseURL() {
-		return "jdbc:mysql://" + this.getHost() + ":" + this.getPort() + "/" + this.getSchema();
+		return "jdbc:h2:file:" + this.getHost() + "/" +  this.getSchema() + ";AUTO_RECONNECT=TRUE";
 	}
 
 }

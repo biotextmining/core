@@ -1,7 +1,8 @@
 package com.silicolife.textmining.core.interfaces.core.dataaccess.database;
 
 public enum DataBaseTypeEnum {
-	MYSQL;
+	MYSQL,
+	H2Embedded;
 //	HQSQL,
 //	SQLITE;
 	
@@ -11,6 +12,10 @@ public enum DataBaseTypeEnum {
 		if(databaseType.equals(DataBaseTypeEnum.MYSQL.toString()))
 		{
 			return DataBaseTypeEnum.MYSQL;
+		}
+		else if(databaseType.equals(DataBaseTypeEnum.H2Embedded.toString()))
+		{
+			return DataBaseTypeEnum.H2Embedded;
 		}
 //		else if(databaseType.equals(DataBaseTypeEnum.HQSQL.toString()))
 //		{

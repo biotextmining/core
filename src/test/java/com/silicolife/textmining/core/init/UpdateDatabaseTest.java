@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.DatabaseAccess;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.instances.MySQLDatabase;
 import com.silicolife.textmining.core.datastructures.init.exception.InvalidDatabaseAccess;
+import com.silicolife.textmining.core.interfaces.core.dataaccess.database.DataBaseTypeEnum;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.database.IDatabase;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 
@@ -17,7 +18,7 @@ public class UpdateDatabaseTest {
 //	@Test	
 	public void update() throws InvalidDatabaseAccess, SQLException, FileNotFoundException, IOException, ANoteException {
 		IDatabase database = new MySQLDatabase("localhost","3306","databasename","databaseuser","databaseuserpassword");
-		DatabaseConnectionInit.init("localhost","3306","databasename","databaseuser","databaseuserpassword");
+		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL, "localhost","3306","databasename","databaseuser","databaseuserpassword");
 		database.updateDatabase("src/test/resources/dbupdatefolder","src/test/resources/anote2_db_version.xml");	
 	    assertTrue(true);
 	}
@@ -32,7 +33,7 @@ public class UpdateDatabaseTest {
 	        assertTrue(false);
 		}		
         fillDatabase(database);
-		DatabaseConnectionInit.init("localhost","3306","todelete3","root","admin");
+		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","todelete3","root","admin");
 		DatabaseAccess dbAccess = new DatabaseAccess(database, hibernateFilePath);
 		if(!dbAccess.isFill() || dbAccess.isDatabaseOutOfDate("src/test/resources/anote2_db_version.xml"))
 		{
@@ -51,7 +52,7 @@ public class UpdateDatabaseTest {
 			assertTrue(false);
 		}		
 		fillDatabase(database);
-		DatabaseConnectionInit.init("localhost","3306","todelete3","root","admin");
+		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","todelete3","root","admin");
 		DatabaseAccess dbAccess = new DatabaseAccess(database, hibernateFilePath);
 		if(!dbAccess.isFill() || dbAccess.isDatabaseOutOfDate("src/test/resources/anote2_db_version.xml"))
 		{

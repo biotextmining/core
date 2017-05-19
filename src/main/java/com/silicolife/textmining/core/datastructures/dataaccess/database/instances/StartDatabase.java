@@ -143,4 +143,22 @@ public class StartDatabase implements IDatabase {
 		return null;
 	}
 
+	@Override
+	public String getDriverClassName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getDialectClassName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setDialectClassName(String dialectName) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

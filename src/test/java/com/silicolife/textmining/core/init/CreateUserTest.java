@@ -11,6 +11,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.init.InitConfiguration;
 import com.silicolife.textmining.core.datastructures.init.exception.InvalidDatabaseAccess;
 import com.silicolife.textmining.core.datastructures.utils.GenerateRandomId;
+import com.silicolife.textmining.core.interfaces.core.dataaccess.database.DataBaseTypeEnum;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.user.IGroup;
 import com.silicolife.textmining.core.interfaces.core.user.IUser;
@@ -19,7 +20,7 @@ public class CreateUserTest {
 
 	@Test
 	public void test() throws InvalidDatabaseAccess, ANoteException {
-		DatabaseConnectionInit.init("localhost","3306","textminingcarbontest","root","admin");
+		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","textminingcarbontest","root","admin");
 		
 		List<IGroup> groups = InitConfiguration.getDataAccess().getAllGroups();
 		IGroup group = groups.get(0);

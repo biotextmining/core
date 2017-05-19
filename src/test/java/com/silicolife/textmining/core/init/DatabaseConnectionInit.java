@@ -18,10 +18,10 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANote
 
 
 public class DatabaseConnectionInit {
-	
-	public static void init(String host,String port,String schema,String username,String password) throws InvalidDatabaseAccess, ANoteException
+
+	public static void init(DataBaseTypeEnum databaseType,String host,String port,String schema,String username,String password) throws InvalidDatabaseAccess, ANoteException
 	{
-		IDatabase dabaseAcess = factoryDatabase(host,port,schema,username,password);
+		IDatabase dabaseAcess = factoryDatabase(databaseType, host,port,schema,username,password);
 		Properties properties = new Properties();
 		properties.put("Using-Title-In-Abstract", "true");
 		properties.put("Free-Full-Text-Only", "true");
@@ -34,8 +34,8 @@ public class DatabaseConnectionInit {
 		InitConfiguration.getDataAccess().checkLogin("admin", "admin");
 		assertTrue(true);
 	}
-	
-	
+
+
 	/**
 	 * Create Database  
 	 * 
@@ -43,45 +43,24 @@ public class DatabaseConnectionInit {
 	 * @throws InvalidDatabaseAccess
 	 * @throws SQLException 
 	 */
-	private static IDatabase factoryDatabase(String host,String port,String schema,String username,String password) throws InvalidDatabaseAccess
+	private static IDatabase factoryDatabase(DataBaseTypeEnum databaseType,String host,String port,String schema,String username,String password) throws InvalidDatabaseAccess
 	{
-		DataBaseTypeEnum databaseType = DataBaseTypeEnum.MYSQL;
-		if (host.trim().equals("") || port.trim().equals("") || schema.trim().equals("")) {
-			if(host.isEmpty())
-			{
-				throw new InvalidDatabaseAccess("Host can not be null (localhost by default)");
-			}
-			if(port.isEmpty())
-			{
-				throw new InvalidDatabaseAccess("Port can not be null (3306 by default)");
-			}
-			if(schema.isEmpty())
-			{
-				throw new InvalidDatabaseAccess("Schema can not be null");
-			}
-			return null;
-		} else {
-			IDatabase databaseAdded = DatabaseFactory.createDatabase(databaseType, host, port, schema, username, password);
-			return databaseAdded;
+
+		if(host == null || host.isEmpty() || host.trim().isEmpty())
+		{
+			throw new InvalidDatabaseAccess("Host can not be empty (localhost by default)");
 		}
-	}
-	
-	/**
-	 * Check databse connection
-	 * 
-	 * @param databaseAdded
-	 * @return
-	 */
-	private boolean checkConnection(IDatabase databaseAdded) {
-		try {
-			databaseAdded.openConnection();
-			if (databaseAdded.getConnection() != null) {
-				return true;
-			}
-		}catch (SQLException e) {
-			return false;
+		if(!databaseType.equals(DataBaseTypeEnum.H2Embedded) && (port == null || port.isEmpty() || port.trim().isEmpty()))
+		{
+			throw new InvalidDatabaseAccess("Port can not be empty (3306 by default)");
 		}
-		return false;
+		if(schema == null || schema.isEmpty() || schema.trim().isEmpty())
+		{
+			throw new InvalidDatabaseAccess("Schema can not be empty");
+		}
+		IDatabase databaseAdded = DatabaseFactory.createDatabase(databaseType, host, port, schema, username, password);
+		return databaseAdded;
 	}
+
 
 }

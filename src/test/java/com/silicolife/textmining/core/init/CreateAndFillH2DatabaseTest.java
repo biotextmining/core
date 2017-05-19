@@ -1,4 +1,4 @@
-package com.silicolife.textmining.core.lucene;
+package com.silicolife.textmining.core.init;
 
 import static org.junit.Assert.assertTrue;
 
@@ -9,27 +9,22 @@ import java.sql.SQLException;
 import org.junit.Test;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.DatabaseFactory;
-import com.silicolife.textmining.core.datastructures.init.InitConfiguration;
 import com.silicolife.textmining.core.datastructures.init.exception.InvalidDatabaseAccess;
-import com.silicolife.textmining.core.init.DatabaseConnectionInit;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.database.DataBaseTypeEnum;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.database.IDatabase;
-import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 
-public class CreateFillAndLuceneIndexMysqlDatabaseTest{
+public class CreateAndFillH2DatabaseTest{
 	
 	
 	@Test
-	public void createUpdateDatabase() throws InvalidDatabaseAccess, FileNotFoundException, SQLException, IOException, ANoteException
+	public void createUpdateDatabase() throws InvalidDatabaseAccess, FileNotFoundException, SQLException, IOException
 	{
-		IDatabase database = createDatabase(DataBaseTypeEnum.MYSQL,"localhost","3306","todelete","root","admin");
+		IDatabase database = createDatabase("./","todelete","root","admin");
 		if(database==null)
 		{
 	        assertTrue(false);
 		}		
         assertTrue(fillDatabase(database));
-        DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","todelete","root","admin");
-        InitConfiguration.getDataAccess().getResourceElementsByExactSynonym("batatas");
 	}
 	
 	/**
@@ -45,7 +40,7 @@ public class CreateFillAndLuceneIndexMysqlDatabaseTest{
 	{
 		if(!database.isfill())
 		{
-			database.fillDataBaseTables("src/test/resources/anote2databasescript.sql");
+			database.fillDataBaseTables("src/test/resources/h2_anote2databasescript.sql");
 			return true;
 		}
 		return false;
@@ -58,24 +53,21 @@ public class CreateFillAndLuceneIndexMysqlDatabaseTest{
 	 * @throws InvalidDatabaseAccess
 	 * @throws SQLException 
 	 */
-	public static IDatabase createDatabase(DataBaseTypeEnum databaseType,String host,String port,String schema,String username,String password) throws InvalidDatabaseAccess, SQLException
+	public static IDatabase createDatabase(String databasePath,String schema,String username,String password) throws InvalidDatabaseAccess, SQLException
 	{
-		if (host.trim().equals("") || port.trim().equals("") || schema.trim().equals("")) {
-			if(host.isEmpty())
+		DataBaseTypeEnum databaseType = DataBaseTypeEnum.H2Embedded;
+		if (databasePath.trim().equals("") || schema.trim().equals("")) {
+			if(databasePath.isEmpty())
 			{
-				throw new InvalidDatabaseAccess("Host can not be null (localhost by default)");
-			}
-			if(port.isEmpty())
-			{
-				throw new InvalidDatabaseAccess("Port can not be null (3306 by default)");
+				throw new InvalidDatabaseAccess("Host can not be empty ('./' by default)");
 			}
 			if(schema.isEmpty())
 			{
-				throw new InvalidDatabaseAccess("Schema can not be null");
+				throw new InvalidDatabaseAccess("Schema can not be empty");
 			}
 			return null;
 		} else {
-			IDatabase databaseAdded = DatabaseFactory.createDatabase(databaseType, host, port, schema, username, password);
+			IDatabase databaseAdded = DatabaseFactory.createDatabase(databaseType, databasePath, null, schema, username, password);
 			databaseAdded.createDataBase();
 			checkConnection(databaseAdded);
 			return databaseAdded;

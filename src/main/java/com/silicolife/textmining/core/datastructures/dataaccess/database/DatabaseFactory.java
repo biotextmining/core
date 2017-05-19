@@ -1,5 +1,6 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.instances.H2EmbeddedDatabase;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.instances.MySQLDatabase;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.database.DataBaseTypeEnum;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.database.IDatabase;
@@ -15,7 +16,8 @@ public class DatabaseFactory {
 	public static IDatabase createDatabase(DataBaseTypeEnum databatype, String host, String port, String schema, String user, String pwd) {
 		if (databatype == DataBaseTypeEnum.MYSQL) {
 			return new MySQLDatabase(host, port, schema, user, pwd);
-		}
+		}else if(databatype == DataBaseTypeEnum.H2Embedded)
+			return new H2EmbeddedDatabase(host, schema, user, pwd);
 		// else if(databatype == DataBaseTypeEnum.HQSQL)
 		// {
 		// return new HQSQLDatabase(host, port, schema, user, pwd);
@@ -45,6 +47,13 @@ public class DatabaseFactory {
 					pwd = "";
 				}
 				return new DatabaseManager(new MySQLDatabase(host, port, schema, user, pwd));
+			}else if (databatype == DataBaseTypeEnum.H2Embedded){
+				if (databaseFields.length == 7) {
+					pwd = databaseFields[6];
+				} else if (databaseFields.length == 6) {
+					pwd = "";
+				}
+				return new DatabaseManager(new H2EmbeddedDatabase(host, schema, user, pwd));
 			}
 			// else if(databatype == DataBaseTypeEnum.HQSQL)
 			// {
