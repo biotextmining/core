@@ -1,13 +1,11 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
-import org.hibernate.SQLQuery;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -245,16 +243,21 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 	public Publications getPublicationFullText(Long publicationId) {
 
 		Session session = sessionFactory.getCurrentSession();
-		String sqlString = "SELECT pub_id, pub_fullcontent FROM publications WHERE pub_id = ?";
-		SQLQuery qry = session.createSQLQuery(sqlString);
-		qry.setParameter(0, publicationId);
+//		String sqlString = "SELECT pub_id, pub_fullcontent FROM publications WHERE pub_id = ?";
+//		SQLQuery qry = session.createSQLQuery(sqlString);
+//		qry.setParameter(0, publicationId);
+//		qry.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+		
+		String hqlString = "select p.pubId, p.pubFullcontent from Publications as p "
+				+ "where p.pubId = :publicationId";
+		Query qry = session.createQuery(hqlString );
 		qry.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		@SuppressWarnings("rawtypes")
-		Map data = (Map) qry.uniqueResult();
+
+		Object[] data = (Object[]) qry.uniqueResult();
 		Publications publication = null;
-		if (data != null) {
-			Long id = ((BigInteger) data.get("pub_id")).longValue();
-			String content = (String) data.get("pub_fullcontent");
+		if (data != null && data.length < 1) {
+			Long id = Long.valueOf(data[0].toString());
+			String content = data[1].toString();
 			publication = new Publications(id);
 			publication.setPubFullcontent(content);
 		}

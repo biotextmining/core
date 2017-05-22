@@ -15,11 +15,17 @@ public class QueriesGeneral {
 	
 	public static final String createDatabse = "CREATE DATABASE IF NOT EXISTS ";
 	
+	public static final String createSchema = "CREATE SCHEMA IF NOT EXISTS ";
+	
 	public static final String showDatabaseListOfTable = "SELECT table_name "+
 													     "FROM information_schema.tables " +
 													     "WHERE table_type = 'BASE TABLE' AND table_schema=?  "+
 													     "ORDER BY table_name ASC ";
-
+	
+	public static final String h2_showDatabaseListOfTable = "SELECT TABLE_NAME "+
+		     "FROM INFORMATION_SCHEMA.TABLES " +
+		     "WHERE TABLE_SCHEMA=?  "+
+		     "ORDER BY TABLE_NAME ASC ";
 	
 	public static final String selectClassColor = "SELECT color FROM classes_colors "+
 												  "WHERE classes_idclasses=? ";

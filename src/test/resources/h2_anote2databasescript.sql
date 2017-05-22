@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `annotations` (
   `ann_resource_element_id` BIGINT NULL,
   `ann_class_id` BIGINT NULL DEFAULT NULL,
   `ann_element` VARCHAR(500) NULL DEFAULT NULL,
-  `ann_annot_type` ENUM('ner','re') NOT NULL DEFAULT 'ner',
+  `ann_annot_type` VARCHAR(6) NOT NULL DEFAULT 'ner',
   `ann_clue` VARCHAR(250) NULL,
   `ann_active` TINYINT(1) NOT NULL DEFAULT 1,
   `ann_notes` VARCHAR(500) NULL DEFAULT NULL,
@@ -223,6 +223,10 @@ CREATE INDEX IF NOT EXISTS `idx_annotations_07`
   
 CREATE INDEX IF NOT EXISTS `idx_annotations_08`
   ON `annotations` (`ann_class_id` ASC);
+
+ALTER TABLE `annotations` ADD
+  CONSTRAINT `ck_ann_annot_type`
+  	CHECK ( `ann_annot_type` in ('ner','re')); 
   
 ALTER TABLE `annotations` ADD
   CONSTRAINT `fk_annotations_01`
@@ -427,7 +431,7 @@ ALTER TABLE `queries` ADD
 CREATE TABLE IF NOT EXISTS `query_has_publications` (
   `qhb_query_id` BIGINT NOT NULL,
   `qhb_publication_id` BIGINT NOT NULL,
-  `qhb_relevance` ENUM('Relevant','Related','Irrelevant') NULL,
+  `qhb_relevance` VARCHAR(20) NULL,
   PRIMARY KEY (`qhb_query_id`, `qhb_publication_id`));
   
 CREATE INDEX IF NOT EXISTS `idx_query_has_publications_01`
@@ -436,6 +440,10 @@ CREATE INDEX IF NOT EXISTS `idx_query_has_publications_01`
 CREATE INDEX IF NOT EXISTS `idx_query_has_publications_02`
   ON `query_has_publications` (`qhb_publication_id` ASC);
 
+ALTER TABLE `query_has_publications` ADD
+  CONSTRAINT `ck_qhb_relevance`
+  	 CHECK ( `qhb_relevance` in ('Relevant','Related','Irrelevant'));
+  
 ALTER TABLE `query_has_publications` ADD
   CONSTRAINT `fk_query_has_publications_01`
     FOREIGN KEY (`qhb_publication_id`)
@@ -611,12 +619,16 @@ CREATE TABLE IF NOT EXISTS `publication_fields` (
   `pfl_field` VARCHAR(255) NOT NULL,
   `pfl_field_start` BIGINT NOT NULL,
   `pfl_field_end` BIGINT NOT NULL,
-  `pfl_text` ENUM('abstracttext', 'fulltext') NOT NULL DEFAULT 'abstracttext',
+  `pfl_text` VARCHAR(20) NOT NULL DEFAULT 'abstracttext',
   PRIMARY KEY (`pfl_field`, `pfl_publication_id`));
   
 CREATE INDEX IF NOT EXISTS `idx_publication_fields_fk` 
   ON `publication_fields` (`pfl_publication_id` ASC);
 
+ALTER TABLE `publication_fields` ADD
+  CONSTRAINT `ck_pfl_text`
+  	CHECK ( `pfl_text` in ('abstracttext', 'fulltext'));
+  
 ALTER TABLE `publication_fields` ADD
   CONSTRAINT `fk_publication_fields`
     FOREIGN KEY (`pfl_publication_id`)
@@ -630,7 +642,7 @@ ALTER TABLE `publication_fields` ADD
 CREATE TABLE IF NOT EXISTS `annotation_sides` (
   `as_annotation_id` BIGINT NOT NULL,
   `as_annotation_sub_id` BIGINT NOT NULL,
-  `as_annot_side_type` ENUM('left','right') NOT NULL,
+  `as_annot_side_type` VARCHAR(6) NOT NULL,
   PRIMARY KEY (`as_annotation_id`, `as_annotation_sub_id`));
   
 CREATE INDEX IF NOT EXISTS `idx_annotation_sides_01`
@@ -639,6 +651,10 @@ CREATE INDEX IF NOT EXISTS `idx_annotation_sides_01`
 CREATE INDEX IF NOT EXISTS `idx_annotation_sides_02`
   ON `annotation_sides` (`as_annotation_sub_id` ASC);
 
+ALTER TABLE `annotation_sides` ADD
+  CONSTRAINT `ck_as_annot_side_type`
+  	CHECK ( `as_annot_side_type` in ('left','right'));  
+  
 ALTER TABLE `annotation_sides` ADD
   CONSTRAINT `fk_annotation_sides_01`
     FOREIGN KEY (`as_annotation_id`)
@@ -661,7 +677,7 @@ CREATE TABLE IF NOT EXISTS `hyper_link_menus` (
   `hyl_menu_name` VARCHAR(45) NOT NULL,
   `hyl_hyper_link_menu` VARCHAR(250) NOT NULL,
   `hyl_icon` BLOB NULL,
-  `hyl_menu_level` ENUM('1','2') NOT NULL DEFAULT 1,
+  `hyl_menu_level` VARCHAR(2) NOT NULL DEFAULT 1,
   PRIMARY KEY (`hyl_id`));
 
 -- -----------------------------------------------------
@@ -678,6 +694,10 @@ CREATE INDEX IF NOT EXISTS `idx_hyper_link_submenus_01`
 CREATE INDEX IF NOT EXISTS `idx_hyper_link_submenus_02`
   ON `hyper_link_submenus` (`hyli_hyper_link_menu_id` ASC);
 
+ALTER TABLE `hyper_link_menus` ADD
+  CONSTRAINT `ck_hyl_menu_level`
+  	CHECK ( `hyl_menu_level` in ('1','2'));   
+  
 ALTER TABLE `hyper_link_submenus` ADD
   CONSTRAINT `fk_hyper_link_submenus_01`
     FOREIGN KEY (`hyli_hyper_link_submenu_id`)
@@ -905,7 +925,7 @@ CREATE TABLE IF NOT EXISTS `annotation_logs` (
   `alo_corpus_id` BIGINT NOT NULL,
   `alo_process_id` BIGINT NOT NULL,
   `alo_publication_id` BIGINT NOT NULL,
-  `alo_annot_log_type` ENUM('ENTITYADD','ENTITYREMOVE','ENTITYUPDATE','RELATIONADD','RELATIONREMOVE','RELATIONUPDATE','ENTITYVALIDATED','RELATIONVALIDATED') NOT NULL,
+  `alo_annot_log_type` VARCHAR(20) NOT NULL,
   `alo_annot_old` VARCHAR(300) NOT NULL DEFAULT '\"\"',
   `alo_annot_new` VARCHAR(300) NOT NULL,
   `alo_notes` TEXT NULL,
@@ -926,6 +946,10 @@ CREATE INDEX IF NOT EXISTS `idx_annotation_logs_04`
   
 CREATE INDEX IF NOT EXISTS `idx_annotation_logs_05`
   ON `annotation_logs` (`alo_user_id` ASC);
+  
+ALTER TABLE `annotation_logs` ADD
+  CONSTRAINT `ck_alo_annot_log_type`
+  	CHECK ( `alo_annot_log_type` in ('ENTITYADD','ENTITYREMOVE','ENTITYUPDATE','RELATIONADD','RELATIONREMOVE','RELATIONUPDATE','ENTITYVALIDATED','RELATIONVALIDATED'));  
   
 ALTER TABLE `annotation_logs` ADD
   CONSTRAINT `fk_annotation_logs_01`
@@ -1009,7 +1033,7 @@ CREATE TABLE IF NOT EXISTS `auth_user_logs` (
   `aul_id` BIGINT NOT NULL AUTO_INCREMENT,
   `aul_user_id` BIGINT NOT NULL,
   `aul_create_date` DATETIME NOT NULL,
-  `aul_operation` ENUM('create','update','delete') NOT NULL,
+  `aul_operation` VARCHAR(10) NOT NULL,
   `aul_table_changed` VARCHAR(128) NOT NULL,
   `aul_sql_command` MEDIUMTEXT NULL,
   `aul_notes` MEDIUMTEXT NULL,
@@ -1018,6 +1042,10 @@ CREATE TABLE IF NOT EXISTS `auth_user_logs` (
 CREATE INDEX IF NOT EXISTS `idx_auth_user_logs_fk`
   ON `auth_user_logs` (`aul_user_id` ASC);
 
+ALTER TABLE `auth_user_logs` ADD
+  CONSTRAINT `ck_aul_operation`
+  	CHECK ( `aul_operation` in ('create','update','delete'));  
+  
 ALTER TABLE `auth_user_logs` ADD
   CONSTRAINT `fk_auth_user_logs`
     FOREIGN KEY (`aul_user_id`)
@@ -1031,13 +1059,21 @@ ALTER TABLE `auth_user_logs` ADD
 CREATE TABLE IF NOT EXISTS `auth_user_data_objects` (
   `audo_user_id` BIGINT NOT NULL,
   `audo_uid_resource` BIGINT NOT NULL,
-  `audo_type_resource` ENUM('queries','resources','corpus','processes') NOT NULL,
-  `audo_permission` ENUM('owner','read_write','read') NOT NULL,
+  `audo_type_resource` VARCHAR(20) NOT NULL,
+  `audo_permission` VARCHAR(20) NOT NULL,
   PRIMARY KEY (`audo_user_id`, `audo_uid_resource`, `audo_type_resource`));
   
 CREATE INDEX IF NOT EXISTS `idx_auth_user_data_objects_fk`
   ON `auth_user_data_objects` (`audo_user_id` ASC);
 
+ALTER TABLE `auth_user_data_objects` ADD
+  CONSTRAINT `ck_audo_type_resource`
+  	CHECK ( `audo_type_resource` in ('queries','resources','corpus','processes')); 
+
+ALTER TABLE `auth_user_data_objects` ADD
+  CONSTRAINT `ck_audo_permission`
+  	CHECK ( `audo_permission` in ('owner','read_write','read')); 
+  
 ALTER TABLE `auth_user_data_objects` ADD
   CONSTRAINT `fk_auth_user_data_objects`
     FOREIGN KEY (`audo_user_id`)
@@ -1145,14 +1181,22 @@ ALTER TABLE `auth_user_settings` ADD
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `data_process_status` (
   `dps_data_object_id` BIGINT NOT NULL,
-  `dps_type_resource` ENUM('queries','resources','corpus','ner','re') NOT NULL,
-  `dps_status` ENUM('start','running','finished','stop','error') NOT NULL,
+  `dps_type_resource` VARCHAR(20) NOT NULL,
+  `dps_status` VARCHAR(20) NOT NULL,
   `dps_report` LONGTEXT NULL,
   `dps_progress` FLOAT NULL,
   `dps_create_date` DATETIME NULL,
   `dps_update_date` DATETIME NULL,
   PRIMARY KEY (`dps_data_object_id`, `dps_type_resource`));
 
+ALTER TABLE `data_process_status` ADD
+  CONSTRAINT `ck_dps_type_resource`
+  	CHECK ( `dps_type_resource` in ('queries','resources','corpus','ner','re')); 
+  	
+ALTER TABLE `data_process_status` ADD
+  CONSTRAINT `ck_dps_status`
+  	CHECK ( `dps_status` in ('start','running','finished','stop','error')); 
+  
 -- -----------------------------------------------------
 -- Table `data_process_status`
 -- -----------------------------------------------------
