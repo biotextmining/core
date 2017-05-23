@@ -1672,3 +1672,4 @@ pt.uminho.anote2.workflow.relationtypes=Relation Types
 pt.uminho.anote2.general.dataaccess.daemonnew=New Daemon
 pt.uminho.anote2.general.publication.sources.delete=Delete Source
 pt.uminho.anote2.aibench.resources.dictionary.view.err.termalreadycontainsexternalid=already contains this External ID
+pt.uminho.anote2.general.database.path=Path
