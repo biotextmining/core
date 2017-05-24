@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Corpus;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublications;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Processes;
+import com.silicolife.textmining.core.datastructures.documents.corpus.CorpusFieldsEnum;
 
 @Repository
 public class CorpusAuxDaoImpl implements CorpusAuxDao {
@@ -61,6 +62,77 @@ public class CorpusAuxDaoImpl implements CorpusAuxDao {
 		Session session = sessionFactory.getCurrentSession();
 		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " + "INNER JOIN corpus as b ON a.audo_uid_resource = b.crp_id "
 				+ "WHERE audo_user_id = ? AND audo_type_resource = ?";
+		SQLQuery qry = session.createSQLQuery(sqlString);
+		qry.setParameter(0, auId);
+		qry.setParameter(1, corpusstr);
+		qry.addEntity("corpus", Corpus.class);
+		@SuppressWarnings("unchecked")
+		List<Corpus> result = qry.list();
+
+		return result;
+	}
+	
+	@Override
+	public Integer CountCorpusByAttributes(Long auId, String corpusstr) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " + "INNER JOIN corpus as b ON a.audo_uid_resource = b.crp_id "
+				+ "WHERE audo_user_id = ? AND audo_type_resource = ?";
+		SQLQuery qry = session.createSQLQuery(sqlString);
+		qry.setParameter(0, auId);
+		qry.setParameter(1, corpusstr);
+		qry.addEntity("corpus", Corpus.class);
+		@SuppressWarnings("unchecked")
+		List<Corpus> result = qry.list();
+
+		return result.size();
+	}
+	
+	@Override
+	public List<Corpus> findQueriesByAttributesPaginated(Long auId, String corpusstr, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+		Session session = sessionFactory.getCurrentSession();
+		/*
+		SELECT anote2db.corpus.*
+	    FROM anote2db.corpus LEFT JOIN anote2db.corpus_has_processes 
+	    ON anote2db.corpus.crp_id = anote2db.corpus_has_processes.chp_corpus_id
+	    GROUP BY anote2db.corpus.crp_id
+	    ORDER BY COUNT(chp_corpus_id) DESC
+		*/
+		/*
+	    SELECT b.* FROM auth_user_data_objects AS a INNER JOIN corpus as b ON a.audo_uid_resource = b.crp_id LEFT JOIN corpus_has_processes as c 
+	    ON b.crp_id = c.chp_corpus_id
+	    GROUP BY b.crp_id
+	    ORDER BY COUNT(chp_corpus_id) DESC
+	    */
+		
+		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " + "INNER JOIN corpus as b ON a.audo_uid_resource = b.crp_id ";
+		
+		if(!sortBy.equals("none")){
+			if(sortBy.equals("processesNumber") | sortBy.equals("publicationsNumber")){
+				String uniqueId = CorpusFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+				
+				String ord = " DESC";
+				if(asc){
+					ord = " ASC";
+				}
+				sqlString = sqlString + "LEFT JOIN "+uniqueId+" as c ON b.crp_id = c.chp_corpus_id" + " WHERE audo_user_id = ? AND audo_type_resource = ? "+ "GROUP BY b.crp_id ORDER BY COUNT(chp_corpus_id) " + ord;
+			}
+			else{
+			String uniqueId = CorpusFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+			String ord = " DESC";
+			if(asc){
+				ord = " ASC";
+			}
+			sqlString = sqlString+ "WHERE audo_user_id = ? AND audo_type_resource = ? "+"ORDER BY "+ uniqueId+ord;
+			}
+		}
+		else{
+			sqlString = sqlString + "WHERE audo_user_id = ? AND audo_type_resource = ? ";
+		}
+		
+		sqlString = sqlString+" LIMIT "+paginationSize+" OFFSET "+ paginationIndex;
+		
+		//SQLQuery qry = session.createSQLQuery(sqlString);
+		
 		SQLQuery qry = session.createSQLQuery(sqlString);
 		qry.setParameter(0, auId);
 		qry.setParameter(1, corpusstr);
