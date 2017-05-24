@@ -90,19 +90,6 @@ public class CorpusAuxDaoImpl implements CorpusAuxDao {
 	@Override
 	public List<Corpus> findQueriesByAttributesPaginated(Long auId, String corpusstr, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
 		Session session = sessionFactory.getCurrentSession();
-		/*
-		SELECT anote2db.corpus.*
-	    FROM anote2db.corpus LEFT JOIN anote2db.corpus_has_processes 
-	    ON anote2db.corpus.crp_id = anote2db.corpus_has_processes.chp_corpus_id
-	    GROUP BY anote2db.corpus.crp_id
-	    ORDER BY COUNT(chp_corpus_id) DESC
-		*/
-		/*
-	    SELECT b.* FROM auth_user_data_objects AS a INNER JOIN corpus as b ON a.audo_uid_resource = b.crp_id LEFT JOIN corpus_has_processes as c 
-	    ON b.crp_id = c.chp_corpus_id
-	    GROUP BY b.crp_id
-	    ORDER BY COUNT(chp_corpus_id) DESC
-	    */
 		
 		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " + "INNER JOIN corpus as b ON a.audo_uid_resource = b.crp_id ";
 		
@@ -131,7 +118,6 @@ public class CorpusAuxDaoImpl implements CorpusAuxDao {
 		
 		sqlString = sqlString+" LIMIT "+paginationSize+" OFFSET "+ paginationIndex;
 		
-		//SQLQuery qry = session.createSQLQuery(sqlString);
 		
 		SQLQuery qry = session.createSQLQuery(sqlString);
 		qry.setParameter(0, auId);
