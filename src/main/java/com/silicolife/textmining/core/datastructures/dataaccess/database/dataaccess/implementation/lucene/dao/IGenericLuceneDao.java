@@ -8,9 +8,18 @@ public interface IGenericLuceneDao<T> {
 
 	public List<T> findExactByAttributes(Map<String, String> eqSentenceOnField);
 	
+	public List<T> findNotExactByAttributes(Map<String, String> eqSentenceOnField);
+	
 	public List<T> findStartingUsingWildcardAndExactByAttributes(Map<String, String> startSentenceOnField, Map<String, String> eqSentenceOnField);
 	
 	public List<T> findMultiFieldSameAttributesAndExactByAttributes(Map<String, Set<String>> attributeForMultipleFieldsMap, Map<String, String> eqSentenceOnField);
+		
+	public List<Object[]> findStartingUsingWildcardAndExactByAttributesWithProjection(Map<String, String> startSentenceOnField,
+			Map<String, String> eqSentenceOnField, List<String> projections);
+
+	public List<T> findMixedByAttributes(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField);
+	
+	public List<T> findNotExactByAttributesWKeywords(Map<String, String> eqSentenceOnField);
 	
 	//set of attributes 
 	
@@ -27,6 +36,20 @@ public interface IGenericLuceneDao<T> {
 	public List<T> findStartingUsingWildcardAndExactByAttributesPaginated(Map<String, String> startSentenceOnField, Map<String, String> eqSentenceOnField, int index, int paginationSize);
 	
 	public List<T> findMultiFieldSameAttributesAndExactByAttributesPaginated(Map<String, Set<String>> attributeForMultipleFieldsMap, Map<String, String> eqSentenceOnField, int index, int paginationSize);
+	
+	public List<T> findMixedByAttributesPaginated(Map<String, String> eqSentenceOnField,
+			Map<String, String> eqMustSentenceOnField, int index, int paginationSize);
+	
+	public List<T> findNotExactByAttributesPaginated(Map<String, String> eqSentenceOnField, int index, int paginationSize);
+
+	public List<T> findMixedByAttributesWKeywords(Map<String, String> eqSentenceOnField,
+			Map<String, String> eqMustSentenceOnField);
+
+	public List<T> findMixedByAttributesWKeywordsPaginated(Map<String, String> eqSentenceOnField,
+			Map<String, String> eqMustSentenceOnField, int index, int paginationSize);
+	
+	public List<T> findNotExactByAttributesWKeywordsPaginated(Map<String, String> eqSentenceOnField, int index,
+			int paginationSize);
 	
 	//set of attributes pagination
 	
@@ -51,4 +74,24 @@ public interface IGenericLuceneDao<T> {
 	public Integer countSetOfStartingUsingWildcardAndSetOfExactByAttributes(Set<Map<String, String>> setOfStartSentenceOnFields, Set<Map<String, String>> setOfEqSentenceOnFields);
 	
 	public Integer countSetOfMultiFieldSameAttributesAndSetOfExactByAttributes(Set<Map<String, Set<String>>> setOfAttributeForMultipleFieldsMaps, Set<Map<String, String>> setOfEqSentenceOnFields);
+
+
+	public Integer countNotExactByAttributes(Map<String, String> eqSentenceOnField);
+
+	public Integer countMixedByAttributes(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField);
+
+	public Integer countMixedByAttributesWKeywords(Map<String, String> eqSentenceOnField,
+			Map<String, String> eqMustSentenceOnField);
+
+	public Integer countNotExactByAttributesWKeywords(Map<String, String> eqSentenceOnField);
+
+
+
+
+
+
+
+	
+
+	
 }

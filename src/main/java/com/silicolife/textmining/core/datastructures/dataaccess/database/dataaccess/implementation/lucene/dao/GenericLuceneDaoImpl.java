@@ -5,7 +5,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.lucene.search.Query;
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
@@ -45,6 +48,84 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		}
 		return combinedQuery;
 	}
+	
+	@SuppressWarnings("rawtypes")
+	private BooleanJunction<BooleanJunction> addShouldPhraseWithAttributesOnFields(Map<String, String> eqSentenceOnField,  QueryBuilder qb,
+			BooleanJunction<BooleanJunction> combinedQuery) {
+		for(String field : eqSentenceOnField.keySet()){
+			String value = eqSentenceOnField.get(field);
+			Query luceneQuery = qb.phrase()
+					.onField(field)
+					.sentence(value)
+					.createQuery();
+			combinedQuery.should(luceneQuery); //must(luceneQuery);
+		}
+		return combinedQuery;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private BooleanJunction<BooleanJunction> addShouldKeywordsWithAttributesOnFields(Map<String, String> eqSentenceOnField,  QueryBuilder qb,
+			BooleanJunction<BooleanJunction> combinedQuery) {
+		for(String field : eqSentenceOnField.keySet()){
+			String value = eqSentenceOnField.get(field);
+			Query luceneQuery = qb.keyword()
+					.onField(field)
+					.matching(value)
+					.createQuery();
+			combinedQuery.should(luceneQuery); //must(luceneQuery);
+		}
+		return combinedQuery;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private BooleanJunction<BooleanJunction> addShouldWMustPhraseWithAttributesOnFields(Map<String, String> eqSentenceOnField,Map<String, String> eqMustSentenceOnField,  QueryBuilder qb,
+			BooleanJunction<BooleanJunction> combinedQuery) {
+		for(String field : eqSentenceOnField.keySet()){
+			String value = eqSentenceOnField.get(field);
+			Query luceneQuery = qb.phrase()
+					.onField(field)
+					.sentence(value)
+					.createQuery();
+			combinedQuery.should(luceneQuery); //must(luceneQuery);
+		}
+		combinedQuery.must(combinedQuery.createQuery());
+		//combinedQuery.setMinimumShouldMatch(2);
+		for(String field : eqMustSentenceOnField.keySet()){
+			String value = eqMustSentenceOnField.get(field);
+			Query luceneQuery = qb.phrase()
+					.onField(field)
+					.sentence(value)
+					.createQuery();
+			combinedQuery.must(luceneQuery); //must(luceneQuery);
+		}
+		return combinedQuery;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private BooleanJunction<BooleanJunction> addShouldWMustKeywordsWithAttributesOnFields(Map<String, String> eqSentenceOnField,Map<String, String> eqMustSentenceOnField,  QueryBuilder qb,
+			BooleanJunction<BooleanJunction> combinedQuery) {
+		for(String field : eqSentenceOnField.keySet()){
+			String value = eqSentenceOnField.get(field);
+			Query luceneQuery = qb.keyword()
+					.onField(field)
+					.matching(value)
+					.createQuery();
+			combinedQuery.should(luceneQuery); //must(luceneQuery);
+		}
+		combinedQuery.must(combinedQuery.createQuery());
+		//combinedQuery.setMinimumShouldMatch(2);
+		for(String field : eqMustSentenceOnField.keySet()){
+			String value = eqMustSentenceOnField.get(field);
+			Query luceneQuery = qb.keyword()
+					.onField(field)
+					.matching(value)
+					.createQuery();
+			combinedQuery.must(luceneQuery); //must(luceneQuery);
+		}
+		return combinedQuery;
+	}
+	
+	
 	
 	@SuppressWarnings("rawtypes")
 	private BooleanJunction<BooleanJunction> addMustWildcardWithStartingAttributesOnFields(Map<String, String> startSentenceOnField,
@@ -99,6 +180,50 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
 		return fullTextQuery;
 	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	private FullTextQuery createFullTextQueryForfindNotExactByAttribute(Map<String, String> eqSentenceOnField) {
+		FullTextSession fullTextSession = getFullTextSession();
+		QueryBuilder qb = getQueryBuilder(fullTextSession);
+		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
+		combinedQuery = addShouldPhraseWithAttributesOnFields(eqSentenceOnField, qb, combinedQuery);
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
+		return fullTextQuery;
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	private FullTextQuery createFullTextQueryForfindNotExactByAttributeWKeywords(Map<String, String> eqSentenceOnField) {
+		FullTextSession fullTextSession = getFullTextSession();
+		QueryBuilder qb = getQueryBuilder(fullTextSession);
+		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
+		combinedQuery = addShouldKeywordsWithAttributesOnFields(eqSentenceOnField, qb, combinedQuery);
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
+		return fullTextQuery;
+	}
+	
+	
+	
+	@SuppressWarnings({ "rawtypes" })
+	private FullTextQuery createFullTextQueryForfindMixedByAttribute(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField) {
+		FullTextSession fullTextSession = getFullTextSession();
+		QueryBuilder qb = getQueryBuilder(fullTextSession);
+		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
+		combinedQuery = addShouldWMustPhraseWithAttributesOnFields(eqSentenceOnField,eqMustSentenceOnField, qb, combinedQuery);
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
+		return fullTextQuery;
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	private FullTextQuery createFullTextQueryForfindMixedByAttributeWKeywords(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField) {
+		FullTextSession fullTextSession = getFullTextSession();
+		QueryBuilder qb = getQueryBuilder(fullTextSession);
+		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
+		combinedQuery = addShouldWMustKeywordsWithAttributesOnFields(eqSentenceOnField,eqMustSentenceOnField, qb, combinedQuery);
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
+		return fullTextQuery;
+	}
+	
+	
 
 	@SuppressWarnings("rawtypes")
 	private FullTextQuery createFullTextQueryForfindStartingUsingWildcardAndExactByAttributes(Map<String, String> startSentenceOnField, Map<String, String> eqSentenceOnField) {
@@ -181,11 +306,52 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		FullTextQuery fullTextQuery = createFullTextQueryForfindExactByAttribute(eqSentenceOnField);
 		return fullTextQuery.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findNotExactByAttributes(Map<String, String> eqSentenceOnField) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttribute(eqSentenceOnField);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findNotExactByAttributesWKeywords(Map<String, String> eqSentenceOnField) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttributeWKeywords(eqSentenceOnField);
+		return fullTextQuery.list();
+	}
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findMixedByAttributes (Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField ) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttribute(eqSentenceOnField, eqMustSentenceOnField);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findMixedByAttributesWKeywords (Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField ) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttributeWKeywords(eqSentenceOnField, eqMustSentenceOnField);
+		return fullTextQuery.list();
+	}
+	
+	
 
 	@SuppressWarnings({ "unchecked" })
 	@Override
 	public List<T> findStartingUsingWildcardAndExactByAttributes(Map<String, String> startSentenceOnField, Map<String, String> eqSentenceOnField) {
 		FullTextQuery fullTextQuery = createFullTextQueryForfindStartingUsingWildcardAndExactByAttributes(startSentenceOnField, eqSentenceOnField);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings({ "unchecked" })
+	@Override
+	public List<Object[]> findStartingUsingWildcardAndExactByAttributesWithProjection(Map<String, String> startSentenceOnField, Map<String, String> eqSentenceOnField, List<String> projections) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindStartingUsingWildcardAndExactByAttributes(startSentenceOnField, eqSentenceOnField);
+		for(String projection : projections)
+			fullTextQuery.setProjection(projection);
 		return fullTextQuery.list();
 	}
 
@@ -241,6 +407,53 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		fullTextQuery.setFetchSize(paginationSize);
 		return fullTextQuery.list();
 	}
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findMixedByAttributesPaginated(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, int index,
+			int paginationSize) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttribute(eqSentenceOnField, eqMustSentenceOnField);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findMixedByAttributesWKeywordsPaginated(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, int index,
+			int paginationSize) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttributeWKeywords(eqSentenceOnField, eqMustSentenceOnField);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findNotExactByAttributesPaginated(Map<String, String> eqSentenceOnField, int index,
+			int paginationSize) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttribute(eqSentenceOnField);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findNotExactByAttributesWKeywordsPaginated(Map<String, String> eqSentenceOnField, int index,
+			int paginationSize) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttributeWKeywords(eqSentenceOnField);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -291,6 +504,32 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	@Override
 	public Integer countExactByAttributes(Map<String, String> eqSentenceOnField) {
 		FullTextQuery fullTextQuery = createFullTextQueryForfindExactByAttribute(eqSentenceOnField);
+		return fullTextQuery.getResultSize();
+	}
+	
+	@Override
+	public Integer countNotExactByAttributes(Map<String, String> eqSentenceOnField) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttribute(eqSentenceOnField);
+		return fullTextQuery.getResultSize();
+	}
+	
+	@Override
+	public Integer countNotExactByAttributesWKeywords(Map<String, String> eqSentenceOnField) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttributeWKeywords(eqSentenceOnField);
+		return fullTextQuery.getResultSize();
+	}
+	
+	
+	
+	@Override
+	public Integer countMixedByAttributes(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttribute(eqSentenceOnField, eqMustSentenceOnField);
+		return fullTextQuery.getResultSize();
+	}
+	
+	@Override
+	public Integer countMixedByAttributesWKeywords(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttributeWKeywords(eqSentenceOnField, eqMustSentenceOnField);
 		return fullTextQuery.getResultSize();
 	}
 
