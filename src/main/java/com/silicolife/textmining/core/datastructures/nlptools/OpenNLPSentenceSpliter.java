@@ -6,12 +6,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.silicolife.textmining.core.datastructures.documents.structure.SentenceImpl;
+import com.silicolife.textmining.core.interfaces.core.document.structure.ISentence;
+
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
 import opennlp.tools.util.Span;
-
-import com.silicolife.textmining.core.datastructures.documents.structure.SentenceImpl;
-import com.silicolife.textmining.core.interfaces.core.document.structure.ISentence;
 
 /**
  * Class that represents a OpenNLP Tagging 
@@ -27,8 +27,7 @@ public class OpenNLPSentenceSpliter {
 
 	private static OpenNLPSentenceSpliter _instance;
 
-	private OpenNLPSentenceSpliter()
-	{
+	private OpenNLPSentenceSpliter(){
 
 	}
 
@@ -42,6 +41,14 @@ public class OpenNLPSentenceSpliter {
 		}
 		return _instance;
 	}
+	
+	
+
+	public SentenceModel getSentenceModel() throws IOException {
+		if(sentenceModel == null)
+			sentenceModel = initSentenceModel();
+		return sentenceModel;
+	}
 
 	/**
 	 * Creates the singleton instance.
@@ -53,11 +60,9 @@ public class OpenNLPSentenceSpliter {
 		}
 	}
 
-	private void initSentenceModel() throws IOException
-	{
+	private SentenceModel initSentenceModel() throws IOException{
 		InputStream modelIn = OpenNLPSentenceSpliter.class.getClassLoader().getResourceAsStream(sentenceModelFile);
-//		InputStream modelIn = new FileInputStream(sentenceModelFile);
-		sentenceModel = new SentenceModel(modelIn);
+		return new SentenceModel(modelIn);
 	}
 
 
@@ -70,9 +75,7 @@ public class OpenNLPSentenceSpliter {
 	 */
 	public List<ISentence> getSentencesText(String text) throws IOException
 	{
-		if(sentenceModel==null)
-			initSentenceModel();
-		SentenceDetectorME sentenceDetector = new SentenceDetectorME(sentenceModel);
+		SentenceDetectorME sentenceDetector = new SentenceDetectorME(getSentenceModel());
 		Span sentences[] = sentenceDetector.sentPosDetect(text);
 		List<ISentence> sents = new ArrayList<ISentence>();
 		for(Span sent:sentences)
