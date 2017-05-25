@@ -5,7 +5,6 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
@@ -177,16 +176,14 @@ public class ResourcesAuxDaoImpl implements ResourcesAuxDao {
 //		qry.setParameter(1, true);
 //		qry.addEntity("classes", Classes.class);
 
-
-		Criteria c = session.createCriteria(Classes.class, "classes");
-		c.createAlias("classes.resourceElementses", "resElements");
-		c.setFetchMode("classes.resourceElementses", FetchMode.JOIN);
-		c.add(Restrictions.eq("resElements.resId", resourceId));
-		c.add(Restrictions.eq("resElements.resActive", true));
-		c.setProjection(Projections.groupProperty("classes.claId"));
-		
+		Query qry = session.createQuery("select b FROM ResourceElements AS a "
+				+ "inner join Classes as b on a.classes.claId = b.claId  "
+				+ "inner join Resources as c on a.resources.resoId = c.resoId "
+				+ "where c.resoId = :resourceId and c.resoActive = :resoActive group by b.claId");
+		qry.setParameter("resourceId", resourceId);
+		qry.setParameter("resoActive", true);
 		@SuppressWarnings("unchecked")
-		List<Classes> klass = c.list();
+		List<Classes> klass = qry.list();
 
 		return klass;
 	}
