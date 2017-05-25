@@ -336,7 +336,7 @@ public class CorpusServiceImpl implements ICorpusService {
 
 		}
 
-		AuthUserLogs log = new AuthUserLogs(user, new Date(), "Remove/inactive", "corpus/users_has_data_object", null, "remove/inactive corpus");
+		AuthUserLogs log = new AuthUserLogs(user, new Date(), "delete", "corpus/users_has_data_object", null, "remove/inactive corpus");
 		usersManagerDao.getAuthUserLogsDao().save(log);
 
 		return true;

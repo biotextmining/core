@@ -75,7 +75,7 @@ public class PrivilegesServiceImpl implements IPrivilegesService {
 		usersManagerDao.getAuthUserDataObjectsDao().update(dataObject);
 
 		AuthUsers userLog = userLogged.getCurrentUserLogged();
-		AuthUserLogs log = new AuthUserLogs(userLog, new Date(), "update ", "auth_user_data_objects", null, "edit privile from a resource");
+		AuthUserLogs log = new AuthUserLogs(userLog, new Date(), "update", "auth_user_data_objects", null, "edit privile from a resource");
 		usersManagerDao.getAuthUserLogsDao().save(log);
 
 		return true;
@@ -93,7 +93,7 @@ public class PrivilegesServiceImpl implements IPrivilegesService {
 		usersManagerDao.getAuthUserDataObjectsDao().delete(dataObject);
 
 		AuthUsers userLog = userLogged.getCurrentUserLogged();
-		AuthUserLogs log = new AuthUserLogs(userLog, new Date(), "delete ", "auth_user_data_objects", null, "remove privile from a resource");
+		AuthUserLogs log = new AuthUserLogs(userLog, new Date(), "delete", "auth_user_data_objects", null, "remove privile from a resource");
 		usersManagerDao.getAuthUserLogsDao().save(log);
 
 		return true;
@@ -109,7 +109,7 @@ public class PrivilegesServiceImpl implements IPrivilegesService {
 		AuthUserDataObjects dataObject = usersManagerDao.getAuthUserDataObjectsDao().findById(objectId);
 		if (dataObject != null) {
 			usersManagerDao.getAuthUserDataObjectsDao().delete(dataObject);
-			AuthUserLogs log = new AuthUserLogs(userLog, new Date(), "delete ", "auth_user_data_objects", null, "remove privile from a resource");
+			AuthUserLogs log = new AuthUserLogs(userLog, new Date(), "delete", "auth_user_data_objects", null, "remove privile from a resource");
 			usersManagerDao.getAuthUserLogsDao().save(log);
 		}
 
