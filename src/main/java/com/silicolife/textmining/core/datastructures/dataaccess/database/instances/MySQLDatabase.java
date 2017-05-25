@@ -98,7 +98,7 @@ public class MySQLDatabase extends ADatabase {
 	public boolean createDataBase() throws SQLException {
 		IDatabase dbtest = new MySQLDatabase(this.getHost(), this.getPort(), "mysql", getUser(), getPwd());
 		PreparedStatement createDatbase;
-		createDatbase = dbtest.getConnection().prepareStatement(QueriesGeneral.createDatabse + getSchema() + " DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ");
+		createDatbase = dbtest.getConnection().prepareStatement(QueriesGeneral.createDatabse + getSchema() + " DEFAULT CHARACTER SET utf8 COLLATE utf8_bin ");
 		createDatbase.execute();
 		return true;
 
@@ -107,7 +107,7 @@ public class MySQLDatabase extends ADatabase {
 	public boolean createDataBase(String user, String password) throws SQLException {
 		IDatabase dbtest = new MySQLDatabase(this.getHost(), this.getPort(), "mysql", user, password);
 		PreparedStatement createDatbase;
-		createDatbase = dbtest.getConnection().prepareStatement(QueriesGeneral.createDatabse + getSchema() + " DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ");
+		createDatbase = dbtest.getConnection().prepareStatement(QueriesGeneral.createDatabse + getSchema() + " DEFAULT CHARACTER SET utf8 COLLATE utf8_bin ");
 		createDatbase.execute();
 		return true;
 	}

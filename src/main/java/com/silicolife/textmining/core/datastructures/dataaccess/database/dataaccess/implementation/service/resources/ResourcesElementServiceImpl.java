@@ -189,7 +189,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 		boolean existResourceElement = resourcesManagerDao.getResourcesAuxDao().existResourceElementByResourceCaseSensitive(resource.getResoId(), elem.getTerm());
 
 		if (existResourceElement) {
-			List<ResourceElements> resourceElement = resourcesManagerDao.getResourcesElememtsDao().findByAttributesCaseSensitiveWithLimit(eqRestrictions, 1);
+			List<ResourceElements> resourceElement = resourcesManagerDao.getResourcesElememtsDao().findByAttributes(eqRestrictions);
 			updateResourceElement(report, resource, elem, klass, resourceElement.get(0));
 		}else{
 			boolean existSynonym = resourcesManagerDao.getResourcesAuxDao().existSynonymByResourceCaseSensitive(resource.getResoId(), elem.getTerm());
@@ -455,7 +455,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 		Map<String, Serializable> eqRestrictions = new HashMap<String, Serializable>();
 		eqRestrictions.put("resources", resource);
 		eqRestrictions.put("classes", klass);
-		List<ResourceElements> resourceElements = resourcesManagerDao.getResourcesElememtsDao().findByAttributesCaseSensitive(eqRestrictions);
+		List<ResourceElements> resourceElements = resourcesManagerDao.getResourcesElememtsDao().findByAttributes(eqRestrictions);
 		for (ResourceElements elem : resourceElements) {
 			elem.setResActive(false);
 			resourcesManagerDao.getResourcesElememtsDao().update(elem);
@@ -483,7 +483,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 			eqRestrictions.put("resources", resource);
 			eqRestrictions.put("resElement", cadidateSynonym);
 			eqRestrictions.put("resActive", true);
-			List<ResourceElements> resourceElement = resourcesManagerDao.getResourcesElememtsDao().findByAttributesCaseSensitive(eqRestrictions);
+			List<ResourceElements> resourceElement = resourcesManagerDao.getResourcesElememtsDao().findByAttributes(eqRestrictions);
 			List<Synonyms> resourceElementSynonyms = resourcesManagerDao.getResourcesAuxDao().findSynonymsByResourceElement(resource.getResoId(), cadidateSynonym);
 			if (!resourceElement.isEmpty()) {
 				IResourceElement elem = new ResourceElementImpl(cadidateSynonym, null, null, new ArrayList<String>(), 0, false);
@@ -643,7 +643,7 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 				eqRestrictions.put("resElement", newSynonym);
 				eqRestrictions.put("resActive", true);
 
-				List<ResourceElements> resourceElement = resourcesManagerDao.getResourcesElememtsDao().findByAttributesCaseSensitive(eqRestrictions);
+				List<ResourceElements> resourceElement = resourcesManagerDao.getResourcesElememtsDao().findByAttributes(eqRestrictions);
 				List<Synonyms> resourceElementSynonyms = resourcesManagerDao.getResourcesAuxDao().findSynonymsByResourceElement(resource.getResoId(), newSynonym);
 				if (!resourceElement.isEmpty()) {
 					IResourceElement elem = new ResourceElementImpl(newSynonym, null, null, new ArrayList<String>(), 0, false);

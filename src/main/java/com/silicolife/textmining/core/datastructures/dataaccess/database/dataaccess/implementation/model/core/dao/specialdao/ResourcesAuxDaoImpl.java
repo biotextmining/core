@@ -8,7 +8,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -67,8 +66,8 @@ public class ResourcesAuxDaoImpl implements ResourcesAuxDao {
 		// Added By Hugo
 		c.add(Restrictions.eq("syn.id.synActive", true));
 		c.add(Restrictions.eq("resourceElements.resActive", true));
-
-		c.add(Restrictions.sqlRestriction("syn_synonym" + " = ? collate utf8_bin", synonym, new StringType()));
+		c.add(Restrictions.eq("syn.id.synSynonym", synonym));
+//		c.add(Restrictions.sqlRestriction("syn_synonym" + " = ? collate utf8_bin", synonym, new StringType()));
 
 		@SuppressWarnings("unchecked")
 		List<Synonyms> synonims = c.list();
@@ -87,9 +86,10 @@ public class ResourcesAuxDaoImpl implements ResourcesAuxDao {
 		// Added By Hugo
 		c.add(Restrictions.eq("syn.id.synActive", true));
 		c.add(Restrictions.eq("resourceElements.resActive", true));
-
-		c.add(Restrictions.sqlRestriction("syn_synonym" + " = ? collate utf8_bin", synonym, new StringType()));
+		c.add(Restrictions.eq("syn.id.synSynonym", synonym));
+//		c.add(Restrictions.sqlRestriction("syn_synonym" + " = ? collate utf8_bin", synonym, new StringType()));
 		c.setMaxResults(maxLimit);
+		c.setFetchSize(maxLimit);
 //		c.setFirstResult(rowStart);
 		
 		@SuppressWarnings("unchecked")
@@ -256,7 +256,8 @@ public class ResourcesAuxDaoImpl implements ResourcesAuxDao {
 		c.add(Restrictions.eq("resources.resoId", resourceId));
 		c.add(Restrictions.eq("syn.id.synActive", true));
 		c.add(Restrictions.eq("resourceElements.resActive", true));
-		c.add(Restrictions.sqlRestriction("syn_synonym" + " = ? collate utf8_bin", synonym, new StringType()));
+		c.add(Restrictions.eq("syn.id.synSynonym",synonym));
+//		c.add(Restrictions.sqlRestriction("syn_synonym" + " = ? collate utf8_bin", synonym, new StringType()));
 		c.setProjection(Projections.rowCount());
 
 		Object returned = c.uniqueResult();
@@ -274,7 +275,8 @@ public class ResourcesAuxDaoImpl implements ResourcesAuxDao {
 		c.createAlias("resourceElement.resources", "resources");
 		c.add(Restrictions.eq("resources.resoId", resourceId));
 		c.add(Restrictions.eq("resourceElement.resActive", true));
-		c.add(Restrictions.sqlRestriction("res_element = ? collate utf8_bin", term, new StringType()));
+		c.add(Restrictions.eq("resourceElement.resElement", term));
+//		c.add(Restrictions.sqlRestriction("res_element = ? collate utf8_bin", term, new StringType()));
 
 		c.setProjection(Projections.rowCount());
 
@@ -319,7 +321,8 @@ public class ResourcesAuxDaoImpl implements ResourcesAuxDao {
 			String externalId) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria c = session.createCriteria(ResourceElementExtenalIds.class, "externalID");
-		c.add(Restrictions.sqlRestriction("rele_external_id" + " = ? collate utf8_bin", externalId, new StringType()));
+		c.add(Restrictions.eq("externalID.id.releExternalId", externalId));
+//		c.add(Restrictions.sqlRestriction("rele_external_id" + " = ? collate utf8_bin", externalId, new StringType()));
 		c.add(Restrictions.eq("externalID.id.releSourceId", sourceId));
 		c.add(Restrictions.eq("externalID.releActive", true));
 		@SuppressWarnings("unchecked")

@@ -1417,6 +1417,7 @@ INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (5, '2017-02-07 20:00:00', 'Lucene Index');
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (6, '2017-03-10 20:00:00', 'Alter Annotation table: remove start, end offset sentence, relation_classidfication and add manual curated field, Alter Processes table : add version, create and update date: Alter table corpus_has_publication_has_processes: Add version');
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (7, '2017-05-12 20:00:00', 'Update some external id links and icons');
+INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (8, '2017-05-25 20:00:00', 'Fix case sensitive search for old dbs');
 
 -- -----------------------------------------------------
 -- Data for table `auth_groups`

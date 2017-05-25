@@ -9,7 +9,6 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.type.StringType;
 
 /**
  * This classes represents the implementation of generic methods to access the
@@ -117,69 +116,70 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 	
 	@Override
 	public T merge(Object object) {
+		@SuppressWarnings("unchecked")
 		T castedObj = (T) sessionFactory.getCurrentSession().merge(object);
 		return castedObj;	
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<T> findByAttributesCaseSensitive(Map<String, Serializable> eqRestrictions) {
-
-		Criteria c = sessionFactory.getCurrentSession().createCriteria(klass);
-		for (Map.Entry<String, Serializable> entry : eqRestrictions.entrySet()) {
-			String key = entry.getKey().replaceAll("(.)(\\p{Upper})", "$1_$2").toLowerCase();
-			// if(entry.getValue() instanceof Long){
-			// c.add(Restrictions.sqlRestriction( key + " = ? collate utf8_bin",
-			// entry.getValue(),new LongType() ));
-			// }else if (entry.getValue() instanceof Boolean){
-			// c.add(Restrictions.sqlRestriction( key + " = ? collate utf8_bin",
-			// entry.getValue(),new BooleanType() ));
-			// }else if(entry.getValue() instanceof Integer){
-			// c.add(Restrictions.sqlRestriction( key + " = ? collate utf8_bin",
-			// entry.getValue(),new IntegerType() ));
-			// }else if(entry.getValue() instanceof Date){
-			// c.add(Restrictions.sqlRestriction( key + " = ? collate utf8_bin",
-			// entry.getValue(),new DateType() ));
-			if (entry.getValue() instanceof String) {
-				c.add(Restrictions.sqlRestriction(key + " = ? collate utf8_bin", entry.getValue(), new StringType()));
-			} else {
-				c.add(Restrictions.eq(entry.getKey(), entry.getValue()));
-			}
-		}
-
-		return c.list();
-	}
-
-	@Override
-	public T findUniqueByAttributeCaseSensitive(String attribute, Serializable value) {
-
-		Map<String, Serializable> eqRestrictions = new HashMap<String, Serializable>();
-		eqRestrictions.put(attribute, value);
-		List<T> result = findByAttributesCaseSensitive(eqRestrictions);
-		if (result.size() == 1)
-			return result.get(0);
-
-		return null;
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<T> findByAttributesCaseSensitiveWithLimit(Map<String, Serializable> eqRestrictions, int limit) {
-		Criteria c = sessionFactory.getCurrentSession().createCriteria(klass);
-		for (Map.Entry<String, Serializable> entry : eqRestrictions.entrySet()) {
-		
-			String key = entry.getKey().replaceAll("(.)(\\p{Upper})", "$1_$2").toLowerCase();
-			if (entry.getValue() instanceof String) {
-				c.add(Restrictions.sqlRestriction(key + " = ? collate utf8_bin", entry.getValue(), new StringType()));
-			} else {
-				c.add(Restrictions.eq(entry.getKey(), entry.getValue()));
-			}
-		}
-		c.setMaxResults(limit);
-		//c.setFirstResult(limit);
-		
-		return c.list();
-	}
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public List<T> findByAttributesCaseSensitive(Map<String, Serializable> eqRestrictions) {
+//
+//		Criteria c = sessionFactory.getCurrentSession().createCriteria(klass);
+//		for (Map.Entry<String, Serializable> entry : eqRestrictions.entrySet()) {
+//			String key = entry.getKey().replaceAll("(.)(\\p{Upper})", "$1_$2").toLowerCase();
+//			// if(entry.getValue() instanceof Long){
+//			// c.add(Restrictions.sqlRestriction( key + " = ? collate utf8_bin",
+//			// entry.getValue(),new LongType() ));
+//			// }else if (entry.getValue() instanceof Boolean){
+//			// c.add(Restrictions.sqlRestriction( key + " = ? collate utf8_bin",
+//			// entry.getValue(),new BooleanType() ));
+//			// }else if(entry.getValue() instanceof Integer){
+//			// c.add(Restrictions.sqlRestriction( key + " = ? collate utf8_bin",
+//			// entry.getValue(),new IntegerType() ));
+//			// }else if(entry.getValue() instanceof Date){
+//			// c.add(Restrictions.sqlRestriction( key + " = ? collate utf8_bin",
+//			// entry.getValue(),new DateType() ));
+//			if (entry.getValue() instanceof String) {
+//				c.add(Restrictions.sqlRestriction(key + " = ? collate utf8_bin", entry.getValue(), new StringType()));
+//			} else {
+//				c.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+//			}
+//		}
+//
+//		return c.list();
+//	}
+//
+//	@Override
+//	public T findUniqueByAttributeCaseSensitive(String attribute, Serializable value) {
+//
+//		Map<String, Serializable> eqRestrictions = new HashMap<String, Serializable>();
+//		eqRestrictions.put(attribute, value);
+//		List<T> result = findByAttributesCaseSensitive(eqRestrictions);
+//		if (result.size() == 1)
+//			return result.get(0);
+//
+//		return null;
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public List<T> findByAttributesCaseSensitiveWithLimit(Map<String, Serializable> eqRestrictions, int limit) {
+//		Criteria c = sessionFactory.getCurrentSession().createCriteria(klass);
+//		for (Map.Entry<String, Serializable> entry : eqRestrictions.entrySet()) {
+//		
+//			String key = entry.getKey().replaceAll("(.)(\\p{Upper})", "$1_$2").toLowerCase();
+//			if (entry.getValue() instanceof String) {
+//				c.add(Restrictions.sqlRestriction(key + " = ? collate utf8_bin", entry.getValue(), new StringType()));
+//			} else {
+//				c.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+//			}
+//		}
+//		c.setMaxResults(limit);
+//		//c.setFirstResult(limit);
+//		
+//		return c.list();
+//	}
 
 	@Override
 	public void clearSession() {

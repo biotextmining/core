@@ -21,9 +21,9 @@ public interface GenericDao<T> {
 
 	public List<T> findByAttributes(Map<String, Serializable> eqRestrictions);
 
-	public List<T> findByAttributesCaseSensitive(Map<String, Serializable> eqRestrictions);
+//	public List<T> findByAttributesCaseSensitive(Map<String, Serializable> eqRestrictions);
 	
-	public List<T> findByAttributesCaseSensitiveWithLimit(Map<String, Serializable> eqRestrictions, int limit);
+//	public List<T> findByAttributesCaseSensitiveWithLimit(Map<String, Serializable> eqRestrictions, int limit);
 	
 	public List<T> findByAttributesWithPagniation(Map<String, Serializable> eqRestrictions, int index, int limit);
 
@@ -49,5 +49,5 @@ public interface GenericDao<T> {
 	
 	public T merge(Object object);
 
-	public T findUniqueByAttributeCaseSensitive(String attribute, Serializable value);
+//	public T findUniqueByAttributeCaseSensitive(String attribute, Serializable value);
 }

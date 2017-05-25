@@ -1,0 +1,3 @@
+ALTER TABLE `resource_elements` CHANGE COLUMN `res_element` `res_element` VARCHAR(500) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL;
+ALTER TABLE `synonyms` CHANGE COLUMN `syn_synonym` `syn_synonym` VARCHAR(500) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL;
+ALTER TABLE `resource_element_extenal_ids` CHANGE COLUMN `rele_external_id` `rele_external_id` VARCHAR(200) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL;
