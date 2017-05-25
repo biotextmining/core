@@ -4,12 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.CorpusException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.PublicationManagerException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
-import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.relevance.RelevanceTypeEnum;
 import com.silicolife.textmining.core.interfaces.process.IR.IQuery;

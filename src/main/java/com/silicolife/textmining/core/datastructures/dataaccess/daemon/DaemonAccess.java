@@ -267,7 +267,7 @@ public class DaemonAccess implements IDataAccess {
 
 	@Override
 	public void updateQueryDocumentRelevance(IPublication publication, IQuery query, IQueryPublicationRelevance relevance) throws ANoteException {
-		queryAccessImpl.updateRelevance(publication.getId(), query.getId(), relevance.getRelevance().name());
+		queryAccessImpl.updateRelevance(publication.getId(), query.getId(), relevance.getRelevance().toString());
 	}
 
 	@Override

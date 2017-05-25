@@ -74,7 +74,6 @@ import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpusStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.labels.IPublicationLabel;
 import com.silicolife.textmining.core.interfaces.core.document.relevance.IQueryPublicationRelevance;
-import com.silicolife.textmining.core.interfaces.core.document.relevance.RelevanceTypeEnum;
 import com.silicolife.textmining.core.interfaces.core.general.IExternalID;
 import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
 import com.silicolife.textmining.core.interfaces.core.general.source.ISource;
@@ -1113,11 +1112,7 @@ public class DatabaseAccess implements IDataAccess {
 
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			if (relevance.getRelevance() == RelevanceTypeEnum.none) {
-				queriesService.updateRelevance(query.getId(), publication.getId(), null);
-			} else {
-				queriesService.updateRelevance(query.getId(), publication.getId(), relevance.getRelevance().name());
-			}
+			queriesService.updateRelevance(query.getId(), publication.getId(), relevance.getRelevance().toString());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 		} catch (RuntimeException e) {
 			sessionFactory.getCurrentSession().getTransaction().rollback();
