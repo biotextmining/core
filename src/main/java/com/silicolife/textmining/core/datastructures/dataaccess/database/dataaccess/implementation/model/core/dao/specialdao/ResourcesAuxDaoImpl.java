@@ -3,7 +3,6 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -342,7 +341,7 @@ public class ResourcesAuxDaoImpl implements ResourcesAuxDao {
 //
 //		Object returned = qry.uniqueResult();
 //
-//		if (((BigInteger) returned).compareTo(BigInteger.ZERO) > 0)  {
+//		if (((Number) returned).compareTo(BigInteger.ZERO) > 0)  {
 //			return true;
 //		} else {
 //			return false;
@@ -361,7 +360,7 @@ public class ResourcesAuxDaoImpl implements ResourcesAuxDao {
 //
 //		Object returned = qry.uniqueResult();
 //
-//		if (((BigInteger) returned).compareTo(BigInteger.ZERO) > 0) {
+//		if (((Number) returned).compareTo(BigInteger.ZERO) > 0) {
 //			return true;
 //		} else {
 //			return false;

@@ -1,6 +1,5 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +60,7 @@ public class QueriesAuxDaoImpl implements QueriesAuxDao {
 		Query qry = session.createQuery(hqlString);
 		qry.setParameter("id", id);
 		qry.setParameter("resourceType", resourceType);
-		return ((BigInteger)qry.uniqueResult()).intValue();
+		return ((Number)qry.uniqueResult()).intValue();
 	}
 	
 	

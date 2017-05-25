@@ -1,6 +1,5 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -63,7 +62,7 @@ public class CorpusAuxDaoImpl implements CorpusAuxDao {
 		qry.setParameter("str", str);
 		qry.setParameter("corpusId", corpusId);
 
-		return ((BigInteger)qry.uniqueResult()).intValue();
+		return ((Number)qry.uniqueResult()).intValue();
 	}
 
 	@Override
