@@ -2,10 +2,12 @@ package com.silicolife.textmining.core.lucene;
 
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
 
+import com.silicolife.textmining.core.datastructures.documents.SearchPropertiesImpl;
 import com.silicolife.textmining.core.datastructures.init.InitConfiguration;
 import com.silicolife.textmining.core.datastructures.init.exception.InvalidDatabaseAccess;
 import com.silicolife.textmining.core.datastructures.init.exception.InvalidDemonConnectionException;
@@ -14,6 +16,9 @@ import com.silicolife.textmining.core.init.DaemonConnectionInit;
 import com.silicolife.textmining.core.init.DatabaseConnectionInit;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.database.DataBaseTypeEnum;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
+import com.silicolife.textmining.core.interfaces.core.document.IPublication;
+import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
+import com.silicolife.textmining.core.interfaces.process.IR.IQuery;
 import com.silicolife.textmining.core.interfaces.resource.IResource;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElementSet;
@@ -48,7 +53,7 @@ public class LuceneTest {
 		
 	}
 	
-	@Test
+//	@Test
 	public void testIndex2() throws InvalidDatabaseAccess, ANoteException{
 		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","sisbitmpipeline","root","admin");
 		long startime = GregorianCalendar.getInstance().getTimeInMillis();
@@ -155,6 +160,43 @@ public class LuceneTest {
 		
 		System.out.println(notStart);
 		
+	}
+	
+//	@Test
+	public void testIndex10() throws InvalidDatabaseAccess, ANoteException{
+		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","anote2db","root","rootadmin");
+		List<IQuery> queries = InitConfiguration.getDataAccess().getQueriesByName("thyroid differentiated");
+		List<IQuery> queries1 = InitConfiguration.getDataAccess().getQueriesByOrganism("treponema");
+		List<IQuery> queries2 = InitConfiguration.getDataAccess().getQueriesBykeywords("ecoli");
+		List<IQuery> queries3 = InitConfiguration.getDataAccess().getQueriesKeywordsByWildCard("dif");
+		List<String> keywords = InitConfiguration.getDataAccess().getKeywordsOfQueriesByWildCard("dif");
+		//System.out.println(queries);
+		System.out.println(queries2.get(0).getId());
+		//System.out.println(queries2);
+		//System.out.println(queries3);
+		//System.out.println(keywords);
+	}
+	
+	@Test
+	public void testIndex11() throws InvalidDatabaseAccess, ANoteException{
+		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","anote2db","root","rootadmin");
+		ISearchProperties searchProperties = new SearchPropertiesImpl();
+		searchProperties.setKeywords(false);
+		searchProperties.setWholeWords(true);
+		//searchProperties.setCaseSensitive(true);
+		searchProperties.addField("title");
+		//searchProperties.addField("journal");
+		//searchProperties.addField("organism");
+		//searchProperties.addRestriction("queryId", "694261800784300680");
+		searchProperties.addRestriction("queryId", "547193518995135916");
+		searchProperties.setValue("genes and proteins");
+		//List<IPublication> publications = InitConfiguration.getDataAccess().getPublicationsByTitle("bacteria of");
+		List<IPublication> publications = InitConfiguration.getDataAccess().getPublicationsFromSearch(searchProperties);
+		//System.out.println(publications.get(0));
+		for(IPublication p : publications){
+			System.out.println(p);
+		}
+			
 	}
 
 }

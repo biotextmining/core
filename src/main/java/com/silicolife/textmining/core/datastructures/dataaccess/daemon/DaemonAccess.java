@@ -17,6 +17,8 @@ import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implement
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.general.ClassesAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.hyperlinks.HyperlinkAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.lucene.LuceneAccessImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.lucene.publications.LucenePublicationsAcessImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.lucene.queries.LuceneQueriesAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.lucene.resources.LuceneResourcesElementsAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.processes.ProcessesAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.publicationmanager.PublicationsAccessImpl;
@@ -48,6 +50,7 @@ import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumen
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
+import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpusStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.labels.IPublicationLabel;
@@ -98,6 +101,8 @@ public class DaemonAccess implements IDataAccess {
 	private RunSercerProcessesAccessImpl runServerProcessesImpl;
 	private LuceneAccessImpl luceneAccessImpl;
 	private LuceneResourcesElementsAccessImpl luceneResourcesElementsAccessImpl;
+	private LuceneQueriesAccessImpl luceneQueriesAccessImpl;
+	private LucenePublicationsAcessImpl lucenePublicationsAcessImpl;
 
 	public DaemonAccess(IDaemon daemonConfigurations) {
 		this.daemonConfigurations = daemonConfigurations;
@@ -117,6 +122,8 @@ public class DaemonAccess implements IDataAccess {
 		runServerProcessesImpl = new RunSercerProcessesAccessImpl();
 		luceneAccessImpl = new LuceneAccessImpl();
 		luceneResourcesElementsAccessImpl = new LuceneResourcesElementsAccessImpl();
+		luceneQueriesAccessImpl = new LuceneQueriesAccessImpl();
+		lucenePublicationsAcessImpl = new LucenePublicationsAcessImpl();
 	}
 
 	public IDaemon getDaemonConfigurations() {
@@ -149,6 +156,7 @@ public class DaemonAccess implements IDataAccess {
 			runServerProcessesImpl.setRestClient(webClient);
 			luceneAccessImpl.setRestClient(webClient);
 			luceneResourcesElementsAccessImpl.setRestClient(webClient);
+			luceneQueriesAccessImpl.setRestClient(webClient);
 			initConnection();
 		}
 	}
@@ -1157,4 +1165,50 @@ public class DaemonAccess implements IDataAccess {
 		hyperLinkAccessImpl.updateHyperLinkMenuItem(hyperLinkMenuItem);
 		
 	}
+
+	public List<IQuery> getQueriesByName(String name) throws ANoteException {
+		return luceneQueriesAccessImpl.getQueriesByName(name);
+	}
+
+	@Override
+	public List<IQuery> getQueriesByOrganism(String organism) throws ANoteException {
+		return luceneQueriesAccessImpl.getQueriesByOrganism(organism);
+	}
+
+	@Override
+	public List<IQuery> getQueriesBykeywords(String keywords) throws ANoteException {
+		return luceneQueriesAccessImpl.getQueriesBykeywords(keywords);
+	}
+
+	@Override
+	public List<IQuery> getQueriesKeywordsByWildCard(String subKeyword) throws ANoteException {
+		return luceneQueriesAccessImpl.getQueriesKeywordsByWildCard(subKeyword);
+	}
+
+	@Override
+	public List<String> getKeywordsOfQueriesByWildCard(String subKeyword) throws ANoteException {
+		return luceneQueriesAccessImpl.getKeywordsOfQueriesByWildCard(subKeyword);
+	}
+
+	@Override
+	public List<IPublication> getPublicationsByTitle(String title) throws ANoteException {
+		return lucenePublicationsAcessImpl.getPublicationsByTitle(title);
+	}
+	
+	@Override
+	public List<IPublication> getPublicationsFromSearch(ISearchProperties searchProperties)  throws ANoteException{
+		return lucenePublicationsAcessImpl.getPublicationsFromSearch(searchProperties);
+	}
+
+	@Override
+	public List<IPublication> getPublicationsFromSearchPaginated(ISearchProperties searchProperties, int index,
+			int paginationSize) throws ANoteException {
+		return lucenePublicationsAcessImpl.getPublicationsFromSearchPaginated(searchProperties, index, paginationSize);
+	}
+
+	@Override
+	public Integer countGetPublicationsFromSearch(ISearchProperties searchProperties) throws ANoteException {
+		return lucenePublicationsAcessImpl.countGetPublicationsFromSearch(searchProperties);
+	}
+	
 }

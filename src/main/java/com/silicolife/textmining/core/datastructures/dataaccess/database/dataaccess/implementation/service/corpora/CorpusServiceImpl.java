@@ -99,6 +99,38 @@ public class CorpusServiceImpl implements ICorpusService {
 
 		return corpus_;
 	}
+	
+	@Override
+	public Integer countAllCorpus(){
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		/**
+		 * get all corpus from a user
+		 */
+
+		return corpusManagerDao.getCorpusAuxDao().CountCorpusByAttributes(user.getAuId(), corpusStr);
+	}
+	
+	@Override
+	public List<ICorpus> getAllCorpusPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		/**
+		 * get all corpus from a user
+		 */
+
+		List<Corpus> corpus = corpusManagerDao.getCorpusAuxDao().findQueriesByAttributesPaginated(user.getAuId(), corpusStr, paginationIndex, paginationSize, asc, sortBy);
+
+		List<ICorpus> corpus_ = new ArrayList<ICorpus>();
+		for (Corpus corpusObj : corpus) {
+			ICorpus corpusObj_ = CorpusWrapper.convertToAnoteStructure(corpusObj);
+			corpus_.add(corpusObj_);
+		}
+		//		if (corpus_.size() == 0)
+		//			return null;
+
+		return corpus_;
+	}
+
 
 	@Override
 	public ICorpus getCorpusByID(Long id) {
@@ -221,6 +253,8 @@ public class CorpusServiceImpl implements ICorpusService {
 	public List<IIEProcess> getCorpusProcesses(Long corpusId) throws CorpusException {
 
 		AuthUsers user = userLogged.getCurrentUserLogged();
+		
+		System.out.println("chego");
 
 		Corpus corpus = corpusManagerDao.getCorpusDao().findById(corpusId);
 		if (corpus == null)

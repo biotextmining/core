@@ -79,6 +79,7 @@ public class ManagerDao {
 	private ClustersManagerDao clusterManagerDao;
 	private HyperLinkMenuManagerDao hyperlinkMenuManagerDao;
 	private SystemManagerDao systemManagerDao;
+	private PublicationsManagerDao publicationsManagerDao;
 	
 	private SessionFactory sessionFactory;
 
@@ -94,6 +95,7 @@ public class ManagerDao {
 		clusterManagerDao = createClusterManagerdao();
 		hyperlinkMenuManagerDao = createHyperLinkMenusDao();
 		systemManagerDao = createSystemMangerDao();
+		publicationsManagerDao = createPublicationsDao();
 	}
 
 	
@@ -185,6 +187,23 @@ public class ManagerDao {
 
 	public CorpusManagerDao getCorpusManagerDao() {
 		return corpusManagerDao;
+	}
+	
+	public PublicationsManagerDao createPublicationsDao(){
+		GenericDao<PublicationSources> publicationSourcesDao = new GenericDaoImpl<PublicationSources>(sessionFactory, PublicationSources.class);;
+		GenericDao<PublicationHasSources> publicationsHasPublicationsSourceDao = new GenericDaoImpl<PublicationHasSources>(sessionFactory, PublicationHasSources.class);
+		GenericDao<Publications> publicationsDao = new GenericDaoImpl<Publications>(sessionFactory, Publications.class);
+		GenericDao<PublicationFields> publicationsFieldsDao = new GenericDaoImpl<PublicationFields>(sessionFactory, PublicationFields.class);
+		GenericDao<PublicationLabels> publicationsLabelsDao = new GenericDaoImpl<PublicationLabels>(sessionFactory, PublicationLabels.class);
+		GenericDao<PublicationHasLabels> publicationsHasPublicationLabelsDao = new GenericDaoImpl<PublicationHasLabels>(sessionFactory, PublicationHasLabels.class);
+		PublicationsAuxDao publicationsAuxDao = new PublicationsAuxDaoImpl(sessionFactory);
+		PublicationsManagerDao publicationsManagerDao = new PublicationsManagerDao(publicationSourcesDao, publicationsHasPublicationsSourceDao, publicationsDao, publicationsFieldsDao, publicationsLabelsDao, publicationsHasPublicationLabelsDao, publicationsAuxDao);
+		
+		return publicationsManagerDao;
+	}
+	
+	public PublicationsManagerDao getPublicationsManagerDao(){
+		return publicationsManagerDao;
 	}
 
 	public QueriesManagerDao createQueriesDao() {

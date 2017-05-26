@@ -22,6 +22,7 @@ import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumen
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
+import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpusStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.labels.IPublicationLabel;
@@ -1142,7 +1143,59 @@ public class DataAccessStart implements IDataAccess {
 
 	@Override
 	public void updateHyperLinkMenuItem(IHyperLinkMenuItem hyperLinkMenuItem) throws ANoteException {
-		
+	}
+	
+	public List<IQuery> getQueriesByName(String name) {
+		return null;
+	}
+
+	@Override
+	public List<IQuery> getQueriesByOrganism(String organism) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IQuery> getQueriesBykeywords(String keywords) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IQuery> getQueriesKeywordsByWildCard(String subKeyword) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getKeywordsOfQueriesByWildCard(String subKeyword) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IPublication> getPublicationsByTitle(String title) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public List<IPublication> getPublicationsFromSearch(ISearchProperties searchProperties)  throws ANoteException{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IPublication> getPublicationsFromSearchPaginated(ISearchProperties searchProperties, int index,
+			int paginationSize) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer countGetPublicationsFromSearch(ISearchProperties searchProperties) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

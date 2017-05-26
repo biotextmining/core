@@ -18,6 +18,10 @@ import org.hibernate.service.ServiceRegistry;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.manager.LuceneManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.ILuceneService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.LuceneServiceImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.publications.IPublicationsLuceneService;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.publications.PublicationsLuceneServiceImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.queries.IQueriesLuceneService;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.queries.QueriesLuceneServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.resources.IResourcesElementLuceneService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.resources.ResourcesElementLuceneServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
@@ -70,6 +74,7 @@ import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumen
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
+import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpusStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.labels.IPublicationLabel;
@@ -115,13 +120,17 @@ public class DatabaseAccess implements IDataAccess {
 	
 	private LuceneManagerDao luceneManagerDao;
 	private ILuceneService luceneService;
+	private IPublicationsLuceneService lucenePublicationsService;
 	private IResourcesElementLuceneService luceneResourcesElementService;
-
+	private IQueriesLuceneService luceneQueriesService;
 	private IUserService userService;
 	private UsersLogged userLogged = new UsersLoggedImpl();
 	private boolean alreadyConfigurate = false;
 
 	private String hibernateFilePath;
+
+
+	
 
 	public DatabaseAccess(IDatabase db,String hibernateFilePath) {
 		this.db = db;
@@ -190,6 +199,9 @@ public class DatabaseAccess implements IDataAccess {
 		luceneManagerDao = new LuceneManagerDao(sessionFactory);
 		luceneService = new LuceneServiceImpl(sessionFactory);
 		luceneResourcesElementService = new ResourcesElementLuceneServiceImpl(luceneManagerDao.getResourcesLuceneManagerDao(), managerDao.getResourcesManagerDao());
+		luceneQueriesService = new QueriesLuceneServiceImpl(luceneManagerDao.getQueriesLuceneManagerDao(), managerDao.getQueriesManagerDao());
+		lucenePublicationsService = new PublicationsLuceneServiceImpl(managerDao.getPublicationsManagerDao(), luceneManagerDao.getPublicationsLuceneManagerDao());
+
 	}
 
 	@Override
@@ -2409,5 +2421,121 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}
 	}
+	public List<IQuery> getQueriesByName(String name) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IQuery> result = luceneQueriesService.getQueriesByName(name);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return result;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
+	@Override
+	public List<IQuery> getQueriesByOrganism(String organism) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IQuery> result = luceneQueriesService.getQueriesByOrganism(organism);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return result;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
+	@Override
+	public List<IQuery> getQueriesBykeywords(String keywords) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IQuery> result = luceneQueriesService.getQueriesBykeywords(keywords);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return result;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
+	@Override
+	public  List<IQuery> getQueriesKeywordsByWildCard(String subKeyword) throws ANoteException{
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IQuery> result = luceneQueriesService.getQueriesKeywordsByWildCard(subKeyword);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return result;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
 
+	@Override
+	public List<String> getKeywordsOfQueriesByWildCard(String subKeyword) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<String> result = luceneQueriesService.getKeywordsOfQueriesByWildCard(subKeyword);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return result;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
+	@Override
+	public List<IPublication> getPublicationsByTitle(String title) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IPublication> result = lucenePublicationsService.getPublicationsByTitle(title);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return result;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
+	@Override
+	public List<IPublication> getPublicationsFromSearch(ISearchProperties searchProperties)  throws ANoteException{
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IPublication> result = lucenePublicationsService.getPublicationsFromSearch(searchProperties);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return result;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public List<IPublication> getPublicationsFromSearchPaginated(ISearchProperties searchProperties, int index,
+			int paginationSize) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IPublication> result = lucenePublicationsService.getPublicationsFromSearchPaginated(searchProperties, index, paginationSize);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return result;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Integer countGetPublicationsFromSearch(ISearchProperties searchProperties) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer result = lucenePublicationsService.countGetPublicationsFromSearch(searchProperties);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return result;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}		
+	}
+	
 }

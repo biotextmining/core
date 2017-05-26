@@ -3,7 +3,10 @@ package com.silicolife.textmining.core.datastructures.documents;
 public enum PublicationFieldsEnum {
 	title ("pubTitle"),
 	authors ("pubAuthors"),
-	yeardate ("pubYeardate");
+	yeardate ("pubYeardate"),
+	jounal ("pubJournal"),
+	fullContent("pubFullcontent"),
+	abstractSection("pubAbstract");
 	
 	
 	private final String uniqueIdentifier;

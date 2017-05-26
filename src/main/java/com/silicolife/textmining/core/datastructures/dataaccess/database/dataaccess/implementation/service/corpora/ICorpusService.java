@@ -143,4 +143,8 @@ public interface ICorpusService {
 	public Long countCorpusPublicationsOutdated(Long corpusId, Long processId) throws CorpusException;
 
 	public IDocumentSet getCorpusPublicationsOutdatedPaginated(Long corpusId, Long processId, Integer paginationIndex, Integer paginationSize) throws CorpusException;
+
+	public Integer countAllCorpus();
+
+	public List<ICorpus> getAllCorpusPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
 }
