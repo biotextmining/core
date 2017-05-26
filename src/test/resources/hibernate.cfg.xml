@@ -4,33 +4,40 @@
 "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
 	<session-factory>
+		
+		<!-- session context configuration -->
 		<property name="hibernate.current_session_context_class">thread</property>
+		
+		<!-- object to database fine tune configuration -->
 		<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
-		<property name="hibernate.format_sql">true</property>
-		<property name="hibernate.show_sql">false</property>
-		<property name="hibernate.use_sql_comments">true</property>
-		<property name="hibernate.connection.characterEncoding">UTF-8</property>
-		<property name="hibernate.connection.useUnicode">true</property>
 		<property name="hibernate.validator.apply_to_ddl">false</property>
+		
+		<!-- connection pool configuration -->
+		<property name="hibernate.c3p0.idle_test_period">10</property>
+		<property name="hibernate.c3p0.acquireRetryAttempts">1</property>
+		<property name="hibernate.c3p0.max_size">5</property>
+		<property name="hibernate.c3p0.max_statements">50</property>
+		<property name="hibernate.c3p0.min_size">1</property>
+		<property name="hibernate.c3p0.timeout">10</property>
+		
+		<!-- connection auto-reconnect configuration -->
 		<property name="connection.autoReconnect">true</property>
 		<property name="connection.autoReconnectForPools">true</property>
 		<property name="connection.is-connection-validation-required">true</property>
-
-		<!-- C3P0 configuration -->
-
-		<property name="hibernate.c3p0.min_size">10</property>
-		<property name="hibernate.c3p0.max_size">20</property>
-		<property name="hibernate.c3p0.acquire_increment">1</property>
-		<property name="hibernate.c3p0.idle_test_period">3000</property>
-		<property name="hibernate.c3p0.max_statements">50</property>
-		<property name="hibernate.c3p0.timeout">1800</property>
-
+	
+		<!-- sql handler configuration -->
+		<property name="hibernate.connection.characterEncoding">UTF-8</property>
+		<property name="hibernate.connection.useUnicode">true</property>
+		<property name="hibernate.format_sql">true</property>
+		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.use_sql_comments">false</property>
+		
 		<!--  Hibernate Search configuration -->
 		<!--  
 		<property name="hibernate.search.default.directory_provider">filesystem</property>
 		<property name="hibernate.search.default.indexBase">/var/lucene/indexes</property>		
 		-->
-
+		
 		<mapping
 			class="com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ClusterLabels" />
 		<mapping
@@ -145,9 +152,12 @@
 			class="com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AnnotationProperties" />
 		<mapping
 			class="com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.QueryHasPublications" />
+		
 		<!-- Version 2.2 -->
-		<mapping class="com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublicationsHasProcesses" />
-		<mapping class="com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.DataProcessStatus" />
+		<mapping 
+			class="com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublicationsHasProcesses" />
+		<mapping 
+			class="com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.DataProcessStatus" />
 			
 	</session-factory>
 </hibernate-configuration>

@@ -54,7 +54,7 @@ public class H2EmbeddedDatabase extends ADatabase {
 			}
 			setLoadDriver(true);
 		}
-		String url_db_connection = "jdbc:h2:file:" + this.getHost() + "/" + this.getSchema() + ";AUTO_RECONNECT=TRUE;DATABASE_TO_UPPER=FALSE";
+		String url_db_connection = "jdbc:h2:file:" + this.getHost() + "/" + this.getSchema() + ";DATABASE_TO_UPPER=FALSE";
 		Connection h2connection = DriverManager.getConnection(url_db_connection, this.getUser(), this.getPwd());
 		try{
 			h2connection.setSchema(this.getSchema());
@@ -86,7 +86,7 @@ public class H2EmbeddedDatabase extends ADatabase {
 			}
 			setLoadDriver(true);
 		}
-		String url_db_connection = "jdbc:h2:file:" + this.getHost() + "/" + this.getSchema() + ";AUTO_RECONNECT=TRUE;DATABASE_TO_UPPER=FALSE";
+		String url_db_connection = "jdbc:h2:file:" + this.getHost() + "/" + this.getSchema() + ";DATABASE_TO_UPPER=FALSE";
 		return DriverManager.getConnection(url_db_connection, this.getUser(), this.getPwd());
 	}
 
@@ -234,7 +234,7 @@ public class H2EmbeddedDatabase extends ADatabase {
 
 	@Override
 	public String getDataBaseURL() {
-		return "jdbc:h2:file:" + this.getHost() + "/" +  this.getSchema() + ";AUTO_RECONNECT=TRUE;DATABASE_TO_UPPER=FALSE";
+		return "jdbc:h2:file:" + this.getHost() + "/" +  this.getSchema() + ";DATABASE_TO_UPPER=FALSE";
 	}
 
 }
