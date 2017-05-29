@@ -2,6 +2,7 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -248,16 +249,18 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 //		qry.setParameter(0, publicationId);
 //		qry.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 		
-		String hqlString = "select p.pubId, p.pubFullcontent from Publications as p "
+		String hqlString = "select p.pubId as id, p.pubFullcontent as fullcontent from Publications as p "
 				+ "where p.pubId = :publicationId";
-		Query qry = session.createQuery(hqlString );
+		Query qry = session.createQuery(hqlString);
+		qry.setParameter("publicationId", publicationId);
 		qry.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 
-		Object[] data = (Object[]) qry.uniqueResult();
+		@SuppressWarnings("unchecked")
+		Map<String, Object> map = (Map<String, Object>) qry.uniqueResult();
 		Publications publication = null;
-		if (data != null && data.length < 1) {
-			Long id = Long.valueOf(data[0].toString());
-			String content = data[1].toString();
+		if (map != null) {
+			Long id = Long.valueOf(map.get("id").toString());
+			String content = map.get("fullcontent").toString();
 			publication = new Publications(id);
 			publication.setPubFullcontent(content);
 		}
