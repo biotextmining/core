@@ -268,6 +268,7 @@ public class PublicationImpl extends Observable implements IPublication {
 				if(InitConfiguration.getDataAccess() != null)
 					fullTextContent = InitConfiguration.getDataAccess().getPublicationFullText(this);
 			} catch (ANoteException e) {
+				e.printStackTrace();
 				return new String();
 			}
 			if(fullTextContent==null)
@@ -324,7 +325,7 @@ public class PublicationImpl extends Observable implements IPublication {
 		if(saveDocDirectoty!=null)
 		{
 			String filePath = saveDocDirectoty + "//" + getRelativePath();
-			String fileIDPath = saveDocDirectoty + "//id" + String.valueOf(getId()) + ".pdf";
+			String fileIDPath = saveDocDirectoty + "//" + String.valueOf(getId()) + ".pdf";
 			if (new File(filePath).exists() && new File(filePath).isFile() || new File(fileIDPath).exists() && new File(filePath).isFile()) {
 				return Boolean.TRUE;
 			} else {

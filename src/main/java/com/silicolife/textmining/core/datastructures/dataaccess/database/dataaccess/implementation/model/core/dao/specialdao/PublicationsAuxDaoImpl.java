@@ -2,17 +2,16 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -249,22 +248,15 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 //		qry.setParameter(0, publicationId);
 //		qry.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 		
-		String hqlString = "select p.pubId as id, p.pubFullcontent as fullcontent from Publications as p "
-				+ "where p.pubId = :publicationId";
-		Query qry = session.createQuery(hqlString);
-		qry.setParameter("publicationId", publicationId);
-		qry.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-
-		@SuppressWarnings("unchecked")
-		Map<String, Object> map = (Map<String, Object>) qry.uniqueResult();
-		Publications publication = null;
-		if (map != null) {
-			Long id = Long.valueOf(map.get("id").toString());
-			String content = map.get("fullcontent").toString();
-			publication = new Publications(id);
-			publication.setPubFullcontent(content);
-		}
-
+		Criteria c = session.createCriteria(Publications.class);
+		c.add(Restrictions.eq("pubId", publicationId));
+		c.setProjection(Projections.projectionList()
+				.add(Projections.property("pubId"), "pubId")
+				.add(Projections.property("pubFullcontent"), "pubFullcontent"));
+		c.setResultTransformer(Transformers.aliasToBean(Publications.class));
+		
+		Publications publication = (Publications) c.uniqueResult();
+		
 		return publication;
 	}
 	@Override
