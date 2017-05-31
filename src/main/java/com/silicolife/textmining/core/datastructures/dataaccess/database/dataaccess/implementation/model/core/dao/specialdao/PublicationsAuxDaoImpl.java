@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -248,20 +248,15 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 //		qry.setParameter(0, publicationId);
 //		qry.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 		
-		String hqlString = "select p.pubId, p.pubFullcontent from Publications as p "
-				+ "where p.pubId = :publicationId";
-		Query qry = session.createQuery(hqlString );
-		qry.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-
-		Object[] data = (Object[]) qry.uniqueResult();
-		Publications publication = null;
-		if (data != null && data.length < 1) {
-			Long id = Long.valueOf(data[0].toString());
-			String content = data[1].toString();
-			publication = new Publications(id);
-			publication.setPubFullcontent(content);
-		}
-
+		Criteria c = session.createCriteria(Publications.class);
+		c.add(Restrictions.eq("pubId", publicationId));
+		c.setProjection(Projections.projectionList()
+				.add(Projections.property("pubId"), "pubId")
+				.add(Projections.property("pubFullcontent"), "pubFullcontent"));
+		c.setResultTransformer(Transformers.aliasToBean(Publications.class));
+		
+		Publications publication = (Publications) c.uniqueResult();
+		
 		return publication;
 	}
 	@Override
