@@ -339,6 +339,8 @@ public class PublicationImpl extends Observable implements IPublication {
 	public String toString() {
 		String result = new String();
 		result = result + "(" + getId() + ") ";
+		if(getYeardate()!=null)
+			result = result + " ["+getYeardate()+"] ";
 		for (IPublicationExternalSourceLink externalSourceLinks : this.publicationExternalIDSource)
 			result = result + externalSourceLinks.getSource() + ": " + externalSourceLinks.getSourceInternalId() + " ";
 		if (getTitle() != null && !getTitle().isEmpty())
