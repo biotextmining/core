@@ -254,8 +254,6 @@ public class CorpusServiceImpl implements ICorpusService {
 
 		AuthUsers user = userLogged.getCurrentUserLogged();
 		
-		System.out.println("chego");
-
 		Corpus corpus = corpusManagerDao.getCorpusDao().findById(corpusId);
 		if (corpus == null)
 			throw new CorpusException(ExceptionsCodes.codeNoCorpus, ExceptionsCodes.msgNoCorpus);
