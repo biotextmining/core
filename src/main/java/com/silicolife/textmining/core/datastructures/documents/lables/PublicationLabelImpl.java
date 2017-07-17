@@ -5,6 +5,10 @@ import com.silicolife.textmining.core.interfaces.core.document.labels.IPublicati
 
 public class PublicationLabelImpl implements IPublicationLabel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long id;
 	private String label;
 

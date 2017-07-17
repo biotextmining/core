@@ -23,6 +23,11 @@ import com.silicolife.textmining.core.interfaces.core.document.structure.IPublic
 
 public class PublicationImpl extends Observable implements IPublication {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private long id;
 	protected String title;
 	protected String authors;
@@ -152,6 +157,8 @@ public class PublicationImpl extends Observable implements IPublication {
 
 	@Override
 	public String getYeardate() {
+		if(yeardate!=null && yeardate.length()>4)
+			return yeardate.substring(0, 4);
 		return yeardate;
 	}
 

@@ -26,6 +26,12 @@ import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 
 public class AnnotatedDocumentImpl extends PublicationImpl implements IAnnotatedDocument{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
 	private List<IEntityAnnotation> entities;
 	private List<IEventAnnotation> events;
 	private IIEProcess process;

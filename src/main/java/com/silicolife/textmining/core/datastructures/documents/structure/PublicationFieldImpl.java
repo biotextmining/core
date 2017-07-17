@@ -6,6 +6,10 @@ import com.silicolife.textmining.core.interfaces.core.document.structure.IPublic
 
 public class PublicationFieldImpl implements IPublicationField {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long start;
 	private long end;
 	private String name;

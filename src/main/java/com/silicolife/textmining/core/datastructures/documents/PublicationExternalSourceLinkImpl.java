@@ -5,6 +5,10 @@ import com.silicolife.textmining.core.interfaces.core.document.IPublicationExter
 
 public class PublicationExternalSourceLinkImpl implements IPublicationExternalSourceLink {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String sourceInternalId;
 	private String source;
 	private long sourceId;

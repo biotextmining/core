@@ -1,5 +1,6 @@
 package com.silicolife.textmining.core.interfaces.process.IR;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +11,7 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.Daemo
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.relevance.IQueryPublicationRelevance;
 
-public interface IQuery {
+public interface IQuery extends Serializable{
 
 	/**
 	 * Method that return a queryID

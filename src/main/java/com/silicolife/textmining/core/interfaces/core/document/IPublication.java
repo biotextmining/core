@@ -2,6 +2,7 @@ package com.silicolife.textmining.core.interfaces.core.document;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import com.silicolife.textmining.core.interfaces.core.document.labels.IPublicationLabel;
@@ -14,7 +15,7 @@ import com.silicolife.textmining.core.interfaces.core.document.structure.IPublic
  *
  * @version 1.1 (14 Novembro 2009)
  */
-public interface IPublication {
+public interface IPublication extends Serializable{
 
 	/**
 	 * This method return a ID for a document

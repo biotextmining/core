@@ -35,6 +35,11 @@ import com.silicolife.textmining.core.interfaces.process.IR.IQueryOriginType;
  */
 public class QueryImpl extends Observable implements IQuery {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private long id;
 	@JsonDeserialize(as = QueryOriginTypeImpl.class)
 	private IQueryOriginType queryOriginType;

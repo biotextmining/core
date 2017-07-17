@@ -15,9 +15,13 @@ import java.awt.image.BufferedImage;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
+
+import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 
 /**
  * Class that contains some util methods 
@@ -188,6 +192,30 @@ public class Utils {
 			return true;
 		}
 		return false;
+	}
+	
+	public static Set<String> getDocummentClassification(IPublication publicaiton)
+	{
+		Set<String> out = new HashSet<>();
+		String  notes = publicaiton.getNotes();
+		if(notes !=null)
+		{
+			if(notes.startsWith("Classification IPCR"))
+			{
+				String notesChange = notes.replaceAll("Classification IPCR : ", "");
+				String[] classifications = notesChange.split(",");
+				for(String classification:classifications)
+				{
+					String classificationSRT = classification.trim();
+					if(!classificationSRT.isEmpty())
+					{
+						String classification3letter = classificationSRT.substring(0,3);
+						out.add(classification3letter);
+					}
+				}
+			}
+		}
+		return out;
 	}
 	
 }

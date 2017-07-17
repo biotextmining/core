@@ -1,6 +1,8 @@
 package com.silicolife.textmining.core.interfaces.core.document.labels;
 
-public interface IPublicationLabel {
+import java.io.Serializable;
+
+public interface IPublicationLabel extends Serializable {
 	public String getLabel();
 
 	public long getId();

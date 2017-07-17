@@ -8,6 +8,11 @@ import com.silicolife.textmining.core.interfaces.core.document.IPublicationEdita
 
 public class PublicationEditableImpl extends PublicationImpl  implements IPublicationEditable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public PublicationEditableImpl(IPublication pub) {
 		super(pub);
 	}

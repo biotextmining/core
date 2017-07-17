@@ -1,6 +1,8 @@
 package com.silicolife.textmining.core.interfaces.core.document;
 
-public interface IPublicationExternalSourceLink {
+import java.io.Serializable;
+
+public interface IPublicationExternalSourceLink extends Serializable{
 	public String getSource();
 
 	public long getSourceId();
