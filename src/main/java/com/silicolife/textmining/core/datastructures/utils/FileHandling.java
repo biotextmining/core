@@ -23,19 +23,19 @@ import java.util.Set;
  * 
  */
 public class FileHandling {
-	
+
 	public static boolean createDirectory(String dir){
-		
+
 		return (new File(dir)).mkdir();
-	
+
 	}
-	
+
 	public static boolean existDirectory(String dir){
-	
+
 		return (new File(dir)).exists();
-		
+
 	}
-	
+
 	/**
 	 * Method that remove a directory
 	 * 
@@ -45,7 +45,7 @@ public class FileHandling {
 	 */
 	public static boolean removeDirectory(File dir){
 		//If the directory is not empty, it is necessary to first recursively delete all files and subdirectories in the directory. Here is a method that will delete a non-empty directory.
-		
+
 		if (dir.isDirectory()) {
 			String[] children = dir.list();
 			for(String child: children)
@@ -58,12 +58,12 @@ public class FileHandling {
 			}
 			return true;
 		}
-			
+
 		// The directory is now empty so delete it
 		return removeEmptyDirectory(dir);
-	
+
 	}
-	
+
 	public static int getFileLines(File file) throws IOException
 	{
 		FileReader fr = new FileReader(file);
@@ -74,7 +74,7 @@ public class FileHandling {
 		fr.close();
 		return lines;
 	}
-	
+
 	public static Set<String> getFileLinesTExt(File file) throws IOException{
 		Set<String> lines = new HashSet<String>();
 		FileReader fr = new FileReader(file);
@@ -89,11 +89,11 @@ public class FileHandling {
 		fr.close();
 		return lines;
 	}
-	
+
 	private static boolean removeEmptyDirectory(File dir){		
 		return dir.delete();
 	}
-	
+
 	/**
 	 * Method that copy a file
 	 * 
@@ -108,14 +108,14 @@ public class FileHandling {
 			FileWriter fw = new FileWriter(out);
 			BufferedReader br = new BufferedReader(fr);
 			BufferedWriter bw = new BufferedWriter(fw);
-			
+
 			String line = br.readLine();
 			while(line != null)
 			{
 				bw.write(line + "\n");
 				line = br.readLine();
 			}
-			
+
 			br.close();
 			bw.close();
 			fr.close();
@@ -126,7 +126,7 @@ public class FileHandling {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Method that copy a file in Binary
 	 * 
@@ -136,44 +136,44 @@ public class FileHandling {
 	 * 		   false -- otherwise
 	 */
 	public static void copy(File src, File dst) throws IOException {
-        InputStream in = new FileInputStream(src);
-        OutputStream out = new FileOutputStream(dst);
-    
-        // Transfer bytes from in to out
-        byte[] buf = new byte[1024];
-        int len;
-        while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
-        }
-        in.close();
-        out.close();
-    }
-	
+		InputStream in = new FileInputStream(src);
+		OutputStream out = new FileOutputStream(dst);
+
+		// Transfer bytes from in to out
+		byte[] buf = new byte[1024];
+		int len;
+		while ((len = in.read(buf)) > 0) {
+			out.write(buf, 0, len);
+		}
+		in.close();
+		out.close();
+	}
+
 	public static boolean appendToFile(String text, File in, File out){
 		try {
 			FileReader fr = new FileReader(in);
 			FileWriter fw = new FileWriter(out);
 			BufferedReader br = new BufferedReader(fr);
 			BufferedWriter bw = new BufferedWriter(fw);
-			
+
 			String line = text;
 			while(line != null)
 			{
 				bw.write(line + "\n");
 				line = br.readLine();
 			}
-			
+
 			br.close();
 			bw.close();
 			fr.close();
 			fw.close();
- 		} catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
 		return true;
 	}
-	
+
 	/**
 	 *  Method that return a list with names of the files is a given directory
 	 *  
@@ -182,16 +182,16 @@ public class FileHandling {
 	 */
 	public static ArrayList<String> listFileNames(File directory){
 		ArrayList<String> fileList = new ArrayList<String>();
-		
+
 		if(!directory.isDirectory())
 			return fileList;
-		
+
 		for(File file: directory.listFiles())
 			fileList.add(file.getName());
-		
+
 		return fileList;
 	}
-	
+
 	public static void writeInformationOnFile(File fileInput,String theText) throws IOException 
 	{
 		FileWriter fw = new FileWriter(fileInput);
@@ -203,25 +203,25 @@ public class FileHandling {
 
 	public static String fileToString(File file) throws FileNotFoundException {
 		String result = null;
-        DataInputStream in = null;
+		DataInputStream in = null;
 
-        try {
-            byte[] buffer = new byte[(int) file.length()];
-            in = new DataInputStream(new FileInputStream(file));
-            in.readFully(buffer);
-            result = new String(buffer);
-        } catch (IOException e) {
-            throw new RuntimeException("IO problem in fileToString", e);
-        } finally {
-            try {
-                in.close();
-            } catch (IOException e) { /* ignore it */
-            }
-        }
-        return result;
+		try {
+			byte[] buffer = new byte[(int) file.length()];
+			in = new DataInputStream(new FileInputStream(file));
+			in.readFully(buffer);
+			result = new String(buffer);
+		} catch (IOException e) {
+			throw new RuntimeException("IO problem in fileToString", e);
+		} finally {
+			try {
+				in.close();
+			} catch (IOException e) { /* ignore it */
+			}
+		}
+		return result;
 	} 
-	
-	
+
+
 	/**
 	 * MEthod that reads a file and return a set of lines text
 	 * 
@@ -237,7 +237,7 @@ public class FileHandling {
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
 		String strLine;
 		while ((strLine = br.readLine()) != null)   {
-			
+
 			files.add(strLine);
 		}
 		br.close();
@@ -245,7 +245,7 @@ public class FileHandling {
 		fstream.close();
 		return files;
 	}
-	
+
 	/**
 	 * MEthod that reads a file and return a set of lines text
 	 * 
@@ -270,7 +270,7 @@ public class FileHandling {
 		fstream.close();
 		return null;
 	}
-	
+
 	public static String getFileContent(File filePath) throws FileNotFoundException, IOException
 	{
 		List<String> lines = getFileLinesContent(filePath);
@@ -281,8 +281,17 @@ public class FileHandling {
 		}
 		return content;
 	}
-	
-	
-	
-	
+
+	public static String convertImputStream(InputStream inputStreamObject) throws IOException
+	{
+		BufferedReader streamReader = new BufferedReader(new InputStreamReader(inputStreamObject, "UTF-8"));
+		StringBuilder responseStrBuilder = new StringBuilder();
+
+		String inputStr;
+		while ((inputStr = streamReader.readLine()) != null)
+				responseStrBuilder.append(inputStr);
+		return responseStrBuilder.toString();
+	}
+
+
 }
