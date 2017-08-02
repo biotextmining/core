@@ -443,6 +443,22 @@ public class PublicationImpl extends Observable implements IPublication {
 			return false;
 		return true;
 	}
+
+	public String toString2() {
+		String toString = new String();
+		toString = toString + "{" + "\n";
+		toString = toString + "id="+id + "\n";
+		toString = toString + "publicationExternalIDSource="+publicationExternalIDSource+ "\n";
+		toString = toString + "title="+title+ "\n";
+		toString = toString + "authors="+authors+ "\n";
+		toString = toString + "yeardate="+yeardate+ "\n";
+		toString = toString + "fulldate="+fulldate+ "\n";	
+		toString = toString + "notes="+notes+ "\n";
+		toString = toString + "externalLink="+externalLink+ "\n";
+		toString = toString + "abstractSection="+abstractSection+ "\n";
+		toString = toString + "}\n";
+		return toString;
+	}
 	
 	
 
