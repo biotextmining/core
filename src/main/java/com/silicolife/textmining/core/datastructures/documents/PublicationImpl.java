@@ -3,8 +3,10 @@ package com.silicolife.textmining.core.datastructures.documents;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Observable;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -392,6 +394,15 @@ public class PublicationImpl extends Observable implements IPublication {
 				return links.getSourceInternalId().trim();
 		}
 		return null;
+	}
+	
+	public static Set<String> getPublicationExternalIDSetForSource(IPublication publication, String source) {
+		Set<String> out = new HashSet<>();
+		for (IPublicationExternalSourceLink links : publication.getPublicationExternalIDSource()) {
+			if (links.getSource().equals(source))
+				out.add(links.getSourceInternalId().trim());
+		}
+		return out;
 	}
 
 	public static String getPublicationExternalIDsStream(IPublication publication) {
