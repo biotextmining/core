@@ -12,5 +12,11 @@ public class PDFToTEXTTest {
 		String url = "src/test/resources/pdf/2780325519275702332.pdf";
 		PDFtoText.convertPDFDocument(url);
 	}
+	
+	@Test
+	public void test2() throws FileNotFoundException, IOException {
+		String url = "src/test/resources/pdf/1000.pdf";
+		System.out.println(PDFtoText.convertPDFDocument(url));
+	}
 
 }
