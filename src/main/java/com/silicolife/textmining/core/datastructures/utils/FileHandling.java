@@ -17,6 +17,16 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.pdfbox.exceptions.COSVisitorException;
+
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfWriter;
 /**
  * This class contain method for manager directory and files
  * 
@@ -289,9 +299,23 @@ public class FileHandling {
 
 		String inputStr;
 		while ((inputStr = streamReader.readLine()) != null)
-				responseStrBuilder.append(inputStr);
+			responseStrBuilder.append(inputStr);
 		return responseStrBuilder.toString();
 	}
+
+	public static void createPDFFileWithText(String filepath, String fullTextContent) throws COSVisitorException, IOException, DocumentException {
+		Document document = new Document();
+		PdfWriter.getInstance(document, new FileOutputStream(filepath));
+		document.open();
+		Font normal =FontFactory.getFont(FontFactory.TIMES_ROMAN, 12);
+		Paragraph p = new Paragraph(fullTextContent, normal);
+		p.setAlignment(Element.ALIGN_JUSTIFIED);
+		document.add(p);
+		document.close();
+	}
+
+
+
 
 
 }
