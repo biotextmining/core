@@ -200,14 +200,16 @@
 			<artifactId>hibernate-search-orm</artifactId>
 			<version>5.6.0.Beta2</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.11</version>
+		</dependency>
 	</dependencies>
 
-	<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
-	<dependency>
-		<groupId>com.itextpdf</groupId>
-		<artifactId>itextpdf</artifactId>
-		<version>5.5.11</version>
-	</dependency>
+
 
 
 	<build>
