@@ -3,7 +3,6 @@ package com.silicolife.textmining.core.datastructures.documents;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +25,18 @@ public class PDFtoText {
 
 
 
-	public static String convertPDFDocument(String url) throws FileNotFoundException, IOException {
-
-		PDFTextStripper stripper = new PDFTextStripper();
-		PDFParser parser = new PDFParser(new FileInputStream(url));
-		parser.parse();
-		PDDocument doc = parser.getPDDocument();
-		String text = stripper.getText(doc);
-		parser.clearResources();
-		doc.close();
+	public static String convertPDFDocument(String url) throws IOException {
+		String text = null;
+		try {
+			PDFTextStripper stripper = new PDFTextStripper();
+			PDFParser parser = new PDFParser(new FileInputStream(url));
+			parser.parse();
+			PDDocument doc = parser.getPDDocument();
+			text = stripper.getText(doc);
+			parser.clearResources();
+			doc.close();
+		} catch (IOException e) {
+		}
 		if(text==null || text.isEmpty() || verifyValidOCRlenght(text)==false)
 		{
 			try {
@@ -53,7 +55,7 @@ public class PDFtoText {
 		}
 		return NormalizationForm.removeOffsetProblemSituation(text);
 	}
-	
+
 	private static String convertEncryptedPDFDocument(String url) throws IOException, TesseractException{
 		int imageDPIValue = 300;
 		PDDocument document = PDDocument.loadNonSeq(new File(url), null);
@@ -73,7 +75,7 @@ public class PDFtoText {
 		String originalText = tessaract.doOCR(pagesToOCR, null);
 		return originalText;
 	}
-	
+
 	/**
 	 * Apply OCR algorithm to a PDF file given an pathway to the file
 	 * 
@@ -85,8 +87,8 @@ public class PDFtoText {
 		String result = instance.doOCR(imageList, null);
 		return result;
 	}
-	
-	
+
+
 	private static boolean verifyValidOCRlenght(String text){
 		String newText = text.replaceAll("\\s", "");
 		if (newText.length()<200){
@@ -100,4 +102,4 @@ public class PDFtoText {
 
 
 
-	
+
