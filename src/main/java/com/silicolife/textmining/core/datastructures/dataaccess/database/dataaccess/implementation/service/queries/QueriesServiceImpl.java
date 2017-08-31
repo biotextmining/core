@@ -142,8 +142,11 @@ public class QueriesServiceImpl implements IQueriesService {
 
 		List<IQuery> listQueries_ = new ArrayList<IQuery>();
 		for (Queries query : listQueries) {
-			IQuery query_ = QueriesWrapperSpeedUp.convertToAnoteStructure(query);
-			listQueries_.add(query_);
+			if(query.isQuActive())
+			{
+				IQuery query_ = QueriesWrapperSpeedUp.convertToAnoteStructure(query);
+				listQueries_.add(query_);
+			}
 		}
 
 		return listQueries_;
@@ -160,8 +163,11 @@ public class QueriesServiceImpl implements IQueriesService {
 
 		List<IQuery> listQueries_ = new ArrayList<IQuery>();
 		for (Queries query : listQueries) {
-			IQuery query_ = QueriesWrapper.convertToAnoteStructure(query);
-			listQueries_.add(query_);
+			if(query.isQuActive())
+			{
+				IQuery query_ = QueriesWrapper.convertToAnoteStructure(query);
+				listQueries_.add(query_);
+			}
 		}
 
 		return listQueries_;
@@ -185,8 +191,11 @@ public class QueriesServiceImpl implements IQueriesService {
 
 		List<IQuery> listQueries_ = new ArrayList<IQuery>();
 		for (Queries query : listQueries) {
-			IQuery query_ = QueriesWrapper.convertToAnoteStructure(query);
-			listQueries_.add(query_);
+			if(query.isQuActive())
+			{
+				IQuery query_ = QueriesWrapper.convertToAnoteStructure(query);
+				listQueries_.add(query_);
+			}
 		}
 
 		return listQueries_;
