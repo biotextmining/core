@@ -91,8 +91,11 @@ public class CorpusServiceImpl implements ICorpusService {
 
 		List<ICorpus> corpus_ = new ArrayList<ICorpus>();
 		for (Corpus corpusObj : corpus) {
-			ICorpus corpusObj_ = CorpusWrapper.convertToAnoteStructure(corpusObj);
-			corpus_.add(corpusObj_);
+			if(corpusObj.isCrpActive())
+			{
+				ICorpus corpusObj_ = CorpusWrapper.convertToAnoteStructure(corpusObj);
+				corpus_.add(corpusObj_);
+			}
 		}
 		//		if (corpus_.size() == 0)
 		//			return null;
@@ -122,8 +125,11 @@ public class CorpusServiceImpl implements ICorpusService {
 
 		List<ICorpus> corpus_ = new ArrayList<ICorpus>();
 		for (Corpus corpusObj : corpus) {
-			ICorpus corpusObj_ = CorpusWrapper.convertToAnoteStructure(corpusObj);
-			corpus_.add(corpusObj_);
+			if(corpusObj.isCrpActive())
+			{
+				ICorpus corpusObj_ = CorpusWrapper.convertToAnoteStructure(corpusObj);
+				corpus_.add(corpusObj_);
+			}
 		}
 		//		if (corpus_.size() == 0)
 		//			return null;
@@ -399,8 +405,11 @@ public class CorpusServiceImpl implements ICorpusService {
 
 		List<ICorpus> listCorpus_ = new ArrayList<ICorpus>();
 		for (Corpus corpus : listCorpus) {
-			ICorpus corpus_ = CorpusWrapper.convertToAnoteStructure(corpus);
-			listCorpus_.add(corpus_);
+			if(corpus.isCrpActive())
+			{
+				ICorpus corpus_ = CorpusWrapper.convertToAnoteStructure(corpus);
+				listCorpus_.add(corpus_);
+			}
 		}
 
 		return listCorpus_;

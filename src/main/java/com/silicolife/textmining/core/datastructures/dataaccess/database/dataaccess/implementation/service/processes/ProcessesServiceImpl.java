@@ -177,10 +177,12 @@ public class ProcessesServiceImpl implements IProcessesService {
 
 		List<IIEProcess> listProcesses_ = new ArrayList<IIEProcess>();
 		for (Processes process : listProcesses) {
-			IIEProcess process_ = ProcessWrapper.convertToAnoteStructure(process);
-			listProcesses_.add(process_);
+			if(process.isProActive())
+			{
+				IIEProcess process_ = ProcessWrapper.convertToAnoteStructure(process);
+				listProcesses_.add(process_);
+			}
 		}
-
 		return listProcesses_;
 	}
 
@@ -196,8 +198,11 @@ public class ProcessesServiceImpl implements IProcessesService {
 		
 		List<IIEProcess> listProcesses_ = new ArrayList<IIEProcess>();
 		for (Processes process : listProcesses) {
-			IIEProcess process_ = ProcessWrapper.convertToAnoteStructure(process);
-			listProcesses_.add(process_);
+			if(process.isProActive())
+			{
+				IIEProcess process_ = ProcessWrapper.convertToAnoteStructure(process);
+				listProcesses_.add(process_);
+			}
 		}
 
 		return listProcesses_;

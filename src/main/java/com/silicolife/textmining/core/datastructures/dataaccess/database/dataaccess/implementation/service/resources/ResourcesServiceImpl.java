@@ -58,10 +58,12 @@ public class ResourcesServiceImpl implements IResourcesService {
 		List<Resources> resources = resourcesManagerDao.getResourcesAuxDao().findResourcesByAttributes(userId, resourceType.getRtyId(), ResourcesTypeUtils.resources.getName());
 
 		for (Resources resource : resources) {
-			IResource<IResourceElement> resource_ = ResourcesWrapper.convertToAnoteStructure(resource);
-			resources_.add(resource_);
+			if(resource.isResoActive())
+			{
+				IResource<IResourceElement> resource_ = ResourcesWrapper.convertToAnoteStructure(resource);
+				resources_.add(resource_);
+			}
 		}
-
 		return resources_;
 
 	}
@@ -160,8 +162,11 @@ public class ResourcesServiceImpl implements IResourcesService {
 
 		List<IResource<IResourceElement>> listResources_ = new ArrayList<IResource<IResourceElement>>();
 		for (Resources resource : listResources) {
-			IResource<IResourceElement> resource_ = ResourcesWrapper.convertToAnoteStructure(resource);
-			listResources_.add(resource_);
+			if(resource.isResoActive())
+			{
+				IResource<IResourceElement> resource_ = ResourcesWrapper.convertToAnoteStructure(resource);
+				listResources_.add(resource_);
+			}
 		}
 
 		return listResources_;
