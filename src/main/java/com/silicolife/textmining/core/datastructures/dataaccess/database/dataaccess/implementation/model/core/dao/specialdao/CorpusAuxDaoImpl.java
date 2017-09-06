@@ -119,6 +119,7 @@ public class CorpusAuxDaoImpl implements CorpusAuxDao {
 		return processes;
 	}
 	
+	
 	public Integer CountCorpusByAttributes(Long auId, String corpusstr) {
 		Session session = sessionFactory.getCurrentSession();
 		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " + "INNER JOIN corpus as b ON a.audo_uid_resource = b.crp_id "
@@ -175,25 +176,7 @@ public class CorpusAuxDaoImpl implements CorpusAuxDao {
 		return result;
 	}
 
-@Override
-	public List<Processes> findProcessesByCorpusId(Long corpusId,Long userID,String str) {
 
-		Session session = sessionFactory.getCurrentSession();
-		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " 
-							+ "INNER JOIN processes as b ON a.audo_uid_resource = b.pro_id "
-							+ "INNER JOIN corpus_has_processes as c ON c.chp_process_id = b.pro_id "
-							+ "WHERE audo_user_id = ? AND audo_type_resource = ? AND c.chp_corpus_id = ? ";
-		SQLQuery qry = session.createSQLQuery(sqlString);
-		qry.setParameter(0, userID);
-		qry.setParameter(1, str);
-		qry.setParameter(2, corpusId);
-		qry.addEntity("processes", Processes.class);
-		
-		@SuppressWarnings("unchecked")
-		List<Processes> processes = qry.list();
-
-		return processes;
-	}
 
 
 @Override

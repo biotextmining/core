@@ -10,7 +10,7 @@ public enum PublicationLuceneIndexFields {
 	abstractSection("abstractCS", "abstractNCS" ),
 	fullContent("fullContentCS", "fullContentNCS"),
 	notes("notesCS","notesNCS"),
-	queryId("queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId");
+	queryId("queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId"),
 	corpusId("corpusHasPublicationses.id.chpCorpusId", "corpusHasPublicationses.id.chpCorpusId");
 	
 	
