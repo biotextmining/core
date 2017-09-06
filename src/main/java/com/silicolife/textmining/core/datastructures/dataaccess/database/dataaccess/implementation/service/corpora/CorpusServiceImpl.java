@@ -254,6 +254,25 @@ public class CorpusServiceImpl implements ICorpusService {
 
 		return documentSet;
 	}
+	
+	@Override
+	public IDocumentSet getCorpusPublicationsPaginatedWSort(Long corpusId, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) throws CorpusException {
+		Corpus corpus = corpusManagerDao.getCorpusDao().findById(corpusId);
+		if (corpus == null)
+			throw new CorpusException(ExceptionsCodes.codeNoCorpus, ExceptionsCodes.msgNoCorpus);
+
+		IDocumentSet documentSet = new DocumentSetImpl();
+		List<Publications> publications = corpusManagerDao.getPublicationsAuxDao().findPublicationsByCorpusIdPaginatedWSort(corpusId, paginationIndex, paginationSize, asc, sortBy);
+		for (Publications publication : publications) {
+			IPublication publication_ = PublicationsWrapper.convertToAnoteStructure(publication);
+			documentSet.addDocument(publication_.getId(), publication_);
+		}
+
+		//		if (documentSet.size() == 0)
+		//			return null;
+
+		return documentSet;
+	}
 
 	@Override
 	public List<IIEProcess> getCorpusProcesses(Long corpusId) throws CorpusException {
@@ -266,6 +285,44 @@ public class CorpusServiceImpl implements ICorpusService {
 
 		List<IIEProcess> processes_ = new ArrayList<IIEProcess>();
 		List<Processes> processes = corpusManagerDao.getCorpusAuxDao().findProcessesByCorpusId(corpusId,user.getAuId(), processStr);
+		for (Processes process : processes) {
+			IIEProcess process_ = ProcessWrapper.convertToAnoteStructure(process);
+			processes_.add(process_);
+		}
+		//		if (processes_.size() == 0)
+		//			return null;
+
+		return processes_;
+	}
+	
+	@Override
+	public Integer countCorpusProcesses(Long corpusId) throws CorpusException {
+
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		
+
+		Corpus corpus = corpusManagerDao.getCorpusDao().findById(corpusId);
+		if (corpus == null)
+			throw new CorpusException(ExceptionsCodes.codeNoCorpus, ExceptionsCodes.msgNoCorpus);
+
+		List<IIEProcess> processes_ = new ArrayList<IIEProcess>();
+		List<Processes> processes = corpusManagerDao.getCorpusAuxDao().findProcessesByCorpusId(corpusId,user.getAuId(), processStr);
+		
+		return processes.size();
+	}
+	
+	@Override
+	public List<IIEProcess> getCorpusProcessesPaginated(Long corpusId, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) throws CorpusException {
+
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		
+
+		Corpus corpus = corpusManagerDao.getCorpusDao().findById(corpusId);
+		if (corpus == null)
+			throw new CorpusException(ExceptionsCodes.codeNoCorpus, ExceptionsCodes.msgNoCorpus);
+
+		List<IIEProcess> processes_ = new ArrayList<IIEProcess>();
+		List<Processes> processes = corpusManagerDao.getCorpusAuxDao().findProcessesByCorpusIdPaginated(corpusId,user.getAuId(), processStr, paginationIndex, paginationSize, asc, sortBy);
 		for (Processes process : processes) {
 			IIEProcess process_ = ProcessWrapper.convertToAnoteStructure(process);
 			processes_.add(process_);

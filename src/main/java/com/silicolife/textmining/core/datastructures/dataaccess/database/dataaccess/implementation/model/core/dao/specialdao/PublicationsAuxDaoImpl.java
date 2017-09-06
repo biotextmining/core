@@ -135,6 +135,33 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 	}
 	
 	@Override
+	@SuppressWarnings("unchecked")
+	public List<Publications> findPublicationsByCorpusIdPaginatedWSort(Long corpusId, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Publications.class, "pub");
+		c.createAlias("pub.corpusHasPublicationses", "corpusHasPub");
+		c.setFetchMode("pub.corpusHasPublicationses", FetchMode.JOIN);
+		c.add(Restrictions.eq("corpusHasPub.id.chpCorpusId", corpusId));
+		if(!sortBy.equals("none")){
+			String uniqueId = PublicationFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+			String sortAlias = "pub."+uniqueId;
+			
+			if(asc)
+				c.addOrder(Order.asc(sortAlias));
+			else
+				c.addOrder(Order.desc(sortAlias));
+			}
+		c.setFirstResult(paginationIndex);
+		c.setMaxResults(paginationSize);
+		c.setFetchSize(paginationSize);
+		
+		List<Publications> publications = c.list();
+
+		return publications;
+	}
+	
+	@Override
 	public Long countPublicationsNotProcessedInProcess(Long corpusId, Long processId){
 		
 		Session session = sessionFactory.getCurrentSession();

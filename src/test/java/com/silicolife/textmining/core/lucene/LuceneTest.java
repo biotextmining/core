@@ -28,7 +28,7 @@ import com.silicolife.textmining.core.interfaces.resource.IResourceElementsFilte
 
 public class LuceneTest {
 
-//	@Test
+	@Test
 	public void rebuildIndex() throws InvalidDatabaseAccess, ANoteException {
 		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","maria","root","admin");
 		InitConfiguration.getDataAccess().rebuildLuceneIndex();

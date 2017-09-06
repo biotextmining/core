@@ -16,6 +16,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublications;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Processes;
 import com.silicolife.textmining.core.datastructures.documents.corpus.CorpusFieldsEnum;
+import com.silicolife.textmining.core.datastructures.documents.ProcessesFieldsEnum;
 
 @Repository
 public class CorpusAuxDaoImpl implements CorpusAuxDao {
@@ -174,7 +175,76 @@ public class CorpusAuxDaoImpl implements CorpusAuxDao {
 		return result;
 	}
 
+@Override
+	public List<Processes> findProcessesByCorpusId(Long corpusId,Long userID,String str) {
 
+		Session session = sessionFactory.getCurrentSession();
+		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " 
+							+ "INNER JOIN processes as b ON a.audo_uid_resource = b.pro_id "
+							+ "INNER JOIN corpus_has_processes as c ON c.chp_process_id = b.pro_id "
+							+ "WHERE audo_user_id = ? AND audo_type_resource = ? AND c.chp_corpus_id = ? ";
+		SQLQuery qry = session.createSQLQuery(sqlString);
+		qry.setParameter(0, userID);
+		qry.setParameter(1, str);
+		qry.setParameter(2, corpusId);
+		qry.addEntity("processes", Processes.class);
+		
+		@SuppressWarnings("unchecked")
+		List<Processes> processes = qry.list();
+
+		return processes;
+	}
+
+
+@Override
+	public List<Processes> findProcessesByCorpusIdPaginated(Long corpusId,Long userID,String str, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+
+		Session session = sessionFactory.getCurrentSession();
+		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " 
+							+ "INNER JOIN processes as b ON a.audo_uid_resource = b.pro_id "
+							+ "INNER JOIN corpus_has_processes as c ON c.chp_process_id = b.pro_id ";
+							
+		
+		if(!sortBy.equals("none")){
+		String uniqueId = ProcessesFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+		String ord = " DESC";
+		if(asc){
+			ord = " ASC";
+		}
+		
+		if(sortBy.equals("processType") | sortBy.equals("processOrigin")){
+			String tableName = "";
+			String idAssociation = "";
+			if(sortBy.equals("processType")) {
+				tableName = "process_types";
+				idAssociation = " as pt on pt.pt_id = b.pro_process_type_id ";
+			}
+			if(sortBy.equals("processOrigin")) {
+				tableName = "process_origins";
+				idAssociation = " as po on po.po_id = b.pro_process_origin_id ";
+				}
+			
+			sqlString = sqlString + "INNER JOIN "+tableName+idAssociation;
+		}
+		
+		sqlString = sqlString+"WHERE audo_user_id = ? AND audo_type_resource = ? AND c.chp_corpus_id = ? "+"ORDER BY "+ uniqueId+ord;
+		}
+		else{
+			sqlString = sqlString +"WHERE audo_user_id = ? AND audo_type_resource = ? AND c.chp_corpus_id = ? ";
+		}
+		
+		sqlString = sqlString+" LIMIT "+paginationSize+" OFFSET "+ paginationIndex;
+		SQLQuery qry = session.createSQLQuery(sqlString);
+		qry.setParameter(0, userID);
+		qry.setParameter(1, str);
+		qry.setParameter(2, corpusId);
+		qry.addEntity("processes", Processes.class);
+		
+		@SuppressWarnings("unchecked")
+		List<Processes> processes = qry.list();
+
+		return processes;
+	}
 
 	@Override
 	public List<Corpus> findCorpusByAttributes(long auId, String resourceType,String permission) {

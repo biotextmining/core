@@ -1,3 +1,4 @@
+<<<<<<< Upstream, based on origin/hcosta
 package com.silicolife.textmining.core.nlp;
 
 import java.io.IOException;
@@ -19,3 +20,11 @@ public class OpenNLPTest {
 			System.out.println(sentence);
 	}	
 }
+=======
+package com.silicolife.textmining.core.nlp;
+
+
+public class OpenNLPTest {
+
+}
+>>>>>>> 39213a9 [UPDATE] Publication classes for search

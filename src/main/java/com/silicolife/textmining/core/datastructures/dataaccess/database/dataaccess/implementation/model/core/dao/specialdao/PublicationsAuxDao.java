@@ -38,4 +38,7 @@ public interface PublicationsAuxDao {
 	public List<Object[]> getPublicationIdBySourceTypeAndId(Long sourceId, String id);
 
 	public Publications getPublicationBySourceTypeAndId(Long sourceId, String id);
+
+	public List<Publications> findPublicationsByCorpusIdPaginatedWSort(Long corpusId, Integer paginationIndex,
+			Integer paginationSize, boolean asc, String sortBy);
 }

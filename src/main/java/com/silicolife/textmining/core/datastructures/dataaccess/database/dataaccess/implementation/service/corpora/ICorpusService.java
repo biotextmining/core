@@ -147,4 +147,12 @@ public interface ICorpusService {
 	public Integer countAllCorpus();
 
 	public List<ICorpus> getAllCorpusPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
+
+	public IDocumentSet getCorpusPublicationsPaginatedWSort(Long corpusId, Integer paginationIndex, Integer paginationSize,
+			boolean asc, String sortBy) throws CorpusException;
+
+	public List<IIEProcess> getCorpusProcessesPaginated(Long corpusId, Integer paginationIndex, Integer paginationSize,
+			boolean asc, String sortBy) throws CorpusException;
+
+	public Integer countCorpusProcesses(Long corpusId) throws CorpusException;
 }

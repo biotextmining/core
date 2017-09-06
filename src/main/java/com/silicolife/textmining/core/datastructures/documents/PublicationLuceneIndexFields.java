@@ -11,6 +11,8 @@ public enum PublicationLuceneIndexFields {
 	fullContent("fullContentCS", "fullContentNCS"),
 	notes("notesCS","notesNCS"),
 	queryId("queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId");
+	corpusId("corpusHasPublicationses.id.chpCorpusId", "corpusHasPublicationses.id.chpCorpusId");
+	
 	
 	private final String cS;
 	private final String nCS;
