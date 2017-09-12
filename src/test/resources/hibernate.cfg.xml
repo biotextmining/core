@@ -33,16 +33,11 @@
 		<property name="hibernate.use_sql_comments">false</property>
 		
 		<!--  Hibernate Search configuration -->
-		  
+		<!-- 
 		<property name="hibernate.search.default.directory_provider">filesystem</property>
 		<property name="hibernate.search.default.indexBase">/var/lucene/indexes</property>		
-<<<<<<< Upstream, based on origin/hcosta
-		-->
-		
-=======
-		
-
->>>>>>> 39213a9 [UPDATE] Publication classes for search
+ 		-->
+ 		
 		<mapping
 			class="com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ClusterLabels" />
 		<mapping
