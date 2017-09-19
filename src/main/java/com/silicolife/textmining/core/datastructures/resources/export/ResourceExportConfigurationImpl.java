@@ -46,10 +46,10 @@ public class ResourceExportConfigurationImpl implements IResourceExportConfigura
 	}
 	
 	private static CSVFileConfigurations getCSVDefaultConfigurations() {
-		String termColumn= LanguageProperties.getLanguageStream("pt.uminho.anote2.general.term"); 
-		String externalIDColumn= LanguageProperties.getLanguageStream("pt.uminho.anote2.general.externalids"); 
-		String synonymsColumn= LanguageProperties.getLanguageStream("pt.uminho.anote2.general.synonyms");
-		String classColumn= LanguageProperties.getLanguageStream("pt.uminho.anote2.general.class");
+		String termColumn= "Term"; 
+		String externalIDColumn= "External Ids"; 
+		String synonymsColumn= "Synonyms";
+		String classColumn= "Class";
 		Map<String, ColumnParameters> columnNameColumnParameters = new HashMap<String, ColumnParameters>();
 		ColumnParameters termColum = new ColumnParameters(0, null, null);
 		columnNameColumnParameters.put(termColumn, termColum );

@@ -13,9 +13,11 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -205,6 +207,16 @@ public class Utils {
 		return false;
 	}
 	
+	public static List<String> parseHeader(IPublication publicaiton)
+	{
+		List<String> out = new ArrayList<>();
+		String  notes = publicaiton.getNotes();
+		String[] notepieces = notes.split("Classification IPCR|Classification|Owners");
+		for(String nodePiece:notepieces)
+			out.add(nodePiece);
+		return out;
+	}
+	
 	public static Set<String> getDocummentClassification(IPublication publicaiton)
 	{
 		Set<String> out = new HashSet<>();
@@ -227,7 +239,7 @@ public class Utils {
 	}
 
 	private static void getClassifications(Set<String> out, String notesChange) {
-		String[] classifications = notesChange.split(",");
+		String[] classifications = notesChange.split("|");
 		for(String classification:classifications)
 		{
 			String classificationSRT = classification.trim();
