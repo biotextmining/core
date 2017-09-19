@@ -31,12 +31,23 @@ import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 public class Utils {
 	
 	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	public static final String DATE_FORMAT2 = "yyyy-MM-dd";
+
 	public static final SimpleDateFormat SimpleDataFormat= new SimpleDateFormat(DATE_FORMAT);
+	public static final SimpleDateFormat SimpleDataFormat2= new SimpleDateFormat(DATE_FORMAT2);
+
 	/**Returns the current time of the system */
 	public static String currentTime() {
 	    
 	  	Calendar cal = Calendar.getInstance();
 	    return SimpleDataFormat.format(cal.getTime());
+	}
+	
+	/**Returns the current time of the system */
+	public static String currentTimeSimple() {
+	    
+	  	Calendar cal = Calendar.getInstance();
+	    return SimpleDataFormat2.format(cal.getTime());
 	}
 	
 	public static String formatDate(String date){
@@ -200,19 +211,59 @@ public class Utils {
 		String  notes = publicaiton.getNotes();
 		if(notes !=null)
 		{
+			String notesChange;
 			if(notes.startsWith("Classification IPCR"))
 			{
-				String notesChange = notes.replaceAll("Classification IPCR : ", "");
-				String[] classifications = notesChange.split(",");
-				for(String classification:classifications)
-				{
-					String classificationSRT = classification.trim();
-					if(!classificationSRT.isEmpty())
-					{
-						String classification3letter = classificationSRT.substring(0,3);
-						out.add(classification3letter);
-					}
-				}
+				notesChange = notes.replaceAll("Classification IPCR : ", "");
+				getClassifications(out, notesChange);
+			}
+			else if(notes.contains("Owners") && notes.contains("Classification IPCR"))
+			{
+				notesChange = notes.replaceAll(".*Classification IPCR : ", "");
+				getClassifications(out, notesChange);
+			}
+		}
+		return out;
+	}
+
+	private static void getClassifications(Set<String> out, String notesChange) {
+		String[] classifications = notesChange.split(",");
+		for(String classification:classifications)
+		{
+			String classificationSRT = classification.trim();
+			if(!classificationSRT.isEmpty() && classificationSRT.length() > 2)
+			{
+				String classification3letter = classificationSRT.substring(0,3);
+				out.add(classification3letter);
+			}
+		}
+	}
+	
+	private static void getOwnersSRT(Set<String> out, String notesChange) {
+		String[] classifications = notesChange.split(",");
+		for(String classification:classifications)
+		{
+			String classificationSRT = classification.trim();
+			if(!classificationSRT.isEmpty())
+			{
+				out.add(classificationSRT);
+			}
+		}
+	}
+
+	public static Set<String> getDocummentOwners(IPublication publication) {
+		Set<String> out = new HashSet<>();
+		String  notes = publication.getNotes();
+		if(notes !=null)
+		{
+			if(notes.contains("Owners") &&  !notes.contains("Classification"))
+			{
+				getOwnersSRT(out, notes);
+			}
+			else if(notes.contains("Owners"))
+			{
+				String notesChange = notes.replaceAll("Classification.*", "");
+				getOwnersSRT(out, notesChange);
 			}
 		}
 		return out;
