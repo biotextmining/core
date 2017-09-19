@@ -1,6 +1,15 @@
 package com.silicolife.textmining.core.datastructures.resources.export;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.silicolife.textmining.core.datastructures.language.LanguageProperties;
 import com.silicolife.textmining.core.datastructures.utils.generic.CSVFileConfigurations;
+import com.silicolife.textmining.core.datastructures.utils.generic.ColumnDelemiterDefaultValue;
+import com.silicolife.textmining.core.datastructures.utils.generic.ColumnParameters;
+import com.silicolife.textmining.core.interfaces.process.IE.io.export.DefaultDelimiterValue;
+import com.silicolife.textmining.core.interfaces.process.IE.io.export.Delimiter;
+import com.silicolife.textmining.core.interfaces.process.IE.io.export.TextDelimiter;
 import com.silicolife.textmining.core.interfaces.resource.export.tsv.IResourceExportConfiguration;
 
 public class ResourceExportConfigurationImpl implements IResourceExportConfiguration{
@@ -15,6 +24,10 @@ public class ResourceExportConfigurationImpl implements IResourceExportConfigura
 		this.csvFileConfigurations = csvFileConfigurations;
 	}
 	
+	public ResourceExportConfigurationImpl(String filePath)
+	{
+		this(filePath, getCSVDefaultConfigurations());
+	}
 	
 	@Override
 	public String getFormat() {
@@ -30,6 +43,31 @@ public class ResourceExportConfigurationImpl implements IResourceExportConfigura
 	@Override
 	public CSVFileConfigurations getCSVFileConfigurations() {
 		return csvFileConfigurations;
+	}
+	
+	private static CSVFileConfigurations getCSVDefaultConfigurations() {
+		String termColumn= LanguageProperties.getLanguageStream("pt.uminho.anote2.general.term"); 
+		String externalIDColumn= LanguageProperties.getLanguageStream("pt.uminho.anote2.general.externalids"); 
+		String synonymsColumn= LanguageProperties.getLanguageStream("pt.uminho.anote2.general.synonyms");
+		String classColumn= LanguageProperties.getLanguageStream("pt.uminho.anote2.general.class");
+		Map<String, ColumnParameters> columnNameColumnParameters = new HashMap<String, ColumnParameters>();
+		ColumnParameters termColum = new ColumnParameters(0, null, null);
+		columnNameColumnParameters.put(termColumn, termColum );
+		ColumnParameters klass = new ColumnParameters(1, null, null);
+		columnNameColumnParameters.put(classColumn, klass );
+		Delimiter vbar = Delimiter.USER;
+		vbar.setUserDelimiter("|");
+		ColumnParameters synonyms = new ColumnParameters(2,vbar, null);
+		columnNameColumnParameters.put(synonymsColumn, synonyms );
+		ColumnParameters externalids = new ColumnParameters(3, vbar, null, Delimiter.COLON );
+		columnNameColumnParameters.put(externalIDColumn, externalids );
+		Delimiter generalDelimiter = Delimiter.TAB;
+		TextDelimiter textDelimiters = TextDelimiter.QUOTATION_MARK;
+		DefaultDelimiterValue defaultValue = DefaultDelimiterValue.HYPHEN;
+		ColumnDelemiterDefaultValue columsDelemiterDefaultValue = new ColumnDelemiterDefaultValue(columnNameColumnParameters);
+		boolean hasHeaders = true;
+		CSVFileConfigurations csvFileConfig = new CSVFileConfigurations(generalDelimiter,textDelimiters,defaultValue,columsDelemiterDefaultValue,hasHeaders);
+		return csvFileConfig;
 	}
 
 }
