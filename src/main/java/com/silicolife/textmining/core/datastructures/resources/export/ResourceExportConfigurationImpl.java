@@ -3,7 +3,6 @@ package com.silicolife.textmining.core.datastructures.resources.export;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.silicolife.textmining.core.datastructures.language.LanguageProperties;
 import com.silicolife.textmining.core.datastructures.utils.generic.CSVFileConfigurations;
 import com.silicolife.textmining.core.datastructures.utils.generic.ColumnDelemiterDefaultValue;
 import com.silicolife.textmining.core.datastructures.utils.generic.ColumnParameters;
