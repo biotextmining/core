@@ -45,21 +45,17 @@ public class ResourceExportConfigurationImpl implements IResourceExportConfigura
 	}
 	
 	private static CSVFileConfigurations getCSVDefaultConfigurations() {
-		String termColumn= "Term"; 
-		String externalIDColumn= "External Ids"; 
-		String synonymsColumn= "Synonyms";
-		String classColumn= "Class";
 		Map<String, ColumnParameters> columnNameColumnParameters = new HashMap<String, ColumnParameters>();
 		ColumnParameters termColum = new ColumnParameters(0, null, null);
-		columnNameColumnParameters.put(termColumn, termColum );
+		columnNameColumnParameters.put(ResourceExportColumnEnum.term.toString(), termColum );
 		ColumnParameters klass = new ColumnParameters(1, null, null);
-		columnNameColumnParameters.put(classColumn, klass );
+		columnNameColumnParameters.put(ResourceExportColumnEnum.classe.toString(), klass );
 		Delimiter vbar = Delimiter.USER;
 		vbar.setUserDelimiter("|");
 		ColumnParameters synonyms = new ColumnParameters(2,vbar, null);
-		columnNameColumnParameters.put(synonymsColumn, synonyms );
+		columnNameColumnParameters.put(ResourceExportColumnEnum.synonyms.toString(), synonyms );
 		ColumnParameters externalids = new ColumnParameters(3, vbar, null, Delimiter.COLON );
-		columnNameColumnParameters.put(externalIDColumn, externalids );
+		columnNameColumnParameters.put(ResourceExportColumnEnum.externalID.toString(), externalids );
 		Delimiter generalDelimiter = Delimiter.TAB;
 		TextDelimiter textDelimiters = TextDelimiter.QUOTATION_MARK;
 		DefaultDelimiterValue defaultValue = DefaultDelimiterValue.HYPHEN;
