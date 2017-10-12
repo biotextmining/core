@@ -27,15 +27,6 @@ public interface IIRSearch extends IIRProcess{
 	public IQuery getQuery();
 	
 	/**
-	 * Method that return the number of query result publication
-	 * 
-	 * @param query
-	 * @return Number of publications mathing for query
-	 * @throws InternetConnectionProblemException 
-	 */
-	public int getExpectedQueryResults(String query) throws InternetConnectionProblemException;
-	
-	/**
 	 * Search publication online library archives and save details on database
 	 * 
 	 * @param keywords - The keywords of search
