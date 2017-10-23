@@ -30,11 +30,11 @@ public class LuceneTest {
 
 	@Test
 	public void rebuildIndex() throws InvalidDatabaseAccess, ANoteException {
-		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","maria","root","admin");
+		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","anote2db","root","rootadmin");
 		InitConfiguration.getDataAccess().rebuildLuceneIndex();
 	}
 	
-//	@Test
+	@Test
 	public void rebuildIndexDaemon() throws InvalidDemonConnectionException, ANoteException {
 		DaemonConnectionInit.init("http","8080","localhost","anote2daemon");
 		InitConfiguration.getDataAccess().rebuildLuceneIndex();
@@ -177,7 +177,7 @@ public class LuceneTest {
 		//System.out.println(keywords);
 	}
 	
-	@Test
+//	@Test
 	public void testIndex11() throws InvalidDatabaseAccess, ANoteException{
 		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","anote2db","root","rootadmin");
 		ISearchProperties searchProperties = new SearchPropertiesImpl();

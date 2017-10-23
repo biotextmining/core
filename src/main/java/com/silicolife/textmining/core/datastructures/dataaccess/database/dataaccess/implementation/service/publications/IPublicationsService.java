@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.PublicationManagerException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.annotation.IAnnotationService;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.labels.IPublicationLabel;
@@ -92,4 +93,6 @@ public interface IPublicationsService {
 	public Long getPublicationIdFromSourceId(String source, String sourceId);
 
 	public IPublication getPublicationFromSourceId(String source, String sourceId);
+
+	public List<IPublication> getPublicationsFromResourcesQuery(String query, IAnnotationService annotationService);
 }

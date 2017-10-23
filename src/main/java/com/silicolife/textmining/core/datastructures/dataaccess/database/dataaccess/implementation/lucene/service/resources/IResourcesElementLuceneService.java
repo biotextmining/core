@@ -80,4 +80,10 @@ public interface IResourcesElementLuceneService {
 
 	public Integer getResourceElementsCountByPartialTermOrPartialSynonym(String partialString);
 
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactTermOrExactSynonymPaginated(String exactString,
+			int index, int paginationSize);
+
+	public Integer getCountResourceElementsByExactTermOrExactSynonymPaginated(String exactString);
+
+
 }

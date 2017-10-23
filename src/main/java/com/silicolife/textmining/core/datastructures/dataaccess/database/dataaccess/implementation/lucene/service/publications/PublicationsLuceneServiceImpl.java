@@ -95,7 +95,7 @@ public class PublicationsLuceneServiceImpl implements IPublicationsLuceneService
 
 		return listPublications_;
 	}
-	
+		
 	
 	
 	/*
