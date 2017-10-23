@@ -5,10 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.lucene.search.Query;
-import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Property;
 import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;

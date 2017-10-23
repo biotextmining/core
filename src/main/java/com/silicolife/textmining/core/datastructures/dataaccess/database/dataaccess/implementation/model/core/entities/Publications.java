@@ -24,7 +24,6 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Fields;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.annotations.Parameter;
 import org.hibernate.search.annotations.Store;
 import org.hibernate.search.annotations.TokenFilterDef;
@@ -36,8 +35,6 @@ import org.hibernate.search.annotations.TokenizerDef;
 @Entity
 @Indexed
 @AnalyzerDefs({ @AnalyzerDef(name = "KeywordsSplitter",
-
-// @TokenFilterDef(factory = ASCIIFoldingFilterFactory.class), 
 
 // Split input into keywords
 tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
@@ -72,9 +69,6 @@ filters = {
 	})
 	
 })
-
-
-
 
 
 @Table(name = "publications")
@@ -153,13 +147,7 @@ public class Publications implements java.io.Serializable {
 		this.pubId = pubId;
 	}
 	
-	/*
-	 * @Fields(value = { @Field(name="titleKNCS",index=Index.YES, analyze=Analyze.YES, store=Store.NO),
-			@Field(name="titlePCS",index=Index.YES, analyze=Analyze.NO, store=Store.NO),
-			@Field(name="titleKCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
-			@Field(name="titlePNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO)
-	 		})
-	 */
+
 	@Fields(value = { 
 			@Field(name="titleCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
 			@Field(name="titleNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
@@ -177,13 +165,6 @@ public class Publications implements java.io.Serializable {
 		this.pubTitle = pubTitle;
 	}
 
-	/*
-	@Fields(value = { @Field(name="authorsKNCS",index=Index.YES, analyze=Analyze.YES, store=Store.NO),
-			@Field(name="authorsPCS",index=Index.YES, analyze=Analyze.NO, store=Store.NO),
-			@Field(name="authorsKCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
-			@Field(name="authorsPNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO)})
-	
-	*/
 //	@Fields(value = { 
 //			@Field(name="authorsCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
 //			@Field(name="authorsNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
@@ -235,13 +216,6 @@ public class Publications implements java.io.Serializable {
 		this.pubStatus = pubStatus;
 	}
 
-	/*
-	@Fields(value = { @Field(name="journalKNCS",index=Index.YES, analyze=Analyze.YES, store=Store.NO),
-			@Field(name="journalPCS",index=Index.YES, analyze=Analyze.NO, store=Store.NO),
-			@Field(name="journalKCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
-			@Field(name="journalPNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO)})
-	
-	*/
 //	@Fields(value = { 
 //			@Field(name="journalCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
 //			@Field(name="journalNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
@@ -284,18 +258,12 @@ public class Publications implements java.io.Serializable {
 		this.pubPages = pubPages;
 	}
 
-	/*
-	@Fields(value = { @Field(name="abstractKNCS",index=Index.YES, analyze=Analyze.YES, store=Store.NO),
-			@Field(name="abstractPCS",index=Index.YES, analyze=Analyze.NO, store=Store.NO),
-			@Field(name="abstractKCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
-			@Field(name="abstractPNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO)})
-	*/
-	@Fields(value = { 
-			@Field(name="abstractCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
-			@Field(name="abstractNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
-			@Field(name="abstractSNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzer"), store=Store.NO),
-			@Field(name="abstractSCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzerCS"), store=Store.NO)
-	})
+//	@Fields(value = { 
+//			@Field(name="abstractCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
+//			@Field(name="abstractNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
+//			@Field(name="abstractSNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzer"), store=Store.NO),
+//			@Field(name="abstractSCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzerCS"), store=Store.NO)
+//	})
 	@Column(name = "pub_abstract")
 	public String getPubAbstract() {
 		return this.pubAbstract;
@@ -324,12 +292,6 @@ public class Publications implements java.io.Serializable {
 	}
 
 	/*
-	@Fields(value = { @Field(name="fullContentKNCS",index=Index.YES, analyze=Analyze.YES, store=Store.NO),
-			@Field(name="fullContentPCS",index=Index.YES, analyze=Analyze.NO, store=Store.NO),
-			@Field(name="fullContentKCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
-			@Field(name="fullContentPNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO)})
-	*/
-	/*
 	@Fields(value = { 
 			@Field(name="fullContentCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
 			@Field(name="fullContentNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
@@ -346,7 +308,6 @@ public class Publications implements java.io.Serializable {
 		this.pubFullcontent = pubFullcontent;
 	}
 
-	//@Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
 	/*
 	@Fields(value = { 
 			@Field(name="notesCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
