@@ -1,0 +1,179 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */options{  static = false;}PARSER_BEGIN(queryGrammar)package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.publications.queryGrammar;
+import java.util.ArrayList;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.HashSet;
+import java.io.UnsupportedEncodingException;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.annotation.IAnnotationService;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.AnnotationException;
+
+public class queryGrammar{
+
+  private IAnnotationService annotationService = null;
+    public HashSet<Long > parseGrammar(String query, IAnnotationService annotationService)  throws ParseException , AnnotationException
+  {
+
+    this.annotationService = annotationService;
+    HashSet<Long > result = null;
+    
+      try
+      {
+        result =  this.query_p();
+        //System.out.println("OK");
+      }
+      catch (Exception e)
+      {
+        System.out.println("NOK.");
+        System.out.println(e.getMessage());
+        this.ReInit(System.in);
+      }
+      catch (Error e)
+      {
+        System.out.println("Oops.");
+        System.out.println(e.getMessage());
+        
+      }
+      return result;
+    }
+  
+}
+
+PARSER_END(queryGrammar)
+
+SKIP :
+{
+  " "
+| "\r"
+| "\t"
+| "\n"
+}
+
+TOKEN : /* OPERATORS */
+{
+  < PLUS : "+" >
+| < MINUS : "-" >
+| < MULTIPLY : "*" >
+| < DIVIDE : "/" >
+}
+
+TOKEN :
+{
+  < CONSTANT : (< DIGIT >)+ >
+| < #DIGIT : [ "0"-"9" ] >
+}
+
+
+
+//("AND" | "OR") "{" (t(a))+ "}"
+HashSet<Long> query_p() throws  AnnotationException:
+{
+ ArrayList<HashSet<Long >> operations = new ArrayList<HashSet<Long >>();
+ 
+ }
+{
+  "QUERY" operation(operations) "END"
+  {
+    return operations.get(0);
+  }
+}
+
+void operation(ArrayList<HashSet<Long >> operations) throws  AnnotationException:
+{HashSet<Long > a = new HashSet<Long >();}
+{
+  (
+    andOp(a, operations)
+  | orOp(a, operations)
+  )
+  {
+   System.out.println(operations);
+  }
+}
+
+void andOp(HashSet<Long> a, ArrayList<HashSet<Long >> operations) throws  AnnotationException :
+{
+  ArrayList<HashSet<Long >> sonOp = new ArrayList<HashSet<Long >>();
+   HashSet<Long > res = new HashSet<Long >();
+}
+{
+    "AND"
+	"{"
+	(
+	t(a, sonOp)
+	)*
+	"}"
+	{
+	  System.out.println("AND");
+	  System.out.println(a);
+	 
+	    for(Long rID : a) {
+	    HashSet<Long > temp =   new HashSet<Long >();
+	    temp.add(rID);
+	       if(res.size() ==0) {
+	  res.addAll(this.annotationService.getPublicationsIdsByResourceElements(temp));
+		}
+		else {
+		  res.retainAll(this.annotationService.getPublicationsIdsByResourceElements(temp));
+		}
+	}	
+	  for(HashSet<Long > i : sonOp) {
+	     if(res.size() ==0) {
+			res.addAll(i);
+	     }else { 
+	    	res.retainAll(i);
+	  	}
+	  }
+	  operations.add(res);
+	  System.out.println("SON");
+	  System.out.println(sonOp);
+	  //System.out.println(this.annotationService.getPublicationsIdsByResourceElements(a));
+	}
+}
+
+void orOp(HashSet<Long > a, ArrayList<HashSet<Long >> operations) throws  AnnotationException :
+{
+  ArrayList<HashSet<Long >> sonOp = new ArrayList<HashSet<Long >>();
+  HashSet<Long > res = new HashSet<Long >();
+}
+{
+    "OR"
+	"{"
+	(
+	t(a, sonOp)
+	)*
+	"}"
+	{
+	  System.out.println("OR");
+	  System.out.println(a);
+	  if(a.size() >0)
+	  res.addAll(this.annotationService.getPublicationsIdsByResourceElements(a));
+	  for(HashSet<Long > i : sonOp) {
+	    res.addAll(i);
+	  }
+	  operations.add(res);
+	  System.out.println("SON");
+	  System.out.println(sonOp);
+	  //System.out.println(this.annotationService.getPublicationsIdsByResourceElements(a));
+	}
+}
+
+
+void t(HashSet<Long > a, ArrayList<HashSet<Long >> operations) throws  AnnotationException:
+{} {
+  (
+    (
+      operation(operations)
+    ) 
+  | el(a)
+  )
+}
+
+void el(HashSet<Long > a):
+{Token id; HashSet<Long> hashWid = new HashSet<Long>();}
+{
+	"TERM" id=< CONSTANT > {
+	   hashWid.add((Long) id.getValue());
+	   a.add((Long) Long.valueOf(id.toString()));
+	}
+}

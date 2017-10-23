@@ -1,6 +1,9 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.publications;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.AnnotationException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.PublicationManagerException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.general.ExceptionsCodes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
@@ -25,6 +29,9 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.PublicationLabels;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.PublicationSources;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.annotation.IAnnotationService;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.publications.queryGrammar.ParseException;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.publications.queryGrammar.queryGrammar;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsFieldsWrapper;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsLabelsWrapper;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsSourceWrapper;
@@ -199,6 +206,36 @@ public class PublicationsServiceImpl implements IPublicationsService {
 		 IPublication publication_ = PublicationsWrapper.convertToAnoteStructure(publication);
 			return publication_;
 		
+	}
+	
+	@Override
+	public List<IPublication> getPublicationsFromResourcesQuery(String query, IAnnotationService annotationService){
+		Set<Long > result = null;
+		List<IPublication> publications = new ArrayList<IPublication>();
+		try {
+			InputStream is = new ByteArrayInputStream( query.getBytes() );
+		    queryGrammar parser = new queryGrammar(is);
+		    
+			try {
+				result = parser.parseGrammar(query, annotationService);
+				for(Long id : result) {
+				Publications publication = publicationsManagerDao.getPublicationsDao().findById(id);
+				if (publication == null)
+					return null;
+
+				IPublication publication_ = PublicationsWrapper.convertToAnoteStructure(publication);
+				publications.add(publication_);
+				}
+			} catch (AnnotationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return publications;
 	}
 	
 	

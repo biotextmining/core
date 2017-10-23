@@ -396,6 +396,7 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		fullTextQuery.setFetchSize(paginationSize);
 		return fullTextQuery.list();
 	}
+	
 
 	@SuppressWarnings("unchecked")
 	@Override

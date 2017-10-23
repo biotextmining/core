@@ -108,6 +108,67 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 
 		return elementSet;
 	}
+	
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactTermOrExactSynonymPaginated(
+			String exactString, int index, int paginationSize) {
+
+		Set<Map<String, String>> setEqSentenceOnFields = new HashSet<>(); ;
+		
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		eqSentenceOnField.put("synonymses.id.synSynonym", exactString);
+		eqSentenceOnField.put("synonymses.id.synActive", "true");
+		eqSentenceOnField.put("resActive", "true");
+		
+		setEqSentenceOnFields.add(eqSentenceOnField);
+		
+		Map<String, String> eqSentenceOnFieldTerm = new HashMap<>();
+		eqSentenceOnFieldTerm.put("resElement", exactString);
+		eqSentenceOnFieldTerm.put("resActive", "true");
+		
+		setEqSentenceOnFields.add(eqSentenceOnFieldTerm);
+		
+		
+		List<ResourceElements> resourcesElements = resourcesLuceneManagerDao.getResourcesElememtsLuceneDao()
+				.findSetOfExactByAttributesPaginated(setEqSentenceOnFields, index, paginationSize);
+
+		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
+		int priority = 0;
+		for (ResourceElements resourceElement : resourcesElements) {
+			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
+			elementSet.addElementResource(resourceElement_);
+			priority++;
+		}
+
+		return elementSet;
+	}
+	
+	@Override
+	public Integer getCountResourceElementsByExactTermOrExactSynonymPaginated(
+			String exactString) {
+
+		Set<Map<String, String>> setEqSentenceOnFields = new HashSet<>(); ;
+		
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		eqSentenceOnField.put("synonymses.id.synSynonym", exactString);
+		eqSentenceOnField.put("synonymses.id.synActive", "true");
+		eqSentenceOnField.put("resActive", "true");
+		
+		setEqSentenceOnFields.add(eqSentenceOnField);
+		
+		Map<String, String> eqSentenceOnFieldTerm = new HashMap<>();
+		eqSentenceOnFieldTerm.put("resElement", exactString);
+		eqSentenceOnFieldTerm.put("resActive", "true");
+		
+		setEqSentenceOnFields.add(eqSentenceOnFieldTerm);
+		
+		
+		List<ResourceElements> resourcesElements = resourcesLuceneManagerDao.getResourcesElememtsLuceneDao()
+				.findSetOfExactByAttributes(setEqSentenceOnFields);
+
+		return resourcesElements.size();
+	}
 
 
 	@Override
@@ -955,6 +1016,7 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 
 		return elementSet;
 	}
+	
 
 	@Override
 	public Integer getResourceElementsCountByPartialTermOrPartialSynonym(String partialString) {
