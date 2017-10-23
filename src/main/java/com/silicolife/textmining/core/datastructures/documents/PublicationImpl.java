@@ -470,6 +470,24 @@ public class PublicationImpl extends Observable implements IPublication {
 		toString = toString + "}\n";
 		return toString;
 	}
+
+	public static List<IPublicationLabel> getNotExistentLabels(IPublication publication,List<IPublicationLabel> labelsToAdd) {
+		List<IPublicationLabel> labels = publication.getPublicationLabels();
+		if(labels==null || labels.isEmpty())
+			return labelsToAdd;
+		Set<String> existentLabelTestStream = new HashSet<>();
+		for(IPublicationLabel label:labels)
+			existentLabelTestStream.add(label.getLabel());
+		List<IPublicationLabel> out = new ArrayList<>();
+		for(IPublicationLabel labelToAdd:labelsToAdd)
+		{
+			if(!existentLabelTestStream.contains(labelToAdd.getLabel()))
+			{
+				out.add(labelToAdd);
+			}
+		}
+		return out;
+	}
 	
 	
 

@@ -15,13 +15,9 @@ import java.awt.image.BufferedImage;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
-
-import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 
 /**
  * Class that contains some util methods 
@@ -31,12 +27,23 @@ import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 public class Utils {
 	
 	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	public static final String DATE_FORMAT2 = "yyyy-MM-dd";
+
 	public static final SimpleDateFormat SimpleDataFormat= new SimpleDateFormat(DATE_FORMAT);
+	public static final SimpleDateFormat SimpleDataFormat2= new SimpleDateFormat(DATE_FORMAT2);
+
 	/**Returns the current time of the system */
 	public static String currentTime() {
 	    
 	  	Calendar cal = Calendar.getInstance();
 	    return SimpleDataFormat.format(cal.getTime());
+	}
+	
+	/**Returns the current time of the system */
+	public static String currentTimeSimple() {
+	    
+	  	Calendar cal = Calendar.getInstance();
+	    return SimpleDataFormat2.format(cal.getTime());
 	}
 	
 	public static String formatDate(String date){
@@ -194,28 +201,6 @@ public class Utils {
 		return false;
 	}
 	
-	public static Set<String> getDocummentClassification(IPublication publicaiton)
-	{
-		Set<String> out = new HashSet<>();
-		String  notes = publicaiton.getNotes();
-		if(notes !=null)
-		{
-			if(notes.startsWith("Classification IPCR"))
-			{
-				String notesChange = notes.replaceAll("Classification IPCR : ", "");
-				String[] classifications = notesChange.split(",");
-				for(String classification:classifications)
-				{
-					String classificationSRT = classification.trim();
-					if(!classificationSRT.isEmpty())
-					{
-						String classification3letter = classificationSRT.substring(0,3);
-						out.add(classification3letter);
-					}
-				}
-			}
-		}
-		return out;
-	}
+	
 	
 }
