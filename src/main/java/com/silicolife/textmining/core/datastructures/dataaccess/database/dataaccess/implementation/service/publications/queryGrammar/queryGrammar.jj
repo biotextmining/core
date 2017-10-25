@@ -87,7 +87,7 @@ void operation(ArrayList<HashSet<Long >> operations) throws  AnnotationException
   | orOp(a, operations)
   )
   {
-   System.out.println(operations);
+   //System.out.println(operations);
   }
 }
 
@@ -144,8 +144,8 @@ void orOp(HashSet<Long > a, ArrayList<HashSet<Long >> operations) throws  Annota
 	)*
 	"}"
 	{
-	  System.out.println("OR");
-	  System.out.println(a);
+	  //System.out.println("OR");
+	  //System.out.println(a);
 	  if(a.size() >0)
 	  res.addAll(this.annotationService.getPublicationsIdsByResourceElements(a));
 	  for(HashSet<Long > i : sonOp) {

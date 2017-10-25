@@ -62,7 +62,7 @@ public class queryGrammar implements queryGrammarConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
-   System.out.println(operations);
+
   }
 
   final public void andOp(HashSet<Long> a, ArrayList<HashSet<Long >> operations) throws ParseException, AnnotationException {
@@ -132,8 +132,8 @@ public class queryGrammar implements queryGrammarConstants {
       t(a, sonOp);
     }
     jj_consume_token(15);
-          System.out.println("OR");
-          System.out.println(a);
+          //System.out.println("OR");
+          //System.out.println(a);
           if(a.size() >0)
           res.addAll(this.annotationService.getPublicationsIdsByResourceElements(a));
           for(HashSet<Long > i : sonOp) {
