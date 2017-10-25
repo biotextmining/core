@@ -106,8 +106,8 @@ public class queryGrammar implements queryGrammarConstants {
                 }
           }
           operations.add(res);
-          System.out.println("SON");
-          System.out.println(sonOp);
+          //System.out.println("SON");
+          //System.out.println(sonOp);
           //System.out.println(this.annotationService.getPublicationsIdsByResourceElements(a));
 
   }
@@ -140,8 +140,8 @@ public class queryGrammar implements queryGrammarConstants {
             res.addAll(i);
           }
           operations.add(res);
-          System.out.println("SON");
-          System.out.println(sonOp);
+          //System.out.println("SON");
+          //System.out.println(sonOp);
           //System.out.println(this.annotationService.getPublicationsIdsByResourceElements(a));
 
   }
