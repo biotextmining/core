@@ -68,12 +68,6 @@ public class PublicationsLuceneServiceImpl implements IPublicationsLuceneService
 			eqSentenceOnField.put(PublicationLuceneIndexFields.getLuceneField(searchProperties, field),searchProperties.getValue());
 		}
 		
-		//eqSentenceOnField.put("qhb_query_id", "694261800784300680");
-		//eqSentenceOnField.put("qhb_query_id", "1878075771966414137");
-		//Long id = (long) Long.valueOf("547193518995135916");
-		
-		//eqSentenceOnField.put("queryHasPublicationses.id.qhbQueryId", "547193518995135916");
-		//eqMustSentenceOnField.put("queryHasPublicationses.id.qhbQueryId", "547193518995135916");
 		List<Publications> listPublications = null;
 		if(eqMustSentenceOnField.size()>0){
 			if(searchProperties.isWholeWords())
@@ -85,8 +79,7 @@ public class PublicationsLuceneServiceImpl implements IPublicationsLuceneService
 		else
 			listPublications = publicationsLuceneManagerDao.getPublicationsLuceneDao().findNotExactByAttributes(eqSentenceOnField);
 
-		//List<Publications> listPublications = publicationsLuceneManagerDao.getPublicationsLuceneDao().findExactByAttributes(eqSentenceOnField);
-		
+
 		List<IPublication> listPublications_ = new ArrayList<IPublication>();
 		for (Publications pub : listPublications) {
 			IPublication publication_ = PublicationsWrapper.convertToAnoteStructure(pub);
@@ -95,7 +88,15 @@ public class PublicationsLuceneServiceImpl implements IPublicationsLuceneService
 
 		return listPublications_;
 	}
-		
+	
+	//eqSentenceOnField.put("qhb_query_id", "694261800784300680");
+	//eqSentenceOnField.put("qhb_query_id", "1878075771966414137");
+	//Long id = (long) Long.valueOf("547193518995135916");
+	
+	//eqSentenceOnField.put("queryHasPublicationses.id.qhbQueryId", "547193518995135916");
+	//eqMustSentenceOnField.put("queryHasPublicationses.id.qhbQueryId", "547193518995135916");
+	
+	//List<Publications> listPublications = publicationsLuceneManagerDao.getPublicationsLuceneDao().findExactByAttributes(eqSentenceOnField);
 	
 	
 	/*

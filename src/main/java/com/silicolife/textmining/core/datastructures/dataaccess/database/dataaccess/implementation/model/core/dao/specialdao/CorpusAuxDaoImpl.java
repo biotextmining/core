@@ -122,7 +122,7 @@ public class CorpusAuxDaoImpl implements CorpusAuxDao {
 	
 	public Integer CountCorpusByAttributes(Long auId, String corpusstr) {
 		Session session = sessionFactory.getCurrentSession();
-		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " + "INNER JOIN corpus as b ON a.audo_uid_resource = b.crp_id "
+		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " + "INNER JOIN corpus as b ON a.audo_uid_resource = b.crp_id AND b.crp_active=1 "
 				+ "WHERE audo_user_id = ? AND audo_type_resource = ?";
 		SQLQuery qry = session.createSQLQuery(sqlString);
 		qry.setParameter(0, auId);
@@ -138,7 +138,7 @@ public class CorpusAuxDaoImpl implements CorpusAuxDao {
 	public List<Corpus> findQueriesByAttributesPaginated(Long auId, String corpusstr, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
 		Session session = sessionFactory.getCurrentSession();
 		
-		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " + "INNER JOIN corpus as b ON a.audo_uid_resource = b.crp_id ";
+		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " + "INNER JOIN corpus as b ON a.audo_uid_resource = b.crp_id AND b.crp_active=1 ";
 		
 		if(!sortBy.equals("none")){
 			if(sortBy.equals("processesNumber") | sortBy.equals("publicationsNumber")){
@@ -148,7 +148,7 @@ public class CorpusAuxDaoImpl implements CorpusAuxDao {
 				if(asc){
 					ord = " ASC";
 				}
-				sqlString = sqlString + "LEFT JOIN "+uniqueId+" as c ON b.crp_id = c.chp_corpus_id" + " WHERE audo_user_id = ? AND audo_type_resource = ? "+ "GROUP BY b.crp_id ORDER BY COUNT(chp_corpus_id) " + ord;
+				sqlString = sqlString + "LEFT JOIN "+uniqueId+" as c ON b.crp_id = c.chp_corpus_id " + " WHERE audo_user_id = ? AND audo_type_resource = ? AND c.crp_active=1 "+ "GROUP BY b.crp_id ORDER BY COUNT(chp_corpus_id) " + ord;
 			}
 			else{
 			String uniqueId = CorpusFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
