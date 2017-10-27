@@ -55,7 +55,7 @@ public class QueriesAuxDaoImpl implements QueriesAuxDao {
 //		qry.addEntity("queries", Queries.class);
 		
 		String hqlString = "select count(*) from Queries as b "
-				+ "inner join AuthUserDataObjects as a on a.id.audoUidResource = b.quId "
+				+ "inner join AuthUserDataObjects as a on a.id.audoUidResource = b.quId AND b.quActive=1 "
 				+ "where a.id.audoUserId = :id and a.id.audoTypeResource = :resourceType";
 		Query qry = session.createQuery(hqlString);
 		qry.setParameter("id", id);
@@ -89,7 +89,7 @@ public class QueriesAuxDaoImpl implements QueriesAuxDao {
 //		qry.addEntity("queries", Queries.class);
 		
 		String hqlString = "select b from Queries as b "
-				+ "inner join AuthUserDataObjects as a on a.id.audoUidResource = b.quId "
+				+ "inner join AuthUserDataObjects as a on a.id.audoUidResource = b.quId AND b.quActive=1 "
 				+ "where a.id.audoUserId = :id and a.id.audoTypeResource = :resourceType";
 		
 		if(!sortBy.equals("none")){
