@@ -135,7 +135,7 @@ public class CorpusAuxDaoImpl implements CorpusAuxDao {
 	}
 	
 	@Override
-	public List<Corpus> findQueriesByAttributesPaginated(Long auId, String corpusstr, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+	public List<Corpus> findCorpusByAttributesPaginated(Long auId, String corpusstr, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
 		Session session = sessionFactory.getCurrentSession();
 		
 		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " + "INNER JOIN corpus as b ON a.audo_uid_resource = b.crp_id AND b.crp_active=1 ";

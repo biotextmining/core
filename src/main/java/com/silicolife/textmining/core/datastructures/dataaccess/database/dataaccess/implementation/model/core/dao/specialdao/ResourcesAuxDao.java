@@ -39,4 +39,9 @@ public interface ResourcesAuxDao {
 	public List<ResourceElementRelations> getResourceElementsRelations(Long resourceID);
 	
  	public List<ResourceElementExtenalIds> getResourceElementExternalIdBySourceAndExternalId(Long sourceId, String externalId);
+
+	public List<Resources> findResourcesByAttributesPaginated(Long userId, Long resourceTypeId, String privilegeResourceType,
+			Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
+
+	public List<Resources> findActiveResourcesByAttributes(Long userId, Long resourceTypeId, String privilegeResourceType);
 }

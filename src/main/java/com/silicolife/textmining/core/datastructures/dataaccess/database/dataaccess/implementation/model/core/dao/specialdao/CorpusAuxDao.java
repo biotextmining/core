@@ -19,11 +19,14 @@ public interface CorpusAuxDao {
 	
 	public List<Corpus> findCorpusByPublicationId(Long publicationId);
 
-	public List<Corpus> findQueriesByAttributesPaginated(Long auId, String corpusstr, Integer paginationIndex,
-			Integer paginationSize, boolean asc, String sortBy);
+//	public List<Corpus> findQueriesByAttributesPaginated(Long auId, String corpusstr, Integer paginationIndex,
+//			Integer paginationSize, boolean asc, String sortBy);
 
 	public Integer CountCorpusByAttributes(Long auId, String corpusstr);
 
 	public List<Processes> findProcessesByCorpusIdPaginated(Long corpusId, Long userID, String str, Integer paginationIndex,
+			Integer paginationSize, boolean asc, String sortBy);
+
+	public List<Corpus> findCorpusByAttributesPaginated(Long auId, String corpusstr, Integer paginationIndex,
 			Integer paginationSize, boolean asc, String sortBy);
 }
