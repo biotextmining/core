@@ -202,4 +202,6 @@ public interface IPublication extends Serializable{
 	public void setPublicationLabels(List<IPublicationLabel> publicationLabels);
 
 	public void setIssue(String issue);
+	
+	public void setType(String type);
 }
