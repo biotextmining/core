@@ -179,6 +179,12 @@ public class QueriesServiceImpl implements IQueriesService {
 		return queriesManagerDao.getQueriesAuxDao().countQueriesByAttributes(user.getAuId(), queries);
 	}
 	
+	@Override
+	public Integer countAllActiveQueries(){
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		return queriesManagerDao.getQueriesAuxDao().countActiveQueriesByAttributes(user.getAuId(), queries);
+	}
+	
 	
 	@Override
 	public List<IQuery> getAllQueriesPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {

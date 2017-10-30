@@ -148,4 +148,9 @@ public interface IQueriesService {
 	 * Counts all queries of a user
 	 */
 	public Integer countAllQueries();
+	
+	/**
+	 * Counts all active queries of a user
+	 */
+	public Integer countAllActiveQueries();
 }
