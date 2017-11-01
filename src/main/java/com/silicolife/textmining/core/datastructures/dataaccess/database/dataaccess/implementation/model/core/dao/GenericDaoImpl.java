@@ -6,9 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
+
 
 /**
  * This classes represents the implementation of generic methods to access the
@@ -40,6 +45,26 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 	@Override
 	public List<T> findAll() {
 		Criteria c = sessionFactory.getCurrentSession().createCriteria(klass);
+		return c.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findAllPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+		Criteria c = sessionFactory.getCurrentSession().createCriteria(klass, "al");
+
+		if(!sortBy.equals("none")){
+			//String uniqueId = PublicationFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+			String sortAlias = "al."+sortBy;
+			
+			if(asc)
+				c.addOrder(Order.asc(sortAlias));
+			else
+				c.addOrder(Order.desc(sortAlias));
+			}
+			c.setFirstResult(paginationIndex);
+			c.setMaxResults(paginationSize);
+			c.setFetchSize(paginationSize);
 		return c.list();
 	}
 

@@ -84,4 +84,7 @@ public interface IPrivilegesService {
 	public Boolean hasPermission(Long resourceId, String resource, List<String> permission);
 	
 	public void setUserLogged(UsersLogged userLogged);
+
+	public List<IGenericPair<IUser, String>> getUsersAndPermissionsPaginated(Long resourceId, String resource,
+			Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
 }

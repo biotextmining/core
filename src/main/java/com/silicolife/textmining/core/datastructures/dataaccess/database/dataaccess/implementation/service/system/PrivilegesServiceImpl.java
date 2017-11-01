@@ -140,6 +140,23 @@ public class PrivilegesServiceImpl implements IPrivilegesService {
 		}
 		return list;
 	}
+	
+	@Override
+	public List<IGenericPair<IUser, String>> getUsersAndPermissionsPaginated(Long resourceId, String resource, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+
+		List<IGenericPair<IUser, String>> list = new ArrayList<IGenericPair<IUser, String>>();
+		List<AuthUsers> allUsers = usersManagerDao.getAuthUsersDao().findAllPaginated(paginationIndex, paginationSize, asc, sortBy);
+		for (AuthUsers user : allUsers) {
+			AuthUserDataObjectsId objectId = new AuthUserDataObjectsId(user.getAuId(), resourceId, resource);
+			AuthUserDataObjects dataObject = usersManagerDao.getAuthUserDataObjectsDao().findById(objectId);
+			if (dataObject != null) {
+				list.add(new GenericPairImpl<IUser, String>(user, dataObject.getAudoPermission()));
+			} else {
+				list.add(new GenericPairImpl<IUser, String>(user, null));
+			}
+		}
+		return list;
+	}
 
 	@Override
 	public Boolean hasPermission(Long resourceId, String resource, List<String> permission) {
