@@ -114,4 +114,6 @@ public interface IUserService {
 	
 	public void setUserLogged(UsersLogged userLogged);
 
+	public Boolean createUserFromWeb(IUser userIn);
+
 }

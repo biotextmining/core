@@ -23,7 +23,9 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUserSettings;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUserSettingsId;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUsers;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.GeneratePassword;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.general.AuthPropertiesWrapper;
+import com.silicolife.textmining.core.datastructures.utils.GenerateRandomId;
 import com.silicolife.textmining.core.interfaces.core.user.IGroup;
 import com.silicolife.textmining.core.interfaces.core.user.IUser;
 
@@ -109,6 +111,39 @@ public class UserServiceImpl implements IUserService {
 
 		return true;
 	}
+	
+	@Transactional(readOnly = false)
+	@Override
+	public Boolean createUserFromWeb(IUser userIn) {
+		
+		Long id = GenerateRandomId.generateID();
+		Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+		encoder.setIterations(13);
+		String salt = encoder.encodePassword(String.valueOf(id), null);
+		String pass = GeneratePassword.generate(String.valueOf(userIn.getAuPassword()), salt);
+		
+		AuthUsers user = new AuthUsers();
+		user.setAuId(id);
+		user.setAuFullname(userIn.getAuFullname());
+		user.setAuUsername(userIn.getAuUsername());
+		user.setAuPassword(pass);
+		user.setAuAddress(userIn.getAuAddress());
+		user.setAuZipCode(userIn.getAuZipCode());
+		user.setAuLocation(userIn.getAuLocation());
+			user.setAuPhone(userIn.getAuPhone());
+		user.setAuEmail(userIn.getAuEmail());
+		user.setAuthGroups((AuthGroups) userIn.getAuthGroups());
+	
+		usersManagerDao.getAuthUsersDao().save(user);
+
+		AuthUsers userLog = userLogged.getCurrentUserLogged();
+		AuthUserLogs log = new AuthUserLogs(userLog, new Date(), "create", "auth_users", null, "create a new User");
+		usersManagerDao.getAuthUserLogsDao().save(log);
+
+		return true;
+	}
+	
+
 
 	@Transactional(readOnly = false)
 	@Override
