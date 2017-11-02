@@ -87,4 +87,6 @@ public interface IPrivilegesService {
 
 	public List<IGenericPair<IUser, String>> getUsersAndPermissionsPaginated(Long resourceId, String resource,
 			Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
+
+	public Integer countUsersAndPermissions(Long resourceId, String resource);
 }

@@ -156,6 +156,52 @@ public class UserServiceImpl implements IUserService {
 
 		return true;
 	}
+	
+	@Transactional(readOnly = false)
+	@Override
+	public Boolean updateCurrentUserFromWeb(IUser user, String oldPassword) {
+		
+		AuthUsers userLog = userLogged.getCurrentUserLogged();
+		AuthUsers userFromBd = usersManagerDao.getAuthUsersDao().findUniqueByAttribute("auUsername", userLog.getAuUsername());
+		
+		
+		Long userId = userLog.getAuId();
+		String strUserId = String.valueOf(userId);
+		Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+		encoder.setIterations(13);
+		String salt = encoder.encodePassword(strUserId, null);
+		if (!passwordEncoder.isPasswordValid(userFromBd.getAuPassword(), oldPassword, salt)) {
+			return false;
+		}
+		else {
+			//String pass = GeneratePassword.generate(oldPassword, salt);
+			//userCopy.setAuPassword(pass);	
+		if(user.getAuAddress()!=null) userFromBd.setAuAddress(user.getAuAddress());
+		if(user.getAuEmail()!=null) userFromBd.setAuEmail(user.getAuEmail()); 
+		if(user.getAuFullname()!=null) userFromBd.setAuFullname(user.getAuFullname()); 
+		if(user.getAuLocation()!=null) userFromBd.setAuLocation(user.getAuLocation()); 
+		if(user.getAuPhone()!=null) userFromBd.setAuPhone(user.getAuPhone()); 
+		if(user.getAuUsername()!=null) userFromBd.setAuUsername(user.getAuUsername());
+		if(user.getAuZipCode()!=null) userFromBd.setAuZipCode(user.getAuZipCode());
+		
+		if(user.getAuPassword()!=null) {
+		Long id = userLog.getAuId();
+		encoder = new Md5PasswordEncoder();
+		encoder.setIterations(13);
+		salt = encoder.encodePassword(String.valueOf(id), null);
+		String pass = GeneratePassword.generate(String.valueOf(user.getAuPassword()), salt);
+		userFromBd.setAuPassword(pass);
+		}
+		
+		usersManagerDao.getAuthUsersDao().update(userFromBd);
+		
+		AuthUserLogs log = new AuthUserLogs(userFromBd, new Date(), "update", "auth_users", null, "update an user");
+		usersManagerDao.getAuthUserLogsDao().save(log);
+		
+
+		return true;
+		}
+	}
 
 	@Transactional(readOnly = false)
 	@Override

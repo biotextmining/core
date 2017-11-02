@@ -142,6 +142,14 @@ public class PrivilegesServiceImpl implements IPrivilegesService {
 	}
 	
 	@Override
+	public Integer countUsersAndPermissions(Long resourceId, String resource) {
+
+		List<AuthUsers> allUsers = usersManagerDao.getAuthUsersDao().findAll();
+		
+		return allUsers.size();
+	}
+	
+	@Override
 	public List<IGenericPair<IUser, String>> getUsersAndPermissionsPaginated(Long resourceId, String resource, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
 
 		List<IGenericPair<IUser, String>> list = new ArrayList<IGenericPair<IUser, String>>();
