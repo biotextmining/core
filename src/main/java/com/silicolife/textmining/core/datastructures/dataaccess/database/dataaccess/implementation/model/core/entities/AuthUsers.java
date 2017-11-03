@@ -15,7 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.silicolife.textmining.core.interfaces.core.user.IUser;
 
 /**
@@ -35,6 +34,9 @@ public class AuthUsers implements java.io.Serializable, IUser {
 	private String auAddress;
 	private String auZipCode;
 	private String auLocation;
+	private String auPreferLanguage;
+	private byte[] auAvatar;
+	private boolean auActive;
 	private Set<AnnotationLogs> annotationLogses = new HashSet<AnnotationLogs>(0);
 	private Set<AuthUserSettings> authUserSettingses = new HashSet<AuthUserSettings>(0);
 	private Set<AuthUserDataObjects> authUserDataObjectses = new HashSet<AuthUserDataObjects>(0);
@@ -43,17 +45,20 @@ public class AuthUsers implements java.io.Serializable, IUser {
 	public AuthUsers() {
 	}
 
-	public AuthUsers(long auId, AuthGroups authGroups, String auUsername, String auPassword, String auFullname, String auEmail) {
+	public AuthUsers(long auId, AuthGroups authGroups, String auUsername, String auPassword, String auFullname, String auEmail,String preferLanguage,byte[] auAvatar) {
 		this.auId = auId;
 		this.authGroups = authGroups;
 		this.auUsername = auUsername;
 		this.auPassword = auPassword;
 		this.auFullname = auFullname;
 		this.auEmail = auEmail;
+		this.auPreferLanguage=preferLanguage;
+		this.auAvatar=auAvatar;
+		this.auActive=true;
 	}
 
 	public AuthUsers(long auId, AuthGroups authGroups, String auUsername, String auPassword, String auFullname, String auEmail, Integer auPhone, String auAddress,
-			String auZipCode, String auLocation, Set<AnnotationLogs> annotationLogses, Set<AuthUserSettings> authUserSettingses, Set<AuthUserDataObjects> authUserDataObjectses,
+			String auZipCode, String auLocation,String preferLanguage,byte[] auAvatar,boolean auActive,Set<AnnotationLogs> annotationLogses, Set<AuthUserSettings> authUserSettingses, Set<AuthUserDataObjects> authUserDataObjectses,
 			Set<AuthUserLogs> authUserLogses) {
 		this.auId = auId;
 		this.authGroups = authGroups;
@@ -65,6 +70,9 @@ public class AuthUsers implements java.io.Serializable, IUser {
 		this.auAddress = auAddress;
 		this.auZipCode = auZipCode;
 		this.auLocation = auLocation;
+		this.auPreferLanguage=preferLanguage;
+		this.auAvatar=auAvatar;
+		this.auActive=auActive;
 		this.annotationLogses = annotationLogses;
 		this.authUserSettingses = authUserSettingses;
 		this.authUserDataObjectses = authUserDataObjectses;
@@ -172,6 +180,33 @@ public class AuthUsers implements java.io.Serializable, IUser {
 	public void setAuLocation(String auLocation) {
 		this.auLocation = auLocation;
 	}
+	
+	@Column(name = "au_prefer_language")
+	public String getAuPreferLanguage() {
+		return auPreferLanguage;
+	}
+
+	public void setAuPreferLanguage(String auPreferLanguage) {
+		this.auPreferLanguage = auPreferLanguage;
+	}
+
+	@Column(name = "au_avatar")
+	public byte[] getAuAvatar() {
+		return auAvatar;
+	}
+
+	public void setAuAvatar(byte[] auAvatar) {
+		this.auAvatar = auAvatar;
+	}
+
+	@Column(name = "au_ative")
+	public boolean isAuActive() {
+		return auActive;
+	}
+
+	public void setAuActive(boolean auActive) {
+		this.auActive = auActive;
+	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "authUsers")
 	public Set<AnnotationLogs> getAnnotationLogses() {
@@ -208,5 +243,7 @@ public class AuthUsers implements java.io.Serializable, IUser {
 	public void setAuthUserLogses(Set<AuthUserLogs> authUserLogses) {
 		this.authUserLogses = authUserLogses;
 	}
+
+
 
 }

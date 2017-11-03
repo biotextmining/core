@@ -1,5 +1,8 @@
 package com.silicolife.textmining.core.init;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Test;
@@ -19,20 +22,33 @@ import com.silicolife.textmining.core.interfaces.core.user.IUser;
 public class CreateUserTest {
 
 	@Test
-	public void test() throws InvalidDatabaseAccess, ANoteException {
-		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","textminingcarbontest","root","admin");
-		
+	public void test() throws InvalidDatabaseAccess, ANoteException, IOException {
+		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","databasename","databasenameuser","databasenamepwd");
+
 		List<IGroup> groups = InitConfiguration.getDataAccess().getAllGroups();
 		IGroup group = groups.get(0);
-		
+
 		Long userID = GenerateRandomId.generateID();
 		String password = "test";
 		Md5PasswordEncoder encoder = new Md5PasswordEncoder();
 		encoder.setIterations(13);
 		String salt = encoder.encodePassword(String.valueOf(userID), null);
 		String pass = GeneratePassword.generate(String.valueOf(password), salt);
-		IUser user = new AuthUsers(userID, (AuthGroups) group, "test", pass, "test", "test@silicolife.com");
+		String preferLanguage = "en";
+		byte[] auAvatar = extractBytes("src/test/resources/images/anoteuser.png");
+
+		IUser user = new AuthUsers(userID, (AuthGroups) group, "test3", pass, "test3", "test3@silicolife.com",preferLanguage,auAvatar);
 		InitConfiguration.getDataAccess().createUser(user);
+	}
+
+	public byte[] extractBytes (String ImageName) throws IOException {
+		// open image
+		File imgPath = new File(ImageName);
+		FileInputStream fin = new FileInputStream(imgPath);
+		byte [] b1=new byte[(int)imgPath.length()];
+		fin.read(b1);
+        fin.close();
+        return b1;
 	}
 
 }

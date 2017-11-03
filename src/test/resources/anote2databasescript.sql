@@ -749,6 +749,9 @@ CREATE TABLE IF NOT EXISTS `auth_users` (
   `au_address` VARCHAR(255) NULL,
   `au_zip_code` VARCHAR(16) NULL,
   `au_location` VARCHAR(255) NULL,
+  `au_prefer_language` VARCHAR(10) DEFAULT 'en',
+  `au_avatar` BLOB,
+  `au_active` TINYINT(1) DEFAULT 1,
   PRIMARY KEY (`au_id`),
   INDEX `idx_auth_users_01` (`au_group_id` ASC),
   UNIQUE INDEX `idx_auth_users_02` (`au_username` ASC),
@@ -1217,6 +1220,7 @@ INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (6, '2017-03-10 20:00:00', 'Alter Annotation table: remove start, end offset sentence, relation_classidfication and add manual curated field, Alter Processes table : add version, create and update date: Alter table corpus_has_publication_has_processes: Add version');
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (7, '2017-05-12 20:00:00', 'Update some external id links and icons');
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (8, '2017-05-25 20:00:00', 'Fix case sensitive search for old dbs');
+INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (9, '2017-11-02 00:00:00', 'User Tabel Update : Add Active, avatar and default language fields');
 
 
 COMMIT;
