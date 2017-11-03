@@ -17,6 +17,8 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ResourceElements;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Resources;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Synonyms;
+import com.silicolife.textmining.core.datastructures.documents.query.QueryFieldsEnum;
+import com.silicolife.textmining.core.datastructures.resources.ResourceFieldsEnum;
 
 @Repository
 public class ResourcesAuxDaoImpl implements ResourcesAuxDao {
@@ -48,6 +50,66 @@ public class ResourcesAuxDaoImpl implements ResourcesAuxDao {
 		qry.setParameter("userId", userId);
 		qry.setParameter("resourceTypeId", resourceTypeId);
 		qry.setParameter("privilegeResourceType", privilegeResourceType);
+		@SuppressWarnings("unchecked")
+		List<Resources> result = qry.list();
+
+		return result;
+
+	}
+	
+	@Override
+	public List<Resources> findActiveResourcesByAttributes(Long userId, Long resourceTypeId, String privilegeResourceType) {
+		Session session = sessionFactory.getCurrentSession();
+
+//		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a"
+//				+ " INNER JOIN resources AS b ON a.audo_uid_resource = b.reso_id"
+//				+ " WHERE audo_user_id = ? AND b.reso_resource_type_id = ? AND audo_type_resource = ?";
+//		SQLQuery qry = session.createSQLQuery(sqlString);
+//		qry.setParameter(0, userId);
+//		qry.setParameter(1, resourceTypeId);
+//		qry.setParameter(2, privilegeResourceType);
+//		qry.addEntity("queries", Resources.class);
+		
+		String hqlString = "select b from Resources as b "
+				+ "inner join AuthUserDataObjects as a on a.id.audoUidResource = b.resoId AND b.resoActive=1 "
+				+ "where a.id.audoUserId = :userId and a.id.audoTypeResource = :privilegeResourceType and b.resourceTypes.rtyId = :resourceTypeId";
+		Query qry = session.createQuery(hqlString);
+		qry.setParameter("userId", userId);
+		qry.setParameter("resourceTypeId", resourceTypeId);
+		qry.setParameter("privilegeResourceType", privilegeResourceType);
+		@SuppressWarnings("unchecked")
+		List<Resources> result = qry.list();
+
+		return result;
+
+	}
+	
+	
+	@Override
+	public List<Resources> findResourcesByAttributesPaginated(Long userId, Long resourceTypeId, String privilegeResourceType,Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy){
+		Session session = sessionFactory.getCurrentSession();
+
+		String hqlString = "select b from Resources as b "
+				+ "inner join AuthUserDataObjects as a on a.id.audoUidResource = b.resoId AND b.resoActive=1 "
+				+ "where a.id.audoUserId = :userId and a.id.audoTypeResource = :privilegeResourceType and b.resourceTypes.rtyId = :resourceTypeId";
+		
+		if(!sortBy.equals("none")){
+			String uniqueId = ResourceFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+			String ord = "DESC";
+			if(asc){
+				ord = "ASC";
+			}
+			hqlString = hqlString + " ORDER BY " + uniqueId + " " + ord;
+		}
+		
+				
+		Query qry = session.createQuery(hqlString);
+		qry.setParameter("userId", userId);
+		qry.setParameter("resourceTypeId", resourceTypeId);
+		qry.setParameter("privilegeResourceType", privilegeResourceType);
+		qry.setFirstResult(paginationIndex);
+		qry.setMaxResults(paginationSize);
+		qry.setFetchSize(paginationSize);
 		@SuppressWarnings("unchecked")
 		List<Resources> result = qry.list();
 

@@ -48,6 +48,9 @@ public interface GenericDao<T> {
 	public void evict(Object object);
 	
 	public T merge(Object object);
+	
+	//only works if sortBy is already the same as in the core entity that maps the database 
+	public List<T> findAllPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
 
 //	public T findUniqueByAttributeCaseSensitive(String attribute, Serializable value);
 }

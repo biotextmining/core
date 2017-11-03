@@ -18,4 +18,6 @@ public interface QueriesAuxDao {
 
 	public Integer countQueriesByAttributes(Long id, String resourceType);
 
+	public Integer countActiveQueriesByAttributes(Long id, String resourceType);
+
 }

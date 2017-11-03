@@ -1198,4 +1198,17 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public Integer countGetCorpusFrom(ISearchProperties searchProperties) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ICorpus> getCorpusFromSearchPaginated(ISearchProperties searchProperties, int index, int paginationSize)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

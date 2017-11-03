@@ -104,8 +104,8 @@ void andOp(HashSet<Long> a, ArrayList<HashSet<Long >> operations) throws  Annota
 	)*
 	"}"
 	{
-	  System.out.println("AND");
-	  System.out.println(a);
+	  //System.out.println("AND");
+	  //System.out.println(a);
 	 
 	    for(Long rID : a) {
 	    HashSet<Long > temp =   new HashSet<Long >();

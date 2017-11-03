@@ -13,8 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.QueriesManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.ResourcesManagerDao;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Queries;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsWrapper;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.queries.QueriesWrapper;
+import com.silicolife.textmining.core.datastructures.documents.PublicationLuceneIndexFields;
+import com.silicolife.textmining.core.datastructures.documents.query.QueriesLuceneFields;
+import com.silicolife.textmining.core.interfaces.core.document.IPublication;
+import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
 import com.silicolife.textmining.core.interfaces.process.IR.IQuery;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.manager.QueriesLuceneManagerDao;
 
@@ -98,6 +104,79 @@ public class QueriesLuceneServiceImpl implements IQueriesLuceneService {
 		return listQueries_;
 	}
 	
+	
+	@Override
+	public List<IQuery> getQueriesFromSearchPaginated(ISearchProperties searchProperties, int index, int paginationSize ){
+		List<String> fields = searchProperties.getFields();
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		Map<String, String> eqMustSentenceOnField = new HashMap<>();
+		eqMustSentenceOnField.put("quActive", "true");
+		Map<String, String> restrictions = searchProperties.getRestrictions();
+		
+		for(String key : restrictions.keySet()){
+			eqMustSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, key), restrictions.get(key));
+		}
+		
+		for(String field : fields){
+			eqSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, field),searchProperties.getValue());
+		}
+		
+		List<Queries> listQueries = null;
+		if(eqMustSentenceOnField.size()>0){
+			if(searchProperties.isWholeWords())
+				listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findMixedByAttributesPaginated(eqSentenceOnField, eqMustSentenceOnField, index, paginationSize);
+			else
+				listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findMixedByAttributesWKeywordsPaginated(eqSentenceOnField, eqMustSentenceOnField, index, paginationSize);
+		}
+		else{
+			if(searchProperties.isWholeWords())
+				listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findNotExactByAttributesPaginated(eqSentenceOnField, index, paginationSize);
+			else
+				listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findNotExactByAttributesWKeywordsPaginated(eqSentenceOnField, index, paginationSize);
+		}
+		
+		List<IQuery> listQueries_ = new ArrayList<IQuery>();
+		for (Queries query : listQueries) {
+			IQuery query_ = QueriesWrapper.convertToAnoteStructure(query);
+			listQueries_.add(query_);
+		}
+
+		return listQueries_;
+	}
+	
+	@Override
+	public Integer countQueriesFromSearch(ISearchProperties searchProperties ){
+		List<String> fields = searchProperties.getFields();
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		Map<String, String> eqMustSentenceOnField = new HashMap<>();
+		eqMustSentenceOnField.put("quActive", "true");
+		Map<String, String> restrictions = searchProperties.getRestrictions();
+		
+		for(String key : restrictions.keySet()){
+			eqMustSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, key), restrictions.get(key));
+		}
+		
+		for(String field : fields){
+			eqSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, field),searchProperties.getValue());
+		}
+		
+		List<Queries> listQueries = null;
+		if(eqMustSentenceOnField.size()>0){
+			if(searchProperties.isWholeWords())
+				listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findMixedByAttributes(eqSentenceOnField, eqMustSentenceOnField);
+			else
+				listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findMixedByAttributesWKeywords(eqSentenceOnField, eqMustSentenceOnField);
+		}
+		else{
+			if(searchProperties.isWholeWords())
+				listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findNotExactByAttributes(eqSentenceOnField);
+			else
+				listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findNotExactByAttributesWKeywords(eqSentenceOnField);
+		}
+		
+
+		return listQueries.size();
+	}
 	
 	@Override
 	public List<IQuery> getQueriesBykeywords(String keywords) {

@@ -8,6 +8,7 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.Daemo
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.corpora.ieprocess.IIEProcessAccess;
 import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
+import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpusStatistics;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
@@ -184,4 +185,5 @@ public interface ICorpusAccess extends IIEProcessAccess, IAnnotationAccess, IAnn
 	public Set<String> getCorpusPublicationsExternalIDFromSource(ICorpus corpus, String source) throws ANoteException;
 	
 	public Set<ICorpus> getCorpusByPublication(IPublication publication) throws ANoteException;
+
 }

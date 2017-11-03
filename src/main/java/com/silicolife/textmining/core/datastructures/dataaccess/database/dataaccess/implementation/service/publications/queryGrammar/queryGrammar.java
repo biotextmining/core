@@ -85,8 +85,8 @@ public class queryGrammar implements queryGrammarConstants {
       t(a, sonOp);
     }
     jj_consume_token(15);
-          System.out.println("AND");
-          System.out.println(a);
+          //System.out.println("AND");
+          //System.out.println(a);
 
             for(Long rID : a) {
             HashSet<Long > temp =   new HashSet<Long >();

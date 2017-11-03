@@ -67,6 +67,47 @@ public class ResourcesServiceImpl implements IResourcesService {
 		return resources_;
 
 	}
+	
+	@Override
+	public Integer countResourcesByType(String type) throws ResourcesExceptions {
+
+		ResourceTypes resourceType = resourcesManagerDao.getResourceTypeDao().findUniqueByAttribute("rtyResourceType", type);
+		if (resourceType == null) {
+			return 0;
+			// throw new ResourcesExceptions("default", "default");
+		}
+
+		List<IResource<IResourceElement>> resources_ = new ArrayList<IResource<IResourceElement>>();
+		long userId = userLogged.getCurrentUserLogged().getAuId();
+		List<Resources> resources = resourcesManagerDao.getResourcesAuxDao().findActiveResourcesByAttributes(userId, resourceType.getRtyId(), ResourcesTypeUtils.resources.getName());
+
+		return resources.size();
+
+	}
+	
+	@Override
+	public List<IResource<IResourceElement>> getResourcesByTypePaginated(String type, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) throws ResourcesExceptions {
+
+		ResourceTypes resourceType = resourcesManagerDao.getResourceTypeDao().findUniqueByAttribute("rtyResourceType", type);
+		if (resourceType == null) {
+			return new ArrayList<IResource<IResourceElement>>();
+			// throw new ResourcesExceptions("default", "default");
+		}
+
+		List<IResource<IResourceElement>> resources_ = new ArrayList<IResource<IResourceElement>>();
+		long userId = userLogged.getCurrentUserLogged().getAuId();
+		List<Resources> resources = resourcesManagerDao.getResourcesAuxDao().findResourcesByAttributesPaginated(userId, resourceType.getRtyId(), ResourcesTypeUtils.resources.getName(), paginationIndex, paginationSize, asc, sortBy);
+
+		for (Resources resource : resources) {
+			if(resource.isResoActive())
+			{
+				IResource<IResourceElement> resource_ = ResourcesWrapper.convertToAnoteStructure(resource);
+				resources_.add(resource_);
+			}
+		}
+		return resources_;
+
+	}
 
 	@Override
 	public IResource<IResourceElement> getResourcesById(Long id) {

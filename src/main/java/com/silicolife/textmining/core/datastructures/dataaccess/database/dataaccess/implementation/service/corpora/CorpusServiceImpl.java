@@ -121,7 +121,7 @@ public class CorpusServiceImpl implements ICorpusService {
 		 * get all corpus from a user
 		 */
 
-		List<Corpus> corpus = corpusManagerDao.getCorpusAuxDao().findQueriesByAttributesPaginated(user.getAuId(), corpusStr, paginationIndex, paginationSize, asc, sortBy);
+		List<Corpus> corpus = corpusManagerDao.getCorpusAuxDao().findCorpusByAttributesPaginated(user.getAuId(), corpusStr, paginationIndex, paginationSize, asc, sortBy);
 
 		List<ICorpus> corpus_ = new ArrayList<ICorpus>();
 		for (Corpus corpusObj : corpus) {

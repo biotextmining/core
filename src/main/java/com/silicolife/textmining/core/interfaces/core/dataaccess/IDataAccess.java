@@ -14,6 +14,7 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.resources
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.runserverprocesses.IRunServerProcesses;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.user.IUserPrivilegesAccess;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.ILuceneDataAcess;
+import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
 import com.silicolife.textmining.core.interfaces.core.user.IUser;
 
 public interface IDataAccess extends IPublicationManagerAccess, IGeneralDataAccess, ICorpusAccess, IResourceAccess, IUpdateAccess, IUserPrivilegesAccess, IHyperLinkMenuLayer,IRunServerProcesses, ILuceneDataAcess {
@@ -38,6 +39,7 @@ public interface IDataAccess extends IPublicationManagerAccess, IGeneralDataAcce
 	public void saveProperties(Properties properties) throws ANoteException;
 
 	public Properties loadProperties(Set<String> propertiesIdentifiers) throws ANoteException;
+
 
 
 

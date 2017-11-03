@@ -23,7 +23,9 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUserSettings;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUserSettingsId;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUsers;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.GeneratePassword;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.general.AuthPropertiesWrapper;
+import com.silicolife.textmining.core.datastructures.utils.GenerateRandomId;
 import com.silicolife.textmining.core.interfaces.core.user.IGroup;
 import com.silicolife.textmining.core.interfaces.core.user.IUser;
 
@@ -109,6 +111,39 @@ public class UserServiceImpl implements IUserService {
 
 		return true;
 	}
+	
+	@Transactional(readOnly = false)
+	@Override
+	public Boolean createUserFromWeb(IUser userIn) {
+		
+		Long id = GenerateRandomId.generateID();
+		Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+		encoder.setIterations(13);
+		String salt = encoder.encodePassword(String.valueOf(id), null);
+		String pass = GeneratePassword.generate(String.valueOf(userIn.getAuPassword()), salt);
+		
+		AuthUsers user = new AuthUsers();
+		user.setAuId(id);
+		user.setAuFullname(userIn.getAuFullname());
+		user.setAuUsername(userIn.getAuUsername());
+		user.setAuPassword(pass);
+		user.setAuAddress(userIn.getAuAddress());
+		user.setAuZipCode(userIn.getAuZipCode());
+		user.setAuLocation(userIn.getAuLocation());
+			user.setAuPhone(userIn.getAuPhone());
+		user.setAuEmail(userIn.getAuEmail());
+		user.setAuthGroups((AuthGroups) userIn.getAuthGroups());
+	
+		usersManagerDao.getAuthUsersDao().save(user);
+
+		AuthUsers userLog = userLogged.getCurrentUserLogged();
+		AuthUserLogs log = new AuthUserLogs(userLog, new Date(), "create", "auth_users", null, "create a new User");
+		usersManagerDao.getAuthUserLogsDao().save(log);
+
+		return true;
+	}
+	
+
 
 	@Transactional(readOnly = false)
 	@Override
@@ -120,6 +155,52 @@ public class UserServiceImpl implements IUserService {
 		usersManagerDao.getAuthUserLogsDao().save(log);
 
 		return true;
+	}
+	
+	@Transactional(readOnly = false)
+	@Override
+	public Boolean updateCurrentUserFromWeb(IUser user, String oldPassword) {
+		
+		AuthUsers userLog = userLogged.getCurrentUserLogged();
+		AuthUsers userFromBd = usersManagerDao.getAuthUsersDao().findUniqueByAttribute("auUsername", userLog.getAuUsername());
+		
+		
+		Long userId = userLog.getAuId();
+		String strUserId = String.valueOf(userId);
+		Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+		encoder.setIterations(13);
+		String salt = encoder.encodePassword(strUserId, null);
+		if (!passwordEncoder.isPasswordValid(userFromBd.getAuPassword(), oldPassword, salt)) {
+			return false;
+		}
+		else {
+			//String pass = GeneratePassword.generate(oldPassword, salt);
+			//userCopy.setAuPassword(pass);	
+		if(user.getAuAddress()!=null) userFromBd.setAuAddress(user.getAuAddress());
+		if(user.getAuEmail()!=null) userFromBd.setAuEmail(user.getAuEmail()); 
+		if(user.getAuFullname()!=null) userFromBd.setAuFullname(user.getAuFullname()); 
+		if(user.getAuLocation()!=null) userFromBd.setAuLocation(user.getAuLocation()); 
+		if(user.getAuPhone()!=null) userFromBd.setAuPhone(user.getAuPhone()); 
+		if(user.getAuUsername()!=null) userFromBd.setAuUsername(user.getAuUsername());
+		if(user.getAuZipCode()!=null) userFromBd.setAuZipCode(user.getAuZipCode());
+		
+		if(user.getAuPassword()!=null) {
+		Long id = userLog.getAuId();
+		encoder = new Md5PasswordEncoder();
+		encoder.setIterations(13);
+		salt = encoder.encodePassword(String.valueOf(id), null);
+		String pass = GeneratePassword.generate(String.valueOf(user.getAuPassword()), salt);
+		userFromBd.setAuPassword(pass);
+		}
+		
+		usersManagerDao.getAuthUsersDao().update(userFromBd);
+		
+		AuthUserLogs log = new AuthUserLogs(userFromBd, new Date(), "update", "auth_users", null, "update an user");
+		usersManagerDao.getAuthUserLogsDao().save(log);
+		
+
+		return true;
+		}
 	}
 
 	@Transactional(readOnly = false)

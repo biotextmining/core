@@ -10,12 +10,12 @@ public enum PublicationLuceneFields {
 	TITLEPCS("titlePCS"),
 	*/
 	
-	title("titleKNCS", "titleKCS", "titlePNCS", "titlePCS" ),
-	authors ("authorsKNCS","authorsKCS","authorsPNCS", "authorsPCS"),
-	journal ("journalKNCS","journalKCS","journalPNCS", "journalPCS" ),
-	abstractSection("abstractKNCS", "abstractKCS", "abstractPNCS", "abstractPCS"),
-	fullContent("fullContentKNCS", "fullContentKCS","fullContentPNCS", "fullContentPCS" ),
-	queryId("queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId");
+	title("titleNCS", "titleCS", "titleNCS", "titleCS", "titleSCS", "titleSNC" ),
+	authors ("authorsNCS","authorsCS","authorsNCS", "authorsCS", "authorsSCS", "authorsSNCS"),
+	journal ("journalNCS","journalCS","journalNCS", "journalCS", "journalSCS", "journalSNCS" ),
+	abstractSection("abstractNCS", "abstractCS", "abstractNCS", "abstractCS", "abstractSCS", "abstractSNCS"),
+	fullContent("fullContentNCS", "fullContentCS","fullContentNCS","fullContentCS",  "fullContentSCS","fullContentSNCS"  ),
+	queryId("queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId", "queryHasPublicationses.id.qhbQueryId", "queryHasPublicationses.id.qhbQueryId");
 	
 	/*
 	AUTHORSKNCS("authorsKNCS"),
@@ -43,12 +43,16 @@ public enum PublicationLuceneFields {
 	private final String kCS;
 	private final String PNCS;
 	private final String PCS;
+	private final String SCS;
+	private final String SNCS;
 	
-	PublicationLuceneFields(String kNCS, String kCS,String PNCS, String PCS ){
+	PublicationLuceneFields(String kNCS, String kCS,String PNCS, String PCS, String SCS,String SNCS ){
 		this.kNCS = kNCS;
 		this.kCS = kCS;
 		this.PNCS = PNCS;
 		this.PCS = PCS;
+		this.SCS = SCS;
+		this.SNCS = SNCS;
 	}
 	
 	
@@ -162,7 +166,15 @@ public static PublicationLuceneFields getFullContentbyAnalyser(String analyzer){
 	*/
 	public static String getLuceneField(ISearchProperties searchProperties, String field){
 		PublicationLuceneFields pubLuceneField = PublicationLuceneFields.valueOf(field);
-		
+		/*if(searchProperties.isSugestions()) {
+			if(searchProperties.isCaseSensitive()) {
+				return pubLuceneField.SCS;
+			}else
+			{
+				return pubLuceneField.SNCS;
+			}
+		}
+		else {*/
 		if(searchProperties.isKeywords()){
 			if(searchProperties.isCaseSensitive())
 				return pubLuceneField.kCS;
@@ -175,6 +187,7 @@ public static PublicationLuceneFields getFullContentbyAnalyser(String analyzer){
 			else
 				return pubLuceneField.PNCS;
 		}
+		//}
 	}
 	
 	public String getKNCS(){

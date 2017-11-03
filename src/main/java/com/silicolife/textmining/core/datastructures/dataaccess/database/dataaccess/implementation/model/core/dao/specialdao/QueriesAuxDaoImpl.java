@@ -63,6 +63,25 @@ public class QueriesAuxDaoImpl implements QueriesAuxDao {
 		return ((Number)qry.uniqueResult()).intValue();
 	}
 	
+	@Override
+	public Integer countActiveQueriesByAttributes(Long id, String resourceType) {
+		Session session = sessionFactory.getCurrentSession();
+//		String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " + "INNER JOIN queries as b ON a.audo_uid_resource = b.qu_id "
+//				+ "WHERE audo_user_id = ? AND audo_type_resource = ?";
+//		SQLQuery qry = session.createSQLQuery(sqlString);
+//		qry.setParameter(0, id);
+//		qry.setParameter(1, resourceType);
+//		qry.addEntity("queries", Queries.class);
+		
+		String hqlString = "select count(*) from Queries as b "
+				+ "inner join AuthUserDataObjects as a on a.id.audoUidResource = b.quId AND b.quActive=1 "
+				+ "where a.id.audoUserId = :id and a.id.audoTypeResource = :resourceType";
+		Query qry = session.createQuery(hqlString);
+		qry.setParameter("id", id);
+		qry.setParameter("resourceType", resourceType);
+		return ((Number)qry.uniqueResult()).intValue();
+	}
+	
 	
 	
 	@Override
@@ -89,7 +108,7 @@ public class QueriesAuxDaoImpl implements QueriesAuxDao {
 //		qry.addEntity("queries", Queries.class);
 		
 		String hqlString = "select b from Queries as b "
-				+ "inner join AuthUserDataObjects as a on a.id.audoUidResource = b.quId "
+				+ "inner join AuthUserDataObjects as a on a.id.audoUidResource = b.quId AND b.quActive=1 "
 				+ "where a.id.audoUserId = :id and a.id.audoTypeResource = :resourceType";
 		
 		if(!sortBy.equals("none")){

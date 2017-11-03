@@ -17,7 +17,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Fields;
+import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.annotations.Store;
@@ -105,7 +109,10 @@ public class Queries implements java.io.Serializable {
 		this.quQueryDate = quQueryDate;
 	}
 
-	@Field(store = Store.YES)
+	@Fields(value = { 
+			@Field(name="q_keywordsCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
+			@Field(name="q_keywordsNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO)
+	})
 	@Column(name = "qu_keywords", nullable = false, length = 16777215)
 	public String getQuKeywords() {
 		return this.quKeywords;
@@ -115,7 +122,10 @@ public class Queries implements java.io.Serializable {
 		this.quKeywords = quKeywords;
 	}
 
-	@Field
+	@Fields(value = { 
+			@Field(name="q_organismCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
+			@Field(name="q_organismNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO)
+	})
 	@Column(name = "qu_organism", length = 500)
 	public String getQuOrganism() {
 		return this.quOrganism;

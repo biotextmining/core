@@ -114,4 +114,8 @@ public interface IUserService {
 	
 	public void setUserLogged(UsersLogged userLogged);
 
+	public Boolean createUserFromWeb(IUser userIn);
+
+	public Boolean updateCurrentUserFromWeb(IUser user, String oldPassword);
+
 }
