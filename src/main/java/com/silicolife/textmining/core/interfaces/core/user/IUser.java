@@ -24,5 +24,11 @@ public interface IUser {
 	public String getAuZipCode();
 
 	public String getAuLocation();
+	
+	public String getAuPreferLanguage();
+	
+	public byte[] getAuAvatar(); 
+	
+	public boolean isAuActive();
 
 }

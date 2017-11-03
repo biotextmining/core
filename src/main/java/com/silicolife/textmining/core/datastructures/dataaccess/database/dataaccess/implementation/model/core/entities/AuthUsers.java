@@ -199,7 +199,7 @@ public class AuthUsers implements java.io.Serializable, IUser {
 		this.auAvatar = auAvatar;
 	}
 
-	@Column(name = "au_ative")
+	@Column(name = "au_active")
 	public boolean isAuActive() {
 		return auActive;
 	}
