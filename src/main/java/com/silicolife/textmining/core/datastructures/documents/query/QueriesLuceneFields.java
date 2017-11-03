@@ -21,12 +21,12 @@ public enum QueriesLuceneFields {
 	
 	
 	public static String getLuceneField(ISearchProperties searchProperties, String field){
-		QueriesLuceneFields pubLuceneField = QueriesLuceneFields.valueOf(field);
+		QueriesLuceneFields queryLuceneField = QueriesLuceneFields.valueOf(field);
 
 			if(searchProperties.isCaseSensitive())
-				return pubLuceneField.CS;
+				return queryLuceneField.CS;
 			else
-				return pubLuceneField.NCS;
+				return queryLuceneField.NCS;
 		
 		
 	}

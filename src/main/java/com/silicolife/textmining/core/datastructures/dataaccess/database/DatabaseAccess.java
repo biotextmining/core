@@ -18,6 +18,8 @@ import org.hibernate.service.ServiceRegistry;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.manager.LuceneManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.ILuceneService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.LuceneServiceImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.corpus.CorpusLuceneServiceImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.corpus.ICorpusLuceneService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.publications.IPublicationsLuceneService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.publications.PublicationsLuceneServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.queries.IQueriesLuceneService;
@@ -123,6 +125,7 @@ public class DatabaseAccess implements IDataAccess {
 	private IPublicationsLuceneService lucenePublicationsService;
 	private IResourcesElementLuceneService luceneResourcesElementService;
 	private IQueriesLuceneService luceneQueriesService;
+	private ICorpusLuceneService luceneCorpusService;
 	private IUserService userService;
 	private UsersLogged userLogged = new UsersLoggedImpl();
 	private boolean alreadyConfigurate = false;
@@ -201,7 +204,7 @@ public class DatabaseAccess implements IDataAccess {
 		luceneResourcesElementService = new ResourcesElementLuceneServiceImpl(luceneManagerDao.getResourcesLuceneManagerDao(), managerDao.getResourcesManagerDao());
 		luceneQueriesService = new QueriesLuceneServiceImpl(luceneManagerDao.getQueriesLuceneManagerDao(), managerDao.getQueriesManagerDao());
 		lucenePublicationsService = new PublicationsLuceneServiceImpl(managerDao.getPublicationsManagerDao(), luceneManagerDao.getPublicationsLuceneManagerDao());
-
+		luceneCorpusService = new CorpusLuceneServiceImpl(managerDao.getCorpusManagerDao(), luceneManagerDao.getCorpusLuceneManagerDao());
 	}
 
 	@Override
@@ -2536,6 +2539,33 @@ public class DatabaseAccess implements IDataAccess {
 			sessionFactory.getCurrentSession().getTransaction().rollback();
 			throw new ANoteException(e);
 		}		
+	}
+	
+	@Override
+	public Integer countGetCorpusFrom(ISearchProperties searchProperties) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer result = luceneCorpusService.countCorpusFromSearch(searchProperties);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return result;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}		
+	}
+	
+	@Override
+	public List<ICorpus> getCorpusFromSearchPaginated(ISearchProperties searchProperties, int index,
+			int paginationSize) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<ICorpus> result = luceneCorpusService.getCorpusFromSearchPaginated(searchProperties, index, paginationSize);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return result;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
 	}
 	
 }

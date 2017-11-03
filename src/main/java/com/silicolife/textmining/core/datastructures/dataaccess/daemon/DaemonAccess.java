@@ -17,6 +17,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implement
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.general.ClassesAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.hyperlinks.HyperlinkAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.lucene.LuceneAccessImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.lucene.Corpus.LuceneCorpusAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.lucene.publications.LucenePublicationsAcessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.lucene.queries.LuceneQueriesAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.lucene.resources.LuceneResourcesElementsAccessImpl;
@@ -103,6 +104,7 @@ public class DaemonAccess implements IDataAccess {
 	private LuceneResourcesElementsAccessImpl luceneResourcesElementsAccessImpl;
 	private LuceneQueriesAccessImpl luceneQueriesAccessImpl;
 	private LucenePublicationsAcessImpl lucenePublicationsAcessImpl;
+	private LuceneCorpusAccessImpl luceneCorpusAcessImpl;
 
 	public DaemonAccess(IDaemon daemonConfigurations) {
 		this.daemonConfigurations = daemonConfigurations;
@@ -124,6 +126,7 @@ public class DaemonAccess implements IDataAccess {
 		luceneResourcesElementsAccessImpl = new LuceneResourcesElementsAccessImpl();
 		luceneQueriesAccessImpl = new LuceneQueriesAccessImpl();
 		lucenePublicationsAcessImpl = new LucenePublicationsAcessImpl();
+		luceneCorpusAcessImpl = new LuceneCorpusAccessImpl();
 	}
 
 	public IDaemon getDaemonConfigurations() {
@@ -157,6 +160,7 @@ public class DaemonAccess implements IDataAccess {
 			luceneAccessImpl.setRestClient(webClient);
 			luceneResourcesElementsAccessImpl.setRestClient(webClient);
 			luceneQueriesAccessImpl.setRestClient(webClient);
+			luceneCorpusAcessImpl.setRestClient(webClient);
 			initConnection();
 		}
 	}
@@ -1209,6 +1213,19 @@ public class DaemonAccess implements IDataAccess {
 	@Override
 	public Integer countGetPublicationsFromSearch(ISearchProperties searchProperties) throws ANoteException {
 		return lucenePublicationsAcessImpl.countGetPublicationsFromSearch(searchProperties);
+	}
+
+	@Override
+	public Integer countGetCorpusFrom(ISearchProperties searchProperties) throws ANoteException {
+		//luceneCorpusAcessImpl;
+		return null;
+	}
+
+	@Override
+	public List<ICorpus> getCorpusFromSearchPaginated(ISearchProperties searchProperties, int index, int paginationSize)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
