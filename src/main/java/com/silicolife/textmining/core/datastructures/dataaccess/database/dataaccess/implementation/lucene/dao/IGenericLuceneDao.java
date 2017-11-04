@@ -1,8 +1,11 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUserDataObjects;
 
 public interface IGenericLuceneDao<T> {
 
@@ -84,6 +87,9 @@ public interface IGenericLuceneDao<T> {
 			Map<String, String> eqMustSentenceOnField);
 
 	public Integer countNotExactByAttributesWKeywords(Map<String, String> eqSentenceOnField);
+
+	public List<AuthUserDataObjects> findExactByAttributesForAuth(Map<String, String> eqSentenceOnField);
+
 
 
 

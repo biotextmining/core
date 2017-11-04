@@ -17,6 +17,9 @@ import org.hibernate.search.query.dsl.PhraseContext;
 import org.hibernate.search.query.dsl.PhraseMatchingContext;
 import org.hibernate.search.query.dsl.QueryBuilder;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUserDataObjects;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUserDataObjectsId;
+
 public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 
 	private SessionFactory sessionFactory;
@@ -33,6 +36,10 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	
 	private QueryBuilder getQueryBuilder(FullTextSession fullTextSession) {
 		return fullTextSession.getSearchFactory().buildQueryBuilder().forEntity(klass).get();
+	}
+	
+	private QueryBuilder getQueryBuilderForAuth(FullTextSession fullTextSession) {
+		return fullTextSession.getSearchFactory().buildQueryBuilder().forEntity(AuthUserDataObjects.class).get();
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -76,6 +83,8 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		}
 		return combinedQuery;
 	}
+	
+	
 	
 	@SuppressWarnings("rawtypes")
 	private BooleanJunction<BooleanJunction> addShouldWMustPhraseWithAttributesOnFields(Map<String, String> eqSentenceOnField,Map<String, String> eqMustSentenceOnField,  QueryBuilder qb,
@@ -169,7 +178,16 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		}
 		return combinedQuery;
 	}
-
+	
+	@SuppressWarnings({ "rawtypes" })
+	private FullTextQuery createFullTextQueryForAuthUsersfindExactByAttribute(Map<String, String> eqSentenceOnField) {
+		FullTextSession fullTextSession = getFullTextSession();
+		QueryBuilder qb = getQueryBuilderForAuth(fullTextSession);
+		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
+		combinedQuery = addMustPhraseWithAttributesOnFields(eqSentenceOnField, qb, combinedQuery);
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
+		return fullTextQuery;
+	}
 	
 	@SuppressWarnings({ "rawtypes" })
 	private FullTextQuery createFullTextQueryForfindExactByAttribute(Map<String, String> eqSentenceOnField) {
@@ -212,6 +230,7 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
 		return fullTextQuery;
 	}
+	
 	
 	@SuppressWarnings({ "rawtypes" })
 	private FullTextQuery createFullTextQueryForfindMixedByAttributeWKeywords(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField) {
@@ -307,6 +326,15 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		return fullTextQuery.list();
 	}
 	
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<AuthUserDataObjects> findExactByAttributesForAuth(Map<String, String> eqSentenceOnField) {
+		FullTextQuery fullTextQuery = createFullTextQueryForAuthUsersfindExactByAttribute(eqSentenceOnField);
+		//fullTextQuery.setProjection("audoUidResource");
+		return fullTextQuery.list();
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> findNotExactByAttributes(Map<String, String> eqSentenceOnField) {
@@ -322,13 +350,13 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	}
 	
 	
-	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> findMixedByAttributes (Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField ) {
+	public List<T> findMixedByAttributes (Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField) {
 		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttribute(eqSentenceOnField, eqMustSentenceOnField);
 		return fullTextQuery.list();
 	}
+	
 	
 	@SuppressWarnings("unchecked")
 	@Override

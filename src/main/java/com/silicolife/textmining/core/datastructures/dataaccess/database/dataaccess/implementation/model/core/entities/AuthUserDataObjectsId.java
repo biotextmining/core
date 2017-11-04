@@ -10,6 +10,7 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Store;
+import org.hibernate.search.bridge.StringBridge;
 import org.hibernate.search.bridge.builtin.LongBridge;
 
 /**
@@ -53,6 +54,8 @@ public class AuthUserDataObjectsId implements java.io.Serializable {
 		this.audoUidResource = audoUidResource;
 	}
 
+	
+	@Field(name="Auth_audo_type_resource", index=Index.YES, analyze=Analyze.NO, store=Store.NO)
 	@Column(name = "audo_type_resource", nullable = false, length = 9)
 	public String getAudoTypeResource() {
 		return this.audoTypeResource;

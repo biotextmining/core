@@ -4,7 +4,8 @@ import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties
 
 public enum CorpusLuceneFieldsEnum {
 	
-	name ("crp_nameNCS","crp_nameCS");
+	name ("crp_nameNCS","crp_nameCS"),
+	notes("crp_notesNCS","crp_notesCS");
 	
 	private final String NCS;
 	private final String CS;
