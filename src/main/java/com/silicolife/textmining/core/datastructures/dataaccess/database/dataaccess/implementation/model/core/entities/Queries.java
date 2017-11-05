@@ -162,7 +162,10 @@ public class Queries implements java.io.Serializable {
 		this.quAvailableAbstracts = quAvailableAbstracts;
 	}
 
-	@Field
+	@Fields(value = { 
+			@Field(name="q_query_nameCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
+			@Field(name="q_query_nameNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO)
+	})
 	@Column(name = "qu_query_name", length = 500)
 	public String getQuQueryName() {
 		return this.quQueryName;

@@ -6,7 +6,8 @@ public enum QueriesLuceneFields {
 	
 	
 	keywords("q_keywordsNCS", "q_keywordsCS" ),
-	organism ("q_organismNCS","q_organismCS");
+	organism ("q_organismNCS","q_organismCS"),
+	name("q_query_nameNCS","q_query_nameCS");
 	
 	
 	private final String NCS;
