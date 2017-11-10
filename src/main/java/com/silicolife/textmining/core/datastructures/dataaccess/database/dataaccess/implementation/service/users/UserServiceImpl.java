@@ -12,6 +12,7 @@ import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lowagie.text.pdf.codec.Base64;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.CredentialsAccessException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.UserExceptions;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.general.ExceptionsCodes;
@@ -201,6 +202,31 @@ public class UserServiceImpl implements IUserService {
 
 		return true;
 		}
+	}
+	
+	@Transactional(readOnly = false)
+	@Override
+	public byte[] postAvatar(String image) {
+		
+		AuthUsers userLog = userLogged.getCurrentUserLogged();
+		AuthUsers userFromBd = usersManagerDao.getAuthUsersDao().findUniqueByAttribute("auUsername", userLog.getAuUsername());
+		System.out.println(image);
+		String[] bytesString = image.split(",");
+		byte[] bytes = new byte[bytesString.length];
+		for(int i = 0 ; i < bytes.length ; ++i) {
+		    bytes[i] = Byte.parseByte(bytesString[i]);
+		}
+		System.out.println(bytes);
+		userFromBd.setAuAvatar(bytes);
+		
+		usersManagerDao.getAuthUsersDao().update(userFromBd);
+		
+		AuthUserLogs log = new AuthUserLogs(userFromBd, new Date(), "update", "auth_users", null, "update an user");
+		usersManagerDao.getAuthUserLogsDao().save(log);
+		
+
+		return bytes;
+		
 	}
 
 	@Transactional(readOnly = false)

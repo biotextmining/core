@@ -328,7 +328,7 @@ public class Publications implements java.io.Serializable {
 	
 	@Fields(value = { 
 			@Field(name="notesCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
-			@Field(name="notesCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
+			@Field(name="notesNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
 			@Field(name="notesSNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzer"), store=Store.NO),
 			@Field(name="notesSCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzerCS"), store=Store.NO)
 	})
