@@ -13,10 +13,11 @@ public enum PublicationLuceneFields {
 	title("titleNCS", "titleCS", "titleNCS", "titleCS", "titleSCS", "titleSNC" ),
 	authors ("authorsNCS","authorsCS","authorsNCS", "authorsCS", "authorsSCS", "authorsSNCS"),
 	journal ("journalNCS","journalCS","journalNCS", "journalCS", "journalSCS", "journalSNCS" ),
+	notes("notesNCS","notesCS","notesNCS","notesCS","notesSCS","notesSNCS"),
 	abstractSection("abstractNCS", "abstractCS", "abstractNCS", "abstractCS", "abstractSCS", "abstractSNCS"),
 	fullContent("fullContentNCS", "fullContentCS","fullContentNCS","fullContentCS",  "fullContentSCS","fullContentSNCS"  ),
-	queryId("queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId", "queryHasPublicationses.id.qhbQueryId", "queryHasPublicationses.id.qhbQueryId");
-	
+	queryId("queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId", "queryHasPublicationses.id.qhbQueryId", "queryHasPublicationses.id.qhbQueryId"),
+	corpusId("corpusHasPublicationses.id.chpCorpusId","corpusHasPublicationses.id.chpCorpusId","corpusHasPublicationses.id.chpCorpusId","corpusHasPublicationses.id.chpCorpusId","corpusHasPublicationses.id.chpCorpusId","corpusHasPublicationses.id.chpCorpusId");
 	/*
 	AUTHORSKNCS("authorsKNCS"),
 	AUTHORSKCS("authorsKCS"),

@@ -14,4 +14,6 @@ public interface ICorpusLuceneService {
 
 	void setUserLogged(UsersLogged userLogged);
 
+	public List<ICorpus> getCorpusFromSearchWPrivileges(ISearchProperties searchProperties);
+
 }

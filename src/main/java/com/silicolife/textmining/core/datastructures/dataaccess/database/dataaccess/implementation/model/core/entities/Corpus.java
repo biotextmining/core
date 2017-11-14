@@ -92,7 +92,11 @@ public class Corpus implements java.io.Serializable {
 	public void setCrpActive(boolean crpActive) {
 		this.crpActive = crpActive;
 	}
-
+	
+	@Fields(value = { 
+			@Field(name="crp_notesCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
+			@Field(name="crp_notesNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO)
+	})
 	@Column(name = "crp_notes", length = 65535)
 	public String getCrpNotes() {
 		return this.crpNotes;

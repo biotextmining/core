@@ -118,4 +118,6 @@ public interface IUserService {
 
 	public Boolean updateCurrentUserFromWeb(IUser user, String oldPassword);
 
+	public byte[] postAvatar(String image);
+
 }
