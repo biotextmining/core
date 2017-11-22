@@ -90,6 +90,34 @@ public interface IGenericLuceneDao<T> {
 
 	public List<AuthUserDataObjects> findExactByAttributesForAuth(Map<String, String> eqSentenceOnField);
 
+	// Lucene methods that filters results based on the permission to the resource (only returns resources that the user has some permission on them)
+	public List<T> findMixedByAttributesPaginatedWAuth(Map<String, String> eqSentenceOnField,
+			Map<String, String> eqMustSentenceOnField, Map<String, String> authFields, String idField, int index,
+			int paginationSize);
+
+
+	public List<T> findMixedByAttributesWKeywordsPaginatedWAuth(Map<String, String> eqSentenceOnField,
+			Map<String, String> eqMustSentenceOnField, Map<String, String> authFields, String idField, int index,
+			int paginationSize);
+
+	public List<T> findNotExactByAttributesPaginatedWAuth(Map<String, String> eqSentenceOnField,
+			Map<String, String> authFields, String idField, int index, int paginationSize);
+
+	public List<T> findNotExactByAttributesWKeywordsPaginatedWAuth(Map<String, String> eqSentenceOnField,
+			Map<String, String> authFields, String idField, int index, int paginationSize);
+
+	public List<T> findMixedByAttributesWAuth(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField,
+			Map<String, String> authFields, String idField);
+
+	public List<T> findMixedByAttributesWKeywordsWAuth(Map<String, String> eqSentenceOnField,
+			Map<String, String> eqMustSentenceOnField, Map<String, String> authFields, String idField);
+
+	public List<T> findNotExactByAttributesWAuth(Map<String, String> eqSentenceOnField, Map<String, String> authFields,
+			String idField);
+
+	public List<T> findNotExactByAttributesWKeywordsWAuth(Map<String, String> eqSentenceOnField,
+			Map<String, String> authFields, String idField);
+
 
 
 

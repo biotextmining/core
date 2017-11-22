@@ -153,7 +153,9 @@ public class ResourceElements implements java.io.Serializable {
 		@Field(name = "keywordEdgeNGram_res_element", index = Index.YES, store = Store.NO,
 		analyze = Analyze.YES, analyzer = @Analyzer(definition = "keywordEdgeAnalyzer"), boost = @Boost(2)),
 		@Field(name = "tokenEdgeNGram_res_element", index = Index.YES, store = Store.NO,
-		analyze = Analyze.YES, analyzer = @Analyzer(definition = "tokenEdgeAnalyzer"))
+		analyze = Analyze.YES, analyzer = @Analyzer(definition = "tokenEdgeAnalyzer")),
+		@Field(name="res_elementCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
+		@Field(name="res_elementNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO)
 	})
 	@Column(name = "res_element", nullable = false, length = 500)
 	public String getResElement() {

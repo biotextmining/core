@@ -202,7 +202,7 @@ public class DatabaseAccess implements IDataAccess {
 		luceneManagerDao = new LuceneManagerDao(sessionFactory);
 		luceneService = new LuceneServiceImpl(sessionFactory);
 		luceneResourcesElementService = new ResourcesElementLuceneServiceImpl(luceneManagerDao.getResourcesLuceneManagerDao(), managerDao.getResourcesManagerDao());
-		luceneQueriesService = new QueriesLuceneServiceImpl(luceneManagerDao.getQueriesLuceneManagerDao(), managerDao.getQueriesManagerDao());
+		luceneQueriesService = new QueriesLuceneServiceImpl(luceneManagerDao.getQueriesLuceneManagerDao(), managerDao.getQueriesManagerDao(), userLogged);
 		lucenePublicationsService = new PublicationsLuceneServiceImpl(managerDao.getPublicationsManagerDao(), luceneManagerDao.getPublicationsLuceneManagerDao());
 		luceneCorpusService = new CorpusLuceneServiceImpl(managerDao.getCorpusManagerDao(), luceneManagerDao.getCorpusLuceneManagerDao(), userLogged);
 	}

@@ -1,5 +1,7 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -66,6 +68,22 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 					.sentence(value)
 					.createQuery();
 			combinedQuery.should(luceneQuery); //must(luceneQuery);
+		}
+		return combinedQuery;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private BooleanJunction<BooleanJunction> addShouldPhraseWithMultipleAttributesOnFields(Map<String, List<String>> eqSentenceOnField,  QueryBuilder qb,
+			BooleanJunction<BooleanJunction> combinedQuery) {
+		for(String field : eqSentenceOnField.keySet()){
+			List<String> values = eqSentenceOnField.get(field);
+			for(String value : values) {
+			Query luceneQuery = qb.phrase()
+					.onField(field)
+					.sentence(value)
+					.createQuery();
+			combinedQuery.should(luceneQuery); //must(luceneQuery);
+			}
 		}
 		return combinedQuery;
 	}
@@ -210,11 +228,35 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	}
 	
 	@SuppressWarnings({ "rawtypes" })
+	private FullTextQuery createFullTextQueryForfindNotExactByAttributeWAuth(Map<String, String> eqSentenceOnField, Map<String, String> authFields, String idField) {
+		FullTextSession fullTextSession = getFullTextSession();
+		QueryBuilder qb = getQueryBuilder(fullTextSession);
+		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
+		combinedQuery = addShouldPhraseWithAttributesOnFields(eqSentenceOnField, qb, combinedQuery);
+		Query permissionsQuery= createQueryToGetResourcesWPermissions(authFields,qb,idField);
+		combinedQuery.must(permissionsQuery);
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
+		return fullTextQuery;
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
 	private FullTextQuery createFullTextQueryForfindNotExactByAttributeWKeywords(Map<String, String> eqSentenceOnField) {
 		FullTextSession fullTextSession = getFullTextSession();
 		QueryBuilder qb = getQueryBuilder(fullTextSession);
 		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
 		combinedQuery = addShouldKeywordsWithAttributesOnFields(eqSentenceOnField, qb, combinedQuery);
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
+		return fullTextQuery;
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	private FullTextQuery createFullTextQueryForfindNotExactByAttributeWKeywordsWAuth(Map<String, String> eqSentenceOnField, Map<String, String> authFields, String idField) {
+		FullTextSession fullTextSession = getFullTextSession();
+		QueryBuilder qb = getQueryBuilder(fullTextSession);
+		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
+		combinedQuery = addShouldKeywordsWithAttributesOnFields(eqSentenceOnField, qb, combinedQuery);
+		Query permissionsQuery = createQueryToGetResourcesWPermissions(authFields, qb, idField);
+		combinedQuery.must(permissionsQuery);
 		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
 		return fullTextQuery;
 	}
@@ -231,6 +273,42 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		return fullTextQuery;
 	}
 	
+	@SuppressWarnings({ "rawtypes" })
+	private Query createQueryToGetResourcesWPermissions(Map<String, String> authFields,QueryBuilder qb, String idField) {
+		List<AuthUserDataObjects> l = this.findExactByAttributesForAuth(authFields);
+		Map<String, List<String>> ids = new HashMap<String, List<String>>();
+		List<String> list = new ArrayList<String>();
+		for(AuthUserDataObjects a : l) {
+			  list.add(String.valueOf(a.getId().getAudoUidResource()));
+		}
+		ids.put(idField,list);
+		BooleanJunction<BooleanJunction> combinedQuery2 = qb.bool();
+		combinedQuery2= this.addShouldPhraseWithMultipleAttributesOnFields(ids, qb,combinedQuery2 );
+		return combinedQuery2.createQuery();
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	private FullTextQuery createFullTextQueryForfindMixedByAttributeWAuth(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, Map<String, String> authFields, String idField) {
+		FullTextSession fullTextSession = getFullTextSession();
+		QueryBuilder qb = getQueryBuilder(fullTextSession);
+		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
+		combinedQuery = addShouldWMustPhraseWithAttributesOnFields(eqSentenceOnField,eqMustSentenceOnField, qb, combinedQuery);
+		List<AuthUserDataObjects> l = this.findExactByAttributesForAuth(authFields);
+		Map<String, List<String>> ids = new HashMap<String, List<String>>();
+		List<String> list = new ArrayList<String>();
+		for(AuthUserDataObjects a : l) {
+			//System.out.println(a.getId().getAudoUidResource());
+			  list.add(String.valueOf(a.getId().getAudoUidResource()));
+		}
+		//QueryBuilder qb2 = getQueryBuilder(fullTextSession);
+		ids.put(idField,list);
+		BooleanJunction<BooleanJunction> combinedQuery2 = qb.bool();
+		combinedQuery2= this.addShouldPhraseWithMultipleAttributesOnFields(ids, qb,combinedQuery2 );
+		combinedQuery.must(combinedQuery2.createQuery());
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
+		return fullTextQuery;
+	}
+	
 	
 	@SuppressWarnings({ "rawtypes" })
 	private FullTextQuery createFullTextQueryForfindMixedByAttributeWKeywords(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField) {
@@ -238,6 +316,27 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		QueryBuilder qb = getQueryBuilder(fullTextSession);
 		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
 		combinedQuery = addShouldWMustKeywordsWithAttributesOnFields(eqSentenceOnField,eqMustSentenceOnField, qb, combinedQuery);
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
+		return fullTextQuery;
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	private FullTextQuery createFullTextQueryForfindMixedByAttributeWKeywordsWAuth(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField
+			, Map<String, String> authFields, String idField) {
+		FullTextSession fullTextSession = getFullTextSession();
+		QueryBuilder qb = getQueryBuilder(fullTextSession);
+		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
+		combinedQuery = addShouldWMustKeywordsWithAttributesOnFields(eqSentenceOnField,eqMustSentenceOnField, qb, combinedQuery);
+		List<AuthUserDataObjects> l = this.findExactByAttributesForAuth(authFields);
+		Map<String, List<String>> ids = new HashMap<String, List<String>>();
+		List<String> list = new ArrayList<String>();
+		for(AuthUserDataObjects a : l) {
+			  list.add(String.valueOf(a.getId().getAudoUidResource()));
+		}
+		ids.put(idField,list);
+		BooleanJunction<BooleanJunction> combinedQuery2 = qb.bool();
+		combinedQuery2= this.addShouldPhraseWithMultipleAttributesOnFields(ids, qb,combinedQuery2 );
+		combinedQuery.must(combinedQuery2.createQuery());
 		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
 		return fullTextQuery;
 	}
@@ -344,8 +443,22 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<T> findNotExactByAttributesWAuth(Map<String, String> eqSentenceOnField, Map<String, String> authFields,String idField) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttributeWAuth(eqSentenceOnField, authFields, idField);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<T> findNotExactByAttributesWKeywords(Map<String, String> eqSentenceOnField) {
 		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttributeWKeywords(eqSentenceOnField);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findNotExactByAttributesWKeywordsWAuth(Map<String, String> eqSentenceOnField, Map<String, String> authFields,String idField) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttributeWKeywordsWAuth(eqSentenceOnField,authFields,idField);
 		return fullTextQuery.list();
 	}
 	
@@ -357,11 +470,27 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		return fullTextQuery.list();
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findMixedByAttributesWAuth (Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField,
+			Map<String, String> authFields,String idField) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttributeWAuth(eqSentenceOnField, eqMustSentenceOnField, authFields, idField);
+		return fullTextQuery.list();
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> findMixedByAttributesWKeywords (Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField ) {
 		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttributeWKeywords(eqSentenceOnField, eqMustSentenceOnField);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findMixedByAttributesWKeywordsWAuth (Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField
+			, Map<String, String> authFields,String idField) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttributeWKeywordsWAuth(eqSentenceOnField, eqMustSentenceOnField, authFields, idField);
 		return fullTextQuery.list();
 	}
 	
@@ -441,6 +570,17 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<T> findMixedByAttributesPaginatedWAuth(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField,
+			 Map<String, String> authFields,String idField ,int index,int paginationSize) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttributeWAuth(eqSentenceOnField, eqMustSentenceOnField, authFields, idField);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<T> findMixedByAttributesPaginated(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, int index,
 			int paginationSize) {
 		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttribute(eqSentenceOnField, eqMustSentenceOnField);
@@ -450,11 +590,24 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		return fullTextQuery.list();
 	}
 	
+	
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> findMixedByAttributesWKeywordsPaginated(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, int index,
 			int paginationSize) {
 		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttributeWKeywords(eqSentenceOnField, eqMustSentenceOnField);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findMixedByAttributesWKeywordsPaginatedWAuth(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField,
+			Map<String, String> authFields,String idField,int index,int paginationSize) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttributeWKeywordsWAuth(eqSentenceOnField, eqMustSentenceOnField, authFields, idField);
 		fullTextQuery.setFirstResult(index);
 		fullTextQuery.setMaxResults(paginationSize);
 		fullTextQuery.setFetchSize(paginationSize);
@@ -474,9 +627,31 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<T> findNotExactByAttributesPaginatedWAuth(Map<String, String> eqSentenceOnField,
+			Map<String, String> authFields,String idField, int index,int paginationSize) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttributeWAuth(eqSentenceOnField,authFields, idField);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<T> findNotExactByAttributesWKeywordsPaginated(Map<String, String> eqSentenceOnField, int index,
 			int paginationSize) {
 		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttributeWKeywords(eqSentenceOnField);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findNotExactByAttributesWKeywordsPaginatedWAuth(Map<String, String> eqSentenceOnField,
+			Map<String, String> authFields,String idField,int index,int paginationSize) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttributeWKeywordsWAuth(eqSentenceOnField, authFields, idField);
 		fullTextQuery.setFirstResult(index);
 		fullTextQuery.setMaxResults(paginationSize);
 		fullTextQuery.setFetchSize(paginationSize);
