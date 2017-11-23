@@ -4,20 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.IGenericLuceneDao;
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ResourceElements;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Resources;
 
 @Repository
 public class ResourcesLuceneManagerDao {
-	
-	private IGenericLuceneDao<ResourceElements> resourcesElememtsLuceneDao;
+	private IGenericLuceneDao<Resources> resourcesLuceneDao;
 
 	@Autowired
-	public ResourcesLuceneManagerDao(IGenericLuceneDao<ResourceElements> resourcesElememtsLuceneDao){
-		this.resourcesElememtsLuceneDao = resourcesElememtsLuceneDao;
+	public ResourcesLuceneManagerDao(IGenericLuceneDao<Resources> resourcesLuceneDao){
+		this.resourcesLuceneDao = resourcesLuceneDao;
 	}
 
-	public IGenericLuceneDao<ResourceElements> getResourcesElememtsLuceneDao() {
-		return resourcesElememtsLuceneDao;
+	public IGenericLuceneDao<Resources> getResourcesLuceneDao() {
+		return resourcesLuceneDao;
 	}
-	
 }

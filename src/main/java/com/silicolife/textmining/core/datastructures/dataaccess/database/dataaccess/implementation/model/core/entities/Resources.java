@@ -19,6 +19,7 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Fields;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.annotations.Store;
 
 /**
@@ -56,6 +57,7 @@ public class Resources implements java.io.Serializable {
 	}
 
 	@Id
+	@IndexedEmbedded
 	@Column(name = "reso_id", unique = true, nullable = false)
 	public long getResoId() {
 		return this.resoId;
@@ -64,7 +66,8 @@ public class Resources implements java.io.Serializable {
 	public void setResoId(long resoId) {
 		this.resoId = resoId;
 	}
-
+	
+	@IndexedEmbedded
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "reso_resource_type_id", nullable = false)
 	public ResourceTypes getResourceTypes() {

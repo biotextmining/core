@@ -5,7 +5,8 @@ import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties
 public enum ResourcesLuceneFieldsEnum {
 	
 	name ("reso_resource_nameNCS","reso_resource_nameCS"),
-	informations("reso_notesNCS","reso_notesCS");
+	info("reso_notesNCS","reso_notesCS"),
+	type("resourceTypes.rtyResourceType", "resourceTypes.rtyResourceType");
 	
 	private final String NCS;
 	private final String CS;
