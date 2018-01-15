@@ -18,6 +18,9 @@ public interface IPublicationsLuceneService {
 			int paginationSize);
 
 	public Integer countGetPublicationsFromSearch(ISearchProperties searchProperties);
+
+	public List<IPublication> getPublicationsFromSearchPaginatedWSort(ISearchProperties searchProperties, int index,
+			int paginationSize, boolean asc, String sortBy);
 	
 
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.lucene.search.SortField.Type;
+
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUserDataObjects;
 
 public interface IGenericLuceneDao<T> {
@@ -117,6 +119,52 @@ public interface IGenericLuceneDao<T> {
 
 	public List<T> findNotExactByAttributesWKeywordsWAuth(Map<String, String> eqSentenceOnField,
 			Map<String, String> authFields, String idField);
+
+	public List<T> findMixedByAttributesPaginatedWSort(Map<String, String> eqSentenceOnField,
+			Map<String, String> eqMustSentenceOnField, int index, int paginationSize, String sortField, Type sortType,
+			boolean asc);
+
+	public List<T> findMixedByAttributesWKeywordsPaginatedWSort(Map<String, String> eqSentenceOnField,
+			Map<String, String> eqMustSentenceOnField, int index, int paginationSize, String sortField, Type sortType,
+			boolean asc);
+
+	public List<T> findNotExactByAttributesPaginatedWSort(Map<String, String> eqSentenceOnField, int index, int paginationSize,
+			String sortField, Type sortType, boolean asc);
+
+	public List<T> findNotExactByAttributesWKeywordsPaginatedWSort(Map<String, String> eqSentenceOnField, int index,
+			int paginationSize, String sortField, Type sortType, boolean asc);
+
+	public List<T> findMixedByAttributesPaginatedWAuth(Map<String, String> eqSentenceOnField,
+			Map<String, String> eqMustSentenceOnField, Map<String, String> authFields, String idField, int index,
+			int paginationSize, String sortField, Type sortType, boolean asc);
+
+	public List<T> findMixedByAttributesWKeywordsPaginatedWAuth(Map<String, String> eqSentenceOnField,
+			Map<String, String> eqMustSentenceOnField, Map<String, String> authFields, String idField, int index,
+			int paginationSize, String sortField, Type sortType, boolean asc);
+
+	public List<T> findNotExactByAttributesPaginatedWAuth(Map<String, String> eqSentenceOnField,
+			Map<String, String> authFields, String idField, int index, int paginationSize, String sortField,
+			Type sortType, boolean asc);
+
+	public List<T> findNotExactByAttributesWKeywordsPaginatedWAuth(Map<String, String> eqSentenceOnField,
+			Map<String, String> authFields, String idField, int index, int paginationSize, String sortField,
+			Type sortType, boolean asc);
+
+	public List<T> findMixedByAttributesPaginatedWSort(Map<String, String> eqSentenceOnField,
+			Map<String, String> eqMustSentenceOnField, Map<String, List<String>> filtersOnFields, int index,
+			int paginationSize, String sortField, Type sortType, boolean asc);
+
+
+	public List<T> findNotExactByAttributesPaginatedWSort(Map<String, String> eqSentenceOnField,
+			Map<String, List<String>> filtersOnFields, int index, int paginationSize, String sortField, Type sortType,
+			boolean asc);
+
+	public List<T> findForWebTablePaginated(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField,
+			Map<String, List<String>> filtersOnFields, boolean isPhrase, int index, int paginationSize,
+			String sortField, Type sortType, boolean asc);
+
+	public Integer countForWebTable(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField,
+			Map<String, List<String>> filtersOnFields, boolean isPhrase);
 
 
 

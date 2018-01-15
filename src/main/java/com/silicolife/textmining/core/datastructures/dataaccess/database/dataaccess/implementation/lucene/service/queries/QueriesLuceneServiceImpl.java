@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.lucene.search.SortField;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -142,6 +143,60 @@ public class QueriesLuceneServiceImpl implements IQueriesLuceneService {
 				listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findNotExactByAttributesPaginatedWAuth(eqSentenceOnField,permissionFields,idField, index, paginationSize);
 			else
 				listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findNotExactByAttributesWKeywordsPaginatedWAuth(eqSentenceOnField,permissionFields,idField, index, paginationSize);
+		}
+		
+		List<IQuery> listQueries_ = new ArrayList<IQuery>();
+		for (Queries query : listQueries) {
+			IQuery query_ = QueriesWrapper.convertToAnoteStructure(query);
+			listQueries_.add(query_);
+		}
+
+		return listQueries_;
+	}
+	
+	@Override
+	public List<IQuery> getQueriesFromSearchPaginatedWAuthAndSort(ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy ){
+		
+		if(sortBy.equals("none")) {
+			return this.getQueriesFromSearchPaginatedWAuth(searchProperties, index, paginationSize);
+		}
+		
+		List<String> fields = searchProperties.getFields();
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		Map<String, String> eqMustSentenceOnField = new HashMap<>();
+		String idField = "quId";
+		eqMustSentenceOnField.put("quActive", "true");
+		Map<String, String> restrictions = searchProperties.getRestrictions();
+		Map<String, String> permissionFields = new HashMap<>();
+		
+		
+		permissionFields.put("id.Auth_audo_user_id", String.valueOf(user.getCurrentUserLogged().getAuId()));
+		permissionFields.put("id.Auth_audo_type_resource", "queries");
+		
+		String sortField = QueriesLuceneFields.getSortField(sortBy);
+		
+		SortField.Type sortType = QueriesLuceneFields.getSortType(sortBy);
+		
+		for(String key : restrictions.keySet()){
+			eqMustSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, key), restrictions.get(key));
+		}
+		
+		for(String field : fields){
+			eqSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, field),searchProperties.getValue());
+		}
+		
+		List<Queries> listQueries = null;
+		if(eqMustSentenceOnField.size()>0){
+			if(searchProperties.isWholeWords())
+				listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findMixedByAttributesPaginatedWAuth(eqSentenceOnField, eqMustSentenceOnField,permissionFields,idField, index, paginationSize, sortField,sortType, asc );
+			else
+				listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findMixedByAttributesWKeywordsPaginatedWAuth(eqSentenceOnField, eqMustSentenceOnField,permissionFields,idField, index, paginationSize, sortField,sortType, asc);
+		}
+		else{
+			if(searchProperties.isWholeWords())
+				listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findNotExactByAttributesPaginatedWAuth(eqSentenceOnField,permissionFields,idField, index, paginationSize, sortField,sortType, asc);
+			else
+				listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findNotExactByAttributesWKeywordsPaginatedWAuth(eqSentenceOnField,permissionFields,idField, index, paginationSize, sortField,sortType, asc);
 		}
 		
 		List<IQuery> listQueries_ = new ArrayList<IQuery>();

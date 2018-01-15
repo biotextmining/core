@@ -17,6 +17,7 @@ public class SearchPropertiesImpl implements ISearchProperties {
 	private boolean caseSensitive;
 	private boolean sugestions;
 	private Map<String, String> restrictions;
+	private Map<String,List<String>> filters;
 	
 	public SearchPropertiesImpl(){
 		this.value = "";
@@ -26,6 +27,7 @@ public class SearchPropertiesImpl implements ISearchProperties {
 		this.caseSensitive = false;
 		this.sugestions = false;
 		this.restrictions = new HashMap<String, String>();
+		this.filters = new HashMap<String,List<String>>();
 	}
 	
 	public SearchPropertiesImpl(String value, List<String> fields, boolean wholeWords, boolean keywords ,
@@ -119,9 +121,31 @@ public class SearchPropertiesImpl implements ISearchProperties {
 	}
 	
 	@Override
+	public Map<String, List<String>> getFilters() {
+		return filters;
+	}
+	
+	@Override
+	public void setFilters(Map<String, List<String>> filters) {
+		this.filters = filters;
+	}
+
+	@Override
 	@JsonIgnore
 	public void addRestriction(String field, String value){
 		 this.restrictions.put(field, value);
+	}
+	
+	@Override
+	@JsonIgnore
+	public List<String> addFilter(String field, List<String> values) {
+		return this.filters.put(field, values);
+	}
+	
+	@Override
+	@JsonIgnore
+	public boolean addValueToFilter(String field, String value) {
+		return this.filters.get(field).add(value);
 	}
 	
 	

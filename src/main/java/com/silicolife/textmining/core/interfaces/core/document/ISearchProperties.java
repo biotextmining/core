@@ -40,4 +40,12 @@ public interface ISearchProperties {
 
 	public void addRestriction(String field, String value);
 
+	public Map<String, List<String>> getFilters();
+
+	public void setFilters(Map<String, List<String>> filters);
+
+	public List<String> addFilter(String field, List<String> values);
+
+	public boolean addValueToFilter(String field, String value);
+
 }

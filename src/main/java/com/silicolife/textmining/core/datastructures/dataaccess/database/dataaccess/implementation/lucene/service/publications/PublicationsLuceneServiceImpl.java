@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.lucene.search.SortField;
+import org.apache.lucene.search.SortField.Type;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -185,6 +187,49 @@ public class PublicationsLuceneServiceImpl implements IPublicationsLuceneService
 		return listPublications_;
 	}
 	
+	@Override
+	public List<IPublication> getPublicationsFromSearchPaginatedWSort(ISearchProperties searchProperties, int index, int paginationSize,boolean asc, String sortBy ){
+		
+		List<String> fields = searchProperties.getFields();
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		Map<String, String> eqMustSentenceOnField = new HashMap<>();
+		Map<String, List<String>> eqFilters = new HashMap<>();
+		
+		Map<String, String> restrictions = searchProperties.getRestrictions();
+		
+		Map<String, List<String>> filters = searchProperties.getFilters();
+		
+		String sortField = PublicationLuceneIndexFields.getSortField(sortBy);
+		
+		SortField.Type sortType = PublicationLuceneIndexFields.getSortType(sortBy);
+		
+		for(String key : restrictions.keySet()){
+			eqMustSentenceOnField.put(PublicationLuceneIndexFields.getLuceneField(searchProperties, key), restrictions.get(key));
+		}
+
+		for(String key : filters.keySet()){
+			eqFilters.put(PublicationLuceneIndexFields.getLuceneField(searchProperties, key), filters.get(key));
+		}
+		
+		if(searchProperties.getValue()!=null) {
+		for(String field : fields){
+			eqSentenceOnField.put(PublicationLuceneIndexFields.getLuceneField(searchProperties, field),searchProperties.getValue());
+		}
+		}
+		
+		List<Publications> listPublications = null;
+		
+		listPublications = publicationsLuceneManagerDao.getPublicationsLuceneDao().findForWebTablePaginated(eqSentenceOnField, eqMustSentenceOnField, eqFilters,searchProperties.isWholeWords(), index, paginationSize, sortField, sortType, asc);
+		
+		List<IPublication> listPublications_ = new ArrayList<IPublication>();
+		for (Publications pub : listPublications) {
+			IPublication publication_ = PublicationsWrapper.convertToAnoteStructure(pub);
+			listPublications_.add(publication_);
+		}
+
+		return listPublications_;
+	}
+	
 	/*
 	
 	//Method using 4 different index types
@@ -228,32 +273,30 @@ public class PublicationsLuceneServiceImpl implements IPublicationsLuceneService
 		List<String> fields = searchProperties.getFields();
 		Map<String, String> eqSentenceOnField = new HashMap<>();
 		Map<String, String> eqMustSentenceOnField = new HashMap<>();
+		Map<String, List<String>> eqFilters = new HashMap<>();
 		
 		Map<String, String> restrictions = searchProperties.getRestrictions();
+		
+		Map<String, List<String>> filters = searchProperties.getFilters();
 		
 		for(String key : restrictions.keySet()){
 			eqMustSentenceOnField.put(PublicationLuceneIndexFields.getLuceneField(searchProperties, key), restrictions.get(key));
 		}
+
+		for(String key : filters.keySet()){
+			eqFilters.put(PublicationLuceneIndexFields.getLuceneField(searchProperties, key), filters.get(key));
+		}
 		
+		if(searchProperties.getValue()!=null) {
 		for(String field : fields){
 			eqSentenceOnField.put(PublicationLuceneIndexFields.getLuceneField(searchProperties, field),searchProperties.getValue());
 		}
+		}
 		
-		if(eqMustSentenceOnField.size()>0){
-			if(searchProperties.isWholeWords())
-				return publicationsLuceneManagerDao.getPublicationsLuceneDao().countMixedByAttributes(eqSentenceOnField, eqMustSentenceOnField);	
-			else
-				return publicationsLuceneManagerDao.getPublicationsLuceneDao().countMixedByAttributesWKeywords(eqSentenceOnField, eqMustSentenceOnField);	
 
-		}
-		else{
-			if(searchProperties.isWholeWords())
-				return publicationsLuceneManagerDao.getPublicationsLuceneDao().countNotExactByAttributes(eqSentenceOnField);
-			else
-				return publicationsLuceneManagerDao.getPublicationsLuceneDao().countNotExactByAttributesWKeywords(eqSentenceOnField);
-		}
+		return publicationsLuceneManagerDao.getPublicationsLuceneDao().countForWebTable(eqSentenceOnField, eqMustSentenceOnField, eqFilters, searchProperties.isWholeWords());
+
 	}
-	
 	/*
 	 * Method for 4 index
 	 * 

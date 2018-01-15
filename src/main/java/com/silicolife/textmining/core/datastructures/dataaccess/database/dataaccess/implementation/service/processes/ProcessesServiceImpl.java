@@ -152,6 +152,34 @@ public class ProcessesServiceImpl implements IProcessesService {
 		statistics.setClassesNumberOfOcurrences(mapAnoteClassNumberOFOccurrences);
 		return statistics;
 	}
+	
+	@Override
+	public Integer countAllProcesses() {
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		usersManagerDao.getAuthUsersDao().refresh(user);
+		
+		List<Processes> listProcesses = null;
+		listProcesses = processesManagerDao.getProcessesAuxDao().findAllProcesses(user.getAuId(), processStr);
+		
+		return listProcesses.size();
+	}
+	
+	@Override
+	public List<IIEProcess> getAllProcessesPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		usersManagerDao.getAuthUsersDao().refresh(user);
+		
+		List<Processes> listProcesses = null;
+		listProcesses = processesManagerDao.getProcessesAuxDao().findAllProcessesPaginated(user.getAuId(), processStr, paginationIndex, paginationSize, asc, sortBy);
+		
+		List<IIEProcess> listProcesses_ = new ArrayList<IIEProcess>();
+		for (Processes process : listProcesses) {
+			
+				IIEProcess process_ = ProcessWrapper.convertToAnoteStructure(process);
+				listProcesses_.add(process_);
+		}
+		return listProcesses_;
+	}
 
 	@Override
 	public List<IIEProcess> getPrivilegesAllProcessesAdminAccess() {

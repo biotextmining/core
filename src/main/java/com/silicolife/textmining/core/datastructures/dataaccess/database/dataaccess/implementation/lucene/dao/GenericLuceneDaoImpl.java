@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
@@ -87,6 +89,24 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		}
 		return combinedQuery;
 	}
+	
+	@SuppressWarnings("rawtypes")
+	private BooleanJunction<BooleanJunction> addMustFieldsWithShouldPhraseWithMultipleAtributes(Map<String, List<String>> eqSentenceOnField,  QueryBuilder qb,
+			BooleanJunction<BooleanJunction> combinedQuery){	
+		for(String field : eqSentenceOnField.keySet()){
+			List<String> values = eqSentenceOnField.get(field);
+			BooleanJunction<BooleanJunction> fieldQuery = qb.bool();
+			for(String value : values) {
+			Query luceneQuery = qb.phrase()
+					.onField(field)
+					.sentence(value)
+					.createQuery();
+			fieldQuery.should(luceneQuery); //must(luceneQuery);
+			}
+			combinedQuery.must(fieldQuery.createQuery());
+		}
+		return combinedQuery;				
+			}
 	
 	@SuppressWarnings("rawtypes")
 	private BooleanJunction<BooleanJunction> addShouldKeywordsWithAttributesOnFields(Map<String, String> eqSentenceOnField,  QueryBuilder qb,
@@ -228,6 +248,17 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	}
 	
 	@SuppressWarnings({ "rawtypes" })
+	private FullTextQuery createFullTextQueryForfindNotExactByAttribute(Map<String, String> eqSentenceOnField, Map<String, List<String>> filtersOnFields) {
+		FullTextSession fullTextSession = getFullTextSession();
+		QueryBuilder qb = getQueryBuilder(fullTextSession);
+		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
+		combinedQuery = addShouldPhraseWithAttributesOnFields(eqSentenceOnField, qb, combinedQuery);
+		combinedQuery = addMustFieldsWithShouldPhraseWithMultipleAtributes(filtersOnFields,qb, combinedQuery);
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
+		return fullTextQuery;
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
 	private FullTextQuery createFullTextQueryForfindNotExactByAttributeWAuth(Map<String, String> eqSentenceOnField, Map<String, String> authFields, String idField) {
 		FullTextSession fullTextSession = getFullTextSession();
 		QueryBuilder qb = getQueryBuilder(fullTextSession);
@@ -269,6 +300,46 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		QueryBuilder qb = getQueryBuilder(fullTextSession);
 		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
 		combinedQuery = addShouldWMustPhraseWithAttributesOnFields(eqSentenceOnField,eqMustSentenceOnField, qb, combinedQuery);
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
+		return fullTextQuery;
+	}
+	
+	
+	
+	@SuppressWarnings({ "rawtypes" })
+	private FullTextQuery createFullTextQueryForWebTable(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, Map<String, List<String>> filtersOnFields, boolean isPhrase) {
+		FullTextSession fullTextSession = getFullTextSession();
+		QueryBuilder qb = getQueryBuilder(fullTextSession);
+		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
+		if(eqSentenceOnField.size()>0) {
+			BooleanJunction<BooleanJunction> atributeQuery = qb.bool();
+			if(isPhrase) {
+				atributeQuery = addShouldPhraseWithAttributesOnFields(eqSentenceOnField, qb, atributeQuery);
+			}else {
+				atributeQuery = addShouldKeywordsWithAttributesOnFields(eqSentenceOnField, qb, atributeQuery);
+			}
+			combinedQuery.must(atributeQuery.createQuery());
+		}
+		
+		if(eqMustSentenceOnField.size()>0) {
+			combinedQuery = addMustPhraseWithAttributesOnFields(eqSentenceOnField, qb, combinedQuery);	
+		}
+		
+		if(filtersOnFields.size()>0) {
+		combinedQuery = addMustFieldsWithShouldPhraseWithMultipleAtributes(filtersOnFields,qb, combinedQuery);
+		}
+		
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
+		return fullTextQuery;
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	private FullTextQuery createFullTextQueryForfindMixedByAttribute(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, Map<String, List<String>> filtersOnFields) {
+		FullTextSession fullTextSession = getFullTextSession();
+		QueryBuilder qb = getQueryBuilder(fullTextSession);
+		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
+		combinedQuery = addShouldWMustPhraseWithAttributesOnFields(eqSentenceOnField,eqMustSentenceOnField, qb, combinedQuery);
+		combinedQuery = addMustFieldsWithShouldPhraseWithMultipleAtributes(filtersOnFields,qb, combinedQuery);
 		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
 		return fullTextQuery;
 	}
@@ -581,6 +652,19 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<T> findMixedByAttributesPaginatedWAuth(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField,
+			 Map<String, String> authFields,String idField ,int index,int paginationSize,String sortField, SortField.Type sortType, boolean asc) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttributeWAuth(eqSentenceOnField, eqMustSentenceOnField, authFields, idField);
+		Sort s = new Sort(new SortField( sortField, sortType, asc ));
+		fullTextQuery.setSort(s);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<T> findMixedByAttributesPaginated(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, int index,
 			int paginationSize) {
 		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttribute(eqSentenceOnField, eqMustSentenceOnField);
@@ -591,12 +675,93 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findMixedByAttributesPaginatedWSort(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, 
+			Map<String, List<String>> filtersOnFields, int index, int paginationSize, String sortField, SortField.Type sortType, boolean asc) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttribute(eqSentenceOnField, eqMustSentenceOnField, filtersOnFields);
+		Sort s = new Sort(new SortField( sortField, sortType, asc ));
+		fullTextQuery.setSort(s);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findForWebTablePaginated(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, 
+			Map<String, List<String>> filtersOnFields, boolean isPhrase, int index, int paginationSize, String sortField, SortField.Type sortType, boolean asc) {
+		FullTextQuery fullTextQuery = createFullTextQueryForWebTable(eqSentenceOnField, eqMustSentenceOnField, filtersOnFields, isPhrase);
+		if(sortField!="none") {
+		Sort s = new Sort(new SortField( sortField, sortType, asc ));
+		fullTextQuery.setSort(s);
+		}
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Integer countForWebTable(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, 
+			Map<String, List<String>> filtersOnFields, boolean isPhrase) {
+		FullTextQuery fullTextQuery = createFullTextQueryForWebTable(eqSentenceOnField, eqMustSentenceOnField, filtersOnFields, isPhrase);
+		
+		return fullTextQuery.list().size();
+	}
+	
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findMixedByAttributesPaginatedWSort(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, int index,
+			int paginationSize, String sortField, SortField.Type sortType, boolean asc) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttribute(eqSentenceOnField, eqMustSentenceOnField);
+		Sort s = new Sort(new SortField( sortField, sortType, asc ));
+		fullTextQuery.setSort(s);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	
+	
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> findMixedByAttributesWKeywordsPaginated(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, int index,
 			int paginationSize) {
 		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttributeWKeywords(eqSentenceOnField, eqMustSentenceOnField);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findMixedByAttributesWKeywordsPaginatedWSort(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, int index,
+			int paginationSize, String sortField, SortField.Type sortType, boolean asc) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttributeWKeywords(eqSentenceOnField, eqMustSentenceOnField);
+		Sort s = new Sort(new SortField( sortField, sortType, asc ));
+		fullTextQuery.setSort(s);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findMixedByAttributesWKeywordsPaginatedWAuth(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField,
+			Map<String, String> authFields,String idField,int index,int paginationSize, String sortField, SortField.Type sortType, boolean asc) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindMixedByAttributeWKeywordsWAuth(eqSentenceOnField, eqMustSentenceOnField, authFields, idField);
+		Sort s = new Sort(new SortField( sortField, sortType, asc ));
+		fullTextQuery.setSort(s);
 		fullTextQuery.setFirstResult(index);
 		fullTextQuery.setMaxResults(paginationSize);
 		fullTextQuery.setFetchSize(paginationSize);
@@ -627,6 +792,45 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<T> findNotExactByAttributesPaginatedWSort(Map<String, String> eqSentenceOnField, int index,
+			int paginationSize,  String sortField, SortField.Type sortType, boolean asc) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttribute(eqSentenceOnField);
+		Sort s = new Sort(new SortField( sortField, sortType, asc ));
+		fullTextQuery.setSort(s);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findNotExactByAttributesPaginatedWSort(Map<String, String> eqSentenceOnField, 
+			Map<String, List<String>> filtersOnFields,int index, int paginationSize,  String sortField, SortField.Type sortType, boolean asc) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttribute(eqSentenceOnField, filtersOnFields);
+		Sort s = new Sort(new SortField( sortField, sortType, asc ));
+		fullTextQuery.setSort(s);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findNotExactByAttributesPaginatedWAuth(Map<String, String> eqSentenceOnField,
+			Map<String, String> authFields,String idField, int index,int paginationSize,  String sortField, SortField.Type sortType, boolean asc) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttributeWAuth(eqSentenceOnField,authFields, idField);
+		Sort s = new Sort(new SortField( sortField, sortType, asc ));
+		fullTextQuery.setSort(s);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<T> findNotExactByAttributesPaginatedWAuth(Map<String, String> eqSentenceOnField,
 			Map<String, String> authFields,String idField, int index,int paginationSize) {
 		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttributeWAuth(eqSentenceOnField,authFields, idField);
@@ -641,6 +845,32 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	public List<T> findNotExactByAttributesWKeywordsPaginated(Map<String, String> eqSentenceOnField, int index,
 			int paginationSize) {
 		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttributeWKeywords(eqSentenceOnField);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findNotExactByAttributesWKeywordsPaginatedWSort(Map<String, String> eqSentenceOnField, int index,
+			int paginationSize, String sortField, SortField.Type sortType, boolean asc) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttributeWKeywords(eqSentenceOnField);
+		Sort s = new Sort(new SortField( sortField, sortType, asc ));
+		fullTextQuery.setSort(s);
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findNotExactByAttributesWKeywordsPaginatedWAuth(Map<String, String> eqSentenceOnField,
+			Map<String, String> authFields,String idField,int index,int paginationSize, String sortField, SortField.Type sortType, boolean asc) {
+		FullTextQuery fullTextQuery = createFullTextQueryForfindNotExactByAttributeWKeywordsWAuth(eqSentenceOnField, authFields, idField);
+		Sort s = new Sort(new SortField( sortField, sortType, asc ));
+		fullTextQuery.setSort(s);
 		fullTextQuery.setFirstResult(index);
 		fullTextQuery.setMaxResults(paginationSize);
 		fullTextQuery.setFetchSize(paginationSize);

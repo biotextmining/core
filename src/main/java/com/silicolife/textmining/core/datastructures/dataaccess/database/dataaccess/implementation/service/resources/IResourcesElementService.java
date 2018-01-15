@@ -72,4 +72,6 @@ public interface IResourcesElementService {
 	
 	public IResourceManagerReport addResourceElementSynonymsWithoutValidation(long id, long id2, List<String> synonyms) throws ResourcesExceptions;
 
+	public Integer countResourceElements(Long resourceId) throws ResourcesExceptions;
+
 }

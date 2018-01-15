@@ -1,5 +1,7 @@
 package com.silicolife.textmining.core.datastructures.documents;
 
+import org.apache.lucene.search.SortField;
+
 import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
 
 public enum PublicationLuceneFields {
@@ -10,14 +12,15 @@ public enum PublicationLuceneFields {
 	TITLEPCS("titlePCS"),
 	*/
 	
-	title("titleNCS", "titleCS", "titleNCS", "titleCS", "titleSCS", "titleSNC" ),
-	authors ("authorsNCS","authorsCS","authorsNCS", "authorsCS", "authorsSCS", "authorsSNCS"),
-	journal ("journalNCS","journalCS","journalNCS", "journalCS", "journalSCS", "journalSNCS" ),
-	notes("notesNCS","notesCS","notesNCS","notesCS","notesSCS","notesSNCS"),
-	abstractSection("abstractNCS", "abstractCS", "abstractNCS", "abstractCS", "abstractSCS", "abstractSNCS"),
-	fullContent("fullContentNCS", "fullContentCS","fullContentNCS","fullContentCS",  "fullContentSCS","fullContentSNCS"  ),
-	queryId("queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId", "queryHasPublicationses.id.qhbQueryId", "queryHasPublicationses.id.qhbQueryId"),
-	corpusId("corpusHasPublicationses.id.chpCorpusId","corpusHasPublicationses.id.chpCorpusId","corpusHasPublicationses.id.chpCorpusId","corpusHasPublicationses.id.chpCorpusId","corpusHasPublicationses.id.chpCorpusId","corpusHasPublicationses.id.chpCorpusId");
+	title("titleNCS", "titleCS", "titleNCS", "titleCS", "titleSCS", "titleSNC", "pubTitleSort", SortField.Type.STRING ),
+	authors ("authorsNCS","authorsCS","authorsNCS", "authorsCS", "authorsSCS", "authorsSNCS", "pubAuthorsSort", SortField.Type.STRING),
+	journal ("journalNCS","journalCS","journalNCS", "journalCS", "journalSCS", "journalSNCS", "", null),
+	notes("notesNCS","notesCS","notesNCS","notesCS","notesSCS","notesSNCS","", null),
+	abstractSection("abstractNCS", "abstractCS", "abstractNCS", "abstractCS", "abstractSCS", "abstractSNCS", "",null),
+	fullContent("fullContentNCS", "fullContentCS","fullContentNCS","fullContentCS",  "fullContentSCS","fullContentSNCS", "", null  ),
+	queryId("queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId", "queryHasPublicationses.id.qhbQueryId", "queryHasPublicationses.id.qhbQueryId", "", null),
+	corpusId("corpusHasPublicationses.id.chpCorpusId","corpusHasPublicationses.id.chpCorpusId","corpusHasPublicationses.id.chpCorpusId","corpusHasPublicationses.id.chpCorpusId","corpusHasPublicationses.id.chpCorpusId","corpusHasPublicationses.id.chpCorpusId", "", null),
+	yeardate("","","","","","","pubYeardateSort", SortField.Type.INT);
 	/*
 	AUTHORSKNCS("authorsKNCS"),
 	AUTHORSKCS("authorsKCS"),
@@ -46,14 +49,18 @@ public enum PublicationLuceneFields {
 	private final String PCS;
 	private final String SCS;
 	private final String SNCS;
+	private final String SORT;
+	private final SortField.Type SORTTYPE;
 	
-	PublicationLuceneFields(String kNCS, String kCS,String PNCS, String PCS, String SCS,String SNCS ){
+	PublicationLuceneFields(String kNCS, String kCS,String PNCS, String PCS, String SCS,String SNCS, String SORT, SortField.Type SORTTYPE ){
 		this.kNCS = kNCS;
 		this.kCS = kCS;
 		this.PNCS = PNCS;
 		this.PCS = PCS;
 		this.SCS = SCS;
 		this.SNCS = SNCS;
+		this.SORT = SORT;
+		this.SORTTYPE = SORTTYPE;
 	}
 	
 	
@@ -191,8 +198,19 @@ public static PublicationLuceneFields getFullContentbyAnalyser(String analyzer){
 		//}
 	}
 	
+	public static String getSortField(String field) {
+		PublicationLuceneFields pubLuceneField = PublicationLuceneFields.valueOf(field);
+		return pubLuceneField.SORT;
+	}
+	
+	public static SortField.Type getSortType(String field) {
+		PublicationLuceneFields pubLuceneField = PublicationLuceneFields.valueOf(field);
+		return pubLuceneField.SORTTYPE;
+	}
+	
 	public String getKNCS(){
 		return kNCS;
 	}
+
 
 }
