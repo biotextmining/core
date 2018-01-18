@@ -148,7 +148,7 @@ public class CorpusAuxDaoImpl implements CorpusAuxDao {
 				if(asc){
 					ord = " ASC";
 				}
-				sqlString = sqlString + "LEFT JOIN "+uniqueId+" as c ON b.crp_id = c.chp_corpus_id " + " WHERE audo_user_id = ? AND audo_type_resource = ? AND c.crp_active=1 "+ "GROUP BY b.crp_id ORDER BY COUNT(chp_corpus_id) " + ord;
+				sqlString = sqlString + "LEFT JOIN "+uniqueId+" as c ON b.crp_id = c.chp_corpus_id " + " WHERE audo_user_id = ? AND audo_type_resource = ? AND b.crp_active=1 "+ "GROUP BY b.crp_id ORDER BY COUNT(chp_corpus_id) " + ord;
 			}
 			else{
 			String uniqueId = CorpusFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
