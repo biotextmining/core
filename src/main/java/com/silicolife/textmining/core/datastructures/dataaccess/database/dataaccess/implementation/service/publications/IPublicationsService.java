@@ -95,4 +95,14 @@ public interface IPublicationsService {
 	public IPublication getPublicationFromSourceId(String source, String sourceId);
 
 	public List<IPublication> getPublicationsFromResourcesQuery(String query, IAnnotationService annotationService);
+
+	public List<IPublication> getAllPublicationsPaginated(int paginationIndex, int paginationSize, boolean asc, String sortBy);
+
+	public Integer countAllPublications();
+
+	public List<String> findAllDistinctColumnValuesFromPublicationsPaginated(String column, Integer paginationIndex,
+			Integer paginationSize, boolean asc, String sortBy);
+
+
+	public Integer countAllDistinctColumnValuesFromPublications(String column);
 }

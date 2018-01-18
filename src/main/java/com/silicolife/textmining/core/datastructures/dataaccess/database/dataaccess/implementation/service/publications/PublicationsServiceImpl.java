@@ -36,6 +36,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsLabelsWrapper;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsSourceWrapper;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsWrapper;
+import com.silicolife.textmining.core.datastructures.documents.PublicationFieldsEnum;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.IPublicationExternalSourceLink;
@@ -171,6 +172,37 @@ public class PublicationsServiceImpl implements IPublicationsService {
 		}
 
 		return response;
+	}
+	
+	@Override
+	public List<IPublication> getAllPublicationsPaginated(int paginationIndex, int paginationSize,boolean asc, String sortBy) {
+		List<Publications> listPublications = publicationsManagerDao.getPublicationsAuxDao().findAllPublicationsPaginated(paginationIndex, paginationSize, asc, sortBy);
+		
+		List<IPublication> listPublications_ = new ArrayList<IPublication>();
+		for (Publications pub : listPublications) {
+			IPublication publication_ = PublicationsWrapper.convertToAnoteStructure(pub);
+			listPublications_.add(publication_);
+		}
+
+		return listPublications_;
+	}
+	
+	
+	//Only works if the column type is String
+	@Override
+	public List<String> findAllDistinctColumnValuesFromPublicationsPaginated(String column, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+		return publicationsManagerDao.getPublicationsAuxDao().findAllDistinctColumnValuesFromPublicationsPaginated(PublicationFieldsEnum.valueOf(column).getUniqueIdentifier(), paginationIndex, paginationSize, asc, sortBy);
+	}
+	
+	@Override
+	public Integer countAllDistinctColumnValuesFromPublications(String column) {
+		return publicationsManagerDao.getPublicationsAuxDao().findAllDistinctColumnValuesFromPublications(PublicationFieldsEnum.valueOf(column).getUniqueIdentifier()).size();
+	}
+	
+	
+	@Override
+	public Integer countAllPublications() {
+		return publicationsManagerDao.getPublicationsDao().findAll().size();
 	}
 	
 	@Override

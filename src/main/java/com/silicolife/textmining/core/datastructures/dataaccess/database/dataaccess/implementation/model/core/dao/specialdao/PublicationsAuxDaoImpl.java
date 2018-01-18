@@ -88,6 +88,80 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 
 		return publications;
 	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Publications> findAllPublicationsPaginated( Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Publications.class, "pub");
+		
+		//Order order = new Order(sortBy,asc);
+		//c.createAlias("pub."+sortBy, "sortValue");
+		if(!sortBy.equals("none")){
+		String uniqueId = PublicationFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+		String sortAlias = "pub."+uniqueId;
+		
+		if(asc)
+			c.addOrder(Order.asc(sortAlias));
+		else
+			c.addOrder(Order.desc(sortAlias));
+		}
+		
+		c.setFirstResult(paginationIndex);
+		c.setMaxResults(paginationSize);
+		c.setFetchSize(paginationSize);
+		
+		List<Publications> publications = c.list();
+
+		return publications;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<String> findAllDistinctColumnValuesFromPublicationsPaginated(String column, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Publications.class, "pub");
+		
+		//Order order = new Order(sortBy,asc);
+		//c.createAlias("pub."+sortBy, "sortValue");
+		if(!sortBy.equals("none")){
+		String uniqueId = PublicationFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+		String sortAlias = "pub."+uniqueId;
+		
+		if(asc)
+			c.addOrder(Order.asc(sortAlias));
+		else
+			c.addOrder(Order.desc(sortAlias));
+		}
+		
+		c.setProjection(Projections.distinct(Projections.property(column)));
+		c.setFirstResult(paginationIndex);
+		c.setMaxResults(paginationSize);
+		c.setFetchSize(paginationSize);
+		
+		List<String> publicationsColumn = c.list();
+
+		return publicationsColumn;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<String> findAllDistinctColumnValuesFromPublications(String column) {
+
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Publications.class, "pub");
+		
+		
+		c.setProjection(Projections.distinct(Projections.property(column)));
+		
+		List<String> publicationsColumn = c.list();
+
+		return publicationsColumn;
+	}
+	
+	
 
 	@Override
 	@SuppressWarnings("unchecked")

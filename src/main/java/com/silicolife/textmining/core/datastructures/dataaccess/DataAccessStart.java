@@ -1211,4 +1211,10 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public Integer countResourcesFromSearchWAuth(ISearchProperties searchProperties) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.ResourcesExceptions;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.general.ExceptionsCodes;
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.manager.ResourcesLuceneManagerDao;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.manager.ResourceElementsLuceneManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.ResourcesManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ResourceElements;
@@ -29,11 +29,11 @@ import com.silicolife.textmining.core.interfaces.resource.IResourceElementsFilte
 @Transactional(readOnly = true)
 public class ResourcesElementLuceneServiceImpl implements IResourcesElementLuceneService{
 
-	private ResourcesLuceneManagerDao resourcesLuceneManagerDao;
+	private ResourceElementsLuceneManagerDao resourcesLuceneManagerDao;
 	private ResourcesManagerDao resourcesManagerDao;
 
 	@Autowired
-	public ResourcesElementLuceneServiceImpl(ResourcesLuceneManagerDao resourcesLuceneManagerDao, ResourcesManagerDao resourcesManagerDao){
+	public ResourcesElementLuceneServiceImpl(ResourceElementsLuceneManagerDao resourcesLuceneManagerDao, ResourcesManagerDao resourcesManagerDao){
 		this.resourcesLuceneManagerDao = resourcesLuceneManagerDao;
 		this.resourcesManagerDao = resourcesManagerDao;
 	}

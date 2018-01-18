@@ -82,6 +82,7 @@ public class QueryHasPublications implements java.io.Serializable {
 
 	//@Field
 	//@FieldBridge(impl = QueriesBridge.class)
+	@IndexedEmbedded
 	@ManyToOne(fetch = FetchType.LAZY)
 	@ContainedIn
 	@JoinColumn(name = "qhb_query_id", nullable = false, insertable = false, updatable = false)

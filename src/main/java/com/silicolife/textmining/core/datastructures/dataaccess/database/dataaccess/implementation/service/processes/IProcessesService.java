@@ -61,4 +61,9 @@ public interface IProcessesService {
 	
 	public List<IIEProcess> getProcessesByPublicationId(Long publicationId) throws ProcessException;
 
+	public List<IIEProcess> getAllProcessesPaginated(Integer paginationIndex, Integer paginationSize, boolean asc,
+			String sortBy);
+
+	public Integer countAllProcesses();
+
 }

@@ -10,4 +10,9 @@ public interface ProcessesAuxDao {
 	
 	List<Processes> findProcessesByPublicationIds(Long publicationId);
 
+	List<Processes> findAllProcessesPaginated(long auId, String resourceType, Integer paginationIndex,
+			Integer paginationSize, boolean asc, String sortBy);
+
+	List<Processes> findAllProcesses(long auId, String resourceType);
+
 }

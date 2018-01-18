@@ -8,26 +8,35 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Queries;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ResourceElements;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Resources;
 
 public class LuceneManagerDao {
 	
 	private SessionFactory sessionFactory;
-	private ResourcesLuceneManagerDao resourcesLuceneManagerDao;
+	private ResourceElementsLuceneManagerDao resourceElementsLuceneManagerDao;
 	private QueriesLuceneManagerDao queriesLuceneManagerDao;
 	private PublicationsLuceneManagerDao publicationsLuceneManagerDao;
 	private CorpusLuceneManagerDao corpusLuceneManagerDao;
+	private ResourcesLuceneManagerDao resourcesLuceneManagerDao;
 	
 	public LuceneManagerDao(SessionFactory sessionFactory){
 		this.sessionFactory = sessionFactory;
-		this.resourcesLuceneManagerDao = createResourcesLuceneDao();
+		this.resourceElementsLuceneManagerDao = createResourceElementsLuceneDao();
 		this.queriesLuceneManagerDao = createQueriesLuceneDao();
 		this.publicationsLuceneManagerDao = createPublicationsLuceneDao();
 		this.corpusLuceneManagerDao = createCorpusLuceneDao();
+		this.resourcesLuceneManagerDao = createResourcesLuceneDao();
+	}
+	
+	public ResourceElementsLuceneManagerDao createResourceElementsLuceneDao(){
+		IGenericLuceneDao<ResourceElements> resourcesElememtsLuceneDao = new GenericLuceneDaoImpl<ResourceElements>(sessionFactory, ResourceElements.class);
+		ResourceElementsLuceneManagerDao resourcesLuceneManagerDao = new ResourceElementsLuceneManagerDao(resourcesElememtsLuceneDao);
+		return resourcesLuceneManagerDao;
 	}
 	
 	public ResourcesLuceneManagerDao createResourcesLuceneDao(){
-		IGenericLuceneDao<ResourceElements> resourcesElememtsLuceneDao = new GenericLuceneDaoImpl<ResourceElements>(sessionFactory, ResourceElements.class);
-		ResourcesLuceneManagerDao resourcesLuceneManagerDao = new ResourcesLuceneManagerDao(resourcesElememtsLuceneDao);
+		IGenericLuceneDao<Resources> resourcesLuceneDao = new GenericLuceneDaoImpl<Resources>(sessionFactory, Resources.class);
+		ResourcesLuceneManagerDao resourcesLuceneManagerDao = new ResourcesLuceneManagerDao(resourcesLuceneDao);
 		return resourcesLuceneManagerDao;
 	}
 	
@@ -50,6 +59,10 @@ public class LuceneManagerDao {
 		return corpusLuceneManagerDao;
 	}
 	
+	
+	public ResourceElementsLuceneManagerDao getResourceElementsLuceneManagerDao() {
+		return resourceElementsLuceneManagerDao;
+	}
 	
 	public ResourcesLuceneManagerDao getResourcesLuceneManagerDao() {
 		return resourcesLuceneManagerDao;

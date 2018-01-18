@@ -868,6 +868,21 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 
 		return elementSet;
 	}
+	
+	@Override
+	public Integer countResourceElements(Long resourceId) throws ResourcesExceptions {
+		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
+		if (resource == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
+
+		Map<String, Serializable> eqRestrictions = new HashMap<String, Serializable>();
+		eqRestrictions.put("resActive", true);
+		eqRestrictions.put("resources", resource);
+		List<ResourceElements> resourcesElements = resourcesManagerDao.getResourcesElememtsDao().findByAttributes(eqRestrictions);
+
+		return resourcesElements.size();
+	}
+	
 
 	@Override
 	public IResourceManagerReport addResourceElementSynonymsWithoutValidation(long resourceId, long resourceElementID,List<String> synonyms) throws ResourcesExceptions {

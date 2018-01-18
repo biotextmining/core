@@ -25,7 +25,9 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.queries.IQueriesLuceneService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.queries.QueriesLuceneServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.resources.IResourcesElementLuceneService;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.resources.IResourcesLuceneService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.resources.ResourcesElementLuceneServiceImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.resources.ResourcesLuceneServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLoggedImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.ManagerDao;
@@ -127,6 +129,7 @@ public class DatabaseAccess implements IDataAccess {
 	private IQueriesLuceneService luceneQueriesService;
 	private ICorpusLuceneService luceneCorpusService;
 	private IUserService userService;
+	private IResourcesLuceneService luceneResourcesService;
 	private UsersLogged userLogged = new UsersLoggedImpl();
 	private boolean alreadyConfigurate = false;
 
@@ -201,10 +204,11 @@ public class DatabaseAccess implements IDataAccess {
 		
 		luceneManagerDao = new LuceneManagerDao(sessionFactory);
 		luceneService = new LuceneServiceImpl(sessionFactory);
-		luceneResourcesElementService = new ResourcesElementLuceneServiceImpl(luceneManagerDao.getResourcesLuceneManagerDao(), managerDao.getResourcesManagerDao());
-		luceneQueriesService = new QueriesLuceneServiceImpl(luceneManagerDao.getQueriesLuceneManagerDao(), managerDao.getQueriesManagerDao());
+		luceneResourcesElementService = new ResourcesElementLuceneServiceImpl(luceneManagerDao.getResourceElementsLuceneManagerDao(), managerDao.getResourcesManagerDao());
+		luceneQueriesService = new QueriesLuceneServiceImpl(luceneManagerDao.getQueriesLuceneManagerDao(), managerDao.getQueriesManagerDao(), userLogged);
 		lucenePublicationsService = new PublicationsLuceneServiceImpl(managerDao.getPublicationsManagerDao(), luceneManagerDao.getPublicationsLuceneManagerDao());
 		luceneCorpusService = new CorpusLuceneServiceImpl(managerDao.getCorpusManagerDao(), luceneManagerDao.getCorpusLuceneManagerDao(), userLogged);
+		luceneResourcesService = new ResourcesLuceneServiceImpl(managerDao.getResourcesManagerDao(), luceneManagerDao.getResourcesLuceneManagerDao(), userLogged);
 	}
 
 	@Override
@@ -2566,6 +2570,19 @@ public class DatabaseAccess implements IDataAccess {
 			sessionFactory.getCurrentSession().getTransaction().rollback();
 			throw new ANoteException(e);
 		}
+	}
+
+	@Override
+	public Integer countResourcesFromSearchWAuth(ISearchProperties searchProperties) throws ANoteException{
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer result = luceneResourcesService.countResourcesFromSearchWAuth(searchProperties);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return result;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}		
 	}
 	
 }
