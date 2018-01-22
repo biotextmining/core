@@ -168,7 +168,7 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 		Session session = sessionFactory.getCurrentSession();
 		String sqlString = "select count(*) from publications";
 		SQLQuery qry = session.createSQLQuery(sqlString);
-		return ((java.math.BigInteger)qry.uniqueResult()).intValue();
+		return ((Number)qry.uniqueResult()).intValue();
 	}
 	
 	
