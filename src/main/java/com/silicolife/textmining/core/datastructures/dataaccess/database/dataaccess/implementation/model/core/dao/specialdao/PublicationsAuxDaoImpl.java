@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -159,6 +160,15 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 		List<String> publicationsColumn = c.list();
 
 		return publicationsColumn;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public Integer countAll() {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlString = "select count(*) from publications";
+		SQLQuery qry = session.createSQLQuery(sqlString);
+		return ((java.math.BigInteger)qry.uniqueResult()).intValue();
 	}
 	
 	

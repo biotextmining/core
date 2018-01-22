@@ -10,8 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +55,7 @@ import com.silicolife.textmining.core.interfaces.core.document.structure.IPublic
  * 
  */
 @Service
+@CacheConfig(cacheNames = {"publications"})
 @Transactional(readOnly = true)
 public class PublicationsServiceImpl implements IPublicationsService {
 
@@ -110,6 +115,7 @@ public class PublicationsServiceImpl implements IPublicationsService {
 	}
 
 	@Transactional(readOnly = false)
+	@CacheEvict("countAllPublications")
 	@Override
 	public Boolean create(Set<IPublication> publications_) {
 		for (IPublication publication_ : publications_) {
@@ -201,8 +207,16 @@ public class PublicationsServiceImpl implements IPublicationsService {
 	
 	
 	@Override
+	@Cacheable("countAllPublications")
 	public Integer countAllPublications() {
-		return publicationsManagerDao.getPublicationsDao().findAll().size();
+		/*try {
+			TimeUnit.SECONDS.sleep(5);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		return publicationsManagerDao.getPublicationsAuxDao().countAll();
+		
 	}
 	
 	@Override

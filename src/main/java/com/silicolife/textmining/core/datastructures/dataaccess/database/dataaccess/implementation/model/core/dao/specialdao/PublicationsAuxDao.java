@@ -50,4 +50,6 @@ public interface PublicationsAuxDao {
 			Integer paginationSize, boolean asc, String sortBy);
 
 	public List<String> findAllDistinctColumnValuesFromPublications(String column);
+
+	public Integer countAll();
 }
