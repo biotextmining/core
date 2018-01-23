@@ -118,5 +118,7 @@ public interface IGeneralDataAccess {
 	 */
 	public void updatePublicationFullTextContent(IPublication publication) throws ANoteException;
 	
+	public Integer countAllPublications() throws ANoteException;
+	
 
 }

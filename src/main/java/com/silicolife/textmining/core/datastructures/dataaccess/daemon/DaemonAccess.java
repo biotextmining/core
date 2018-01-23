@@ -1237,5 +1237,11 @@ public class DaemonAccess implements IDataAccess {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Integer countAllPublications() throws ANoteException {
+		// TODO Auto-generated method stub
+		return this.publicationsAccessimpl.countAllPublications();
+	}
 	
 }

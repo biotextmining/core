@@ -211,4 +211,20 @@ public class PublicationsAccessImpl extends RestClientAccess {
 			return boo;
 		}
 	}
+	
+	public Integer countAllPublications() throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Integer>> responseType = new ParameterizedTypeReference<DaemonResponse<Integer>>() {};
+		ResponseEntity<DaemonResponse<Integer>> response = webClient.get("publications/countAllPublications", responseType);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
+		} else {
+
+			
+			Integer count  = response.getBody().getContent();
+			
+			return count;
+		}
+		
+	}
 }

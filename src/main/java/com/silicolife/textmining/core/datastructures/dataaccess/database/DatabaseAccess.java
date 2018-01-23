@@ -2584,5 +2584,18 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}		
 	}
+
+	@Override
+	public Integer countAllPublications() throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer result = this.publicationsService.countAllPublications();
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return result;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
 	
 }
