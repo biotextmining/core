@@ -91,6 +91,7 @@ CREATE TABLE IF NOT EXISTS `publications` (
   `pub_fullcontent` LONGTEXT NULL DEFAULT NULL,
   `pub_notes` TEXT NULL DEFAULT NULL,
   `pub_relative_path` VARCHAR(200) NULL DEFAULT NULL,
+  `pub_type` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`pub_id`),
   INDEX `idx_publications_yn` (`pub_free_full_text` ASC))
 ENGINE = InnoDB;
@@ -1221,6 +1222,7 @@ INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (7, '2017-05-12 20:00:00', 'Update some external id links and icons');
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (8, '2017-05-25 20:00:00', 'Fix case sensitive search for old dbs');
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (9, '2017-11-02 00:00:00', 'User Tabel Update : Add Active, avatar and default language fields');
+INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (10, '2018-01-24 00:00:00', 'Add Publication Type field');
 
 
 COMMIT;
