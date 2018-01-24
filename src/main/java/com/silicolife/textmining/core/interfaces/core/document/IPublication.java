@@ -40,14 +40,21 @@ public interface IPublication extends Serializable{
 	 * @return article authors -- null if don�t exit
 	 */
 	public String getAuthors();
-
+	
 	/**
-	 * Method that return article type ( Review,..)
+	 * Method that return document Main type( Publication, Book, Patent, ...)
 	 * 
-	 * @return article authors -- null if don�t exit
+	 * @return article type -- null if don�t exit
 	 */
 	public String getType();
 
+	/**
+	 * Method that return document sub type or category ( Review, Journal Article, ...)
+	 * 
+	 * @return article category -- null if don�t exit
+	 */
+	public String getCategory();
+	
 	/**
 	 * Method that return article date
 	 * 

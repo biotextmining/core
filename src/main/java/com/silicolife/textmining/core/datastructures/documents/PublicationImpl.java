@@ -34,6 +34,7 @@ public class PublicationImpl extends Observable implements IPublication {
 	protected String title;
 	protected String authors;
 	private String type;
+	private String category;
 	protected String yeardate;
 	private String fulldate;
 	private String status;
@@ -62,6 +63,7 @@ public class PublicationImpl extends Observable implements IPublication {
 		this.id = GenerateRandomId.generateID();
 		this.title = new String();
 		this.authors = new String();
+		this.category = new String();
 		this.type = new String();
 		this.yeardate = new String();
 		this.fulldate = new String();
@@ -82,19 +84,20 @@ public class PublicationImpl extends Observable implements IPublication {
 	}
 
 	public PublicationImpl(IPublication pub) {
-		this(pub.getId(), pub.getTitle(), pub.getAuthors(), pub.getType(), pub.getYeardate(), pub.getFulldate(), pub.getStatus(), pub.getJournal(), pub.getVolume(),
-				pub.getIssue(), pub.getPages(), pub.getAbstractSection(), pub.getExternalLink(), pub.isFreeFullText(), pub.getNotes(), pub.getRelativePath(), pub
-						.getPublicationExternalIDSource(), pub.getPublicationFields(), pub.getPublicationLabels());
+		this(pub.getId(), pub.getTitle(), pub.getAuthors(), pub.getCategory(), pub.getYeardate(), pub.getFulldate(), pub.getStatus(), pub.getJournal(), pub.getVolume(),
+				pub.getIssue(), pub.getPages(), pub.getAbstractSection(), pub.getExternalLink(), pub.isFreeFullText(), pub.getNotes(), pub.getRelativePath(),pub.getType(),
+				pub.getPublicationExternalIDSource(), pub.getPublicationFields(), pub.getPublicationLabels());
 		setSourceURL(pub.getSourceURL());
 	}
 
-	public PublicationImpl(long id, String title, String authors, String type, String yeardate, String fulldate, String status, String journal, String volume, String issue,
-			String pages, String abstractSection, String externalLink, boolean freeFullText, String notes, String relativePath,
+	public PublicationImpl(long id, String title, String authors, String category, String yeardate, String fulldate, String status, String journal, String volume, String issue,
+			String pages, String abstractSection, String externalLink, boolean freeFullText, String notes, String relativePath,String type,
 			List<IPublicationExternalSourceLink> publicationExternalIDSource, List<IPublicationField> publicationFields, List<IPublicationLabel> publicationLabels) {
 		this.id = id;
 		this.title = title;
 		this.authors = authors;
 		this.type = type;
+		this.category = category;
 		this.yeardate = yeardate;
 		this.fulldate = fulldate;
 		this.status = status;
@@ -113,11 +116,11 @@ public class PublicationImpl extends Observable implements IPublication {
 		this.publicationLabels = publicationLabels;
 	}
 
-	public PublicationImpl(String title, String authors, String type, String yeardate, String fulldate, String status, String journal, String volume, String issue, String pages,
-			String abstractSection, String externalLink, boolean freeFullText, String notes, String relativePath, List<IPublicationExternalSourceLink> publicationExternalIDSource,
+	public PublicationImpl(String title, String authors, String category, String yeardate, String fulldate, String status, String journal, String volume, String issue, String pages,
+			String abstractSection, String externalLink, boolean freeFullText, String notes, String relativePath,String type, List<IPublicationExternalSourceLink> publicationExternalIDSource,
 			List<IPublicationField> publicationFields, List<IPublicationLabel> publicationLabels) {
-		this(GenerateRandomId.generateID(), title, authors, type, yeardate, fulldate, status, journal, volume, issue, pages, abstractSection, externalLink, freeFullText, notes,
-				relativePath, publicationExternalIDSource, publicationFields, publicationLabels);
+		this(GenerateRandomId.generateID(), title, authors, category, yeardate, fulldate, status, journal, volume, issue, pages, abstractSection, externalLink, freeFullText, notes,
+				relativePath,type, publicationExternalIDSource, publicationFields, publicationLabels);
 	}
 
 	@Override
@@ -149,12 +152,22 @@ public class PublicationImpl extends Observable implements IPublication {
 	}
 
 	@Override
+	public String getCategory() {
+		return category;
+	}
+	
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	
+	@Override
 	public String getType() {
 		return type;
 	}
-
+	
+	@Override
 	public void setType(String type) {
-		this.type = type;
+		this.type=type;
 	}
 
 	@Override
@@ -488,7 +501,5 @@ public class PublicationImpl extends Observable implements IPublication {
 		}
 		return out;
 	}
-	
-	
 
 }

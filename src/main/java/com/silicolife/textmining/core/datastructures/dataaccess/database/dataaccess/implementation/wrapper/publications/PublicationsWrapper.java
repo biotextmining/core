@@ -36,7 +36,10 @@ public class PublicationsWrapper {
 		String authors = publications.getPubAuthors();
 		if (authors == null)
 			authors = "";
-		String type = publications.getPubCategory();
+		String category = publications.getPubCategory();
+		if (category == null)
+			category = "";
+		String type = publications.getPubType();
 		if (type == null)
 			type = "";
 		String yearDate = null;
@@ -115,8 +118,8 @@ public class PublicationsWrapper {
 		/*
 		 * create publication
 		 */
-		PublicationImpl publication_ = new PublicationImpl(id, title, authors, type, yearDate, fullDate, status, journal, volume, issue, pages, abstractSection, externalLink,
-				freefulltextAvailable, notes, relativePath, externalIDsSource_, fullTextfields_, labels_);
+		PublicationImpl publication_ = new PublicationImpl(id, title, authors, category, yearDate, fullDate, status, journal, volume, issue, pages, abstractSection, externalLink,
+				freefulltextAvailable, notes, relativePath,type, externalIDsSource_, fullTextfields_, labels_);
 
 		return publication_;
 	}
@@ -132,7 +135,10 @@ public class PublicationsWrapper {
 		String authors = publications_.getAuthors();
 		if(authors == null || authors.isEmpty())
 			authors = null;
-		String type = publications_.getType();
+		String category = publications_.getCategory();
+		if(category == null || category.isEmpty())
+			category = null;
+		String type = publications_.getCategory();
 		if(type == null || type.isEmpty())
 			type = null;
 		String yearDate = publications_.getYeardate();
@@ -175,7 +181,9 @@ public class PublicationsWrapper {
 		publication.setPubId(id);
 		publication.setPubTitle(title);
 		publication.setPubAuthors(authors);
-		publication.setPubCategory(type);
+		publication.setPubCategory(category);
+		publication.setPubType(type);
+
 		if (yearDate != null) {
 			publication.setPubYeardate(Integer.parseInt(yearDate));
 		}
