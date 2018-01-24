@@ -138,7 +138,7 @@ public class PublicationsWrapper {
 		String category = publications_.getCategory();
 		if(category == null || category.isEmpty())
 			category = null;
-		String type = publications_.getCategory();
+		String type = publications_.getType();
 		if(type == null || type.isEmpty())
 			type = null;
 		String yearDate = publications_.getYeardate();
