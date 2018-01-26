@@ -42,7 +42,7 @@ public class RestClient {
 	private String host;
 	private int port;
 	private Date lastOperationTime;
-	public static final int sessiontimeout = 20; // in minutes
+	public static final int sessiontimeout = 60; // in minutes
 
 	private RestClient(String protocol, String host, int port, String relativePath) throws DaemonException {
 		this.relativePath = relativePath;

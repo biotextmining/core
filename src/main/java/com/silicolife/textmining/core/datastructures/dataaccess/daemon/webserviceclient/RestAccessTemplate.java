@@ -40,7 +40,7 @@ public class RestAccessTemplate extends RestTemplate {
 	private List<HttpMessageConverter<?>> messageConverters;
 	private SSLContextBuilder builder;
 	private SSLConnectionSocketFactory sslsf;
-	private final int socketTimeout = 120; // in seconds
+	private final int socketTimeout = 240; // in seconds
 	private final int connectTimeout = 5; // in seconds
 	private final int connTotal = 400;
 	private boolean useSSL = true;
