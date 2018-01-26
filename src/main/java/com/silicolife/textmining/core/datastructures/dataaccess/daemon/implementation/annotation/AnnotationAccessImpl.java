@@ -37,11 +37,13 @@ import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumen
  */
 public class AnnotationAccessImpl extends RestClientAccess {
 
+	private static int maxEntityAnnotationsPerRequest = 1000;
+
 	public AnnotationAccessImpl() {
 		super();
 	}
 
-	
+
 	/**
 	 * Add corpus process document entity annotations
 	 * 
@@ -60,6 +62,41 @@ public class AnnotationAccessImpl extends RestClientAccess {
 		uriVariables.put("processId", processId);
 		uriVariables.put("documentId", documentId);
 
+		if(entityAnnotations.size() > maxEntityAnnotationsPerRequest)
+		{
+			return addEntitiesPage(entityAnnotations, responseType, uriVariables);
+		}
+		else
+		{
+			return addEntities(entityAnnotations, responseType, uriVariables);
+		}
+	}
+
+
+	private Boolean addEntitiesPage(List<IEntityAnnotation> entityAnnotations,ParameterizedTypeReference<DaemonResponse<Boolean>> responseType, Map<String, Long> uriVariables) throws DaemonException{
+		int listSize = entityAnnotations.size();
+		int start,end;
+		List<IEntityAnnotation> entityAnnotationsSubList;
+		for(int i=0;i<listSize;i=i+maxEntityAnnotationsPerRequest)
+		{
+			start = i;
+			end = i+maxEntityAnnotationsPerRequest;
+			if(end > listSize)
+				end = listSize;
+			entityAnnotationsSubList = entityAnnotations.subList(start, end);
+			ResponseEntity<DaemonResponse<Boolean>> response = webClient.post("annotation/addCorpusProcessDocumentEntityAnootations", responseType, entityAnnotationsSubList, uriVariables);
+
+			if (response.getStatusCode() != HttpStatus.OK) {
+				throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
+			}
+		}
+		return true;
+	}
+
+
+	private Boolean addEntities(List<IEntityAnnotation> entityAnnotations,
+			ParameterizedTypeReference<DaemonResponse<Boolean>> responseType, Map<String, Long> uriVariables)
+			throws DaemonException {
 		ResponseEntity<DaemonResponse<Boolean>> response = webClient.post("annotation/addCorpusProcessDocumentEntityAnootations", responseType, entityAnnotations, uriVariables);
 
 		if (response.getStatusCode() != HttpStatus.OK) {
@@ -69,7 +106,7 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return boo;
 		}
 	}
-	
+
 	/**
 	 * Get processes document statistics
 	 * 
@@ -84,7 +121,7 @@ public class AnnotationAccessImpl extends RestClientAccess {
 		Map<String, Long> uriVariables = new LinkedHashMap<String, Long>();
 		uriVariables.put("publicationId", publicationId);
 		uriVariables.put("processId", processId);
-		
+
 		ResponseEntity<DaemonResponse<AnnotatedDocumentStatisticsImpl>> response = webClient.get("annotation/getProcessDocumentStatistics", responseType, uriVariables);
 
 		if (response.getStatusCode() != HttpStatus.OK) {
@@ -94,8 +131,8 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return stats;
 		}
 	}
-	
-	
+
+
 	/**
 	 * Get process documents annotation entitites
 	 * 
@@ -110,7 +147,7 @@ public class AnnotationAccessImpl extends RestClientAccess {
 		Map<String, Long> uriVariables = new LinkedHashMap<String, Long>();
 		uriVariables.put("publicationId", publicationId);
 		uriVariables.put("processId", processId);
-		
+
 		ResponseEntity<DaemonResponse<List<EntityAnnotationImpl>>> response = webClient.get("annotation/getProcessDoumentAnnotationEntities", responseType, uriVariables);
 
 		if (response.getStatusCode() != HttpStatus.OK) {
@@ -126,8 +163,8 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return iEntityAnnotations;
 		}	
 	}
-	
-	
+
+
 	/**
 	 * Get process documents log
 	 * 
@@ -136,14 +173,14 @@ public class AnnotationAccessImpl extends RestClientAccess {
 	 * @return
 	 * @throws DaemonException
 	 */
-	
+
 	public SortedSet<IAnnotationLog> getProcessDocumentLogs(Long processId, Long publicationId) throws DaemonException{
 		checkAndForceLoginIfNecessary();
 		ParameterizedTypeReference<DaemonResponse<SortedSet<AnnotationLogImpl>>> responseType = new ParameterizedTypeReference<DaemonResponse<SortedSet<AnnotationLogImpl>>>() {};	
 		Map<String, Long> uriVariables = new LinkedHashMap<String, Long>();
 		uriVariables.put("processId", processId);
 		uriVariables.put("publicationId", publicationId);
-				
+
 		ResponseEntity<DaemonResponse<SortedSet<AnnotationLogImpl>>> response = webClient.get("annotation/getProcessDocumentLogs", responseType, uriVariables);
 
 		if (response.getStatusCode() != HttpStatus.OK) {
@@ -159,7 +196,7 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return iAnnotaionLogs;
 		}	
 	}
-	
+
 
 	/**
 	 * Add corpus processes documents events annotations
@@ -179,9 +216,9 @@ public class AnnotationAccessImpl extends RestClientAccess {
 		uriVariables.put("processId", processId);
 		uriVariables.put("documentId", documentID);
 
-	
+
 		ResponseEntity<DaemonResponse<Boolean>> response = webClient.post("annotation/addCorpusProcessDocumentEventsAnootations", responseType, events, uriVariables);
-	
+
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
 		} else {
@@ -189,8 +226,8 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return boo;
 		}	
 	}
-	
-	
+
+
 	/**
 	 * Get processes Log
 	 * 
@@ -203,7 +240,7 @@ public class AnnotationAccessImpl extends RestClientAccess {
 		ParameterizedTypeReference<DaemonResponse<SortedSet<AnnotationLogImpl>>> responseType = new ParameterizedTypeReference<DaemonResponse<SortedSet<AnnotationLogImpl>>>() {};	
 		Map<String, Long> uriVariables = new HashMap<String, Long>();
 		uriVariables.put("processId", processId);
-		
+
 		ResponseEntity<DaemonResponse<SortedSet<AnnotationLogImpl>>> response = webClient.get("annotation/getProcessLogs", responseType, uriVariables);
 
 		if (response.getStatusCode() != HttpStatus.OK) {
@@ -219,8 +256,8 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return iAnnotaionLogs;
 		}	
 	}
-	
-	
+
+
 	/**
 	 * Get process document annotation events
 	 * 
@@ -235,7 +272,7 @@ public class AnnotationAccessImpl extends RestClientAccess {
 		Map<String, Long> uriVariables = new LinkedHashMap<String, Long>();
 		uriVariables.put("processId", processId);
 		uriVariables.put("publicationId", publicationId);
-		
+
 		ResponseEntity<DaemonResponse<List<EventAnnotationImpl>>> response = webClient.get("annotation/getProcessDoumentAnnotationEvents", responseType, uriVariables);
 
 		if (response.getStatusCode() != HttpStatus.OK) {
@@ -251,8 +288,8 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return iEventAnnotation;
 		}	
 	}
-	
-	
+
+
 	/**
 	 * Get process document annotation association logs
 	 * 
@@ -267,7 +304,7 @@ public class AnnotationAccessImpl extends RestClientAccess {
 		ParameterizedTypeReference<DaemonResponse<ManualCurationAnnotationsImpl>> responseType = new ParameterizedTypeReference<DaemonResponse<ManualCurationAnnotationsImpl>>() {};	
 		Map<String, Long> uriVariables = new HashMap<String, Long>();
 		uriVariables.put("processId", processId);
-		
+
 		ResponseEntity<DaemonResponse<ManualCurationAnnotationsImpl>> response = webClient.get("annotation/getProcessDocumentAnnotationsAssociatedToLogs", responseType, uriVariables);
 
 		if (response.getStatusCode() != HttpStatus.OK) {
@@ -278,7 +315,7 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return manualCuration.getAnnotations();
 		}	
 	}
-	
+
 	/**
 	 * Add annotations logs
 	 * 
@@ -298,8 +335,8 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return boo;
 		}	
 	}
-	
-	
+
+
 	/**
 	 * Inactive annotations
 	 * 
@@ -318,8 +355,8 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return boo;
 		}		
 	}
-	
-	
+
+
 	/**
 	 * Update entity annotations
 	 * 
@@ -375,7 +412,7 @@ public class AnnotationAccessImpl extends RestClientAccess {
 	public List<Long> getPublicationsIdsByAnnotationsFilter(IAnnotationsFilter filter) throws DaemonException {
 		checkAndForceLoginIfNecessary();
 		ParameterizedTypeReference<DaemonResponse<List<Long>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<Long>>>() {};
-		
+
 		ResponseEntity<DaemonResponse<List<Long>>> response = webClient.post("annotation/getPublicationsIdsByAnnotationsFilter", responseType, filter);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
