@@ -7,7 +7,8 @@ public enum PublicationFieldsEnum {
 	jounal ("pubJournal"),
 	fullContent("pubFullcontent"),
 	abstractSection("pubAbstract"),
-	type("pubCategory");
+	category("pubCategory"),
+	type("pubType");
 	
 	
 	private final String uniqueIdentifier;
