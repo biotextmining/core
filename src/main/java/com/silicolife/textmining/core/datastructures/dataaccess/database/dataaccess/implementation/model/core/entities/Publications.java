@@ -170,8 +170,8 @@ public class Publications implements java.io.Serializable {
 	@Fields(value = { 
 			@Field(name="titleCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
 			@Field(name="titleNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
-			@Field(name="titleSNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="keywordEdgeAnalyzer"), store=Store.NO, boost = @Boost(2)),
-			@Field(name="titleSCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="keywordEdgeAnalyzerCS"), store=Store.NO, boost = @Boost(2)),
+			//@Field(name="titleSNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="keywordEdgeAnalyzer"), store=Store.NO, boost = @Boost(2)),
+			//@Field(name="titleSCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="keywordEdgeAnalyzerCS"), store=Store.NO, boost = @Boost(2)),
 			//@Field(name="titleTNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzer"), store=Store.NO),
 			//@Field(name="titleTCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzerCS"), store=Store.NO)
 			@Field(name = "pubTitleSort", analyze = Analyze.NO, store = Store.YES)			
@@ -189,8 +189,8 @@ public class Publications implements java.io.Serializable {
 	@Fields(value = { 
 			@Field(name="authorsCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
 			@Field(name="authorsNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
-			@Field(name="authorsSNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzer"), store=Store.NO),
-			@Field(name="authorsSCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzerCS"), store=Store.NO),
+			//@Field(name="authorsSNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzer"), store=Store.NO),
+			//@Field(name="authorsSCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzerCS"), store=Store.NO),
 			@Field(name = "pubAuthorsSort", analyze = Analyze.NO, store = Store.YES)	
 	})
 	@SortableField(forField = "pubAuthorsSort")
@@ -254,8 +254,8 @@ public class Publications implements java.io.Serializable {
 	@Fields(value = { 
 			@Field(name="journalCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
 			@Field(name="journalNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
-			@Field(name="journalSNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzer"), store=Store.NO),
-			@Field(name="journalSCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzerCS"), store=Store.NO)
+			//@Field(name="journalSNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzer"), store=Store.NO),
+			//@Field(name="journalSCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzerCS"), store=Store.NO)
 	})
 	@Column(name = "pub_journal", length = 500)
 	public String getPubJournal() {
@@ -296,8 +296,8 @@ public class Publications implements java.io.Serializable {
 	@Fields(value = { 
 			@Field(name="abstractCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
 			@Field(name="abstractNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
-			@Field(name="abstractSNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzer"), store=Store.NO),
-			@Field(name="abstractSCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzerCS"), store=Store.NO)
+			//@Field(name="abstractSNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzer"), store=Store.NO),
+			//@Field(name="abstractSCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzerCS"), store=Store.NO)
 	})
 	@Column(name = "pub_abstract")
 	public String getPubAbstract() {
@@ -330,8 +330,8 @@ public class Publications implements java.io.Serializable {
 	@Fields(value = { 
 			@Field(name="fullContentCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
 			@Field(name="fullContentNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
-			@Field(name="fullContentSNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzer"), store=Store.NO),
-			@Field(name="fullContentSCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzerCS"), store=Store.NO)
+			//@Field(name="fullContentSNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzer"), store=Store.NO),
+			//@Field(name="fullContentSCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzerCS"), store=Store.NO)
 	})
 	
 	@Column(name = "pub_fullcontent")
@@ -347,8 +347,8 @@ public class Publications implements java.io.Serializable {
 	@Fields(value = { 
 			@Field(name="notesCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
 			@Field(name="notesNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
-			@Field(name="notesSNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzer"), store=Store.NO),
-			@Field(name="notesSCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzerCS"), store=Store.NO)
+			//@Field(name="notesSNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzer"), store=Store.NO),
+			//@Field(name="notesSCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="tokenEdgeAnalyzerCS"), store=Store.NO)
 	})
 	
 	@Column(name = "pub_notes", length = 65535)
@@ -369,6 +369,12 @@ public class Publications implements java.io.Serializable {
 		this.pubRelativePath = pubRelativePath;
 	}
 	
+	@Fields(value = { 
+			@Field(name="typeCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
+			@Field(name="typeNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
+			@Field(name = "pubTypeSort", analyze = Analyze.NO, store = Store.YES)
+	})
+	@SortableField(forField = "pubTypeSort")
 	@Column(name = "pub_type", length = 45)
 	public String getPubType() {
 		return pubType;

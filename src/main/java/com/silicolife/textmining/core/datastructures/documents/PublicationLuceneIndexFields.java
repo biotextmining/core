@@ -15,7 +15,8 @@ public enum PublicationLuceneIndexFields {
 	queryId("queryHasPublicationses.id.qhbQueryId","queryHasPublicationses.id.qhbQueryId", "", null),
 	corpusId("corpusHasPublicationses.id.chpCorpusId", "corpusHasPublicationses.id.chpCorpusId", "", null),
 	yeardate("lucYearDate","lucYearDate","pubYeardateSort", SortField.Type.STRING),
-	type("categoryCS","categoryNCS","pubCategorySort", SortField.Type.STRING),
+	category("categoryCS","categoryNCS","pubCategorySort", SortField.Type.STRING),
+	type("typeCS", "typeNCS", "pubTypeSort", SortField.Type.STRING),
 	none("","","none",null);
 	
 	
