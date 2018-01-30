@@ -322,7 +322,7 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		}
 		
 		if(eqMustSentenceOnField.size()>0) {
-			combinedQuery = addMustPhraseWithAttributesOnFields(eqSentenceOnField, qb, combinedQuery);	
+			combinedQuery = addMustPhraseWithAttributesOnFields(eqMustSentenceOnField, qb, combinedQuery);	
 		}
 		
 		if(filtersOnFields.size()>0) {
