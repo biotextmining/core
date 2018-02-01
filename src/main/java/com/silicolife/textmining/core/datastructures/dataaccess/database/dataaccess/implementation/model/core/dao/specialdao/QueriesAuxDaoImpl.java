@@ -82,6 +82,27 @@ public class QueriesAuxDaoImpl implements QueriesAuxDao {
 		return ((Number)qry.uniqueResult()).intValue();
 	}
 	
+	@Override
+	public Integer countActiveQueries() {
+		Session session = sessionFactory.getCurrentSession();
+		String hqlString = "select count(*) from Queries as b where b.quActive=1";
+		Query qry = session.createQuery(hqlString);
+		return ((Number)qry.uniqueResult()).intValue();
+	}
+	
+	@Override
+	public Integer countActiveQueriesByAttributes(Long id, String resourceType, String permission) {
+		Session session = sessionFactory.getCurrentSession();
+		String hqlString = "select count(*) from Queries as b "
+				+ "inner join AuthUserDataObjects as a on a.id.audoUidResource = b.quId AND b.quActive=1 "
+				+ "where a.id.audoUserId = :id and a.id.audoTypeResource = :resourceType and a.audoPermission = :permission";
+		Query qry = session.createQuery(hqlString);
+		qry.setParameter("id", id);
+		qry.setParameter("resourceType", resourceType);
+		qry.setParameter("permission", permission);
+		return ((Number)qry.uniqueResult()).intValue();
+	}
+	
 	
 	
 	@Override
@@ -123,6 +144,66 @@ public class QueriesAuxDaoImpl implements QueriesAuxDao {
 		Query qry = session.createQuery(hqlString);
 		qry.setParameter("id", id);
 		qry.setParameter("resourceType", resourceType);
+		
+		qry.setFirstResult(paginationIndex);
+		qry.setMaxResults(paginationSize);
+		qry.setFetchSize(paginationSize);
+
+		@SuppressWarnings("unchecked")
+		List<Queries> result = qry.list();
+
+		return result;
+	}
+	
+	
+	@Override
+	public List<Queries> findQueriesByAttributesPaginated(Long id, String resourceType, String permission,Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+		Session session = sessionFactory.getCurrentSession();
+
+		String hqlString = "select b from Queries as b "
+				+ "inner join AuthUserDataObjects as a on a.id.audoUidResource = b.quId AND b.quActive=1 "
+				+ "where a.id.audoUserId = :id and a.id.audoTypeResource = :resourceType and a.audoPermission = :permission";
+		
+		if(!sortBy.equals("none")){
+			String uniqueId = QueryFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+			String ord = "DESC";
+			if(asc){
+				ord = "ASC";
+			}
+			hqlString = hqlString + " ORDER BY " + uniqueId + " " + ord;
+		}
+		
+		Query qry = session.createQuery(hqlString);
+		qry.setParameter("id", id);
+		qry.setParameter("resourceType", resourceType);
+		qry.setParameter("permission", permission);
+		
+		qry.setFirstResult(paginationIndex);
+		qry.setMaxResults(paginationSize);
+		qry.setFetchSize(paginationSize);
+
+		@SuppressWarnings("unchecked")
+		List<Queries> result = qry.list();
+
+		return result;
+	}
+	
+	@Override
+	public List<Queries> findAllQueriesPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+		Session session = sessionFactory.getCurrentSession();
+
+		String hqlString = "select b from Queries as b where b.quActive=1";
+		
+		if(!sortBy.equals("none")){
+			String uniqueId = QueryFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+			String ord = "DESC";
+			if(asc){
+				ord = "ASC";
+			}
+			hqlString = hqlString + " ORDER BY " + uniqueId + " " + ord;
+		}
+		
+		Query qry = session.createQuery(hqlString);
 		
 		qry.setFirstResult(paginationIndex);
 		qry.setMaxResults(paginationSize);

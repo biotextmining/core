@@ -153,4 +153,15 @@ public interface IQueriesService {
 	 * Counts all active queries of a user
 	 */
 	public Integer countAllActiveQueries();
+	
+	/**
+	 * Get all queries existed in system. If "role_admin" all queries are
+	 * returned. If has other role is returned the queries with owner permission
+	 * 
+	 * @return
+	 */
+	public List<IQuery> getAllPrivilegesQueriesAdminAccessPaginated(Integer paginationIndex, Integer paginationSize,
+			boolean asc, String sortBy);
+
+	public Integer countAllPrivilegesQueriesAdminAccess();
 }

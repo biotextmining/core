@@ -16,8 +16,21 @@ public interface QueriesAuxDao {
 	public List<Queries> findQueriesByAttributesPaginated(Long id, String resourceType, Integer paginationIndex,
 			Integer paginationSize, boolean asc, String sortBy);
 
+	public List<Queries> findQueriesByAttributesPaginated(Long id, String resourceType, String permission,
+			Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
+	
 	public Integer countQueriesByAttributes(Long id, String resourceType);
 
 	public Integer countActiveQueriesByAttributes(Long id, String resourceType);
+	
+	public Integer countActiveQueriesByAttributes(Long id, String resourceType, String permission);
+
+	public List<Queries> findAllQueriesPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
+
+	public Integer countActiveQueries();
+
+
+
+
 
 }

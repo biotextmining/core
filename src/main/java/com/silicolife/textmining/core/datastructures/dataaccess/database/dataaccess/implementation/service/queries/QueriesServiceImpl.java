@@ -151,6 +151,64 @@ public class QueriesServiceImpl implements IQueriesService {
 
 		return listQueries_;
 	}
+	
+	@Override
+	public List<IQuery> getAllPrivilegesQueriesAdminAccessPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+		Boolean isAdmin = false;
+		String roleAdmin = RolesEnum.role_admin.toString();
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		usersManagerDao.getAuthUsersDao().refresh(user);
+
+		Set<AuthGroupHasRoles> groupHasRoles = user.getAuthGroups().getAuthGroupHasRoleses();
+		for (AuthGroupHasRoles groupHasRole : groupHasRoles) {
+			String role = groupHasRole.getAuthRoles().getArRoleCode();
+			if (role.equals(roleAdmin)) {
+				isAdmin = true;
+				break;
+			}
+		}
+
+		List<Queries> listQueries = null;
+		if (isAdmin)
+			listQueries = queriesManagerDao.getQueriesAuxDao().findAllQueriesPaginated(paginationIndex, paginationSize, asc, sortBy);
+		else
+			listQueries = queriesManagerDao.getQueriesAuxDao().findQueriesByAttributesPaginated(user.getAuId(), queries, "owner", paginationIndex, paginationSize, asc, sortBy);
+
+		List<IQuery> listQueries_ = new ArrayList<IQuery>();
+		for (Queries query : listQueries) {
+			if(query.isQuActive())
+			{
+				IQuery query_ = QueriesWrapperSpeedUp.convertToAnoteStructure(query);
+				listQueries_.add(query_);
+			}
+		}
+
+		return listQueries_;
+	}
+	
+	@Override
+	public Integer countAllPrivilegesQueriesAdminAccess() {
+		Boolean isAdmin = false;
+		String roleAdmin = RolesEnum.role_admin.toString();
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		usersManagerDao.getAuthUsersDao().refresh(user);
+
+		Set<AuthGroupHasRoles> groupHasRoles = user.getAuthGroups().getAuthGroupHasRoleses();
+		for (AuthGroupHasRoles groupHasRole : groupHasRoles) {
+			String role = groupHasRole.getAuthRoles().getArRoleCode();
+			if (role.equals(roleAdmin)) {
+				isAdmin = true;
+				break;
+			}
+		}
+
+		List<Queries> listQueries = null;
+		if (isAdmin)
+			return queriesManagerDao.getQueriesAuxDao().countActiveQueries();
+		else
+			return queriesManagerDao.getQueriesAuxDao().countActiveQueriesByAttributes(user.getAuId(), queries, "owner");
+
+	}
 
 	@Override
 	public List<IQuery> getAllQueries() {
