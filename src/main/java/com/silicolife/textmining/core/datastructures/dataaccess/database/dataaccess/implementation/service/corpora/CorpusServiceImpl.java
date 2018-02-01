@@ -437,6 +437,64 @@ public class CorpusServiceImpl implements ICorpusService {
 		return true;
 
 	}
+	
+	@Override
+	public List<ICorpus> getAllPrivilegesCorpusAdminAccessPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+		Boolean isAdmin = false;
+		String roleAdmin = RolesEnum.role_admin.toString();
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		usersManagerDao.getAuthUsersDao().refresh(user);
+
+		Set<AuthGroupHasRoles> groupHasRoles = user.getAuthGroups().getAuthGroupHasRoleses();
+		for (AuthGroupHasRoles groupHasRole : groupHasRoles) {
+			String role = groupHasRole.getAuthRoles().getArRoleCode();
+			if (role.equals(roleAdmin)) {
+				isAdmin = true;
+				break;
+			}
+		}
+
+		List<Corpus> listCorpus = null;
+		if (isAdmin)
+			listCorpus = corpusManagerDao.getCorpusAuxDao().findAllActiveCorpusPaginated(paginationIndex, paginationSize, asc, sortBy);
+		else
+			listCorpus = corpusManagerDao.getCorpusAuxDao().findCorpusByAttributesPaginated(user.getAuId(), corpusStr, "owner", paginationIndex, paginationSize, asc, sortBy);
+
+		List<ICorpus> listCorpus_ = new ArrayList<ICorpus>();
+		for (Corpus corpus : listCorpus) {
+			if(corpus.isCrpActive())
+			{
+				ICorpus corpus_ = CorpusWrapper.convertToAnoteStructure(corpus);
+				listCorpus_.add(corpus_);
+			}
+		}
+
+		return listCorpus_;
+	}
+	
+	@Override
+	public Integer countAllPrivilegesCorpusAdminAccess() {
+		Boolean isAdmin = false;
+		String roleAdmin = RolesEnum.role_admin.toString();
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		usersManagerDao.getAuthUsersDao().refresh(user);
+
+		Set<AuthGroupHasRoles> groupHasRoles = user.getAuthGroups().getAuthGroupHasRoleses();
+		for (AuthGroupHasRoles groupHasRole : groupHasRoles) {
+			String role = groupHasRole.getAuthRoles().getArRoleCode();
+			if (role.equals(roleAdmin)) {
+				isAdmin = true;
+				break;
+			}
+		}
+
+		
+		if (isAdmin)
+			return corpusManagerDao.getCorpusAuxDao().CountAllActiveCorpus();
+		else
+			return corpusManagerDao.getCorpusAuxDao().CountCorpusByAttributes(user.getAuId(), corpusStr, "owner");
+
+	}
 
 	@Override
 	public List<ICorpus> getAllPrivilegesCorpusAdminAccess() {

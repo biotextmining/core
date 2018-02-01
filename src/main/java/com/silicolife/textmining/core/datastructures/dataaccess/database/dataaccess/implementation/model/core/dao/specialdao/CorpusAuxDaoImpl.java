@@ -229,6 +229,117 @@ public class CorpusAuxDaoImpl implements CorpusAuxDao {
 		return processes;
 	}
 
+@Override
+public Integer CountCorpusByAttributes(Long auId, String corpusstr, String permission) {
+	Session session = sessionFactory.getCurrentSession();
+	String sqlString = "select count(*) FROM auth_user_data_objects AS a " + "INNER JOIN corpus as b ON a.audo_uid_resource = b.crp_id AND b.crp_active=1 "
+			+ "WHERE audo_user_id = ? AND audo_type_resource = ? AND audo_permission = ?";
+	SQLQuery qry = session.createSQLQuery(sqlString);
+	qry.setParameter(0, auId);
+	qry.setParameter(1, corpusstr);
+	qry.setParameter(2, permission);
+	//qry.addEntity("corpus", Corpus.class);
+
+	return ((Number)qry.uniqueResult()).intValue();
+
+}
+
+@Override
+public Integer CountAllActiveCorpus() {
+	Session session = sessionFactory.getCurrentSession();
+	String sqlString = "select count(*) FROM corpus as b WHERE b.crp_active=1 ";
+	SQLQuery qry = session.createSQLQuery(sqlString);
+	//qry.addEntity("corpus", Corpus.class);
+
+	return ((Number)qry.uniqueResult()).intValue();
+
+}
+
+@Override
+public List<Corpus> findAllActiveCorpusPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+	Session session = sessionFactory.getCurrentSession();
+	
+	String sqlString = "SELECT b.* FROM corpus as b ";
+	
+	if(!sortBy.equals("none")){
+		if(sortBy.equals("processesNumber") | sortBy.equals("publicationsNumber")){
+			String uniqueId = CorpusFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+			
+			String ord = " DESC";
+			if(asc){
+				ord = " ASC";
+			}
+			sqlString = sqlString + "LEFT JOIN "+uniqueId+" as c ON b.crp_id = c.chp_corpus_id WHERE b.crp_active=1 " + "GROUP BY b.crp_id ORDER BY COUNT(chp_corpus_id) " + ord;
+		}
+		else{
+		String uniqueId = CorpusFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+		String ord = " DESC";
+		if(asc){
+			ord = " ASC";
+		}
+		sqlString = sqlString+ "WHERE b.crp_active=1 "+ "ORDER BY "+ uniqueId+ord;
+		}
+	}
+	else{
+		sqlString = sqlString + "WHERE b.crp_active=1 ";
+	}
+	
+	sqlString = sqlString+" LIMIT "+paginationSize+" OFFSET "+ paginationIndex;
+	
+	
+	SQLQuery qry = session.createSQLQuery(sqlString);
+
+	qry.addEntity("corpus", Corpus.class);
+	@SuppressWarnings("unchecked")
+	List<Corpus> result = qry.list();
+
+	return result;
+}
+
+
+@Override
+public List<Corpus> findCorpusByAttributesPaginated(Long auId, String corpusstr,String permission, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+	Session session = sessionFactory.getCurrentSession();
+	
+	String sqlString = "SELECT b.* FROM auth_user_data_objects AS a " + "INNER JOIN corpus as b ON a.audo_uid_resource = b.crp_id AND b.crp_active=1 ";
+	
+	if(!sortBy.equals("none")){
+		if(sortBy.equals("processesNumber") | sortBy.equals("publicationsNumber")){
+			String uniqueId = CorpusFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+			
+			String ord = " DESC";
+			if(asc){
+				ord = " ASC";
+			}
+			sqlString = sqlString + "LEFT JOIN "+uniqueId+" as c ON b.crp_id = c.chp_corpus_id " + " WHERE audo_user_id = ? AND audo_type_resource = ? AND audo_permission = ?"+ "GROUP BY b.crp_id ORDER BY COUNT(chp_corpus_id) " + ord;
+		}
+		else{
+		String uniqueId = CorpusFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+		String ord = " DESC";
+		if(asc){
+			ord = " ASC";
+		}
+		sqlString = sqlString+ "WHERE audo_user_id = ? AND audo_type_resource = ? AND audo_permission = ?"+"ORDER BY "+ uniqueId+ord;
+		}
+	}
+	else{
+		sqlString = sqlString + "WHERE audo_user_id = ? AND audo_type_resource = ? AND audo_permission = ?";
+	}
+	
+	sqlString = sqlString+" LIMIT "+paginationSize+" OFFSET "+ paginationIndex;
+	
+	
+	SQLQuery qry = session.createSQLQuery(sqlString);
+	qry.setParameter(0, auId);
+	qry.setParameter(1, corpusstr);
+	qry.setParameter(2, permission);
+	qry.addEntity("corpus", Corpus.class);
+	@SuppressWarnings("unchecked")
+	List<Corpus> result = qry.list();
+
+	return result;
+}
+
 	@Override
 	public List<Corpus> findCorpusByAttributes(long auId, String resourceType,String permission) {
 		Session session = sessionFactory.getCurrentSession();

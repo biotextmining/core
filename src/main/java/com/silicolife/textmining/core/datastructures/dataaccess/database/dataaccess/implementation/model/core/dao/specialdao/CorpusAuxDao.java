@@ -29,4 +29,14 @@ public interface CorpusAuxDao {
 
 	public List<Corpus> findCorpusByAttributesPaginated(Long auId, String corpusstr, Integer paginationIndex,
 			Integer paginationSize, boolean asc, String sortBy);
+
+	public List<Corpus> findCorpusByAttributesPaginated(Long auId, String corpusstr, String permission,
+			Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
+
+	public Integer CountCorpusByAttributes(Long auId, String corpusstr, String permission);
+
+	public Integer CountAllActiveCorpus();
+
+	public List<Corpus> findAllActiveCorpusPaginated(Integer paginationIndex, Integer paginationSize, boolean asc,
+			String sortBy);
 }

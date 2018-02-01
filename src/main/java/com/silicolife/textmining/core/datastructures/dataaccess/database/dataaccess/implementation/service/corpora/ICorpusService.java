@@ -155,4 +155,9 @@ public interface ICorpusService {
 			boolean asc, String sortBy) throws CorpusException;
 
 	public Integer countCorpusProcesses(Long corpusId) throws CorpusException;
+
+	public List<ICorpus> getAllPrivilegesCorpusAdminAccessPaginated(Integer paginationIndex, Integer paginationSize,
+			boolean asc, String sortBy);
+
+	public Integer countAllPrivilegesCorpusAdminAccess();
 }
