@@ -44,4 +44,14 @@ public interface ResourcesAuxDao {
 			Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
 
 	public List<Resources> findActiveResourcesByAttributes(Long userId, Long resourceTypeId, String privilegeResourceType);
+
+	public List<Resources> findResourcesByAttributesPaginated(Long userId, String resourceType, String permission,
+			Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
+
+	public List<Resources> findActiveResourcesPaginated(Integer paginationIndex, Integer paginationSize, boolean asc,
+			String sortBy);
+
+	public Integer countResourcesByAttributes(Long id, String resourceType, String permission);
+
+	public Integer countActiveResources();
 }

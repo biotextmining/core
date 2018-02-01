@@ -283,6 +283,70 @@ public class ResourcesAuxDaoImpl implements ResourcesAuxDao {
 		qry.setParameter("oldActive", oldActive);
 		qry.executeUpdate();
 	}
+	
+	
+	@Override
+	public List<Resources> findResourcesByAttributesPaginated(Long userId, String resourceType, String permission, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy){
+		Session session = sessionFactory.getCurrentSession();
+
+		String hqlString = "select b from Resources as b "
+				+ "inner join AuthUserDataObjects as a on a.id.audoUidResource = b.resoId AND b.resoActive=1 "
+				+ "where a.id.audoUserId = :userId and a.id.audoTypeResource = :resourceType and a.audoPermission = :permission";
+		
+		if(!sortBy.equals("none")){
+			String uniqueId = ResourceFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+			String ord = "DESC";
+			if(asc){
+				ord = "ASC";
+			}
+			hqlString = hqlString + " ORDER BY " + uniqueId + " " + ord;
+		}
+		
+				
+		Query qry = session.createQuery(hqlString);
+		qry.setParameter("userId", userId);
+		qry.setParameter("resourceType", resourceType);
+		qry.setParameter("permission", permission);
+		qry.setFirstResult(paginationIndex);
+		qry.setMaxResults(paginationSize);
+		qry.setFetchSize(paginationSize);
+		@SuppressWarnings("unchecked")
+		List<Resources> result = qry.list();
+
+		return result;
+
+	}
+	
+	@Override
+	public List<Resources> findActiveResourcesPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy){
+		Session session = sessionFactory.getCurrentSession();
+
+		String hqlString = "select b from Resources as b where b.resoActive=1 ";
+				
+		
+		if(!sortBy.equals("none")){
+			String uniqueId = ResourceFieldsEnum.valueOf(sortBy).getUniqueIdentifier();
+			String ord = "DESC";
+			if(asc){
+				ord = "ASC";
+			}
+			hqlString = hqlString + " ORDER BY " + uniqueId + " " + ord;
+		}
+		
+				
+		Query qry = session.createQuery(hqlString);
+		qry.setFirstResult(paginationIndex);
+		qry.setMaxResults(paginationSize);
+		qry.setFetchSize(paginationSize);
+		@SuppressWarnings("unchecked")
+		List<Resources> result = qry.list();
+
+		return result;
+
+	}
+	
+	
+	
 
 	@Override
 	public List<Resources> findResourcesByAttributes(Long id, String resourceType, String permission) {
@@ -298,7 +362,7 @@ public class ResourcesAuxDaoImpl implements ResourcesAuxDao {
 		
 		String hqlString = "select b form Resources as b "
 				+ "inner join AuthUserDataObjects as a on a.id.audoUidResource = b.resoId "
-				+ "where a.id.audoUserId = :id and a.id.audoTypeResource = :resourceType and a.audoPermission = :premission";
+				+ "where a.id.audoUserId = :id and a.id.audoTypeResource = :resourceType and a.audoPermission = :permission";
 		Query qry = session.createQuery(hqlString);
 		qry.setParameter("id", id);
 		qry.setParameter("resourceType", resourceType);
@@ -307,6 +371,27 @@ public class ResourcesAuxDaoImpl implements ResourcesAuxDao {
 		List<Resources> result = qry.list();
 
 		return result;
+	}
+	
+	@Override
+	public Integer countResourcesByAttributes(Long id, String resourceType, String permission) {
+		Session session = sessionFactory.getCurrentSession();
+		String hqlString = "select count (*) from Resources as b "
+				+ "inner join AuthUserDataObjects as a on a.id.audoUidResource = b.resoId AND b.resoActive=1"
+				+ "where a.id.audoUserId = :id and a.id.audoTypeResource = :resourceType and a.audoPermission = :permission";
+		Query qry = session.createQuery(hqlString);
+		qry.setParameter("id", id);
+		qry.setParameter("resourceType", resourceType);
+		qry.setParameter("permission", permission);
+		return ((Number)qry.uniqueResult()).intValue();
+	}
+	
+	@Override
+	public Integer countActiveResources() {
+		Session session = sessionFactory.getCurrentSession();
+		String hqlString = "select count (*) from Resources as b Where b.resoActive=1";
+		Query qry = session.createQuery(hqlString);
+		return ((Number)qry.uniqueResult()).intValue();
 	}
 
 	@Override

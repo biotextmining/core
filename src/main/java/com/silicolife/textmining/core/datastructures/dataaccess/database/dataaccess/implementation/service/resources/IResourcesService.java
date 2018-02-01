@@ -54,4 +54,9 @@ public interface IResourcesService {
 			Integer paginationSize, boolean asc, String sortBy) throws ResourcesExceptions;
 
 	public Integer countResourcesByType(String type) throws ResourcesExceptions;
+
+	public List<IResource<IResourceElement>> getAllPrivilegesResourcesAdminAccessPaginated(Integer paginationIndex,
+			Integer paginationSize, boolean asc, String sortBy) throws ResourcesExceptions;
+
+	public Integer countAllPrivilegesResourcesAdminAccess() throws ResourcesExceptions;
 }

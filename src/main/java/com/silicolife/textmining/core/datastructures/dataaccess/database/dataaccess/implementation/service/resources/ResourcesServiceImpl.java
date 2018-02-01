@@ -177,6 +177,68 @@ public class ResourcesServiceImpl implements IResourcesService {
 
 		return true;
 	}
+	
+	
+	@Override
+	public List<IResource<IResourceElement>> getAllPrivilegesResourcesAdminAccessPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) throws ResourcesExceptions {
+
+		Boolean isAdmin = false;
+		String roleAdmin = RolesEnum.role_admin.toString();
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		usersManagerDao.getAuthUsersDao().refresh(user);
+
+		Set<AuthGroupHasRoles> groupHasRoles = user.getAuthGroups().getAuthGroupHasRoleses();
+		for (AuthGroupHasRoles groupHasRole : groupHasRoles) {
+			String role = groupHasRole.getAuthRoles().getArRoleCode();
+			if (role.equals(roleAdmin)) {
+				isAdmin = true;
+				break;
+			}
+		}
+
+		List<Resources> listResources = null;
+		if (isAdmin)
+			listResources = resourcesManagerDao.getResourcesAuxDao().findActiveResourcesPaginated(paginationIndex, paginationSize, asc, sortBy);
+		else
+			listResources = resourcesManagerDao.getResourcesAuxDao().findResourcesByAttributesPaginated(user.getAuId(), resourcesStr, "owner", paginationIndex, paginationSize, asc, sortBy);
+
+		List<IResource<IResourceElement>> listResources_ = new ArrayList<IResource<IResourceElement>>();
+		for (Resources resource : listResources) {
+			if(resource.isResoActive())
+			{
+				IResource<IResourceElement> resource_ = ResourcesWrapper.convertToAnoteStructure(resource);
+				listResources_.add(resource_);
+			}
+		}
+
+		return listResources_;
+	}
+	
+	@Override
+	public Integer countAllPrivilegesResourcesAdminAccess() throws ResourcesExceptions {
+
+		Boolean isAdmin = false;
+		String roleAdmin = RolesEnum.role_admin.toString();
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		usersManagerDao.getAuthUsersDao().refresh(user);
+
+		Set<AuthGroupHasRoles> groupHasRoles = user.getAuthGroups().getAuthGroupHasRoleses();
+		for (AuthGroupHasRoles groupHasRole : groupHasRoles) {
+			String role = groupHasRole.getAuthRoles().getArRoleCode();
+			if (role.equals(roleAdmin)) {
+				isAdmin = true;
+				break;
+			}
+		}
+
+
+		if (isAdmin)
+			return resourcesManagerDao.getResourcesAuxDao().countActiveResources();
+		else
+			return resourcesManagerDao.getResourcesAuxDao().countResourcesByAttributes(user.getAuId(), resourcesStr, "owner");
+
+	
+	}
 
 	@Override
 	public List<IResource<IResourceElement>> getAllPrivilegesResourcesAdminAccess() throws ResourcesExceptions {
