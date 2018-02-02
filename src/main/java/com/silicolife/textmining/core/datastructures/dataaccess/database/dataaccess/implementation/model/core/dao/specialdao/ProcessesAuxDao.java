@@ -15,4 +15,14 @@ public interface ProcessesAuxDao {
 
 	List<Processes> findAllProcesses(long auId, String resourceType);
 
+	public Integer countAllActiveProcesses();
+
+	public Integer countProcessesByAttributes(long auId, String resourceType, String permission);
+
+	public List<Processes> findAllActiveProcessesPaginated(Integer paginationIndex, Integer paginationSize, boolean asc,
+			String sortBy);
+
+	public List<Processes> findProcessesByAttributesPaginated(long auId, String resourceType, String permission,
+			Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
+
 }

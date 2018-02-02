@@ -17,6 +17,7 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Fields;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.SortableField;
 import org.hibernate.search.annotations.Store;
 
 /**
@@ -71,8 +72,10 @@ public class Corpus implements java.io.Serializable {
 
 	@Fields(value = { 
 			@Field(name="crp_nameCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
-			@Field(name="crp_nameNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO)
+			@Field(name="crp_nameNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
+			@Field(name = "crpNameSort", analyze = Analyze.NO, store = Store.YES)
 	})
+	@SortableField(forField = "crpNameSort")
 	@Column(name = "crp_corpus_name", nullable = false, length = 500)
 	public String getCrpCorpusName() {
 		return this.crpCorpusName;
@@ -95,8 +98,10 @@ public class Corpus implements java.io.Serializable {
 	
 	@Fields(value = { 
 			@Field(name="crp_notesCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
-			@Field(name="crp_notesNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO)
-	})
+			@Field(name="crp_notesNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
+			@Field(name = "crpNotesSort", analyze = Analyze.NO, store = Store.YES)
+		})
+	@SortableField(forField = "crpNotesSort")
 	@Column(name = "crp_notes", length = 65535)
 	public String getCrpNotes() {
 		return this.crpNotes;

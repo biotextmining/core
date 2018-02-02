@@ -166,6 +166,15 @@ public interface IGenericLuceneDao<T> {
 	public Integer countForWebTable(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField,
 			Map<String, List<String>> filtersOnFields, boolean isPhrase);
 
+	public List<T> findForWebTableWPermissionsPaginated(Map<String, String> eqSentenceOnField,
+			Map<String, String> eqMustSentenceOnField, Map<String, String> permissionFields, String idField,
+			Map<String, List<String>> filtersOnFields, boolean isPhrase, int index, int paginationSize,
+			String sortField, Type sortType, boolean asc);
+
+	public Integer countForWebTableWPermissions(Map<String, String> eqSentenceOnField,
+			Map<String, String> eqMustSentenceOnField, Map<String, String> permissionFields, String idField,
+			Map<String, List<String>> filtersOnFields, boolean isPhrase);
+
 
 
 

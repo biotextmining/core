@@ -4,6 +4,7 @@ import org.hibernate.SessionFactory;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.GenericLuceneDaoImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.IGenericLuceneDao;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUsers;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Corpus;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Queries;
@@ -18,6 +19,7 @@ public class LuceneManagerDao {
 	private PublicationsLuceneManagerDao publicationsLuceneManagerDao;
 	private CorpusLuceneManagerDao corpusLuceneManagerDao;
 	private ResourcesLuceneManagerDao resourcesLuceneManagerDao;
+	private UsersLuceneManagerDao usersLuceneManagerDao;
 	
 	public LuceneManagerDao(SessionFactory sessionFactory){
 		this.sessionFactory = sessionFactory;
@@ -26,6 +28,7 @@ public class LuceneManagerDao {
 		this.publicationsLuceneManagerDao = createPublicationsLuceneDao();
 		this.corpusLuceneManagerDao = createCorpusLuceneDao();
 		this.resourcesLuceneManagerDao = createResourcesLuceneDao();
+		this.usersLuceneManagerDao = createUsersLuceneDao();
 	}
 	
 	public ResourceElementsLuceneManagerDao createResourceElementsLuceneDao(){
@@ -59,6 +62,12 @@ public class LuceneManagerDao {
 		return corpusLuceneManagerDao;
 	}
 	
+	public UsersLuceneManagerDao createUsersLuceneDao() {
+		IGenericLuceneDao<AuthUsers> usersLuceneDao = new GenericLuceneDaoImpl<AuthUsers>(sessionFactory,AuthUsers.class);
+		UsersLuceneManagerDao usersLuceneManagerDao = new UsersLuceneManagerDao(usersLuceneDao);
+		return usersLuceneManagerDao;
+	}
+	
 	
 	public ResourceElementsLuceneManagerDao getResourceElementsLuceneManagerDao() {
 		return resourceElementsLuceneManagerDao;
@@ -78,6 +87,10 @@ public class LuceneManagerDao {
 	
 	public CorpusLuceneManagerDao getCorpusLuceneManagerDao() {
 		return corpusLuceneManagerDao;
+	}
+	
+	public UsersLuceneManagerDao getUsersLuceneManagerDao() {
+		return usersLuceneManagerDao;
 	}
 
 }

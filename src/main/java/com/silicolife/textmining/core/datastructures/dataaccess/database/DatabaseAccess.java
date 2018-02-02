@@ -28,6 +28,8 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.resources.IResourcesLuceneService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.resources.ResourcesElementLuceneServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.resources.ResourcesLuceneServiceImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.users.IUsersLuceneService;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.users.UsersLuceneServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLoggedImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.ManagerDao;
@@ -128,6 +130,7 @@ public class DatabaseAccess implements IDataAccess {
 	private IResourcesElementLuceneService luceneResourcesElementService;
 	private IQueriesLuceneService luceneQueriesService;
 	private ICorpusLuceneService luceneCorpusService;
+	private IUsersLuceneService luceneUsersService;
 	private IUserService userService;
 	private IResourcesLuceneService luceneResourcesService;
 	private UsersLogged userLogged = new UsersLoggedImpl();
@@ -206,6 +209,7 @@ public class DatabaseAccess implements IDataAccess {
 		luceneService = new LuceneServiceImpl(sessionFactory);
 		luceneResourcesElementService = new ResourcesElementLuceneServiceImpl(luceneManagerDao.getResourceElementsLuceneManagerDao(), managerDao.getResourcesManagerDao());
 		luceneQueriesService = new QueriesLuceneServiceImpl(luceneManagerDao.getQueriesLuceneManagerDao(), managerDao.getQueriesManagerDao(), userLogged);
+		luceneUsersService = new UsersLuceneServiceImpl(managerDao.getUsersManagerDao(),luceneManagerDao.getUsersLuceneManagerDao(), userLogged );
 		lucenePublicationsService = new PublicationsLuceneServiceImpl(managerDao.getPublicationsManagerDao(), luceneManagerDao.getPublicationsLuceneManagerDao());
 		luceneCorpusService = new CorpusLuceneServiceImpl(managerDao.getCorpusManagerDao(), luceneManagerDao.getCorpusLuceneManagerDao(), userLogged);
 		luceneResourcesService = new ResourcesLuceneServiceImpl(managerDao.getResourcesManagerDao(), luceneManagerDao.getResourcesLuceneManagerDao(), userLogged);

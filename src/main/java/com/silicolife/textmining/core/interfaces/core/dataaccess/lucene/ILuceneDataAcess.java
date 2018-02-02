@@ -6,8 +6,9 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.layer.IL
 import com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.layer.ILuceneQueriesDataAccess;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.layer.ILuceneResourceElementDataAccess;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.layer.ILuceneResourcesDataAccess;
+import com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.layer.ILuceneUsersDataAccess;
 
-public interface ILuceneDataAcess extends ILuceneResourceElementDataAccess, ILuceneQueriesDataAccess, ILucenePublicationsDataAccess, ILuceneCorpusDataAccess, ILuceneResourcesDataAccess{
+public interface ILuceneDataAcess extends ILuceneResourceElementDataAccess, ILuceneQueriesDataAccess, ILucenePublicationsDataAccess, ILuceneCorpusDataAccess, ILuceneResourcesDataAccess, ILuceneUsersDataAccess{
 
 	/**
 	 * Rebuild lucene index. 

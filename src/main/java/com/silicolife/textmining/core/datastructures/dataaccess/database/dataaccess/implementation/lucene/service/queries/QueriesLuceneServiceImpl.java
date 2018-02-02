@@ -14,10 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.QueriesManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.ResourcesManagerDao;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthGroupHasRoles;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUsers;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Queries;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.RolesEnum;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsWrapper;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.queries.QueriesWrapper;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.queries.QueriesWrapperSpeedUp;
 import com.silicolife.textmining.core.datastructures.documents.PublicationLuceneIndexFields;
 import com.silicolife.textmining.core.datastructures.documents.query.QueriesLuceneFields;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
@@ -154,10 +158,109 @@ public class QueriesLuceneServiceImpl implements IQueriesLuceneService {
 		return listQueries_;
 	}
 	
+	
 	@Override
-	public List<IQuery> getQueriesFromSearchPaginatedWAuthAndSort(ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy ){
+	public List<IQuery> getPrivilegesQueriesAdminAccessFromSearchPaginated(ISearchProperties searchProperties, Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+		Boolean isAdmin = false;
+		String roleAdmin = RolesEnum.role_admin.toString();
+		AuthUsers user = this.user.getCurrentUserLogged();
+		//usersManagerDao.getAuthUsersDao().refresh(user);
+
+		Set<AuthGroupHasRoles> groupHasRoles = user.getAuthGroups().getAuthGroupHasRoleses();
+		for (AuthGroupHasRoles groupHasRole : groupHasRoles) {
+			String role = groupHasRole.getAuthRoles().getArRoleCode();
+			if (role.equals(roleAdmin)) {
+				isAdmin = true;
+				break;
+			}
+		}
+
+		if (isAdmin)
+			return this.getQueriesFromSearchPaginatedWSort(searchProperties,paginationIndex, paginationSize, asc, sortBy);
+		else
+			return this.getQueriesFromSearchPaginatedWAuthAndSort( searchProperties, paginationIndex, paginationSize, asc, sortBy, "owner");
+
+	}
+	
+	@Override
+	public Integer countPrivilegesQueriesAdminAccessFromSearch(ISearchProperties searchProperties) {
+		Boolean isAdmin = false;
+		String roleAdmin = RolesEnum.role_admin.toString();
+		AuthUsers user = this.user.getCurrentUserLogged();
+		//usersManagerDao.getAuthUsersDao().refresh(user);
+
+		Set<AuthGroupHasRoles> groupHasRoles = user.getAuthGroups().getAuthGroupHasRoleses();
+		for (AuthGroupHasRoles groupHasRole : groupHasRoles) {
+			String role = groupHasRole.getAuthRoles().getArRoleCode();
+			if (role.equals(roleAdmin)) {
+				isAdmin = true;
+				break;
+			}
+		}
+
+		if (isAdmin)
+			return this.countActiveQueriesFromSearch(searchProperties);
+		else
+			return this.countQueriesFromSearchWAuth(searchProperties,"owner");
+
+	}
+	
+	@Override
+	public List<IQuery> getQueriesFromSearchPaginatedWAuthAndSort(ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy){
 		
-		if(sortBy.equals("none")) {
+		
+		List<String> fields = searchProperties.getFields();
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		Map<String, String> eqMustSentenceOnField = new HashMap<>();
+		String idField = "quId";
+		eqMustSentenceOnField.put("quActive", "true");
+		Map<String, String> restrictions = searchProperties.getRestrictions();
+		Map<String, String> permissionFields = new HashMap<>();
+		Map<String, List<String>> eqFilters = new HashMap<>();
+		
+		Map<String, List<String>> filters = searchProperties.getFilters();
+		
+		
+		for(String key : filters.keySet()){
+			eqFilters.put(QueriesLuceneFields.getLuceneField(searchProperties, key), filters.get(key));
+		}
+		
+		permissionFields.put("id.Auth_audo_user_id", String.valueOf(user.getCurrentUserLogged().getAuId()));
+		permissionFields.put("id.Auth_audo_type_resource", "queries");
+		
+		String sortField = QueriesLuceneFields.getSortField(sortBy);
+		
+		SortField.Type sortType = QueriesLuceneFields.getSortType(sortBy);
+		
+		for(String key : restrictions.keySet()){
+			eqMustSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, key), restrictions.get(key));
+		}
+		
+		for(String field : fields){
+			eqSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, field),searchProperties.getValue());
+		}
+		
+		List<Queries> listQueries = null;
+		
+		listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findForWebTableWPermissionsPaginated(
+				eqSentenceOnField, eqMustSentenceOnField, permissionFields, idField, 
+				eqFilters,searchProperties.isWholeWords(), index, paginationSize,
+				sortField, sortType, asc);
+		
+		List<IQuery> listQueries_ = new ArrayList<IQuery>();
+		for (Queries query : listQueries) {
+			IQuery query_ = QueriesWrapper.convertToAnoteStructure(query);
+			listQueries_.add(query_);
+		}
+
+		return listQueries_;
+		
+		
+		
+		
+		
+		
+		/*if(sortBy.equals("none")) {
 			return this.getQueriesFromSearchPaginatedWAuth(searchProperties, index, paginationSize);
 		}
 		
@@ -172,6 +275,7 @@ public class QueriesLuceneServiceImpl implements IQueriesLuceneService {
 		
 		permissionFields.put("id.Auth_audo_user_id", String.valueOf(user.getCurrentUserLogged().getAuId()));
 		permissionFields.put("id.Auth_audo_type_resource", "queries");
+		permissionFields.put("audoPermission", "owner");
 		
 		String sortField = QueriesLuceneFields.getSortField(sortBy);
 		
@@ -205,7 +309,221 @@ public class QueriesLuceneServiceImpl implements IQueriesLuceneService {
 			listQueries_.add(query_);
 		}
 
+		return listQueries_;*/
+	}
+	
+	@Override
+	public List<IQuery> getQueriesFromSearchPaginatedWSort(ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy){
+		
+		
+		List<String> fields = searchProperties.getFields();
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		Map<String, String> eqMustSentenceOnField = new HashMap<>();
+		
+		eqMustSentenceOnField.put("quActive", "true");
+		Map<String, String> restrictions = searchProperties.getRestrictions();
+		Map<String, List<String>> eqFilters = new HashMap<>();
+		
+		Map<String, List<String>> filters = searchProperties.getFilters();
+		
+		
+		for(String key : filters.keySet()){
+			eqFilters.put(QueriesLuceneFields.getLuceneField(searchProperties, key), filters.get(key));
+		}
+		
+		
+		String sortField = QueriesLuceneFields.getSortField(sortBy);
+		
+		SortField.Type sortType = QueriesLuceneFields.getSortType(sortBy);
+		
+		for(String key : restrictions.keySet()){
+			eqMustSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, key), restrictions.get(key));
+		}
+		
+		for(String field : fields){
+			eqSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, field),searchProperties.getValue());
+		}
+		
+		List<Queries> listQueries = null;
+		
+		listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findForWebTablePaginated(
+				eqSentenceOnField, eqMustSentenceOnField, 
+				eqFilters,searchProperties.isWholeWords(), index, paginationSize,
+				sortField, sortType, asc);
+		
+		List<IQuery> listQueries_ = new ArrayList<IQuery>();
+		for (Queries query : listQueries) {
+			IQuery query_ = QueriesWrapper.convertToAnoteStructure(query);
+			listQueries_.add(query_);
+		}
+
 		return listQueries_;
+		
+	}
+	
+	@Override
+	public Integer countQueriesFromSearchWAuth(ISearchProperties searchProperties){
+		
+		
+		List<String> fields = searchProperties.getFields();
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		Map<String, String> eqMustSentenceOnField = new HashMap<>();
+		String idField = "quId";
+		eqMustSentenceOnField.put("quActive", "true");
+		Map<String, String> restrictions = searchProperties.getRestrictions();
+		Map<String, String> permissionFields = new HashMap<>();
+		Map<String, List<String>> eqFilters = new HashMap<>();
+		
+		Map<String, List<String>> filters = searchProperties.getFilters();
+		
+		
+		for(String key : filters.keySet()){
+			eqFilters.put(QueriesLuceneFields.getLuceneField(searchProperties, key), filters.get(key));
+		}
+		
+		permissionFields.put("id.Auth_audo_user_id", String.valueOf(user.getCurrentUserLogged().getAuId()));
+		permissionFields.put("id.Auth_audo_type_resource", "queries");
+		
+
+		for(String key : restrictions.keySet()){
+			eqMustSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, key), restrictions.get(key));
+		}
+		
+		for(String field : fields){
+			eqSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, field),searchProperties.getValue());
+		}
+	
+		return queriesLuceneManagerDao.getQueriesLuceneDao().countForWebTableWPermissions(
+				eqSentenceOnField, eqMustSentenceOnField, permissionFields, idField, 
+				eqFilters,searchProperties.isWholeWords());
+		
+	}
+	
+	@Override
+	public Integer countQueriesFromSearchWAuth(ISearchProperties searchProperties , String permission){
+		
+		
+		List<String> fields = searchProperties.getFields();
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		Map<String, String> eqMustSentenceOnField = new HashMap<>();
+		String idField = "quId";
+		eqMustSentenceOnField.put("quActive", "true");
+		Map<String, String> restrictions = searchProperties.getRestrictions();
+		Map<String, String> permissionFields = new HashMap<>();
+		Map<String, List<String>> eqFilters = new HashMap<>();
+		
+		Map<String, List<String>> filters = searchProperties.getFilters();
+		
+		
+		for(String key : filters.keySet()){
+			eqFilters.put(QueriesLuceneFields.getLuceneField(searchProperties, key), filters.get(key));
+		}
+		
+		permissionFields.put("id.Auth_audo_user_id", String.valueOf(user.getCurrentUserLogged().getAuId()));
+		permissionFields.put("id.Auth_audo_type_resource", "queries");
+		permissionFields.put("audoPermission", permission);
+
+		for(String key : restrictions.keySet()){
+			eqMustSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, key), restrictions.get(key));
+		}
+		
+		for(String field : fields){
+			eqSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, field),searchProperties.getValue());
+		}
+	
+		return queriesLuceneManagerDao.getQueriesLuceneDao().countForWebTableWPermissions(
+				eqSentenceOnField, eqMustSentenceOnField, permissionFields, idField, 
+				eqFilters,searchProperties.isWholeWords());
+		
+	}
+	
+	@Override
+	public Integer countActiveQueriesFromSearch(ISearchProperties searchProperties){
+		
+		
+		List<String> fields = searchProperties.getFields();
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		Map<String, String> eqMustSentenceOnField = new HashMap<>();
+		
+		eqMustSentenceOnField.put("quActive", "true");
+		Map<String, String> restrictions = searchProperties.getRestrictions();
+		Map<String, List<String>> eqFilters = new HashMap<>();
+		
+		Map<String, List<String>> filters = searchProperties.getFilters();
+		
+		
+		for(String key : filters.keySet()){
+			eqFilters.put(QueriesLuceneFields.getLuceneField(searchProperties, key), filters.get(key));
+		}
+		
+		
+		for(String key : restrictions.keySet()){
+			eqMustSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, key), restrictions.get(key));
+		}
+		
+		for(String field : fields){
+			eqSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, field),searchProperties.getValue());
+		}
+		
+		List<Queries> listQueries = null;
+		
+		return queriesLuceneManagerDao.getQueriesLuceneDao().countForWebTable(
+				eqSentenceOnField, eqMustSentenceOnField, 
+				eqFilters,searchProperties.isWholeWords());
+		
+	}
+	
+	@Override
+	public List<IQuery> getQueriesFromSearchPaginatedWAuthAndSort(ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy, String permission){
+		
+		
+		List<String> fields = searchProperties.getFields();
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		Map<String, String> eqMustSentenceOnField = new HashMap<>();
+		String idField = "quId";
+		eqMustSentenceOnField.put("quActive", "true");
+		Map<String, String> restrictions = searchProperties.getRestrictions();
+		Map<String, String> permissionFields = new HashMap<>();
+		Map<String, List<String>> eqFilters = new HashMap<>();
+		
+		Map<String, List<String>> filters = searchProperties.getFilters();
+		
+		
+		for(String key : filters.keySet()){
+			eqFilters.put(QueriesLuceneFields.getLuceneField(searchProperties, key), filters.get(key));
+		}
+		
+		permissionFields.put("id.Auth_audo_user_id", String.valueOf(user.getCurrentUserLogged().getAuId()));
+		permissionFields.put("id.Auth_audo_type_resource", "queries");
+		permissionFields.put("audoPermission", permission);
+		
+		String sortField = QueriesLuceneFields.getSortField(sortBy);
+		
+		SortField.Type sortType = QueriesLuceneFields.getSortType(sortBy);
+		
+		for(String key : restrictions.keySet()){
+			eqMustSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, key), restrictions.get(key));
+		}
+		
+		for(String field : fields){
+			eqSentenceOnField.put(QueriesLuceneFields.getLuceneField(searchProperties, field),searchProperties.getValue());
+		}
+		
+		List<Queries> listQueries = null;
+		
+		listQueries = queriesLuceneManagerDao.getQueriesLuceneDao().findForWebTableWPermissionsPaginated(
+				eqSentenceOnField, eqMustSentenceOnField, permissionFields, idField, 
+				eqFilters,searchProperties.isWholeWords(), index, paginationSize,
+				sortField, sortType, asc);
+		
+		List<IQuery> listQueries_ = new ArrayList<IQuery>();
+		for (Queries query : listQueries) {
+			IQuery query_ = QueriesWrapper.convertToAnoteStructure(query);
+			listQueries_.add(query_);
+		}
+
+		return listQueries_;
+		
 	}
 	
 	@Override
@@ -282,7 +600,7 @@ public class QueriesLuceneServiceImpl implements IQueriesLuceneService {
 	}
 	
 	
-	@Override
+	/*@Override
 	public Integer countQueriesFromSearchWAuth(ISearchProperties searchProperties ){
 		List<String> fields = searchProperties.getFields();
 		Map<String, String> eqSentenceOnField = new HashMap<>();
@@ -321,6 +639,7 @@ public class QueriesLuceneServiceImpl implements IQueriesLuceneService {
 
 		return listQueries.size();
 	}
+	*/
 	
 	@Override
 	public List<IQuery> getQueriesBykeywords(String keywords) {

@@ -20,6 +20,7 @@ import org.hibernate.search.annotations.Fields;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
+import org.hibernate.search.annotations.SortableField;
 import org.hibernate.search.annotations.Store;
 
 /**
@@ -80,8 +81,10 @@ public class Resources implements java.io.Serializable {
 	
 	@Fields(value = { 
 			@Field(name="reso_resource_nameCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
-			@Field(name="reso_resource_nameNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO)
-	})
+			@Field(name="reso_resource_nameNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
+			@Field(name = "resoNameSort", analyze = Analyze.NO, store = Store.YES)
+		})
+	@SortableField(forField = "resoNameSort")
 	@Column(name = "reso_resource_name", nullable = false, length = 500)
 	public String getResoResourceName() {
 		return this.resoResourceName;
@@ -93,8 +96,10 @@ public class Resources implements java.io.Serializable {
 	
 	@Fields(value = { 
 			@Field(name="reso_notesCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
-			@Field(name="reso_notesNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO)
-	})
+			@Field(name="reso_notesNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO),
+			@Field(name = "resoNotesSort", analyze = Analyze.NO, store = Store.YES)
+			})
+	@SortableField(forField = "resoNotesSort")
 	@Column(name = "reso_notes", length = 500)
 	public String getResoNotes() {
 		return this.resoNotes;

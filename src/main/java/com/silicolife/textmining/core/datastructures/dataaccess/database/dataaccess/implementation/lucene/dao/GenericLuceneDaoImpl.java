@@ -304,6 +304,45 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		return fullTextQuery;
 	}
 	
+	@SuppressWarnings({ "rawtypes" })
+	private FullTextQuery createFullTextQueryForWebTableWPermissions(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField,Map<String, String> permissionFields,String idField, Map<String, List<String>> filtersOnFields, boolean isPhrase) {
+		FullTextSession fullTextSession = getFullTextSession();
+		QueryBuilder qb = getQueryBuilder(fullTextSession);
+		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
+		if(eqSentenceOnField.size()>0) {
+			BooleanJunction<BooleanJunction> atributeQuery = qb.bool();
+			if(isPhrase) {
+				atributeQuery = addShouldPhraseWithAttributesOnFields(eqSentenceOnField, qb, atributeQuery);
+			}else {
+				atributeQuery = addShouldKeywordsWithAttributesOnFields(eqSentenceOnField, qb, atributeQuery);
+			}
+			combinedQuery.must(atributeQuery.createQuery());
+		}
+		
+		if(eqMustSentenceOnField.size()>0) {
+			combinedQuery = addMustPhraseWithAttributesOnFields(eqMustSentenceOnField, qb, combinedQuery);	
+		}
+		
+		if(filtersOnFields.size()>0) {
+		combinedQuery = addMustFieldsWithShouldPhraseWithMultipleAtributes(filtersOnFields,qb, combinedQuery);
+		}
+		
+		List<AuthUserDataObjects> l = this.findExactByAttributesForAuth(permissionFields);
+		Map<String, List<String>> ids = new HashMap<String, List<String>>();
+		List<String> list = new ArrayList<String>();
+		for(AuthUserDataObjects a : l) {
+			//System.out.println(a.getId().getAudoUidResource());
+			  list.add(String.valueOf(a.getId().getAudoUidResource()));
+		}
+		//QueryBuilder qb2 = getQueryBuilder(fullTextSession);
+		ids.put(idField,list);
+		BooleanJunction<BooleanJunction> combinedQuery2 = qb.bool();
+		combinedQuery2= this.addShouldPhraseWithMultipleAttributesOnFields(ids, qb,combinedQuery2 );
+		combinedQuery.must(combinedQuery2.createQuery());
+		
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
+		return fullTextQuery;
+	}
 	
 	
 	@SuppressWarnings({ "rawtypes" })
@@ -705,6 +744,22 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<T> findForWebTableWPermissionsPaginated(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField,
+			Map<String, String> permissionFields,String idField,Map<String, List<String>> filtersOnFields, boolean isPhrase, int index,
+			 int paginationSize, String sortField, SortField.Type sortType, boolean asc) {
+		FullTextQuery fullTextQuery = createFullTextQueryForWebTableWPermissions(eqSentenceOnField, eqMustSentenceOnField,permissionFields, idField, filtersOnFields, isPhrase);
+		if(sortField!="none") {
+		Sort s = new Sort(new SortField( sortField, sortType, asc ));
+		fullTextQuery.setSort(s);
+		}
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public Integer countForWebTable(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, 
 			Map<String, List<String>> filtersOnFields, boolean isPhrase) {
 		FullTextQuery fullTextQuery = createFullTextQueryForWebTable(eqSentenceOnField, eqMustSentenceOnField, filtersOnFields, isPhrase);
@@ -712,7 +767,14 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		return fullTextQuery.list().size();
 	}
 	
-	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Integer countForWebTableWPermissions(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, 
+			Map<String, String> permissionFields,String idField, Map<String, List<String>> filtersOnFields, boolean isPhrase) {
+		FullTextQuery fullTextQuery = createFullTextQueryForWebTableWPermissions(eqSentenceOnField, eqMustSentenceOnField,permissionFields, idField, filtersOnFields, isPhrase);
+		
+		return fullTextQuery.list().size();
+	}
 	
 	
 	@SuppressWarnings("unchecked")

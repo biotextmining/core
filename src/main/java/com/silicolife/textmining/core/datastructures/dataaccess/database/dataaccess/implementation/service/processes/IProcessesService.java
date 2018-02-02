@@ -66,4 +66,9 @@ public interface IProcessesService {
 
 	public Integer countAllProcesses();
 
+	public Integer countPrivilegesAllProcessesAdminAccess();
+
+	public List<IIEProcess> getPrivilegesAllProcessesAdminAccessPaginated(Integer paginationIndex, Integer paginationSize,
+			boolean asc, String sortBy);
+
 }

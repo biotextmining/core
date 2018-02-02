@@ -38,5 +38,20 @@ public interface IQueriesLuceneService {
 
 	public List<IQuery> getQueriesFromSearchPaginatedWAuthAndSort(ISearchProperties searchProperties, int index,
 			int paginationSize, boolean asc, String sortBy);
+
+	public List<IQuery> getQueriesFromSearchPaginatedWAuthAndSort(ISearchProperties searchProperties, int index,
+			int paginationSize, boolean asc, String sortBy, String permission);
+
+	public Integer countActiveQueriesFromSearch(ISearchProperties searchProperties);
+
+	public List<IQuery> getQueriesFromSearchPaginatedWSort(ISearchProperties searchProperties, int index, int paginationSize,
+			boolean asc, String sortBy);
+
+	public Integer countQueriesFromSearchWAuth(ISearchProperties searchProperties, String permission);
+
+	public List<IQuery> getPrivilegesQueriesAdminAccessFromSearchPaginated(ISearchProperties searchProperties,
+			Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
+
+	public Integer countPrivilegesQueriesAdminAccessFromSearch(ISearchProperties searchProperties);
 	
 }

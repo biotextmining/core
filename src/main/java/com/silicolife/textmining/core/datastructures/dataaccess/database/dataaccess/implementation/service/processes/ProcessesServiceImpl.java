@@ -180,6 +180,61 @@ public class ProcessesServiceImpl implements IProcessesService {
 		}
 		return listProcesses_;
 	}
+	
+	@Override
+	public List<IIEProcess> getPrivilegesAllProcessesAdminAccessPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy) {
+		Boolean isAdmin = false;
+		String roleAdmin = RolesEnum.role_admin.toString();
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		usersManagerDao.getAuthUsersDao().refresh(user);
+
+		Set<AuthGroupHasRoles> groupHasRoles = user.getAuthGroups().getAuthGroupHasRoleses();
+		for (AuthGroupHasRoles groupHasRole : groupHasRoles) {
+			String role = groupHasRole.getAuthRoles().getArRoleCode();
+			if (role.equals(roleAdmin)) {
+				isAdmin = true;
+				break;
+			}
+		}
+
+		List<Processes> listProcesses = null;
+		if (isAdmin)
+			listProcesses = processesManagerDao.getProcessesAuxDao().findAllActiveProcessesPaginated(paginationIndex, paginationSize, asc, sortBy);
+		else
+			listProcesses = processesManagerDao.getProcessesAuxDao().findProcessesByAttributesPaginated(user.getAuId(), processStr, PermissionsUtilsEnum.owner.getName(),paginationIndex, paginationSize, asc, sortBy);
+
+		List<IIEProcess> listProcesses_ = new ArrayList<IIEProcess>();
+		for (Processes process : listProcesses) {
+			if(process.isProActive())
+			{
+				IIEProcess process_ = ProcessWrapper.convertToAnoteStructure(process);
+				listProcesses_.add(process_);
+			}
+		}
+		return listProcesses_;
+	}
+	
+	@Override
+	public Integer countPrivilegesAllProcessesAdminAccess() {
+		Boolean isAdmin = false;
+		String roleAdmin = RolesEnum.role_admin.toString();
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		usersManagerDao.getAuthUsersDao().refresh(user);
+
+		Set<AuthGroupHasRoles> groupHasRoles = user.getAuthGroups().getAuthGroupHasRoleses();
+		for (AuthGroupHasRoles groupHasRole : groupHasRoles) {
+			String role = groupHasRole.getAuthRoles().getArRoleCode();
+			if (role.equals(roleAdmin)) {
+				isAdmin = true;
+				break;
+			}
+		}
+
+		if (isAdmin)
+			 return processesManagerDao.getProcessesAuxDao().countAllActiveProcesses();
+		else
+			return processesManagerDao.getProcessesAuxDao().countProcessesByAttributes(user.getAuId(), processStr, PermissionsUtilsEnum.owner.getName());
+	}
 
 	@Override
 	public List<IIEProcess> getPrivilegesAllProcessesAdminAccess() {

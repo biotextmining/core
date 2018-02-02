@@ -12,7 +12,8 @@ public enum QueriesLuceneFields {
 	organism ("q_organismNCS","q_organismCS", "", null),
 	name("q_query_nameNCS","q_query_nameCS","quNameSort",SortField.Type.STRING),
 	publicationsSize("", "", "quMatchingPublicationsSort", SortField.Type.INT),
-	date ("","","quDateSort",SortField.Type.LONG );
+	date ("","","quDateSort",SortField.Type.LONG ),
+	none("","","none",null);
 	
 	
 	private final String NCS;

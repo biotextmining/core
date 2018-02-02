@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Index;
@@ -71,6 +72,7 @@ public class AuthUserDataObjects implements java.io.Serializable, IUserDataObjec
 		this.authUsers = authUsers;
 	}
 
+	@Field(name="audoPermission",index=Index.YES, analyze=Analyze.YES, store=Store.NO)
 	@Column(name = "audo_permission", nullable = false, length = 10)
 	@Override
 	public String getAudoPermission() {
