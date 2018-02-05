@@ -16,4 +16,19 @@ public interface ICorpusLuceneService {
 
 	public List<ICorpus> getCorpusFromSearchWPrivileges(ISearchProperties searchProperties);
 
+	public List<ICorpus> getCorpusFromSearchWPrivilegesPaginated(ISearchProperties searchProperties, String permission,
+			int index, int paginationSize, boolean asc, String sortBy);
+
+	public Integer countCorpusFromSearchWPrivileges(ISearchProperties searchProperties, String permission);
+
+	public Integer countActiveCorpusFromSearch(ISearchProperties searchProperties);
+
+	public List<ICorpus> getActiveCorpusFromSearchPaginated(ISearchProperties searchProperties, int index, int paginationSize,
+			boolean asc, String sortBy);
+
+	public Integer countPrivilegesCorpusAdminAccessFromSearch(ISearchProperties searchProperties);
+
+	public List<ICorpus> getPrivilegesCorpusAdminAccessFromSearchPaginated(ISearchProperties searchProperties,
+			Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
+
 }

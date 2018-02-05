@@ -212,6 +212,8 @@ public class ProcessesAoxDaoImpl implements ProcessesAuxDao{
 		}
 		
 		sqlString = sqlString+" LIMIT "+paginationSize+" OFFSET "+ paginationIndex;
+		
+		
 		SQLQuery qry = session.createSQLQuery(sqlString);
 		qry.setParameter(0, auId);
 		qry.setParameter(1, resourceType);
