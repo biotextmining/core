@@ -106,6 +106,7 @@ public class Processes implements java.io.Serializable {
 		this.processOrigins = processOrigins;
 	}
 
+	@IndexedEmbedded
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pro_process_type_id", nullable = false)
 	public ProcessTypes getProcessTypes() {

@@ -2,13 +2,14 @@ package com.silicolife.textmining.core.interfaces.core.dataaccess.lucene;
 
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.layer.ILuceneCorpusDataAccess;
+import com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.layer.ILuceneProcessesDataAccess;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.layer.ILucenePublicationsDataAccess;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.layer.ILuceneQueriesDataAccess;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.layer.ILuceneResourceElementDataAccess;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.layer.ILuceneResourcesDataAccess;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.layer.ILuceneUsersDataAccess;
 
-public interface ILuceneDataAcess extends ILuceneResourceElementDataAccess, ILuceneQueriesDataAccess, ILucenePublicationsDataAccess, ILuceneCorpusDataAccess, ILuceneResourcesDataAccess, ILuceneUsersDataAccess{
+public interface ILuceneDataAcess extends ILuceneResourceElementDataAccess, ILuceneQueriesDataAccess, ILucenePublicationsDataAccess, ILuceneCorpusDataAccess, ILuceneResourcesDataAccess, ILuceneUsersDataAccess, ILuceneProcessesDataAccess{
 
 	/**
 	 * Rebuild lucene index. 

@@ -20,6 +20,8 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.LuceneServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.corpus.CorpusLuceneServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.corpus.ICorpusLuceneService;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.processes.IProcessesLuceneService;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.processes.ProcessesLuceneServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.publications.IPublicationsLuceneService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.publications.PublicationsLuceneServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.queries.IQueriesLuceneService;
@@ -131,6 +133,7 @@ public class DatabaseAccess implements IDataAccess {
 	private IQueriesLuceneService luceneQueriesService;
 	private ICorpusLuceneService luceneCorpusService;
 	private IUsersLuceneService luceneUsersService;
+	private IProcessesLuceneService luceneProcessesService;
 	private IUserService userService;
 	private IResourcesLuceneService luceneResourcesService;
 	private UsersLogged userLogged = new UsersLoggedImpl();
@@ -208,11 +211,12 @@ public class DatabaseAccess implements IDataAccess {
 		luceneManagerDao = new LuceneManagerDao(sessionFactory);
 		luceneService = new LuceneServiceImpl(sessionFactory);
 		luceneResourcesElementService = new ResourcesElementLuceneServiceImpl(luceneManagerDao.getResourceElementsLuceneManagerDao(), managerDao.getResourcesManagerDao());
-		luceneQueriesService = new QueriesLuceneServiceImpl(luceneManagerDao.getQueriesLuceneManagerDao(), managerDao.getQueriesManagerDao(), userLogged);
+		luceneQueriesService = new QueriesLuceneServiceImpl(luceneManagerDao.getQueriesLuceneManagerDao(), managerDao.getQueriesManagerDao(), userLogged,managerDao.getUsersManagerDao());
 		luceneUsersService = new UsersLuceneServiceImpl(managerDao.getUsersManagerDao(),luceneManagerDao.getUsersLuceneManagerDao(), userLogged );
 		lucenePublicationsService = new PublicationsLuceneServiceImpl(managerDao.getPublicationsManagerDao(), luceneManagerDao.getPublicationsLuceneManagerDao());
-		luceneCorpusService = new CorpusLuceneServiceImpl(managerDao.getCorpusManagerDao(), luceneManagerDao.getCorpusLuceneManagerDao(), userLogged);
-		luceneResourcesService = new ResourcesLuceneServiceImpl(managerDao.getResourcesManagerDao(), luceneManagerDao.getResourcesLuceneManagerDao(), userLogged);
+		luceneCorpusService = new CorpusLuceneServiceImpl(managerDao.getCorpusManagerDao(), luceneManagerDao.getCorpusLuceneManagerDao(), userLogged, managerDao.getUsersManagerDao());
+		luceneResourcesService = new ResourcesLuceneServiceImpl(managerDao.getResourcesManagerDao(), luceneManagerDao.getResourcesLuceneManagerDao(), userLogged, managerDao.getUsersManagerDao());
+		luceneProcessesService = new ProcessesLuceneServiceImpl(luceneManagerDao.getProcessesLuceneManagerDao(), managerDao.getProcessServiceDao(), userLogged,managerDao.getUsersManagerDao());
 	}
 
 	@Override

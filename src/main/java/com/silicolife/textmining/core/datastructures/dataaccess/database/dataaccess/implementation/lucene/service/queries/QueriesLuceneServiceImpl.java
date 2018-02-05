@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.QueriesManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.ResourcesManagerDao;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.UsersManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthGroupHasRoles;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUsers;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
@@ -36,14 +37,16 @@ public class QueriesLuceneServiceImpl implements IQueriesLuceneService {
 	private QueriesManagerDao queriesManagerDao;
 	private QueriesLuceneManagerDao queriesLuceneManagerDao;
 	private UsersLogged user;
+	private UsersManagerDao usersManagerDao;
 	
 	
 
 	public QueriesLuceneServiceImpl(
-			QueriesLuceneManagerDao queriesLuceneManagerDao, QueriesManagerDao queriesManagerDao, UsersLogged user) {
+			QueriesLuceneManagerDao queriesLuceneManagerDao, QueriesManagerDao queriesManagerDao, UsersLogged user, UsersManagerDao usersManagerDao) {
 		this.queriesManagerDao = queriesManagerDao;
 		this.queriesLuceneManagerDao = queriesLuceneManagerDao;
 		this.user = user;
+		this.usersManagerDao = usersManagerDao;
 	}
 
 
@@ -164,7 +167,7 @@ public class QueriesLuceneServiceImpl implements IQueriesLuceneService {
 		Boolean isAdmin = false;
 		String roleAdmin = RolesEnum.role_admin.toString();
 		AuthUsers user = this.user.getCurrentUserLogged();
-		//usersManagerDao.getAuthUsersDao().refresh(user);
+		usersManagerDao.getAuthUsersDao().refresh(user);
 
 		Set<AuthGroupHasRoles> groupHasRoles = user.getAuthGroups().getAuthGroupHasRoleses();
 		for (AuthGroupHasRoles groupHasRole : groupHasRoles) {
@@ -187,7 +190,7 @@ public class QueriesLuceneServiceImpl implements IQueriesLuceneService {
 		Boolean isAdmin = false;
 		String roleAdmin = RolesEnum.role_admin.toString();
 		AuthUsers user = this.user.getCurrentUserLogged();
-		//usersManagerDao.getAuthUsersDao().refresh(user);
+		usersManagerDao.getAuthUsersDao().refresh(user);
 
 		Set<AuthGroupHasRoles> groupHasRoles = user.getAuthGroups().getAuthGroupHasRoleses();
 		for (AuthGroupHasRoles groupHasRole : groupHasRoles) {

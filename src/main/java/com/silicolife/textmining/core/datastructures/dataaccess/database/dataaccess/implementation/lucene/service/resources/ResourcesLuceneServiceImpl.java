@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.manager.ResourcesLuceneManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.ResourcesManagerDao;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.UsersManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Queries;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Resources;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.queries.QueriesWrapper;
@@ -29,13 +30,15 @@ public class ResourcesLuceneServiceImpl implements IResourcesLuceneService {
 	private ResourcesManagerDao resourcesManagerDao;
 	private ResourcesLuceneManagerDao resourcesLuceneManagerDao;
 	private UsersLogged user;
+	private UsersManagerDao usersManagerDao;
 	
 	
 	public ResourcesLuceneServiceImpl(ResourcesManagerDao resourcesManagerDao ,
-			ResourcesLuceneManagerDao resourcesLuceneManagerDao, UsersLogged user ) {
+			ResourcesLuceneManagerDao resourcesLuceneManagerDao, UsersLogged user, UsersManagerDao usersManagerDao ) {
 		this.resourcesLuceneManagerDao = resourcesLuceneManagerDao;
 		this.resourcesManagerDao = resourcesManagerDao;
 		this.user = user;
+		this.usersManagerDao = usersManagerDao;
 	}
 	
 	@Override

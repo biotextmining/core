@@ -6,6 +6,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.IGenericLuceneDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUsers;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Corpus;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Processes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Queries;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ResourceElements;
@@ -20,6 +21,7 @@ public class LuceneManagerDao {
 	private CorpusLuceneManagerDao corpusLuceneManagerDao;
 	private ResourcesLuceneManagerDao resourcesLuceneManagerDao;
 	private UsersLuceneManagerDao usersLuceneManagerDao;
+	private ProcessesLuceneManagerDao processesLuceneManagerDao;
 	
 	public LuceneManagerDao(SessionFactory sessionFactory){
 		this.sessionFactory = sessionFactory;
@@ -29,6 +31,7 @@ public class LuceneManagerDao {
 		this.corpusLuceneManagerDao = createCorpusLuceneDao();
 		this.resourcesLuceneManagerDao = createResourcesLuceneDao();
 		this.usersLuceneManagerDao = createUsersLuceneDao();
+		this.processesLuceneManagerDao = createProcessesLuceneDao();
 	}
 	
 	public ResourceElementsLuceneManagerDao createResourceElementsLuceneDao(){
@@ -68,6 +71,12 @@ public class LuceneManagerDao {
 		return usersLuceneManagerDao;
 	}
 	
+	public ProcessesLuceneManagerDao createProcessesLuceneDao() {
+		IGenericLuceneDao<Processes> processesLuceneDao = new GenericLuceneDaoImpl<Processes>(sessionFactory,Processes.class);
+		ProcessesLuceneManagerDao processesLuceneManagerDao = new ProcessesLuceneManagerDao(processesLuceneDao);
+		return processesLuceneManagerDao;
+	}
+	
 	
 	public ResourceElementsLuceneManagerDao getResourceElementsLuceneManagerDao() {
 		return resourceElementsLuceneManagerDao;
@@ -91,6 +100,10 @@ public class LuceneManagerDao {
 	
 	public UsersLuceneManagerDao getUsersLuceneManagerDao() {
 		return usersLuceneManagerDao;
+	}
+	
+	public ProcessesLuceneManagerDao getProcessesLuceneManagerDao() {
+		return processesLuceneManagerDao;
 	}
 
 }
