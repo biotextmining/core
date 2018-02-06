@@ -16,4 +16,23 @@ public interface IResourcesLuceneService {
 
 	public void setUserLogged(UsersLogged userLogged);
 
+	public Integer countActiveResourcesFromSearch(ISearchProperties searchProperties);
+
+	public Integer countResourcesFromSearchWAuth(ISearchProperties searchProperties, String permission);
+
+	public List<IResource<IResourceElement>> getActiveResourcesFromSearchPaginatedWSort(ISearchProperties searchProperties,
+			int index, int paginationSize, boolean asc, String sortBy);
+
+	public List<IResource<IResourceElement>> getResourcesFromSearchPaginatedWAuthAndSort(ISearchProperties searchProperties,
+			int index, int paginationSize, boolean asc, String sortBy);
+
+	public List<IResource<IResourceElement>> getResourcesFromSearchPaginatedWAuthAndSort(ISearchProperties searchProperties,
+			int index, int paginationSize, boolean asc, String sortBy, String permission);
+
+	public List<IResource<IResourceElement>> getPrivilegesResourcesAdminAccessFromSearchPaginated(
+			ISearchProperties searchProperties, Integer paginationIndex, Integer paginationSize, boolean asc,
+			String sortBy);
+
+	public Integer countPrivilegesResourcesAdminAccessFromSearch(ISearchProperties searchProperties);
+
 }
