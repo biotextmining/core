@@ -37,6 +37,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsSourceWrapper;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsWrapper;
 import com.silicolife.textmining.core.datastructures.documents.PublicationFieldsEnum;
+import com.silicolife.textmining.core.datastructures.documents.structure.PublicationTypeEnum;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.IPublicationExternalSourceLink;
@@ -172,6 +173,20 @@ public class PublicationsServiceImpl implements IPublicationsService {
 		}
 
 		return response;
+	}
+	
+	@Override
+	public List<String> getPublicationTypesPaginated(int index,int paginationSize){
+		int toIndex = index + paginationSize;
+		int size = PublicationTypeEnum.getAllTypeIdentifiers().size();
+		if(toIndex >= size)
+			toIndex = size;
+		return PublicationTypeEnum.getAllTypeIdentifiers().subList(index,toIndex );
+	}
+	
+	@Override
+	public Integer countPublicationTypes(){
+		return PublicationTypeEnum.getAllTypeIdentifiers().size();
 	}
 	
 	@Override

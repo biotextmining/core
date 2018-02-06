@@ -105,4 +105,8 @@ public interface IPublicationsService {
 
 
 	public Integer countAllDistinctColumnValuesFromPublications(String column);
+
+	public List<String> getPublicationTypesPaginated(int index, int paginationSize);
+
+	public Integer countPublicationTypes();
 }
