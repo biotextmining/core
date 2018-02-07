@@ -18,6 +18,7 @@ public class SearchPropertiesImpl implements ISearchProperties {
 	private boolean sugestions;
 	private Map<String, String> restrictions;
 	private Map<String,List<String>> filters;
+	private boolean expression;
 	
 	public SearchPropertiesImpl(){
 		this.value = "";
@@ -28,22 +29,34 @@ public class SearchPropertiesImpl implements ISearchProperties {
 		this.sugestions = false;
 		this.restrictions = new HashMap<String, String>();
 		this.filters = new HashMap<String,List<String>>();
+		this.expression = false;
 	}
 	
 	public SearchPropertiesImpl(String value, List<String> fields, boolean wholeWords, boolean keywords ,
-	boolean caseSensitive, boolean sugestions){
+	boolean caseSensitive, boolean sugestions, boolean expression){
 		this.value = value;
 		this.fields = fields;
 		this.wholeWords = wholeWords;
 		this.keywords = keywords;
 		this.caseSensitive = caseSensitive;
 		this.sugestions = sugestions;
+		this.expression = expression;
 	}
 	
 	public SearchPropertiesImpl(ISearchProperties s){
-		this(s.getValue(), s.getFields(), s.isWholeWords(), s.isKeywords(), s.isCaseSensitive(), s.isSugestions());
+		this(s.getValue(), s.getFields(), s.isWholeWords(), s.isKeywords(), s.isCaseSensitive(), s.isSugestions(), s.isExpression());
 	}
 	
+	@Override
+	public boolean isExpression() {
+		return expression;
+	}
+	
+	@Override
+	public void setExpression(boolean expression) {
+		this.expression = expression;
+	}
+
 	@Override
 	public String getValue() {
 		return value;

@@ -48,4 +48,8 @@ public interface ISearchProperties {
 
 	public boolean addValueToFilter(String field, String value);
 
+	public void setExpression(boolean expression);
+
+	public boolean isExpression();
+
 }
