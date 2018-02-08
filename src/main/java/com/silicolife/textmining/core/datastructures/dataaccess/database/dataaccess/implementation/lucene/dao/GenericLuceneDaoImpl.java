@@ -344,6 +344,40 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		return fullTextQuery;
 	}
 	
+	@Override
+	@SuppressWarnings({ "rawtypes" })
+	public Query createShouldPhraseQuery(Map<String, String> eqSentenceOnField, QueryBuilder qb) {
+		BooleanJunction<BooleanJunction> query = qb.bool();
+		query = addShouldPhraseWithAttributesOnFields(eqSentenceOnField, qb, query);
+		return query.createQuery();
+	}
+	
+	@Override
+	@SuppressWarnings({ "rawtypes" })
+	public Query createMustQuery(List<Query> queries, QueryBuilder qb) {
+		BooleanJunction<BooleanJunction> query = qb.bool();
+		for(Query q : queries) {
+			query.must(q);
+		}
+		return query.createQuery();
+	}
+	
+	@Override
+	@SuppressWarnings({ "rawtypes" })
+	public Query createShouldQuery(List<Query> queries, QueryBuilder qb) {
+		BooleanJunction<BooleanJunction> query = qb.bool();
+		for(Query q : queries) {
+			query.should(q);
+		}
+		return query.createQuery();
+	}
+	
+	@Override
+	public QueryBuilder createQueryBuilder() {
+		FullTextSession fullTextSession = getFullTextSession();
+		QueryBuilder qb = getQueryBuilder(fullTextSession);
+		return qb;
+	}
 	
 	@SuppressWarnings({ "rawtypes" })
 	private FullTextQuery createFullTextQueryForWebTable(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, Map<String, List<String>> filtersOnFields, boolean isPhrase) {
@@ -371,6 +405,30 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
 		return fullTextQuery;
 	}
+	
+	
+	@SuppressWarnings({ "rawtypes" })
+	private FullTextQuery createFullTextQueryForWebTable(Query q, Map<String, String> eqMustSentenceOnField, Map<String, List<String>> filtersOnFields, boolean isPhrase) {
+		FullTextSession fullTextSession = getFullTextSession();
+		QueryBuilder qb = getQueryBuilder(fullTextSession);
+		BooleanJunction<BooleanJunction> combinedQuery = qb.bool();
+
+			
+		combinedQuery.must(q);
+		
+		
+		if(eqMustSentenceOnField.size()>0) {
+			combinedQuery = addMustPhraseWithAttributesOnFields(eqMustSentenceOnField, qb, combinedQuery);	
+		}
+		
+		if(filtersOnFields.size()>0) {
+		combinedQuery = addMustFieldsWithShouldPhraseWithMultipleAtributes(filtersOnFields,qb, combinedQuery);
+		}
+		
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
+		return fullTextQuery;
+	}
+	
 	
 	@SuppressWarnings({ "rawtypes" })
 	private FullTextQuery createFullTextQueryForfindMixedByAttribute(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, Map<String, List<String>> filtersOnFields) {
@@ -744,6 +802,21 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<T> findForWebTableWExpressionPaginated(Query q, Map<String, String> eqMustSentenceOnField, 
+			Map<String, List<String>> filtersOnFields, boolean isPhrase, int index, int paginationSize, String sortField, SortField.Type sortType, boolean asc) {
+		FullTextQuery fullTextQuery = createFullTextQueryForWebTable(q, eqMustSentenceOnField, filtersOnFields, isPhrase);
+		if(sortField!="none") {
+		Sort s = new Sort(new SortField( sortField, sortType, asc ));
+		fullTextQuery.setSort(s);
+		}
+		fullTextQuery.setFirstResult(index);
+		fullTextQuery.setMaxResults(paginationSize);
+		fullTextQuery.setFetchSize(paginationSize);
+		return fullTextQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<T> findForWebTableWPermissionsPaginated(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField,
 			Map<String, String> permissionFields,String idField,Map<String, List<String>> filtersOnFields, boolean isPhrase, int index,
 			 int paginationSize, String sortField, SortField.Type sortType, boolean asc) {
@@ -763,6 +836,15 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	public Integer countForWebTable(Map<String, String> eqSentenceOnField, Map<String, String> eqMustSentenceOnField, 
 			Map<String, List<String>> filtersOnFields, boolean isPhrase) {
 		FullTextQuery fullTextQuery = createFullTextQueryForWebTable(eqSentenceOnField, eqMustSentenceOnField, filtersOnFields, isPhrase);
+		
+		return fullTextQuery.list().size();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Integer countForWebTableWExpression(Query q, Map<String, String> eqMustSentenceOnField, 
+			Map<String, List<String>> filtersOnFields, boolean isPhrase) {
+		FullTextQuery fullTextQuery = createFullTextQueryForWebTable(q, eqMustSentenceOnField, filtersOnFields, isPhrase);
 		
 		return fullTextQuery.list().size();
 	}

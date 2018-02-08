@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.lucene.search.Query;
 import org.apache.lucene.search.SortField.Type;
+import org.hibernate.search.query.dsl.QueryBuilder;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUserDataObjects;
 
@@ -173,6 +175,21 @@ public interface IGenericLuceneDao<T> {
 
 	public Integer countForWebTableWPermissions(Map<String, String> eqSentenceOnField,
 			Map<String, String> eqMustSentenceOnField, Map<String, String> permissionFields, String idField,
+			Map<String, List<String>> filtersOnFields, boolean isPhrase);
+
+	public QueryBuilder createQueryBuilder();
+
+	public Query createShouldQuery(List<Query> queries, QueryBuilder qb);
+
+	public Query createMustQuery(List<Query> queries, QueryBuilder qb);
+
+	public Query createShouldPhraseQuery(Map<String, String> eqSentenceOnField, QueryBuilder qb);
+
+	public List<T> findForWebTableWExpressionPaginated(Query q, Map<String, String> eqMustSentenceOnField,
+			Map<String, List<String>> filtersOnFields, boolean isPhrase, int index, int paginationSize,
+			String sortField, Type sortType, boolean asc);
+
+	public Integer countForWebTableWExpression(Query q, Map<String, String> eqMustSentenceOnField,
 			Map<String, List<String>> filtersOnFields, boolean isPhrase);
 
 

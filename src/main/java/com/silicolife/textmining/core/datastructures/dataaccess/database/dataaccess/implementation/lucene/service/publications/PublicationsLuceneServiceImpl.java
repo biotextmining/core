@@ -1,18 +1,26 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.publications;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.lucene.search.Query;
 import org.apache.lucene.search.SortField;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.AnnotationException;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.GenericLuceneDaoImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.manager.PublicationsLuceneManagerDao;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.expressionGrammar.expressionGrammar;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.PublicationsManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.publications.queryGrammar.ParseException;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.publications.queryGrammar.queryGrammar;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsWrapper;
 import com.silicolife.textmining.core.datastructures.documents.PublicationLuceneFields;
 import com.silicolife.textmining.core.datastructures.documents.PublicationLuceneIndexFields;
@@ -47,6 +55,25 @@ public class PublicationsLuceneServiceImpl implements IPublicationsLuceneService
 		}
 
 		return listPublications_;
+	}
+	
+	
+	public static List<String> databaseListFields(ISearchProperties searchProperties) {
+		List<String> databaseFields = new ArrayList<>();
+		List<String> fields = searchProperties.getFields();
+		
+			for(String field : fields){
+				databaseFields.add(PublicationLuceneIndexFields.getLuceneField(searchProperties, field));
+			}
+		return 	databaseFields;
+	}
+	
+	public static Map<String, String> putOnEqSentenceOnField(String value, List<String> fields){
+		Map<String, String> eqSentenceOnField = new HashMap<String, String>();
+		for(String field : fields){
+			eqSentenceOnField.put(field, value);
+		}
+		return eqSentenceOnField;
 	}
 
 	@Override
@@ -213,9 +240,14 @@ public class PublicationsLuceneServiceImpl implements IPublicationsLuceneService
 		}
 		
 		List<Publications> listPublications = null;
-		
-		listPublications = publicationsLuceneManagerDao.getPublicationsLuceneDao().findForWebTablePaginated(eqSentenceOnField, eqMustSentenceOnField, eqFilters,searchProperties.isWholeWords(), index, paginationSize, sortField, sortType, asc);
-		
+		if(searchProperties.getValue()!="" && searchProperties.isExpression()) {
+			Query q = getQueryFromExpression(searchProperties);
+			if(q != null)
+			listPublications = publicationsLuceneManagerDao.getPublicationsLuceneDao().findForWebTableWExpressionPaginated(q, eqMustSentenceOnField, eqFilters,searchProperties.isWholeWords(), index, paginationSize, sortField, sortType, asc);
+		}
+		else
+			listPublications = publicationsLuceneManagerDao.getPublicationsLuceneDao().findForWebTablePaginated(eqSentenceOnField, eqMustSentenceOnField, eqFilters,searchProperties.isWholeWords(), index, paginationSize, sortField, sortType, asc);
+		if(listPublications != null) {
 		List<IPublication> listPublications_ = new ArrayList<IPublication>();
 		for (Publications pub : listPublications) {
 			IPublication publication_ = PublicationsWrapper.convertToAnoteStructure(pub);
@@ -223,6 +255,28 @@ public class PublicationsLuceneServiceImpl implements IPublicationsLuceneService
 		}
 
 		return listPublications_;
+		}else
+			return null;
+	}
+	
+	
+	
+	public Query getQueryFromExpression(ISearchProperties searchProperties){
+				Query result = null;
+				//System.out.println(searchProperties.getValue());
+				InputStream is = new ByteArrayInputStream( searchProperties.getValue().getBytes() );
+				expressionGrammar<Publications> parser = new expressionGrammar<Publications>(is);
+				parser.setFields(PublicationsLuceneServiceImpl.databaseListFields(searchProperties));
+				parser.setQb(publicationsLuceneManagerDao.getPublicationsLuceneDao().createQueryBuilder());
+				parser.setGenericDao(publicationsLuceneManagerDao.getPublicationsLuceneDao());
+				 try {
+				result=	parser.parseExpression();
+				} catch (com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.expressionGrammar.ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				 return result;
+		
 	}
 	
 	/*
@@ -288,8 +342,15 @@ public class PublicationsLuceneServiceImpl implements IPublicationsLuceneService
 		}
 		}
 		
-
-		return publicationsLuceneManagerDao.getPublicationsLuceneDao().countForWebTable(eqSentenceOnField, eqMustSentenceOnField, eqFilters, searchProperties.isWholeWords());
+		
+		if(searchProperties.getValue()!="" && searchProperties.isExpression()) {
+			Query q = getQueryFromExpression(searchProperties);
+			if(q != null)
+			return publicationsLuceneManagerDao.getPublicationsLuceneDao().countForWebTableWExpression(q, eqMustSentenceOnField, eqFilters,searchProperties.isWholeWords());
+			else return 0;
+		}
+		else
+			return publicationsLuceneManagerDao.getPublicationsLuceneDao().countForWebTable(eqSentenceOnField, eqMustSentenceOnField, eqFilters, searchProperties.isWholeWords());
 
 	}
 	/*

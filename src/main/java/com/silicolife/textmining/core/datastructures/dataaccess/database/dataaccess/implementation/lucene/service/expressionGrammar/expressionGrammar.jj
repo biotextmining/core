@@ -1,0 +1,152 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */options{  static = false;}PARSER_BEGIN(expressionGrammar)package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.expressionGrammar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
+import java.util.ArrayList;
+import org.apache.lucene.search.Query;
+import org.hibernate.search.query.dsl.QueryBuilder;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.GenericLuceneDaoImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.IGenericLuceneDao;
+
+
+
+public class expressionGrammar<T>{
+
+  private  List<String> fields;
+
+  private  QueryBuilder qb;
+
+  private IGenericLuceneDao<T> genericDao;
+
+    public List<String> getFields() {
+	return fields;
+	}
+	public void setFields(List<String> fields) {
+		this.fields = fields;
+	}
+	public QueryBuilder getQb() {
+		return qb;
+	}
+	public void setQb(QueryBuilder qb) {
+		this.qb = qb;
+	}
+	public IGenericLuceneDao<T> getGenericDao() {
+		return genericDao;
+	}
+	public void setGenericDao(IGenericLuceneDao<T> genericDao) {
+		this.genericDao = genericDao;
+	}
+  
+  public Query parseExpression() throws ParseException  {    //expressionGrammar parser = new expressionGrammar(System.in);
+    //List<String> fields = new ArrayList<String >();
+    //fields.add("title");
+    //fields.add("full text");
+    //this.fields = fields;	Query result = null;      try
+      {
+         result = this.one_line();
+        //System.out.println("OK");
+      }
+      catch (Exception e)
+      {
+       // System.out.println("NOK.");
+       // System.out.println(e.getMessage());
+        this.ReInit(System.in);
+      }
+      catch (Error e)
+      {
+        //System.out.println("Oops.");
+        //System.out.println(e.getMessage());
+        
+      }
+      return result;
+    }      
+	public  Map<String, String> putOnEqSentenceOnField(String value){
+		Map<String, String> eqSentenceOnField = new HashMap<String, String>();
+		for(String field : this.fields){
+			eqSentenceOnField.put(field, value);
+		}
+		return eqSentenceOnField;
+	}}PARSER_END(expressionGrammar)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >}TOKEN :{  < CONSTANT : (< DIGIT >)+ >| < #DIGIT : [ "0"-"9" ] >}
+TOKEN: {
+<QUOTED: 
+    "\"" 
+    (
+         "\\" ~[]     //any escaped character
+    |                 //or
+        ~["\""]  //any character except quote or backslash
+    )* 
+    "\"" > 
+}
+
+
+
+Query one_line() :{ArrayList<Query> queriesOut = new ArrayList<Query>();}{      operation(queriesOut)
+       {
+    //System.out.println(queriesOut.size());    return queriesOut.get(0);  }}
+
+
+void andOp(ArrayList<Query> queriesIn) :
+{ArrayList<Query> queriesOut = new ArrayList<Query>();}
+{
+	"AND"
+	"{"
+	(
+	t(queriesOut)
+	)*
+	"}"
+	{
+	  //System.out.println("AND");
+	  queriesIn.add(this.genericDao.createMustQuery(queriesOut, this.qb));
+	}
+}
+
+void orOp(ArrayList<Query> queriesIn):
+{ ArrayList<Query> queriesOut = new ArrayList<Query>();}
+{
+	"OR"
+	"{"
+	(
+	t(queriesOut)
+	)*
+	"}"
+	{
+	  //System.out.println("OR");
+	  queriesIn.add(this.genericDao.createShouldQuery(queriesOut, this.qb));
+	}
+}
+  
+
+void operation(ArrayList<Query> queriesIn):
+{ }
+{
+   andOp(queriesIn)
+  | orOp(queriesIn)
+}
+
+void t(ArrayList<Query> queriesIn) :
+{} {
+  (
+    (
+      operation(queriesIn)
+    ) 
+  | phrase(queriesIn)
+  )
+}
+
+
+void phrase(ArrayList<Query> queriesIn) :
+{ Token phrase;
+Map<String, String> eqSentenceOnField = null;
+}  {	 phrase=<QUOTED> 
+	{
+	  //System.out.println(phrase.toString().replace("\"",""));
+	  //System.out.println(this.putOnEqSentenceOnField(phrase.toString().replace("\"","")).toString());
+	  eqSentenceOnField = this.putOnEqSentenceOnField(phrase.toString().replace("\"",""));
+	  queriesIn.add(this.genericDao.createShouldPhraseQuery(eqSentenceOnField, this.qb));
+	}
+  }
+
+    void sum() :{}{  term()  (    (      < PLUS >    | < MINUS >    )    term()  )*}void term() :{}{  unary()  (    (      < MULTIPLY >    | < DIVIDE >    )    unary()  )*}void unary() :{}{  < MINUS > element()| element()}void element() :{}{  < CONSTANT >| "(" sum() ")"}

@@ -36,7 +36,7 @@ public class LuceneTest {
 	
 	@Test
 	public void rebuildIndexDaemon() throws InvalidDemonConnectionException, ANoteException {
-		DaemonConnectionInit.init("http","8080","localhost","anote2daemon");
+		DaemonConnectionInit.init("http","8080","localhost","anote2daemondev");
 		InitConfiguration.getDataAccess().rebuildLuceneIndex();
 	}
 	
