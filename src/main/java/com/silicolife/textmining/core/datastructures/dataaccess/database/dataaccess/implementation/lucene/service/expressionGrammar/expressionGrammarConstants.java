@@ -11,19 +11,15 @@ public interface expressionGrammarConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int PLUS = 5;
+  int WORD = 5;
   /** RegularExpression Id. */
-  int MINUS = 6;
+  int AND = 6;
   /** RegularExpression Id. */
-  int MULTIPLY = 7;
+  int OR = 7;
   /** RegularExpression Id. */
-  int DIVIDE = 8;
+  int NOT = 8;
   /** RegularExpression Id. */
-  int CONSTANT = 9;
-  /** RegularExpression Id. */
-  int DIGIT = 10;
-  /** RegularExpression Id. */
-  int QUOTED = 11;
+  int QUOTED = 9;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -35,17 +31,11 @@ public interface expressionGrammarConstants {
     "\"\\r\"",
     "\"\\t\"",
     "\"\\n\"",
-    "\"+\"",
-    "\"-\"",
-    "\"*\"",
-    "\"/\"",
-    "<CONSTANT>",
-    "<DIGIT>",
+    "<WORD>",
+    "<AND>",
+    "<OR>",
+    "\"!\"",
     "<QUOTED>",
-    "\"AND\"",
-    "\"{\"",
-    "\"}\"",
-    "\"OR\"",
     "\"(\"",
     "\")\"",
   };

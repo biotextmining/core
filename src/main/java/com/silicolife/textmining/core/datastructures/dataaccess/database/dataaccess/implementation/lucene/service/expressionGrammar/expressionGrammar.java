@@ -53,14 +53,14 @@ public class expressionGrammar<T> implements expressionGrammarConstants {
       }
       catch (Exception e)
       {
-       // System.out.println("NOK.");
-       // System.out.println(e.getMessage());
+        System.out.println("NOK.");
+        System.out.println(e.getMessage());
         this.ReInit(System.in);
       }
       catch (Error e)
       {
-        //System.out.println("Oops.");
-        //System.out.println(e.getMessage());
+        System.out.println("Oops.");
+        System.out.println(e.getMessage());
 
       }
       return result;
@@ -83,78 +83,95 @@ public class expressionGrammar<T> implements expressionGrammarConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public void andOp(ArrayList<Query> queriesIn) throws ParseException {
- ArrayList<Query> queriesOut = new ArrayList<Query>();
-    jj_consume_token(12);
-    jj_consume_token(13);
+  final public int andOp(ArrayList<Query> queriesIn) throws ParseException {
+    unary(queriesIn);
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case QUOTED:
-      case 12:
-      case 15:
+      case AND:
         ;
         break;
       default:
         jj_la1[0] = jj_gen;
         break label_1;
       }
-      t(queriesOut);
+      jj_consume_token(AND);
+      unary(queriesIn);
     }
-    jj_consume_token(14);
           //System.out.println("AND");
-          queriesIn.add(this.genericDao.createMustQuery(queriesOut, this.qb));
+          {if (true) return 1;}
+    throw new Error("Missing return statement in function");
   }
 
-  final public void orOp(ArrayList<Query> queriesIn) throws ParseException {
-  ArrayList<Query> queriesOut = new ArrayList<Query>();
-    jj_consume_token(15);
-    jj_consume_token(13);
+  final public int orOp(ArrayList<Query> queriesIn) throws ParseException {
+    unary(queriesIn);
     label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case QUOTED:
-      case 12:
-      case 15:
+      case OR:
         ;
         break;
       default:
         jj_la1[1] = jj_gen;
         break label_2;
       }
-      t(queriesOut);
+      jj_consume_token(OR);
+      unary(queriesIn);
     }
-    jj_consume_token(14);
           //System.out.println("OR");
-          queriesIn.add(this.genericDao.createShouldQuery(queriesOut, this.qb));
+          {if (true) return 2;}
+    throw new Error("Missing return statement in function");
   }
 
   final public void operation(ArrayList<Query> queriesIn) throws ParseException {
+ int op= 0; ArrayList<Query> queriesOut = new ArrayList<Query>();
+    unary(queriesOut);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 12:
-      andOp(queriesIn);
-      break;
-    case 15:
-      orOp(queriesIn);
+    case AND:
+    case OR:
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case AND:
+        jj_consume_token(AND);
+        op = andOp(queriesOut);
+        break;
+      case OR:
+        jj_consume_token(OR);
+        op = orOp(queriesOut);
+        break;
+      default:
+        jj_la1[2] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
       break;
     default:
-      jj_la1[2] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
+      jj_la1[3] = jj_gen;
+      ;
     }
+   {
+          //System.out.println(op);
+          if(op==1)
+                queriesIn.add(this.genericDao.createMustQuery(queriesOut, this.qb));
+          if(op==2)
+                queriesIn.add(this.genericDao.createShouldQuery(queriesOut, this.qb));
+          if(op==0)
+                queriesIn.addAll(queriesOut);
+        }
   }
 
   final public void t(ArrayList<Query> queriesIn) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 12:
-    case 15:
-      operation(queriesIn);
-      break;
+    case WORD:
     case QUOTED:
       phrase(queriesIn);
       break;
+    case 10:
+      jj_consume_token(10);
+      operation(queriesIn);
+      jj_consume_token(11);
+      break;
     default:
-      jj_la1[3] = jj_gen;
+      jj_la1[4] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -163,103 +180,65 @@ public class expressionGrammar<T> implements expressionGrammarConstants {
   final public void phrase(ArrayList<Query> queriesIn) throws ParseException {
   Token phrase;
 Map<String, String> eqSentenceOnField = null;
-    phrase = jj_consume_token(QUOTED);
-          //System.out.println(phrase.toString().replace("\"",""));
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case QUOTED:
+      quoted(queriesIn);
+      break;
+    case WORD:
+      word(queriesIn);
+      break;
+    default:
+      jj_la1[5] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+  }
+
+  final public void quoted(ArrayList<Query> queriesIn) throws ParseException {
+  Token quoted;
+Map<String, String> eqSentenceOnField = null;
+    quoted = jj_consume_token(QUOTED);
+          //System.out.println(quoted.toString().replace("\"",""));
           //System.out.println(this.putOnEqSentenceOnField(phrase.toString().replace("\"","")).toString());
-          eqSentenceOnField = this.putOnEqSentenceOnField(phrase.toString().replace("\u005c"",""));
+          eqSentenceOnField = this.putOnEqSentenceOnField(quoted.toString().replace("\u005c"",""));
           queriesIn.add(this.genericDao.createShouldPhraseQuery(eqSentenceOnField, this.qb));
   }
 
-  final public void sum() throws ParseException {
-    term();
-    label_3:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case PLUS:
-      case MINUS:
-        ;
-        break;
-      default:
-        jj_la1[4] = jj_gen;
-        break label_3;
-      }
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case PLUS:
-        jj_consume_token(PLUS);
-        break;
-      case MINUS:
-        jj_consume_token(MINUS);
-        break;
-      default:
-        jj_la1[5] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-      term();
-    }
+  final public void word(ArrayList<Query> queriesIn) throws ParseException {
+  Token word;
+Map<String, String> eqSentenceOnField = null;
+    word = jj_consume_token(WORD);
+          //System.out.println(word.toString());
+          //System.out.println("word");
+          //System.out.println(this.putOnEqSentenceOnField(phrase.toString().replace("\"","")).toString());
+          eqSentenceOnField = this.putOnEqSentenceOnField(word.toString());
+          queriesIn.add(this.genericDao.createShouldPhraseQuery(eqSentenceOnField, this.qb));
   }
 
-  final public void term() throws ParseException {
-    unary();
-    label_4:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case MULTIPLY:
-      case DIVIDE:
-        ;
-        break;
-      default:
-        jj_la1[6] = jj_gen;
-        break label_4;
-      }
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case MULTIPLY:
-        jj_consume_token(MULTIPLY);
-        break;
-      case DIVIDE:
-        jj_consume_token(DIVIDE);
-        break;
-      default:
-        jj_la1[7] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-      unary();
-    }
-  }
-
-  final public void unary() throws ParseException {
+  final public void unary(ArrayList<Query> queriesIn) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case MINUS:
-      jj_consume_token(MINUS);
-      element();
+    case NOT:
+      notRule(queriesIn);
       break;
-    case CONSTANT:
-    case 16:
-      element();
+    case WORD:
+    case QUOTED:
+    case 10:
+      t(queriesIn);
       break;
     default:
-      jj_la1[8] = jj_gen;
+      jj_la1[6] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
   }
 
-  final public void element() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case CONSTANT:
-      jj_consume_token(CONSTANT);
-      break;
-    case 16:
-      jj_consume_token(16);
-      sum();
-      jj_consume_token(17);
-      break;
-    default:
-      jj_la1[9] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
+  final public void notRule(ArrayList<Query> queriesIn) throws ParseException {
+ ArrayList<Query> queriesOut = new ArrayList<Query>();
+    jj_consume_token(NOT);
+    t(queriesOut);
+          //System.out.println("not");
+          //System.out.println(queriesOut.size());
+          queriesIn.add(this.genericDao.createMustNot(queriesOut, this.qb));
   }
 
   /** Generated Token Manager. */
@@ -271,13 +250,13 @@ Map<String, String> eqSentenceOnField = null;
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[10];
+  final private int[] jj_la1 = new int[7];
   static private int[] jj_la1_0;
   static {
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x9800,0x9800,0x9000,0x9800,0x60,0x60,0x180,0x180,0x10240,0x10200,};
+      jj_la1_0 = new int[] {0x40,0x80,0xc0,0xc0,0x620,0x220,0x720,};
    }
 
   /** Constructor with InputStream. */
@@ -291,7 +270,7 @@ Map<String, String> eqSentenceOnField = null;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 7; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -305,7 +284,7 @@ Map<String, String> eqSentenceOnField = null;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 7; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -315,7 +294,7 @@ Map<String, String> eqSentenceOnField = null;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 7; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -325,7 +304,7 @@ Map<String, String> eqSentenceOnField = null;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 7; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -334,7 +313,7 @@ Map<String, String> eqSentenceOnField = null;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 7; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -343,7 +322,7 @@ Map<String, String> eqSentenceOnField = null;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 7; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -394,12 +373,12 @@ Map<String, String> eqSentenceOnField = null;
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[18];
+    boolean[] la1tokens = new boolean[12];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 7; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -408,7 +387,7 @@ Map<String, String> eqSentenceOnField = null;
         }
       }
     }
-    for (int i = 0; i < 18; i++) {
+    for (int i = 0; i < 12; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

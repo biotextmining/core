@@ -51,14 +51,14 @@ public class expressionGrammar<T>{
       }
       catch (Exception e)
       {
-       // System.out.println("NOK.");
-       // System.out.println(e.getMessage());
+        System.out.println("NOK.");
+        System.out.println(e.getMessage());
         this.ReInit(System.in);
       }
       catch (Error e)
       {
-        //System.out.println("Oops.");
-        //System.out.println(e.getMessage());
+        System.out.println("Oops.");
+        System.out.println(e.getMessage());
         
       }
       return result;
@@ -69,18 +69,31 @@ public class expressionGrammar<T>{
 			eqSentenceOnField.put(field, value);
 		}
 		return eqSentenceOnField;
-	}}PARSER_END(expressionGrammar)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >}TOKEN :{  < CONSTANT : (< DIGIT >)+ >| < #DIGIT : [ "0"-"9" ] >}
+	}}PARSER_END(expressionGrammar)SKIP :{  " "| "\r"| "\t"| "\n"}
+
+TOKEN: {
+  < WORD :
+    	(  	      ~["&", "+", "|","!", "\""," ","(",")"]
+  )+  
+
+ >
+|   
+	< AND: ("&" | "+" | "AND ") >
+| 	< OR: ("|" | "OR ") >
+|   < NOT: ("!") >
+}
+
 TOKEN: {
 <QUOTED: 
     "\"" 
     (
          "\\" ~[]     //any escaped character
     |                 //or
-        ~["\""]  //any character except quote or backslash
+        ~["\""]  //any character except quote
     )* 
     "\"" > 
-}
 
+}
 
 
 Query one_line() :{ArrayList<Query> queriesOut = new ArrayList<Query>();}{      operation(queriesOut)
@@ -88,51 +101,75 @@ TOKEN: {
     //System.out.println(queriesOut.size());    return queriesOut.get(0);  }}
 
 
-void andOp(ArrayList<Query> queriesIn) :
-{ArrayList<Query> queriesOut = new ArrayList<Query>();}
+int andOp(ArrayList<Query> queriesIn) :
+{}
 {
-	"AND"
-	"{"
-	(
-	t(queriesOut)
-	)*
-	"}"
+unary(queriesIn)
+(
+    (
+      < AND >
+    )
+    unary(queriesIn)
+  )*
+
 	{
 	  //System.out.println("AND");
-	  queriesIn.add(this.genericDao.createMustQuery(queriesOut, this.qb));
+	  return 1;
 	}
 }
 
-void orOp(ArrayList<Query> queriesIn):
-{ ArrayList<Query> queriesOut = new ArrayList<Query>();}
+int orOp(ArrayList<Query> queriesIn):
+{ }
 {
-	"OR"
-	"{"
-	(
-	t(queriesOut)
-	)*
-	"}"
+unary(queriesIn)
+(
+    (
+      < OR >
+    )
+    unary(queriesIn)
+  )*
+	  
+	  
 	{
 	  //System.out.println("OR");
-	  queriesIn.add(this.genericDao.createShouldQuery(queriesOut, this.qb));
+	  return 2;
 	}
 }
   
 
 void operation(ArrayList<Query> queriesIn):
-{ }
+{int op= 0; ArrayList<Query> queriesOut = new ArrayList<Query>();}
 {
-   andOp(queriesIn)
-  | orOp(queriesIn)
+   unary(queriesOut) 
+  (
+    < AND > op= andOp(queriesOut) 
+	|
+	 < OR > op =orOp(queriesOut) 
+	)?
+ {
+   {
+	  //System.out.println(op);
+	  if(op==1)
+	  	queriesIn.add(this.genericDao.createMustQuery(queriesOut, this.qb));
+	  if(op==2)
+	  	queriesIn.add(this.genericDao.createShouldQuery(queriesOut, this.qb));
+	  if(op==0)
+	  	queriesIn.addAll(queriesOut);
+	}
+ }
 }
+
+
+  
 
 void t(ArrayList<Query> queriesIn) :
 {} {
-  (
-    (
-      operation(queriesIn)
-    ) 
-  | phrase(queriesIn)
+	(	  
+    
+    phrase(queriesIn) 
+    
+  | "("operation(queriesIn)")"
+  
   )
 }
 
@@ -140,13 +177,56 @@ void t(ArrayList<Query> queriesIn) :
 void phrase(ArrayList<Query> queriesIn) :
 { Token phrase;
 Map<String, String> eqSentenceOnField = null;
-}  {	 phrase=<QUOTED> 
+}  {	 quoted(queriesIn)
+|
+	word(queriesIn)
+  }
+
+  void quoted(ArrayList<Query> queriesIn) :
+{ Token quoted;
+Map<String, String> eqSentenceOnField = null;
+}
+  {
+	 quoted=<QUOTED>
+
 	{
-	  //System.out.println(phrase.toString().replace("\"",""));
+	  //System.out.println(quoted.toString().replace("\"",""));
 	  //System.out.println(this.putOnEqSentenceOnField(phrase.toString().replace("\"","")).toString());
-	  eqSentenceOnField = this.putOnEqSentenceOnField(phrase.toString().replace("\"",""));
+	  eqSentenceOnField = this.putOnEqSentenceOnField(quoted.toString().replace("\"",""));
 	  queriesIn.add(this.genericDao.createShouldPhraseQuery(eqSentenceOnField, this.qb));
 	}
   }
-
-    void sum() :{}{  term()  (    (      < PLUS >    | < MINUS >    )    term()  )*}void term() :{}{  unary()  (    (      < MULTIPLY >    | < DIVIDE >    )    unary()  )*}void unary() :{}{  < MINUS > element()| element()}void element() :{}{  < CONSTANT >| "(" sum() ")"}
+
+  void word(ArrayList<Query> queriesIn) :
+{ Token word;
+Map<String, String> eqSentenceOnField = null;
+}
+  {
+	word=<WORD>
+	{
+	  //System.out.println(word.toString());
+	  //System.out.println("word");
+	  //System.out.println(this.putOnEqSentenceOnField(phrase.toString().replace("\"","")).toString());
+	  eqSentenceOnField = this.putOnEqSentenceOnField(word.toString());
+	  queriesIn.add(this.genericDao.createShouldPhraseQuery(eqSentenceOnField, this.qb));
+	}
+  }
+void unary(ArrayList<Query> queriesIn) :
+{}
+{
+   notRule(queriesIn)
+| t(queriesIn)
+
+}
+
+void notRule (ArrayList<Query> queriesIn) :
+{ArrayList<Query> queriesOut = new ArrayList<Query>(); }
+{
+ < NOT > t(queriesOut)
+	{
+	  //System.out.println("not");
+	  //System.out.println(queriesOut.size());
+	  queriesIn.add(this.genericDao.createMustNot(queriesOut, this.qb));
+	}
+}
+  

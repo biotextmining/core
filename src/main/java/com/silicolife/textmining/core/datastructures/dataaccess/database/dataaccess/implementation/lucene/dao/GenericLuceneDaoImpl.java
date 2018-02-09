@@ -364,6 +364,16 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 	
 	@Override
 	@SuppressWarnings({ "rawtypes" })
+	public Query createMustNot(List<Query> queries, QueryBuilder qb) {
+		BooleanJunction<BooleanJunction> query = qb.bool();
+		for(Query q : queries) {
+			query.must(q).not();
+		}
+		return query.createQuery();
+	}
+	
+	@Override
+	@SuppressWarnings({ "rawtypes" })
 	public Query createShouldQuery(List<Query> queries, QueryBuilder qb) {
 		BooleanJunction<BooleanJunction> query = qb.bool();
 		for(Query q : queries) {

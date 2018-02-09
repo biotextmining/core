@@ -192,6 +192,8 @@ public interface IGenericLuceneDao<T> {
 	public Integer countForWebTableWExpression(Query q, Map<String, String> eqMustSentenceOnField,
 			Map<String, List<String>> filtersOnFields, boolean isPhrase);
 
+	public Query createMustNot(List<Query> queries, QueryBuilder qb);
+
 
 
 
