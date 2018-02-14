@@ -2,6 +2,7 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.ResourcesExceptions;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
+import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElementSet;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElementsFilter;
@@ -84,6 +85,11 @@ public interface IResourcesElementLuceneService {
 			int index, int paginationSize);
 
 	public Integer getCountResourceElementsByExactTermOrExactSynonymPaginated(String exactString);
+
+	public IResourceElementSet<IResourceElement> getResourceElementsPaginated(ISearchProperties searchProperties, int index,
+			int paginationSize, boolean asc, String sortBy);
+
+	public Integer countResourceElements(ISearchProperties searchProperties);
 
 
 }

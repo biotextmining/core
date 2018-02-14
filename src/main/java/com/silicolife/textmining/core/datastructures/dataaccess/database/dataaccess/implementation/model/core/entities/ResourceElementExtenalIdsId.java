@@ -6,8 +6,11 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Analyzer;
+import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.FieldBridge;
+import org.hibernate.search.annotations.Fields;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Store;
 import org.hibernate.search.bridge.builtin.LongBridge;
@@ -51,7 +54,15 @@ public class ResourceElementExtenalIdsId implements java.io.Serializable {
 		this.releSourceId = releSourceId;
 	}
 
-	@Field(index=Index.YES, analyze=Analyze.NO, store=Store.NO)
+	@Fields( {
+		@Field(index=Index.YES, analyze=Analyze.NO, store=Store.NO),
+		@Field(name = "keywordEdgeNGram_rele_external", index = Index.YES, store = Store.NO,
+		analyze = Analyze.YES, analyzer = @Analyzer(definition = "keywordEdgeAnalyzer"), boost = @Boost(2)),
+		@Field(name = "tokenEdgeNGram_rele_external", index = Index.YES, store = Store.NO,
+		analyze = Analyze.YES, analyzer = @Analyzer(definition = "tokenEdgeAnalyzer")),
+		@Field(name="rele_externalCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
+		@Field(name="rele_externalNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO)
+	})
 	@Column(name = "rele_external_id", nullable = false, length = 200)
 	public String getReleExternalId() {
 		return this.releExternalId;

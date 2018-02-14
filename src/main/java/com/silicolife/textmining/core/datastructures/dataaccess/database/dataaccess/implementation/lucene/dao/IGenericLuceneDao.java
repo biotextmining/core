@@ -194,6 +194,44 @@ public interface IGenericLuceneDao<T> {
 
 	public Query createMustNot(List<Query> queries, QueryBuilder qb);
 
+	public List<T> findForWebTableWPermissionsPaginated(Set<Map<String, Set<String>>> setOfAttributeForMultipleFieldsMap,
+			Map<String, String> eqMustSentenceOnField, Map<String, String> permissionFields, String idField,
+			Map<String, List<String>> filtersOnFields, boolean isPhrase, int index, int paginationSize,
+			String sortField, Type sortType, boolean asc);
+
+	public Integer countForWebTableWPermissions(Set<Map<String, Set<String>>> setOfAttributeForMultipleFieldsMap,
+			Map<String, String> eqMustSentenceOnField, Map<String, String> permissionFields, String idField,
+			Map<String, List<String>> filtersOnFields, boolean isPhrase);
+
+
+	public List<T> findForWebTablePaginated(Set<Map<String, Set<String>>> setOfAttributeForMultipleFieldsMap,
+			Map<String, String> eqMustSentenceOnField, Map<String, List<String>> filtersOnFields, boolean isPhrase,
+			int index, int paginationSize, String sortField, Type sortType, boolean asc);
+
+	public Integer countForWebTable(Set<Map<String, Set<String>>> setOfAttributeForMultipleFieldsMap,
+			Map<String, String> eqMustSentenceOnField, Map<String, List<String>> filtersOnFields, boolean isPhrase);
+
+	public List<T> findForWebTableWPermissionsPaginated(Map<String, String> eqSentenceOnField,
+			Map<Map<String, String>, Map<String, String>> uniqueRestrictions, Map<String, String> eqMustSentenceOnField,
+			Map<String, String> permissionFields, String idField, Map<String, List<String>> filtersOnFields,
+			boolean isPhrase, int index, int paginationSize, String sortField, Type sortType, boolean asc);
+
+	public List<T> findForWebTableWPermissionsPaginated(Set<Map<String, Set<String>>> setOfAttributeForMultipleFieldsMap,
+			Map<Map<String, String>, Set<Map<String, Set<String>>>> uniqueRestrictions,
+			Map<String, String> eqMustSentenceOnField, Map<String, String> permissionFields, String idField,
+			Map<String, List<String>> filtersOnFields, boolean isPhrase, int index, int paginationSize,
+			String sortField, Type sortType, boolean asc);
+
+	public Integer countForWebTableWPermissions(Map<String, String> eqSentenceOnField,
+			Map<Map<String, String>, Map<String, String>> uniqueRestrictions, Map<String, String> eqMustSentenceOnField,
+			Map<String, String> permissionFields, String idField, Map<String, List<String>> filtersOnFields,
+			boolean isPhrase);
+
+	public Integer countForWebTableWPermissions(Set<Map<String, Set<String>>> setOfAttributeForMultipleFieldsMap,
+			Map<Map<String, String>, Set<Map<String, Set<String>>>> uniqueRestrictions,
+			Map<String, String> eqMustSentenceOnField, Map<String, String> permissionFields, String idField,
+			Map<String, List<String>> filtersOnFields, boolean isPhrase);
+
 
 
 

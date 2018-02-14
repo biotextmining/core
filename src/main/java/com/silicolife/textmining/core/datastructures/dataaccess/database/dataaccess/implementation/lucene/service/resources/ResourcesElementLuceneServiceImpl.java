@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.lucene.search.SortField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,9 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Sources;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.resources.ResourceElementWrapper;
 import com.silicolife.textmining.core.datastructures.resources.ResourceElementSetImpl;
+import com.silicolife.textmining.core.datastructures.resources.ResourceElementsLuceneFieldsEnum;
+import com.silicolife.textmining.core.datastructures.resources.ResourcesLuceneFieldsEnum;
+import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElementSet;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElementsFilter;
@@ -31,11 +35,14 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 
 	private ResourceElementsLuceneManagerDao resourcesLuceneManagerDao;
 	private ResourcesManagerDao resourcesManagerDao;
+	private UsersLogged user;
 
 	@Autowired
-	public ResourcesElementLuceneServiceImpl(ResourceElementsLuceneManagerDao resourcesLuceneManagerDao, ResourcesManagerDao resourcesManagerDao){
+	public ResourcesElementLuceneServiceImpl(ResourceElementsLuceneManagerDao resourcesLuceneManagerDao,
+			ResourcesManagerDao resourcesManagerDao, UsersLogged user){
 		this.resourcesLuceneManagerDao = resourcesLuceneManagerDao;
 		this.resourcesManagerDao = resourcesManagerDao;
+		this.user = user;
 	}
 
 	@Override
@@ -908,7 +915,8 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 	public Integer getResourceElementsFilteredCountByPartialExternalID(IResourceElementsFilter filter, String partialString) throws ResourcesExceptions {
 
 		Set<Map<String, String>> setOfStartSentenceOnField = new HashSet<>();
-		Set<Map<String, String>> setOfeqSentenceOnField = new HashSet<>();
+		Set<Map<String, String>> setOfeqSentenceOnField = new HashSet<>(); 
+		
 		if(!filter.getResourceIds().isEmpty() && !filter.getSourceIds().isEmpty()){
 			for(Long resourceId : filter.getResourceIds()){
 				for(Long sourceId: filter.getSourceIds()){
@@ -996,7 +1004,8 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 		fields.add("synonymses.id.tokenEdgeNGram_syn_synonym");
 		attributeForMultipleFieldsMap = new HashMap<>();
 		attributeForMultipleFieldsMap.put(partialString, fields);
-
+		setOfAttributeForMultipleFieldsMap.add(attributeForMultipleFieldsMap);
+		
 		eqSentenceOnField = new HashMap<>();
 		eqSentenceOnField.put("synonymses.id.synActive", "true");
 		eqSentenceOnField.put("resActive", "true");
@@ -1015,6 +1024,218 @@ public class ResourcesElementLuceneServiceImpl implements IResourcesElementLucen
 		}
 
 		return elementSet;
+	}
+	
+	private Map<String,Map<String, String>> addToMap(Map<String,Map<String, String>> map, String active
+			, String field, String value){
+		if(map.containsKey(active)) {
+			map.get(active).put(field, value);
+		}else {
+			Map<String, String> fields = new HashMap<>();
+			fields.put(field, value);
+			map.put(active, fields);
+		}
+		return map;
+	}
+	
+	private Map<String,Set<Map<String, Set<String>>>> addToMap(Map<String,Set<Map<String, Set<String>>>> map
+			,String active, Map<String, Set<String>> fields) {
+		if(map.containsKey(active)) {
+			map.get(active).add(fields);
+		}else {
+			Set<Map<String, Set<String>>> set = new HashSet<>();
+			set.add(fields);
+			map.put(active, set);
+		}
+		return map;
+	}
+	
+	private Map<Map<String, String>, Set<Map<String, Set<String>>>> activesToMapSearch2(Map<String,Set<Map<String, Set<String>>>> uniqueActives){
+		Map<Map<String, String>, Set<Map<String, Set<String>>>>uniques = new HashMap<>();
+		for(String key : uniqueActives.keySet()) {
+			Map<String, String> eqActive = new HashMap<>();
+			eqActive.put(key, "true");
+			uniques.put(eqActive, uniqueActives.get(key));
+		}
+		return uniques;
+	}
+	
+	private Map<Map<String, String>, Map<String, String>> activesToMap2(Map<String,Map<String, String>> uniqueActives){
+		Map<Map<String, String>, Map<String, String>> uniques = new HashMap<>();
+		for(String key : uniqueActives.keySet()) {
+			Map<String, String> eqActive = new HashMap<>();
+			eqActive.put(key, "true");
+			uniques.put(eqActive, uniqueActives.get(key));
+		}
+		return uniques;
+	}
+	
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsPaginated(
+			ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy) {
+		
+		String partialString = searchProperties.getValue();
+		
+		Set<Map<String, Set<String>>> setOfAttributeForMultipleFieldsMap = new HashSet<>();
+		Set<Map<String, String>> setOfEqSentenceOnField = new HashSet<>();
+		Map<String,Set<Map<String, Set<String>>>> activesSearch = new HashMap<>();
+		Map<Map<String, String>, Set<Map<String, Set<String>>>> uniquesSearch = new HashMap<>();
+		Map<Map<String, String>, Map<String, String>> uniques = new HashMap<>();
+		
+		Map<String,Map<String, String>> uniqueActives = new HashMap<>();
+		
+		List<String> fields = searchProperties.getFields();
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		Map<String, String> eqMustSentenceOnField = new HashMap<>();
+		String idField = "resources";
+		eqMustSentenceOnField.put("resActive", "true");
+		Map<String, String> restrictions = searchProperties.getRestrictions();
+		Map<String, String> permissionFields = new HashMap<>();
+		Map<String, List<String>> eqFilters = new HashMap<>();
+		
+		Map<String, List<String>> filters = searchProperties.getFilters();
+		
+		
+		for(String key : filters.keySet()){
+			eqFilters.put(ResourceElementsLuceneFieldsEnum.getLuceneField(searchProperties, key), filters.get(key));
+		}
+		
+		permissionFields.put("id.Auth_audo_user_id", String.valueOf(user.getCurrentUserLogged().getAuId()));
+		permissionFields.put("id.Auth_audo_type_resource", "resources");
+		
+		String sortField = ResourceElementsLuceneFieldsEnum.getSortField(sortBy);
+		
+		SortField.Type sortType = ResourceElementsLuceneFieldsEnum.getSortType(sortBy);
+		
+		for(String key : restrictions.keySet()){
+			eqMustSentenceOnField.put(ResourceElementsLuceneFieldsEnum.getLuceneField(searchProperties, key), restrictions.get(key));
+		}
+		
+		List<ResourceElements> resourcesElements =null;
+		
+		if(!searchProperties.isSugestions()) {
+		if(searchProperties.getValue()!=null)
+			for(String field : fields){
+				if(ResourceElementsLuceneFieldsEnum.getActive(field)!=null) {
+					uniqueActives = this.addToMap(uniqueActives, ResourceElementsLuceneFieldsEnum.getActive(field),
+							ResourceElementsLuceneFieldsEnum.getLuceneField(searchProperties, field), searchProperties.getValue());
+				//eqMustSentenceOnField.put(ResourceElementsLuceneFieldsEnum.getActive(field), "true");
+				}
+			else	
+			eqSentenceOnField.put(ResourceElementsLuceneFieldsEnum.getLuceneField(searchProperties, field),searchProperties.getValue());
+			}
+		uniques = this.activesToMap2(uniqueActives);
+		resourcesElements =  resourcesLuceneManagerDao.getResourcesElememtsLuceneDao().findForWebTableWPermissionsPaginated(
+		eqSentenceOnField,uniques, eqMustSentenceOnField, permissionFields, idField, 
+		eqFilters,searchProperties.isWholeWords(), index, paginationSize,
+		sortField, sortType, asc);
+		}
+		else {
+			if(searchProperties.getValue()!=null)
+			for(String field : fields){
+				Set<String> edgeFields = new HashSet<>();
+				edgeFields.add(ResourceElementsLuceneFieldsEnum.getKeywordEdge(field));
+				edgeFields.add(ResourceElementsLuceneFieldsEnum.getTokenEdge(field));
+				Map<String, Set<String>> attributeForMultipleFieldsMap = new HashMap<>();
+				attributeForMultipleFieldsMap.put(partialString, edgeFields);
+				if(ResourceElementsLuceneFieldsEnum.getActive(field)!=null) {
+					activesSearch = this.addToMap(activesSearch, ResourceElementsLuceneFieldsEnum.getActive(field), 
+							attributeForMultipleFieldsMap);
+				}
+				else
+				setOfAttributeForMultipleFieldsMap.add(attributeForMultipleFieldsMap);
+			}
+			uniquesSearch = this.activesToMapSearch2(activesSearch);
+			resourcesElements =  resourcesLuceneManagerDao.getResourcesElememtsLuceneDao().findForWebTableWPermissionsPaginated(
+					setOfAttributeForMultipleFieldsMap,uniquesSearch, eqMustSentenceOnField, permissionFields, idField, 
+			eqFilters,searchProperties.isWholeWords(), index, paginationSize,
+			sortField, sortType, asc);
+		}
+		
+		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
+		int priority = 0;
+		for (ResourceElements resourceElement : resourcesElements) {
+			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			resourceElement_.setPriority(priority);
+			elementSet.addElementResource(resourceElement_);
+			priority++;
+		}
+
+		return elementSet;
+	}
+	
+	@Override
+	public Integer countResourceElements(ISearchProperties searchProperties){
+String partialString = searchProperties.getValue();
+		
+		Set<Map<String, Set<String>>> setOfAttributeForMultipleFieldsMap = new HashSet<>();
+		Set<Map<String, String>> setOfEqSentenceOnField = new HashSet<>();
+		Map<String,Set<Map<String, Set<String>>>> activesSearch = new HashMap<>();
+		Map<Map<String, String>, Set<Map<String, Set<String>>>> uniquesSearch = new HashMap<>();
+		Map<Map<String, String>, Map<String, String>> uniques = new HashMap<>();
+		
+		Map<String,Map<String, String>> uniqueActives = new HashMap<>();
+		
+		List<String> fields = searchProperties.getFields();
+		Map<String, String> eqSentenceOnField = new HashMap<>();
+		Map<String, String> eqMustSentenceOnField = new HashMap<>();
+		String idField = "resources";
+		eqMustSentenceOnField.put("resActive", "true");
+		Map<String, String> restrictions = searchProperties.getRestrictions();
+		Map<String, String> permissionFields = new HashMap<>();
+		Map<String, List<String>> eqFilters = new HashMap<>();
+		
+		Map<String, List<String>> filters = searchProperties.getFilters();
+		
+		
+		for(String key : filters.keySet()){
+			eqFilters.put(ResourceElementsLuceneFieldsEnum.getLuceneField(searchProperties, key), filters.get(key));
+		}
+		
+		permissionFields.put("id.Auth_audo_user_id", String.valueOf(user.getCurrentUserLogged().getAuId()));
+		permissionFields.put("id.Auth_audo_type_resource", "resources");	
+		
+		for(String key : restrictions.keySet()){
+			eqMustSentenceOnField.put(ResourceElementsLuceneFieldsEnum.getLuceneField(searchProperties, key), restrictions.get(key));
+		}
+				
+
+		if(!searchProperties.isSugestions()) {
+		if(searchProperties.getValue()!=null)
+			for(String field : fields){
+				if(ResourceElementsLuceneFieldsEnum.getActive(field)!=null) {
+					uniqueActives = this.addToMap(uniqueActives, ResourceElementsLuceneFieldsEnum.getActive(field),
+							ResourceElementsLuceneFieldsEnum.getLuceneField(searchProperties, field), searchProperties.getValue());
+				//eqMustSentenceOnField.put(ResourceElementsLuceneFieldsEnum.getActive(field), "true");
+				}
+			else	
+			eqSentenceOnField.put(ResourceElementsLuceneFieldsEnum.getLuceneField(searchProperties, field),searchProperties.getValue());
+			}
+		uniques = this.activesToMap2(uniqueActives);
+		return resourcesLuceneManagerDao.getResourcesElememtsLuceneDao().countForWebTableWPermissions(
+		eqSentenceOnField, uniques,eqMustSentenceOnField, permissionFields, idField, 
+		eqFilters,searchProperties.isWholeWords());
+		}
+		else {
+			if(searchProperties.getValue()!=null)
+			for(String field : fields){
+				Set<String> edgeFields = new HashSet<>();
+				edgeFields.add(ResourceElementsLuceneFieldsEnum.getKeywordEdge(field));
+				edgeFields.add(ResourceElementsLuceneFieldsEnum.getTokenEdge(field));
+				Map<String, Set<String>> attributeForMultipleFieldsMap = new HashMap<>();
+				attributeForMultipleFieldsMap.put(partialString, edgeFields);
+				if(ResourceElementsLuceneFieldsEnum.getActive(field)!=null) {
+					activesSearch = this.addToMap(activesSearch, ResourceElementsLuceneFieldsEnum.getActive(field), 
+							attributeForMultipleFieldsMap);
+				}
+				else
+				setOfAttributeForMultipleFieldsMap.add(attributeForMultipleFieldsMap);
+			}
+			uniquesSearch = this.activesToMapSearch2(activesSearch);
+			return resourcesLuceneManagerDao.getResourcesElememtsLuceneDao().countForWebTableWPermissions(
+					setOfAttributeForMultipleFieldsMap,uniquesSearch, eqMustSentenceOnField, permissionFields, idField, 
+			eqFilters,searchProperties.isWholeWords());
+		}	
 	}
 	
 

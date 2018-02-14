@@ -46,7 +46,9 @@ public class SynonymsId implements java.io.Serializable {
 		@Field(name = "keywordEdgeNGram_syn_synonym", index = Index.YES, store = Store.NO,
 		analyze = Analyze.YES, analyzer = @Analyzer(definition = "keywordEdgeAnalyzer"), boost = @Boost(2)),
 		@Field(name = "tokenEdgeNGram_syn_synonym", index = Index.YES, store = Store.NO,
-		analyze = Analyze.YES, analyzer = @Analyzer(definition = "tokenEdgeAnalyzer"))
+		analyze = Analyze.YES, analyzer = @Analyzer(definition = "tokenEdgeAnalyzer")),
+		@Field(name="syn_synonymCS",index=Index.YES, analyze=Analyze.YES, analyzer = @Analyzer(definition="KeywordsSplitter"), store=Store.NO),
+		@Field(name="syn_synonymNCS",index=Index.YES, analyze=Analyze.YES,analyzer = @Analyzer(definition="toLowerCase"), store=Store.NO)
 	})
 	@Column(name = "syn_synonym", nullable = false, length = 500)
 	public String getSynSynonym() {
