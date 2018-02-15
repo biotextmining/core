@@ -10,7 +10,11 @@ public class ClassesBridge implements TwoWayStringBridge, IgnoreAnalyzerBridge{
 	@Override
 	public String objectToString(Object obj) {
 		Classes castedObj = (Classes) obj;
-		return String.valueOf(castedObj.getClaId());
+		String res = null;
+		if(castedObj!=null)
+			res= String.valueOf(castedObj.getClaId());
+		
+			return res;
 	}
 
 	@Override
