@@ -36,6 +36,7 @@ import org.hibernate.search.annotations.Store;
 import org.hibernate.search.annotations.TokenFilterDef;
 import org.hibernate.search.annotations.TokenizerDef;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.bridges.ClassesBridge;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.bridges.ResourcesBridge;
 
 /**
@@ -126,6 +127,8 @@ public class ResourceElements implements java.io.Serializable {
 		this.resId = resId;
 	}
 
+	@Field
+	@FieldBridge(impl = ClassesBridge.class)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "res_class_id")
 	public Classes getClasses() {

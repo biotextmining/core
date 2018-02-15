@@ -8,6 +8,7 @@ public enum ResourceElementsLuceneFieldsEnum {
 	
 	name ("res_elementNCS","res_elementCS","", null, "keywordEdgeNGram_res_element", "tokenEdgeNGram_res_element", null),
 	resourceId("resources", "resources", "", null, "", "", null),
+	classId("classes", "classes", "", null, "", "", null ),
 	synonyms("synonymses.id.syn_synonymNCS", "synonymses.id.syn_synonymCS", "",
 			null,"synonymses.id.keywordEdgeNGram_syn_synonym",
 			"synonymses.id.tokenEdgeNGram_syn_synonym", "synonymses.id.synActive"),
