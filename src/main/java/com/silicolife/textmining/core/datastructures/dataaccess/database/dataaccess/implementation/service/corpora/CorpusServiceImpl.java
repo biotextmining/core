@@ -205,6 +205,29 @@ public class CorpusServiceImpl implements ICorpusService {
 
 		return true;
 	}
+	
+	@Transactional(readOnly = false)
+	@Override
+	public boolean updateCorpusStatus(ICorpus corpus_, boolean status_) throws CorpusException {
+		Corpus corpus = corpusManagerDao.getCorpusDao().findById(corpus_.getId());
+		if (corpus == null)
+			throw new CorpusException(ExceptionsCodes.codeNoCorpus, ExceptionsCodes.msgNoCorpus);
+		/*
+		 * update corpus status
+		 */
+
+				corpus.setCrpActive(status_);
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		corpusManagerDao.getCorpusDao().update(corpus);
+		/*
+		 * log
+		 */
+		AuthUserLogs log = new AuthUserLogs(user, new Date(), "update", "corpus", null, "update status");
+		usersManagerDao.getAuthUserLogsDao().save(log);
+
+		return true;
+		
+	}
 
 	@Override
 	public IDocumentSet getCorpusPublications(Long corpusId) throws CorpusException {

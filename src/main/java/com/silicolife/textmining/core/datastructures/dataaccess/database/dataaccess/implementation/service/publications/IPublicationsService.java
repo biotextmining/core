@@ -109,4 +109,6 @@ public interface IPublicationsService {
 	public List<String> getPublicationTypesPaginated(int index, int paginationSize);
 
 	public Integer countPublicationTypes();
+
+	public Set<Long> getPublicationsIdsFromResourcesQuery(String query, IAnnotationService annotationService);
 }

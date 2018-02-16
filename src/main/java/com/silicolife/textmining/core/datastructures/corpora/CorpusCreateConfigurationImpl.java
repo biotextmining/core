@@ -53,6 +53,12 @@ public class CorpusCreateConfigurationImpl extends ConfigurationImpl implements 
 		this.processJournalRetrievalBeforeNeeded = processJournalRetrievalBeforeNeeded;
 	}
 	
+	public CorpusCreateConfigurationImpl(String corpusName,String notes,CorpusTextType corpusTextType, boolean processJournalRetrievalBeforeNeeded,Properties properties,CorpusCreateSourceEnum corpusCreateSourceEnum) {
+		this(corpusName,notes,properties,corpusCreateSourceEnum);
+		this.corpusTextType = corpusTextType;
+		this.processJournalRetrievalBeforeNeeded = processJournalRetrievalBeforeNeeded;
+	}
+	
 	public CorpusCreateConfigurationImpl(String corpusName,String notes, Set<IPublication> docIds,CorpusTextType corpusTextType, boolean processJournalRetrievalBeforeNeeded) {
 		this(corpusName, notes, docIds, corpusTextType, processJournalRetrievalBeforeNeeded, CorpusCreateSourceEnum.Other);
 	}

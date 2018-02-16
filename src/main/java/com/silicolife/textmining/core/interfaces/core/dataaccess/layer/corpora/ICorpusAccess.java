@@ -3,6 +3,7 @@ package com.silicolife.textmining.core.interfaces.core.dataaccess.layer.corpora;
 import java.util.List;
 import java.util.Set;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.CorpusException;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.corpora.ieprocess.IIEProcessAccess;
@@ -32,7 +33,16 @@ public interface ICorpusAccess extends IIEProcessAccess, IAnnotationAccess, IAnn
 	 * @return
 	 */
 	public void updateCorpus(ICorpus corpus) throws ANoteException;
-
+	
+	/**
+	 * Update corpus status
+	 * 
+	 * @param corpus
+	 * @param status
+	 * @return 
+	 */
+	public void updateCorpusStatus(ICorpus corpus, boolean status) throws ANoteException;
+	
 	/**
 	 * Remove corpus
 	 * 

@@ -50,6 +50,17 @@ public interface ICorpusService {
 	 */
 	public boolean updateCorpus(ICorpus corpus_) throws CorpusException;
 	
+
+	/**
+	 * Update corpus status
+	 * 
+	 * @param corpus_
+	 * @param status_
+	 * @return
+	 * @throws CorpusException 
+	 */
+	public boolean updateCorpusStatus(ICorpus corpus_, boolean status_) throws CorpusException;
+	
 	/**
 	 * Get all publications from a corpus
 	 * 
@@ -160,4 +171,6 @@ public interface ICorpusService {
 			boolean asc, String sortBy);
 
 	public Integer countAllPrivilegesCorpusAdminAccess();
+
+
 }

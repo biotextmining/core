@@ -250,6 +250,11 @@ public class DataAccessStart implements IDataAccess {
 
 		
 	}
+	
+	@Override
+	public void updateCorpusStatus(ICorpus corpus, boolean status) throws ANoteException {
+		
+	}
 
 	@Override
 	public void inactivateCorpus(ICorpus corpus) throws ANoteException {
@@ -1222,5 +1227,7 @@ public class DataAccessStart implements IDataAccess {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 }

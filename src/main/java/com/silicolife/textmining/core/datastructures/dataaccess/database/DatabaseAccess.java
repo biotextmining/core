@@ -604,6 +604,19 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}
 	}
+	
+	@Override
+	public void updateCorpusStatus(ICorpus corpus, boolean status) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			corpusService.updateCorpusStatus(corpus, status);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+		
+	}
 
 	@Override
 	public void inactivateCorpus(ICorpus corpus) throws ANoteException {
@@ -2605,5 +2618,7 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}
 	}
+
+
 	
 }

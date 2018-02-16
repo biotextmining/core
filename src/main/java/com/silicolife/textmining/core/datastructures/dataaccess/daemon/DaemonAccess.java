@@ -385,6 +385,12 @@ public class DaemonAccess implements IDataAccess {
 	public void updateCorpus(ICorpus corpus) throws ANoteException {
 		 corpusAccessImpl.updateCorpus(corpus);
 	}
+	
+	@Override
+	public void updateCorpusStatus(ICorpus corpus, boolean status) throws ANoteException {
+		corpusAccessImpl.updateCorpusStatus(corpus, status);
+		
+	}
 
 	@Override
 	public void inactivateCorpus(ICorpus corpus) throws ANoteException {
@@ -1243,5 +1249,6 @@ public class DaemonAccess implements IDataAccess {
 		// TODO Auto-generated method stub
 		return this.publicationsAccessimpl.countAllPublications();
 	}
+
 	
 }

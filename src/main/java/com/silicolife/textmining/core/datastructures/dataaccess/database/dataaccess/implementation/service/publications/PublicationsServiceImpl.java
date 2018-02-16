@@ -262,6 +262,30 @@ public class PublicationsServiceImpl implements IPublicationsService {
 		
 	}
 	
+	
+	@Override
+	public Set<Long > getPublicationsIdsFromResourcesQuery(String query, IAnnotationService annotationService){
+		Set<Long > result = null;
+		
+		try {
+			InputStream is = new ByteArrayInputStream( query.getBytes() );
+		    queryGrammar parser = new queryGrammar(is);
+		    
+				try {
+					result = parser.parseGrammar(query, annotationService);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			} catch (AnnotationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		return result;
+	}
+	
 	@Override
 	public List<IPublication> getPublicationsFromResourcesQuery(String query, IAnnotationService annotationService){
 		Set<Long > result = null;

@@ -75,6 +75,30 @@ public class CorpusAccessImpl extends RestClientAccess {
 			return boo;
 		}
 	}
+	
+	/**
+	 * Connect to daemon and update corpus status
+	 * 
+	 * @param corpus
+	 * @return
+	 * @throws DaemonException 
+	 */
+	public Boolean updateCorpusStatus(ICorpus corpus, boolean status) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		// Not the best way
+		CorpusImpl copusInstance =  new CorpusImpl(corpus.getId(), corpus.getDescription(), corpus.getNotes(), corpus.getProperties());
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("status", String.valueOf(status));
+		ParameterizedTypeReference<DaemonResponse<Boolean>> responseType = new ParameterizedTypeReference<DaemonResponse<Boolean>>() {};
+		ResponseEntity<DaemonResponse<Boolean>> response = webClient.post("corpus/updateCorpusStatus", responseType, copusInstance,uriVariables);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			Boolean boo = response.getBody().getContent();
+			return boo;
+		}
+	}
 
 	/**
 	 * Connect to daemon and get all corpus

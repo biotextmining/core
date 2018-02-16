@@ -172,41 +172,8 @@ public class PublicationsLuceneServiceImpl implements IPublicationsLuceneService
 	
 	@Override
 	public List<IPublication> getPublicationsFromSearchPaginated(ISearchProperties searchProperties, int index, int paginationSize ){
-		List<String> fields = searchProperties.getFields();
-		Map<String, String> eqSentenceOnField = new HashMap<>();
-		Map<String, String> eqMustSentenceOnField = new HashMap<>();
 		
-		Map<String, String> restrictions = searchProperties.getRestrictions();
-		
-		for(String key : restrictions.keySet()){
-			eqMustSentenceOnField.put(PublicationLuceneIndexFields.getLuceneField(searchProperties, key), restrictions.get(key));
-		}
-		
-		for(String field : fields){
-			eqSentenceOnField.put(PublicationLuceneIndexFields.getLuceneField(searchProperties, field),searchProperties.getValue());
-		}
-		
-		List<Publications> listPublications = null;
-		if(eqMustSentenceOnField.size()>0){
-			if(searchProperties.isWholeWords())
-				listPublications = publicationsLuceneManagerDao.getPublicationsLuceneDao().findMixedByAttributesPaginated(eqSentenceOnField, eqMustSentenceOnField, index, paginationSize);
-			else
-				listPublications = publicationsLuceneManagerDao.getPublicationsLuceneDao().findMixedByAttributesWKeywordsPaginated(eqSentenceOnField, eqMustSentenceOnField, index, paginationSize);
-		}
-		else{
-			if(searchProperties.isWholeWords())
-				listPublications = publicationsLuceneManagerDao.getPublicationsLuceneDao().findNotExactByAttributesPaginated(eqSentenceOnField, index, paginationSize);
-			else
-				listPublications = publicationsLuceneManagerDao.getPublicationsLuceneDao().findNotExactByAttributesWKeywordsPaginated(eqSentenceOnField, index, paginationSize);
-		}
-		
-		List<IPublication> listPublications_ = new ArrayList<IPublication>();
-		for (Publications pub : listPublications) {
-			IPublication publication_ = PublicationsWrapper.convertToAnoteStructure(pub);
-			listPublications_.add(publication_);
-		}
-
-		return listPublications_;
+		return this.getPublicationsFromSearchPaginatedWSort(searchProperties, index, paginationSize, true, "none");
 	}
 	
 	@Override
