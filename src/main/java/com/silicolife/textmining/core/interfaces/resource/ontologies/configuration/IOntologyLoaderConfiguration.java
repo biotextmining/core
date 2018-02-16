@@ -7,5 +7,7 @@ public interface IOntologyLoaderConfiguration {
 	
 	public IResource<IResourceElement> getOntology();
 	public String getFilePath();
+	public boolean importExternalIds();
+	public boolean importOnlyMaintExternalIds();
 
 }
