@@ -9,11 +9,16 @@ public class OntologyLoaderConfigurationImpl implements IOntologyLoaderConfigura
 
 	private IResource<IResourceElement> ontology;
 	private String filepath;
+	private boolean importExternalIds;
+	private boolean importOnlyMaintExternalIds;
+
 	
-	public OntologyLoaderConfigurationImpl(IResource<IResourceElement> ontology,String filepath)
+	public OntologyLoaderConfigurationImpl(IResource<IResourceElement> ontology,String filepath,boolean importExternalIds,boolean importOnlyMaintExternalIds)
 	{
 		this.ontology=ontology;
 		this.filepath = filepath;
+		this.importExternalIds=importExternalIds;
+		this.importOnlyMaintExternalIds=importOnlyMaintExternalIds;
 	}
 
 	@Override
@@ -24,6 +29,16 @@ public class OntologyLoaderConfigurationImpl implements IOntologyLoaderConfigura
 	@Override
 	public String getFilePath() {
 		return filepath;
+	}
+
+	@Override
+	public boolean importExternalIds() {
+		return importExternalIds;
+	}
+
+	@Override
+	public boolean importOnlyMaintExternalIds() {
+		return importOnlyMaintExternalIds;
 	}
 
 }
