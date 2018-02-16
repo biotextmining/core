@@ -42,6 +42,8 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.clustering.IClusteringService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.corpora.CorpusServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.corpora.ICorpusService;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.dataProcessStatus.DataProcessStatusServiceImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.dataProcessStatus.IDataProcessStatusService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.hyperlink.HyperLinkServiceImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.hyperlink.IHyperLinkService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.processes.IProcessesService;
@@ -125,6 +127,7 @@ public class DatabaseAccess implements IDataAccess {
 	private IClusteringService clusteringService;
 	private IHyperLinkService hyperLinkService;
 	private ISystemService systemService;
+	private IDataProcessStatusService dataProcessStatusService;
 	
 	private LuceneManagerDao luceneManagerDao;
 	private ILuceneService luceneService;
@@ -207,6 +210,7 @@ public class DatabaseAccess implements IDataAccess {
 
 		clusteringService = new ClusteringServiceImpl(managerDao.getClusterManagerDao(), managerDao.getUsersManagerDao(), managerDao.getQueriesManagerDao(), userLogged);
 		systemService = new SystemServiceImpl(managerDao.getSystemServiceDao());
+		dataProcessStatusService = new DataProcessStatusServiceImpl(managerDao.getDataProcessStatusManagerDao(), managerDao.getUsersManagerDao(), userLogged);
 		
 		luceneManagerDao = new LuceneManagerDao(sessionFactory);
 		luceneService = new LuceneServiceImpl(sessionFactory);

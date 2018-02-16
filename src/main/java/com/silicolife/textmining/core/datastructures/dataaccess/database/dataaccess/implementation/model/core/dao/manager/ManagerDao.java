@@ -10,6 +10,8 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.ClustersProcessAuxDaoImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.CorpusAuxDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.CorpusAuxDaoImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.DataProcessStatusAuxDao;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.DataProcessStatusAuxDaoImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.HyperLinkMenusAuxDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.HyperLinkMenusAuxDaoImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao.ProcessesAoxDaoImpl;
@@ -40,6 +42,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublications;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusHasPublicationsHasProcesses;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.CorpusProperties;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.DataProcessStatus;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.HyperLinkMenuSourceAssociation;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.HyperLinkMenus;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.HyperLinkSubmenus;
@@ -80,6 +83,7 @@ public class ManagerDao {
 	private HyperLinkMenuManagerDao hyperlinkMenuManagerDao;
 	private SystemManagerDao systemManagerDao;
 	private PublicationsManagerDao publicationsManagerDao;
+	private DataProcessStatusManagerDao dataProcessStatusManagerDao;
 	
 	private SessionFactory sessionFactory;
 
@@ -96,11 +100,10 @@ public class ManagerDao {
 		hyperlinkMenuManagerDao = createHyperLinkMenusDao();
 		systemManagerDao = createSystemMangerDao();
 		publicationsManagerDao = createPublicationsDao();
+		dataProcessStatusManagerDao = createDataProcessStatusManagerDao();
 	}
 
 	
-
-
 
 	private HyperLinkMenuManagerDao createHyperLinkMenusDao() {
 		GenericDao<HyperLinkMenus> hyperLinkMenusDao = new GenericDaoImpl<HyperLinkMenus>(sessionFactory, HyperLinkMenus.class);
@@ -260,6 +263,13 @@ public class ManagerDao {
 
 	}
 	
+	public DataProcessStatusManagerDao createDataProcessStatusManagerDao() {
+		GenericDao<DataProcessStatus> dataProcessStatusDao = new GenericDaoImpl<DataProcessStatus>(sessionFactory, DataProcessStatus.class);
+		DataProcessStatusAuxDao dataProcessStatusAuxDao = new DataProcessStatusAuxDaoImpl(sessionFactory);
+		DataProcessStatusManagerDao dataProcessStatusManagerDao = new DataProcessStatusManagerDao(dataProcessStatusDao, dataProcessStatusAuxDao);
+		return dataProcessStatusManagerDao;
+	}
+	
 	private SystemManagerDao createSystemMangerDao() {
 		GenericDao<Versions> versionsDao = new GenericDaoImpl<Versions>(sessionFactory, Versions.class);
 		return new SystemManagerDao(versionsDao);
@@ -293,4 +303,9 @@ public class ManagerDao {
 	public SystemManagerDao getSystemServiceDao() {
 		return systemManagerDao;
 	}
+
+	public DataProcessStatusManagerDao getDataProcessStatusManagerDao() {
+		return dataProcessStatusManagerDao;
+	}
+
 }

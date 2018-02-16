@@ -11,13 +11,14 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.corpora.I
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.hyperlink.IHyperLinkMenuLayer;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.publicationmanager.IPublicationManagerAccess;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.resources.IResourceAccess;
+import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.runserverprocesses.IDataProcessStatusAcess;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.runserverprocesses.IRunServerProcesses;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.user.IUserPrivilegesAccess;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.ILuceneDataAcess;
 import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
 import com.silicolife.textmining.core.interfaces.core.user.IUser;
 
-public interface IDataAccess extends IPublicationManagerAccess, IGeneralDataAccess, ICorpusAccess, IResourceAccess, IUpdateAccess, IUserPrivilegesAccess, IHyperLinkMenuLayer,IRunServerProcesses, ILuceneDataAcess {
+public interface IDataAccess extends IPublicationManagerAccess, IGeneralDataAccess, ICorpusAccess, IResourceAccess, IUpdateAccess, IUserPrivilegesAccess, IHyperLinkMenuLayer,IRunServerProcesses,IDataProcessStatusAcess, ILuceneDataAcess {
 
 	/**
 	 * Method that give the user
