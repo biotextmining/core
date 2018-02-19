@@ -4,21 +4,28 @@ import java.util.Date;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.DataProcessStatusEnum;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.ProcessStatusResourceTypesEnum;
+import com.silicolife.textmining.core.interfaces.core.user.IUser;
 
 public interface IDataProcessStatus {
+	
+	public int getId();
 
-	public Date getUpdateDate();
-
-	public Date getCreationDate();
-
-	public float getProgress();
-
-	public String getReport();
-
+	public long getResourceId(); 
+	
+	public ProcessStatusResourceTypesEnum getResourceType();
+	
 	public DataProcessStatusEnum getStatus();
 
-	public ProcessStatusResourceTypesEnum getResourceType();
+	public String getReport();
+	
+	public float getProgress();	
+	
+	public Date getCreationDate();
+	
+	public Date getUpdateDate();
 
-	public long getId();
+	public Date getFinishDate();
+	
+	public IUser getUser();
 
 }

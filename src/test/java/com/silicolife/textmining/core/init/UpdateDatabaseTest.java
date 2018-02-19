@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import org.junit.Test;
+
 import com.silicolife.textmining.core.datastructures.dataaccess.database.DatabaseAccess;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.instances.MySQLDatabase;
 import com.silicolife.textmining.core.datastructures.init.exception.InvalidDatabaseAccess;
@@ -17,8 +19,13 @@ public class UpdateDatabaseTest {
 
 //	@Test	
 	public void update() throws InvalidDatabaseAccess, SQLException, FileNotFoundException, IOException, ANoteException {
-		IDatabase database = new MySQLDatabase("localhost","3306","databasename","databaseuser","databaseuserpassword");
-		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL, "localhost","3306","databasename","databaseuser","databaseuserpassword");
+		String dbName= "todelete";
+		String databaseuser = "databaseuser";
+		String databaseuserpassword = "databaseuserpassword";
+		String host = "localhost";
+		String port = "3306";
+		IDatabase database = new MySQLDatabase(host,port,dbName,databaseuser,databaseuserpassword);
+		DatabaseConnectionInit.initWithouLogIn(DataBaseTypeEnum.MYSQL, host,port,dbName,databaseuser,databaseuserpassword);
 		database.updateDatabase("src/test/resources/dbupdatefolder","src/test/resources/anote2_db_version.xml");	
 	    assertTrue(true);
 	}
@@ -26,14 +33,20 @@ public class UpdateDatabaseTest {
 	
 //	@Test
 	public void createandupdate() throws InvalidDatabaseAccess, SQLException, FileNotFoundException, IOException, ANoteException {
-		IDatabase database = CreateAndFillMysqlDatabaseTest.createDatabase("localhost","3306","todelete3","root","admin");
+		String dbName= "todelete";
+		String databaseuser = "databaseuser";
+		String databaseuserpassword = "databaseuserpassword";
+		String host = "localhost";
+		String port = "3306";
+		DataBaseTypeEnum databaseType = DataBaseTypeEnum.MYSQL;
+		IDatabase database = CreateAndFillMysqlDatabaseTest.createDatabase(host,port,dbName,databaseuser,databaseuserpassword);
         String hibernateFilePath = "src/test/resources/hibernate.cfg.xml";
 		if(database==null)
 		{
 	        assertTrue(false);
 		}		
         fillDatabase(database);
-		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","todelete3","root","admin");
+		DatabaseConnectionInit.initWithouLogIn(databaseType,host,port,dbName,databaseuser,databaseuserpassword);
 		DatabaseAccess dbAccess = new DatabaseAccess(database, hibernateFilePath);
 		if(!dbAccess.isFill() || dbAccess.isDatabaseOutOfDate("src/test/resources/anote2_db_version.xml"))
 		{
@@ -52,7 +65,7 @@ public class UpdateDatabaseTest {
 			assertTrue(false);
 		}		
 		fillDatabase(database);
-		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","todelete3","root","admin");
+		DatabaseConnectionInit.initWithouLogIn(DataBaseTypeEnum.MYSQL,"localhost","3306","todelete3","root","admin");
 		DatabaseAccess dbAccess = new DatabaseAccess(database, hibernateFilePath);
 		if(!dbAccess.isFill() || dbAccess.isDatabaseOutOfDate("src/test/resources/anote2_db_version.xml"))
 		{

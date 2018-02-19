@@ -1,6 +1,7 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.daemon;
 
 import java.net.UnknownHostException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +58,7 @@ import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpusStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.labels.IPublicationLabel;
 import com.silicolife.textmining.core.interfaces.core.document.relevance.IQueryPublicationRelevance;
+import com.silicolife.textmining.core.interfaces.core.general.IDataProcessStatus;
 import com.silicolife.textmining.core.interfaces.core.general.IExternalID;
 import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
 import com.silicolife.textmining.core.interfaces.core.general.source.ISource;
@@ -1248,6 +1250,31 @@ public class DaemonAccess implements IDataAccess {
 	public Integer countAllPublications() throws ANoteException {
 		// TODO Auto-generated method stub
 		return this.publicationsAccessimpl.countAllPublications();
+	}
+
+	@Override
+	public List<IDataProcessStatus> getAllDataProcessStatus() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IDataProcessStatus> getDataProcessStatusByUserAndDateRange(IUser user, Date startDateRange,
+			Date endDateRange) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addDataProcessStatus(IDataProcessStatus dataprocessStatus) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateDataProcessStatus(IDataProcessStatus dataProcessStatus) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

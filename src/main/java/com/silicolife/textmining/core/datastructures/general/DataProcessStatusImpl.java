@@ -5,113 +5,85 @@ import java.util.Date;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.DataProcessStatusEnum;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.ProcessStatusResourceTypesEnum;
 import com.silicolife.textmining.core.interfaces.core.general.IDataProcessStatus;
+import com.silicolife.textmining.core.interfaces.core.user.IUser;
 
 public class DataProcessStatusImpl implements IDataProcessStatus{
 	
-	private long id;
+	private int id;
+	private long resourceObjectId;
 	private ProcessStatusResourceTypesEnum resourceType;
 	private DataProcessStatusEnum status ;
 	private String report;
 	private float progress;
 	private Date creationDate;
 	private Date updateDate;
+	private Date finishedDate;
+	private IUser user;
 	
 	public DataProcessStatusImpl () {
 		super();
 	}
 
-	public DataProcessStatusImpl(long id, ProcessStatusResourceTypesEnum resourceType, DataProcessStatusEnum status,
-			Date creationDate, Date updateDate) {
+	public DataProcessStatusImpl(int id,long resourceObjectId, ProcessStatusResourceTypesEnum resourceType, DataProcessStatusEnum status,
+			String report,float progress,Date creationDate, Date updateDate,Date finishedDate,IUser user) {
 		super();
 		this.id = id;
+		this.resourceObjectId=resourceObjectId;
 		this.resourceType = resourceType;
 		this.status = status;
+		this.report=report;
+		this.progress=progress;
 		this.creationDate = creationDate;
 		this.updateDate = updateDate;
+		this.finishedDate=finishedDate;
+		this.user=user;
 	}
 
-	public DataProcessStatusImpl(long id, ProcessStatusResourceTypesEnum resourceType, DataProcessStatusEnum status,
-			String report, float progress, Date creationDate, Date updateDate) {
-		super();
-		this.id = id;
-		this.resourceType = resourceType;
-		this.status = status;
-		this.report = report;
-		this.progress = progress;
-		this.creationDate = creationDate;
-		this.updateDate = updateDate;
-	}
-	
-	@Override
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public long getResourceId() {
+		return resourceObjectId;
 	}
 
-	@Override
 	public ProcessStatusResourceTypesEnum getResourceType() {
 		return resourceType;
 	}
 
-	public void setResourceType(ProcessStatusResourceTypesEnum resourceType) {
-		this.resourceType = resourceType;
-	}
-
-	@Override
 	public DataProcessStatusEnum getStatus() {
 		return status;
 	}
 
-	public void setStatus(DataProcessStatusEnum status) {
-		this.status = status;
-	}
-
-	@Override
 	public String getReport() {
 		return report;
 	}
 
-	public void setReport(String report) {
-		this.report = report;
-	}
-
-	@Override
 	public float getProgress() {
 		return progress;
 	}
 
-	public void setProgress(float progress) {
-		this.progress = progress;
-	}
-
-	@Override
 	public Date getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	@Override
 	public Date getUpdateDate() {
 		return updateDate;
 	}
 
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
+	public Date getFinishDate() {
+		return finishedDate;
 	}
 
-	
+	public IUser getUser() {
+		return user;
+	}
+
 	@Override
 	public String toString() {
-		return "DataProcessStatusImpl [id=" + id + ", resourceType=" + resourceType + ", status=" + status + ", report="
-				+ report + ", progress=" + progress + ", creationDate=" + creationDate + ", updateDate=" + updateDate
-				+ "]";
-	}
-	
-	
+		return "DataProcessStatusImpl [id=" + id + ", resourceObjectId=" + resourceObjectId + ", resourceType="
+				+ resourceType + ", status=" + status + ", report=" + report + ", progress=" + progress
+				+ ", creationDate=" + creationDate + ", updateDate=" + updateDate + ", finishedDate=" + finishedDate
+				+ ", user=" + user + "]";
+	}	
 }
