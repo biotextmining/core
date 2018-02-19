@@ -3,6 +3,7 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,7 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.IDataAccess;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.database.IDatabase;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.resources.IResourceManagerReport;
+import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.runserverprocesses.IDataProcessStatusAcess;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocument;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
@@ -89,6 +91,7 @@ import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpusStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.labels.IPublicationLabel;
 import com.silicolife.textmining.core.interfaces.core.document.relevance.IQueryPublicationRelevance;
+import com.silicolife.textmining.core.interfaces.core.general.IDataProcessStatus;
 import com.silicolife.textmining.core.interfaces.core.general.IExternalID;
 import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
 import com.silicolife.textmining.core.interfaces.core.general.source.ISource;
@@ -2621,6 +2624,51 @@ public class DatabaseAccess implements IDataAccess {
 			sessionFactory.getCurrentSession().getTransaction().rollback();
 			throw new ANoteException(e);
 		}
+	}
+
+
+	@Override
+	public List<IDataProcessStatus> getAllDataProcessStatus() throws ANoteException{
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IDataProcessStatus> allDataprocessesStatus = this.dataProcessStatusService.getAllDataProcessStatus();
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return allDataprocessesStatus;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}	
+	}
+
+	@Override
+	public List<IDataProcessStatus> getDataProcessStatusByUserAndDateRange(IUser user, Date startDateRange,
+			Date endDateRange) throws ANoteException{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addDataProcessStatus(IDataProcessStatus dataprocessStatus) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			this.dataProcessStatusService.addDataProcessStatus(dataprocessStatus);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}		
+	}
+
+	@Override
+	public void updateDataProcessStatus(IDataProcessStatus dataProcessStatus) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			this.dataProcessStatusService.updateDataProcessStatus(dataProcessStatus);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}			
 	}
 
 

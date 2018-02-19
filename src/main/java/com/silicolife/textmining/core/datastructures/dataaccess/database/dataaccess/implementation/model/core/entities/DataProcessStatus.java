@@ -2,12 +2,13 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 // Generated 21/jun/2016 18:34:36 by Hibernate Tools 5.1.0.Alpha1
 
 import java.util.Date;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
+
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -21,48 +22,54 @@ import javax.persistence.TemporalType;
 @Table(name = "data_process_status")
 public class DataProcessStatus implements java.io.Serializable {
 
-	private DataProcessStatusId id;
-	private AuthUsers authUsers;
+	private int dpsId;
+	private long dpsDataObjectId;
+	private String dpsTypeResource;
 	private String dpsStatus;
 	private String dpsReport;
 	private Float dpsProgress;
 	private Date dpsCreateDate;
 	private Date dpsUpdateDate;
 	private Date dpsFinishDate;
+	private AuthUsers authUsers;
 
 	public DataProcessStatus() {
 	}
 
-	public DataProcessStatus(DataProcessStatusId id, String dpsStatus) {
-		this.id = id;
-		this.dpsStatus = dpsStatus;
-	}
-	public DataProcessStatus(DataProcessStatusId id, AuthUsers authUsers, String dpsStatus, String dpsReport,
-			Float dpsProgress, Date dpsCreateDate, Date dpsUpdateDate, Date dpsFinishDate) {
-		this.id = id;
-		this.authUsers = authUsers;
-		this.dpsStatus = dpsStatus;
-		this.dpsReport = dpsReport;
-		this.dpsProgress = dpsProgress;
-		this.dpsCreateDate = dpsCreateDate;
-		this.dpsUpdateDate = dpsUpdateDate;
-		this.dpsFinishDate = dpsFinishDate;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name = "dps_id",unique = true, nullable = false)
+	public int getDpsId() {
+		return dpsId;
 	}
 
-	@EmbeddedId
 
-	@AttributeOverrides({
-			@AttributeOverride(name = "dpsDataObjectId", column = @Column(name = "dps_data_object_id", nullable = false)),
-			@AttributeOverride(name = "dpsTypeResource", column = @Column(name = "dps_type_resource", nullable = false, length = 9))})
-	public DataProcessStatusId getId() {
-		return this.id;
+	public void setDpsId(int dpsId) {
+		this.dpsId = dpsId;
 	}
 
-	public void setId(DataProcessStatusId id) {
-		this.id = id;
+	@Column(name = "dps_data_object_id", nullable = false)
+	public long getDpsDataObjectId() {
+		return dpsDataObjectId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+
+	public void setDpsDataObjectId(long dpsDataObjectId) {
+		this.dpsDataObjectId = dpsDataObjectId;
+	}
+
+	@Column(name = "dps_type_resource", nullable = false, length = 20)
+	public String getDpsTypeResource() {
+		return dpsTypeResource;
+	}
+
+
+	public void setDpsTypeResource(String dpsTypeResource) {
+		this.dpsTypeResource = dpsTypeResource;
+	}
+	
+	
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "dps_users_id")
 	public AuthUsers getAuthUsers() {
 		return this.authUsers;
@@ -119,8 +126,7 @@ public class DataProcessStatus implements java.io.Serializable {
 		this.dpsUpdateDate = dpsUpdateDate;
 	}
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "dps_finish_date", length = 10)
+	@Column(name = "dps_finish_date", length = 10,nullable = true)
 	public Date getDpsFinishDate() {
 		return this.dpsFinishDate;
 	}
@@ -128,5 +134,7 @@ public class DataProcessStatus implements java.io.Serializable {
 	public void setDpsFinishDate(Date dpsFinishDate) {
 		this.dpsFinishDate = dpsFinishDate;
 	}
+
+
 
 }

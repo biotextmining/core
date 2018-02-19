@@ -972,6 +972,7 @@ ENGINE = InnoDB;
 -- Table `data_process_status`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `data_process_status` (
+  `dps_id` INT NOT NULL AUTO_INCREMENT,
   `dps_data_object_id` BIGINT NOT NULL,
   `dps_type_resource` ENUM('queries','resources','corpus','ner','re') NOT NULL,
   `dps_status` ENUM('start','running','finished','stop','error') NOT NULL,
@@ -979,7 +980,15 @@ CREATE TABLE IF NOT EXISTS `data_process_status` (
   `dps_progress` FLOAT NULL,
   `dps_create_date` DATETIME NULL,
   `dps_update_date` DATETIME NULL,
-  PRIMARY KEY (`dps_data_object_id`, `dps_type_resource`))
+  `dps_finish_date` DATETIME NULL,
+  `dps_users_id` BIGINT NULL,
+  INDEX `fk_data_process_status_auth_users1_idx` (`dps_users_id` ASC),
+  PRIMARY KEY (`dps_id`),
+  CONSTRAINT `fk_data_process_status_auth_users1`
+    FOREIGN KEY (`dps_users_id`)
+    REFERENCES `auth_users` (`au_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -1223,6 +1232,7 @@ INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (8, '2017-05-25 20:00:00', 'Fix case sensitive search for old dbs');
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (9, '2017-11-02 00:00:00', 'User Tabel Update : Add Active, avatar and default language fields');
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (10, '2018-01-24 00:00:00', 'Add Publication Type field');
+INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (11, '2018-02-19 00:00:00', 'Alter table Data Process Status: Change Primary Key to Auto increment Integer');
 
 
 COMMIT;

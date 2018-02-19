@@ -90,7 +90,9 @@ public class ExceptionsCodes {
 	
 	public static final String codeNoClusteringProcess = "codeNoClusteringProcess";
 	public static final String msgNoClusteringProcess = "Clustering Process not exist";
-
+	
+	public static final String codeNoDataProcessStatus = "codeNoDataProcessStatus";
+	public static final String msgNoDataProcessStatus = "Data Process Status not exist";
 
 	/*
 	 * API codes
