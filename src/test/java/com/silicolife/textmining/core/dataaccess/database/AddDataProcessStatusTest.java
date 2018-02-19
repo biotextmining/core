@@ -19,9 +19,9 @@ import com.silicolife.textmining.core.interfaces.core.user.IUser;
 
 public class AddDataProcessStatusTest {
 
-//	@Test
+	//@Test
 	public void add() throws InvalidDatabaseAccess, ANoteException {
-		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","testkegg","root","admin");
+		DatabaseConnectionInit.init(DataBaseTypeEnum.H2Embedded,"./","3306","todelete","root","admin");
 		
 		DataProcessStatusEnum dpsStatus = DataProcessStatusEnum.start;
 		ProcessStatusResourceTypesEnum resourcesType = ProcessStatusResourceTypesEnum.corpus;
@@ -35,7 +35,7 @@ public class AddDataProcessStatusTest {
 	
 //	@Test
 	public void update() throws InvalidDatabaseAccess, ANoteException {
-		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","testkegg","root","admin");
+		DatabaseConnectionInit.init(DataBaseTypeEnum.H2Embedded,"./","3306","todelete","root","admin");
 		
 		DataProcessStatusEnum dpsStatus = DataProcessStatusEnum.running;
 		ProcessStatusResourceTypesEnum resourcesType = ProcessStatusResourceTypesEnum.resources;
@@ -49,7 +49,7 @@ public class AddDataProcessStatusTest {
 	
 	@Test
 	public void getAllProcess() throws InvalidDatabaseAccess, ANoteException {
-		DatabaseConnectionInit.init(DataBaseTypeEnum.MYSQL,"localhost","3306","testkegg","root","admin");
+		DatabaseConnectionInit.init(DataBaseTypeEnum.H2Embedded,"./","3306","todelete","root","admin");
 		
 		List<IDataProcessStatus> processesStatus = InitConfiguration.getDataAccess().getAllDataProcessStatus();
 		for(IDataProcessStatus processStatus:processesStatus)

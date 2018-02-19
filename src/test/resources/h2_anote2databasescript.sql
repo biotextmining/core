@@ -1184,22 +1184,18 @@ ALTER TABLE `auth_user_settings` ADD
 -- Table `data_process_status`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `data_process_status` (
+  `dps_id` INT NOT NULL AUTO_INCREMENT,
   `dps_data_object_id` BIGINT NOT NULL,
-  `dps_type_resource` VARCHAR(20) NOT NULL,
-  `dps_status` VARCHAR(20) NOT NULL,
+  `dps_type_resource` ENUM('queries','resources','corpus','ner','re') NOT NULL,
+  `dps_status` ENUM('start','running','finished','stop','error') NOT NULL,
   `dps_report` LONGTEXT NULL,
   `dps_progress` FLOAT NULL,
   `dps_create_date` DATETIME NULL,
   `dps_update_date` DATETIME NULL,
-  PRIMARY KEY (`dps_data_object_id`, `dps_type_resource`));
+  `dps_finish_date` DATETIME NULL,
+  `dps_users_id` BIGINT NULL,
+  PRIMARY KEY (`dps_id`));
 
-ALTER TABLE `data_process_status` ADD
-  CONSTRAINT `ck_dps_type_resource`
-  	CHECK ( `dps_type_resource` in ('queries','resources','corpus','ner','re')); 
-  	
-ALTER TABLE `data_process_status` ADD
-  CONSTRAINT `ck_dps_status`
-  	CHECK ( `dps_status` in ('start','running','finished','stop','error')); 
   
 -- -----------------------------------------------------
 -- Table `data_process_status`
@@ -1424,6 +1420,7 @@ INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (8, '2017-05-25 20:00:00', 'Fix case sensitive search for old dbs');
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (9, '2017-11-02 00:00:00', 'User Tabel Update : Add Active, avatar and default language fields');
 INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (10, '2018-01-24 00:00:00', 'Add Publication Type field');
+INSERT INTO `versions` (`ver_version`, `ver_version_date`, `ver_notes`) VALUES (11, '2018-02-19 00:00:00', 'Alter table Data Process Status: Change Primary Key to Auto increment Integer');
 
 -- -----------------------------------------------------
 -- Data for table `auth_groups`
