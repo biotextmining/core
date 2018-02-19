@@ -78,6 +78,7 @@ public class expressionGrammar<T> implements expressionGrammarConstants {
   final public Query one_line() throws ParseException {
  ArrayList<Query> queriesOut = new ArrayList<Query>();
     operation(queriesOut);
+    jj_consume_token(10);
     //System.out.println(queriesOut.size());
     {if (true) return queriesOut.get(0);}
     throw new Error("Missing return statement in function");
@@ -165,10 +166,10 @@ public class expressionGrammar<T> implements expressionGrammarConstants {
     case QUOTED:
       phrase(queriesIn);
       break;
-    case 10:
-      jj_consume_token(10);
-      operation(queriesIn);
+    case 11:
       jj_consume_token(11);
+      operation(queriesIn);
+      jj_consume_token(12);
       break;
     default:
       jj_la1[4] = jj_gen;
@@ -222,7 +223,7 @@ Map<String, String> eqSentenceOnField = null;
       break;
     case WORD:
     case QUOTED:
-    case 10:
+    case 11:
       t(queriesIn);
       break;
     default:
@@ -256,7 +257,7 @@ Map<String, String> eqSentenceOnField = null;
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x40,0x80,0xc0,0xc0,0x620,0x220,0x720,};
+      jj_la1_0 = new int[] {0x40,0x80,0xc0,0xc0,0xa20,0x220,0xb20,};
    }
 
   /** Constructor with InputStream. */
@@ -373,7 +374,7 @@ Map<String, String> eqSentenceOnField = null;
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[12];
+    boolean[] la1tokens = new boolean[13];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -387,7 +388,7 @@ Map<String, String> eqSentenceOnField = null;
         }
       }
     }
-    for (int i = 0; i < 12; i++) {
+    for (int i = 0; i < 13; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

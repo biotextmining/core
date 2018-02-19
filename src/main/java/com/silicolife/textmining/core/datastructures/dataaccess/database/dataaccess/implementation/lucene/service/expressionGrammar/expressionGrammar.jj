@@ -73,7 +73,7 @@ public class expressionGrammar<T>{
 
 TOKEN: {
   < WORD :
-    	(  	      ~["&", "+", "|","!", "\""," ","(",")"]
+    	(  	      ~["&", "+", "|","!", "\""," ","(",")", ";"]
   )+  
 
  >
@@ -96,7 +96,7 @@ TOKEN: {
 }
 
 
-Query one_line() :{ArrayList<Query> queriesOut = new ArrayList<Query>();}{      operation(queriesOut)
+Query one_line() :{ArrayList<Query> queriesOut = new ArrayList<Query>();}{      operation(queriesOut) ";"
        {
     //System.out.println(queriesOut.size());    return queriesOut.get(0);  }}
 
