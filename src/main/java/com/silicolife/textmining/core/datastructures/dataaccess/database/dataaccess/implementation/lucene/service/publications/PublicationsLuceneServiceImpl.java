@@ -207,7 +207,7 @@ public class PublicationsLuceneServiceImpl implements IPublicationsLuceneService
 		}
 		
 		List<Publications> listPublications = null;
-		if(searchProperties.getValue()!="" && searchProperties.isExpression()) {
+		if(searchProperties.getValue()!="" && searchProperties.isExpression() && searchProperties.getValue()!=null) {
 			Query q = getQueryFromExpression(searchProperties);
 			if(q != null)
 			listPublications = publicationsLuceneManagerDao.getPublicationsLuceneDao().findForWebTableWExpressionPaginated(q, eqMustSentenceOnField, eqFilters,searchProperties.isWholeWords(), index, paginationSize, sortField, sortType, asc);
@@ -310,7 +310,7 @@ public class PublicationsLuceneServiceImpl implements IPublicationsLuceneService
 		}
 		
 		
-		if(searchProperties.getValue()!="" && searchProperties.isExpression()) {
+		if(searchProperties.getValue()!="" && searchProperties.isExpression() && searchProperties.getValue()!=null) {
 			Query q = getQueryFromExpression(searchProperties);
 			if(q != null)
 			return publicationsLuceneManagerDao.getPublicationsLuceneDao().countForWebTableWExpression(q, eqMustSentenceOnField, eqFilters,searchProperties.isWholeWords());
