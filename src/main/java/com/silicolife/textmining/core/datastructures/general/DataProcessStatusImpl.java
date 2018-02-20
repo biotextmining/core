@@ -38,6 +38,21 @@ public class DataProcessStatusImpl implements IDataProcessStatus{
 		this.finishedDate=finishedDate;
 		this.user=user;
 	}
+	
+	public DataProcessStatusImpl(long resourceObjectId, ProcessStatusResourceTypesEnum resourceType) {
+		super();
+		Date date = new Date();
+		this.id = 0;
+		this.resourceObjectId=resourceObjectId;
+		this.resourceType = resourceType;
+		this.status = DataProcessStatusEnum.start;
+		this.report=null;
+		this.progress=0;
+		this.creationDate = date;
+		this.updateDate = date;
+		this.finishedDate=null;
+		this.user=null;
+	}
 
 	public int getId() {
 		return id;
@@ -77,6 +92,47 @@ public class DataProcessStatusImpl implements IDataProcessStatus{
 
 	public IUser getUser() {
 		return user;
+	}
+	
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public long getResourceObjectId() {
+		return resourceObjectId;
+	}
+
+	public void setResourceObjectId(long resourceObjectId) {
+		this.resourceObjectId = resourceObjectId;
+	}
+
+	public Date getFinishedDate() {
+		return finishedDate;
+	}
+
+	public void setFinishedDate(Date finishedDate) {
+		this.finishedDate = finishedDate;
+	}
+
+	public void setResourceType(ProcessStatusResourceTypesEnum resourceType) {
+		this.resourceType = resourceType;
+	}
+
+	public void setStatus(DataProcessStatusEnum status) {
+		this.status = status;
+	}
+
+	public void setReport(String report) {
+		this.report = report;
+	}
+
+	public void setProgress(float progress) {
+		this.progress = progress;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
 	@Override

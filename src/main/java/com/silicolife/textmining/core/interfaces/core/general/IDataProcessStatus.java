@@ -28,4 +28,22 @@ public interface IDataProcessStatus {
 	
 	public IUser getUser();
 
+	public void setId(int id);
+
+	public void setUpdateDate(Date updateDate);
+
+	public void setProgress(float progress);
+
+	public void setReport(String report);
+
+	public void setStatus(DataProcessStatusEnum status);
+
+	public void setResourceType(ProcessStatusResourceTypesEnum resourceType);
+
+	public void setFinishedDate(Date finishedDate);
+
+	public Date getFinishedDate();
+
+	public long getResourceObjectId();
+
 }

@@ -3,6 +3,7 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 import java.util.List;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.DataProcessStatusException;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.interfaces.core.general.IDataProcessStatus;
 
 public interface IDataProcessStatusService {
@@ -12,5 +13,7 @@ public interface IDataProcessStatusService {
 	public void updateDataProcessStatus(IDataProcessStatus dataProcessStatus) throws DataProcessStatusException;
 
 	public List<IDataProcessStatus> getAllDataProcessStatus();
+
+	public void setUserLogged(UsersLogged userLogged);
 
 }

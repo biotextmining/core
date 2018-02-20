@@ -14,6 +14,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.DataProcessStatusManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.UsersManagerDao;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUsers;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.DataProcessStatus;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.general.DataProcessStatusWrapper;
 import com.silicolife.textmining.core.interfaces.core.general.IDataProcessStatus;
@@ -36,13 +37,18 @@ public class DataProcessStatusServiceImpl implements IDataProcessStatusService {
 		this.usersManagerDao = usersManagerDao;
 		this.userLogged = userLogged;
 	}
-
+	
+	@Transactional(readOnly = false)
 	@Override
-	public void addDataProcessStatus(IDataProcessStatus dataProcessStatus_) {		
+	public void addDataProcessStatus(IDataProcessStatus dataProcessStatus_) {	
+		AuthUsers user = this.userLogged.getCurrentUserLogged();
 		DataProcessStatus dataProcessStatus = DataProcessStatusWrapper.convertToDaemonStructure(dataProcessStatus_);
+		dataProcessStatus.setAuthUsers(user);
 		this.dataProcessStatusManagerDao.getDataProcessStatusDao().save(dataProcessStatus);
+		dataProcessStatus_.setId(dataProcessStatus.getDpsId());
 	}
 
+	@Transactional(readOnly = false)
 	@Override
 	public void updateDataProcessStatus(IDataProcessStatus dataProcessStatus) throws DataProcessStatusException {
 		DataProcessStatus dataProcess = this.dataProcessStatusManagerDao.getDataProcessStatusDao().findById(dataProcessStatus.getId());
@@ -66,7 +72,12 @@ public class DataProcessStatusServiceImpl implements IDataProcessStatusService {
 		}
 		return out;
 	}
-
+	
+	
+	@Override
+	public void setUserLogged(UsersLogged userLogged) {
+		this.userLogged = userLogged;
+	}
 
 
 }
