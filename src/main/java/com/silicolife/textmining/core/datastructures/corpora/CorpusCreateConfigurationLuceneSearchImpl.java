@@ -14,7 +14,7 @@ public class CorpusCreateConfigurationLuceneSearchImpl extends CorpusCreateConfi
 	
 public  static final String  configurationUID = "corpus.luceneSearchCreation";
 	
-	private ISearchProperties searchProperties;
+	//private ISearchProperties searchProperties;
 
 	public CorpusCreateConfigurationLuceneSearchImpl() {
 		super();
@@ -23,7 +23,7 @@ public  static final String  configurationUID = "corpus.luceneSearchCreation";
 	public CorpusCreateConfigurationLuceneSearchImpl( String corpusName,String notes,
 			CorpusTextType corpusTextType, boolean processJournalRetrievalBeforeNeeded,Properties properties, CorpusCreateSourceEnum corpusSource, ISearchProperties searchProperties) {
 		super(corpusName, notes, corpusTextType, processJournalRetrievalBeforeNeeded,properties,corpusSource );
-		this.searchProperties = searchProperties;
+		//this.searchProperties = searchProperties;
 	}
 	
 	
@@ -32,14 +32,14 @@ public  static final String  configurationUID = "corpus.luceneSearchCreation";
 		super.setDocumentsIDs(documentsIDs);
 	}
 	
-	@Override
+	/*@Override
 	public ISearchProperties getSearchProperties() {
 		return searchProperties;
 	}
 
 	public void setSearchProperties(ISearchProperties searchProperties) {
 		this.searchProperties = searchProperties;
-	}
+	}*/
 	
 	
 }

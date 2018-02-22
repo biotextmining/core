@@ -1,6 +1,8 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.dataProcessStatus;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUsers;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.DataProcessStatus;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.general.DataProcessStatusWrapper;
+import com.silicolife.textmining.core.datastructures.general.DataProcessStatusFieldsEnum;
 import com.silicolife.textmining.core.interfaces.core.general.IDataProcessStatus;
 
 @Service
@@ -28,6 +31,9 @@ public class DataProcessStatusServiceImpl implements IDataProcessStatusService {
 	private DataProcessStatusManagerDao dataProcessStatusManagerDao;
 	private UsersManagerDao usersManagerDao;
 	private UsersLogged userLogged;
+	
+	//Constant in days that is used to decreased to today's date.
+	private static final int  SIGDATERANGE = 7;
 	
 	@Autowired
 	public DataProcessStatusServiceImpl(DataProcessStatusManagerDao dataProcessStatusManagerDao,
@@ -73,6 +79,77 @@ public class DataProcessStatusServiceImpl implements IDataProcessStatusService {
 		return out;
 	}
 	
+	
+	@Override
+	public List<IDataProcessStatus> getUserDataProcessStatus() {
+		List<IDataProcessStatus> out = new ArrayList<>();
+		Long userId = this.userLogged.getCurrentUserLogged().getAuId();
+		List<DataProcessStatus> dataProcessesStatusInDatabase = this.dataProcessStatusManagerDao.getDataProcessStatusAuxDao().findDataProcessStatusForUser(userId);
+		
+		for(DataProcessStatus dataProcessStatusInDatabase:dataProcessesStatusInDatabase)
+		{
+			out.add(DataProcessStatusWrapper.convertToAnoteStructure(dataProcessStatusInDatabase));
+		}
+		return out;
+	}
+	
+	@Override
+	public List<IDataProcessStatus> getUserRecentDataProcessStatus() {
+		List<IDataProcessStatus> out = new ArrayList<>();
+		Date to = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -SIGDATERANGE);
+		Date from = cal.getTime();
+		Long userId = this.userLogged.getCurrentUserLogged().getAuId();
+		List<DataProcessStatus> dataProcessesStatusInDatabase = this.dataProcessStatusManagerDao.getDataProcessStatusAuxDao().findDataProcessStatusForUserWithDateRange(userId, from, to);
+		
+		for(DataProcessStatus dataProcessStatusInDatabase:dataProcessesStatusInDatabase)
+		{
+			out.add(DataProcessStatusWrapper.convertToAnoteStructure(dataProcessStatusInDatabase));
+		}
+		return out;
+	}
+	
+	@Override
+	public List<IDataProcessStatus> getUserRecentDataProcessStatusSorted() {
+		List<IDataProcessStatus> out = new ArrayList<>();
+		Date to = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -SIGDATERANGE);
+		Date from = cal.getTime();
+		Long userId = this.userLogged.getCurrentUserLogged().getAuId();
+		boolean asc = false;
+		String sortBy = DataProcessStatusFieldsEnum.id.toString();
+		List<DataProcessStatus> dataProcessesStatusInDatabase = this.dataProcessStatusManagerDao.getDataProcessStatusAuxDao().findDataProcessStatusForUserWithDateRangeAndSort(userId, from, to, asc, sortBy);
+		
+		for(DataProcessStatus dataProcessStatusInDatabase:dataProcessesStatusInDatabase)
+		{
+			out.add(DataProcessStatusWrapper.convertToAnoteStructure(dataProcessStatusInDatabase));
+		}
+		return out;
+	}
+	
+	
+	@Override
+	public List<IDataProcessStatus> getUserRecentDataProcessStatusSortedWLimit(Integer paginationSize) {
+		List<IDataProcessStatus> out = new ArrayList<>();
+		Date to = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -SIGDATERANGE);
+		Date from = cal.getTime();
+		Long userId = this.userLogged.getCurrentUserLogged().getAuId();
+		boolean asc = false;
+		String sortBy = DataProcessStatusFieldsEnum.id.toString();
+		Integer paginationIndex = 0;
+		
+		List<DataProcessStatus> dataProcessesStatusInDatabase = this.dataProcessStatusManagerDao.getDataProcessStatusAuxDao().findDataProcessStatusForUserWithDateRangeAndSortPaginated(userId, from, to, paginationIndex, paginationSize, asc, sortBy);
+		
+		for(DataProcessStatus dataProcessStatusInDatabase:dataProcessesStatusInDatabase)
+		{
+			out.add(DataProcessStatusWrapper.convertToAnoteStructure(dataProcessStatusInDatabase));
+		}
+		return out;
+	}
 	
 	@Override
 	public void setUserLogged(UsersLogged userLogged) {

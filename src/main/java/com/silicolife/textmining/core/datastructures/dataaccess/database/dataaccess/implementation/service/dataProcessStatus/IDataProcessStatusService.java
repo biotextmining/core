@@ -16,4 +16,12 @@ public interface IDataProcessStatusService {
 
 	public void setUserLogged(UsersLogged userLogged);
 
+	public List<IDataProcessStatus> getUserDataProcessStatus();
+
+	public List<IDataProcessStatus> getUserRecentDataProcessStatus();
+
+	public List<IDataProcessStatus> getUserRecentDataProcessStatusSorted();
+
+	public List<IDataProcessStatus> getUserRecentDataProcessStatusSortedWLimit(Integer paginationSize);
+
 }

@@ -202,7 +202,6 @@ public class QueriesServiceImpl implements IQueriesService {
 			}
 		}
 
-		List<Queries> listQueries = null;
 		if (isAdmin)
 			return queriesManagerDao.getQueriesAuxDao().countActiveQueries();
 		else
