@@ -14,14 +14,14 @@ public class CorpusCreateConfigurationLuceneSearchImpl extends CorpusCreateConfi
 	
 public  static final String  configurationUID = "corpus.luceneSearchCreation";
 	
-	//private ISearchProperties searchProperties;
+	private ISearchProperties searchProperties;
 
 	public CorpusCreateConfigurationLuceneSearchImpl() {
 		super();
 	}
 	
 	public CorpusCreateConfigurationLuceneSearchImpl( String corpusName,String notes,
-			CorpusTextType corpusTextType, boolean processJournalRetrievalBeforeNeeded,Properties properties, CorpusCreateSourceEnum corpusSource, ISearchProperties searchProperties) {
+			CorpusTextType corpusTextType, boolean processJournalRetrievalBeforeNeeded,Properties properties, CorpusCreateSourceEnum corpusSource) {
 		super(corpusName, notes, corpusTextType, processJournalRetrievalBeforeNeeded,properties,corpusSource );
 		//this.searchProperties = searchProperties;
 	}
@@ -32,14 +32,25 @@ public  static final String  configurationUID = "corpus.luceneSearchCreation";
 		super.setDocumentsIDs(documentsIDs);
 	}
 	
-	/*@Override
+	@Override
 	public ISearchProperties getSearchProperties() {
 		return searchProperties;
 	}
 
+	@JsonIgnore
 	public void setSearchProperties(ISearchProperties searchProperties) {
 		this.searchProperties = searchProperties;
-	}*/
+	}
+	
+	@JsonIgnore
+	@Override
+	public String htmlReport(int documentsAdded) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<h3>"+this.getCorpusName()+" creation "+documentsAdded+" documents added</h3>");
+		sb.append(this.getSearchProperties().toHtml());
+		return sb.toString();
+		
+	}
 	
 	
 }

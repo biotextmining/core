@@ -161,5 +161,63 @@ public class SearchPropertiesImpl implements ISearchProperties {
 		return this.filters.get(field).add(value);
 	}
 	
+	@Override
+	@JsonIgnore
+	public String toHtml() {
+		String report = "";
+		StringBuilder sb = new StringBuilder();
+		//sb.append("<h3>"+searchOn+"</h3>");
+		sb.append("<p><b>Search expression:</b> "+this.value+"</p>");
+		sb.append("<p><b>Search fields:</b> </p>");
+		int count =0;
+		int fieldsSize = this.fields.size();
+		sb.append("<p>");
+		while(count < fieldsSize) {
+			if(count == fieldsSize-1) {
+				sb.append(this.fields.get(count));
+			}else {
+				sb.append(this.fields.get(count)+", ");
+			}
+			count++;
+		}
+		sb.append("</p>");
+		if(!this.filters.isEmpty()) {
+			sb.append("<p><b>Filters:</b></p>");
+			for(String key : this.filters.keySet()) {
+				if(key==PublicationFieldsEnum.yeardate.toString()) {
+					sb.append("<p>");
+					sb.append(key+": ");
+					List<String> fields = this.filters.get(key);
+					int size = fields.size();
+					sb.append(fields.get(0));
+					sb.append(" - ");
+					sb.append(fields.get(size-1));
+					sb.append("</p>");
+				}else {
+					sb.append("<p>");
+					sb.append(key+": ");
+					sb.append(this.filters.get(key).toString());
+					sb.append("</p>");
+				}
+			}
+		}
+		if(!this.restrictions.isEmpty()) {
+			sb.append("<p><b>Restrictions:</b></p>");
+			for(String key : this.restrictions.keySet()) {
+				sb.append("<p>");
+				sb.append(key+": ");
+				sb.append(this.restrictions.get(key));
+				sb.append("</p>");
+			}
+		}
+		sb.append("<p><b>Search options:</b></p>");
+		sb.append("<p>"); sb.append("WholeSentence: "); sb.append(this.isWholeWords()); sb.append("</p>");
+		sb.append("<p>"); sb.append("Keywords: "); sb.append(this.isKeywords()); sb.append("</p>");
+		sb.append("<p>"); sb.append("Expression: "); sb.append(this.isExpression()); sb.append("</p>");
+		sb.append("<p>"); sb.append("Case sensitive: "); sb.append(this.isCaseSensitive()); sb.append("</p>");
+		report = sb.toString();
+		return report;
+	}
+	
 	
 }

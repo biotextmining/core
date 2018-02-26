@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +17,11 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.DataProcessStatusManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.manager.UsersManagerDao;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthGroupHasRoles;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUsers;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.DataProcessStatus;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.ProcessStatusResourceTypesEnum;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.RolesEnum;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.general.DataProcessStatusWrapper;
 import com.silicolife.textmining.core.datastructures.general.DataProcessStatusFieldsEnum;
 import com.silicolife.textmining.core.interfaces.core.general.IDataProcessStatus;
@@ -79,6 +83,13 @@ public class DataProcessStatusServiceImpl implements IDataProcessStatusService {
 		return out;
 	}
 	
+	@Override
+	public IDataProcessStatus getDataProcessStatusById(int id) {
+		DataProcessStatus data = this.dataProcessStatusManagerDao.getDataProcessStatusDao().findById(id);
+		
+		return DataProcessStatusWrapper.convertToAnoteStructure(data);
+	}
+	
 	
 	@Override
 	public List<IDataProcessStatus> getUserDataProcessStatus() {
@@ -129,6 +140,45 @@ public class DataProcessStatusServiceImpl implements IDataProcessStatusService {
 		return out;
 	}
 	
+	@Override
+	public List<IDataProcessStatus> getUserRecentDataProcessStatusSortedOfType(ProcessStatusResourceTypesEnum type) {
+		List<IDataProcessStatus> out = new ArrayList<>();
+		Date to = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -SIGDATERANGE);
+		Date from = cal.getTime();
+		Long userId = this.userLogged.getCurrentUserLogged().getAuId();
+		boolean asc = false;
+		String sortBy = DataProcessStatusFieldsEnum.id.toString();
+		List<DataProcessStatus> dataProcessesStatusInDatabase = this.dataProcessStatusManagerDao.getDataProcessStatusAuxDao().findDataProcessStatusForUserWithDateRangeAndSortByType(type,userId, from, to, asc, sortBy);
+		
+		for(DataProcessStatus dataProcessStatusInDatabase:dataProcessesStatusInDatabase)
+		{
+			out.add(DataProcessStatusWrapper.convertToAnoteStructure(dataProcessStatusInDatabase));
+		}
+		return out;
+	}
+	
+	@Override
+	public List<IDataProcessStatus> getUserRecentDataProcessStatusSortedOfTypeWLimit(ProcessStatusResourceTypesEnum type,Integer paginationSize) {
+		List<IDataProcessStatus> out = new ArrayList<>();
+		Date to = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -SIGDATERANGE);
+		Date from = cal.getTime();
+		Long userId = this.userLogged.getCurrentUserLogged().getAuId();
+		boolean asc = false;
+		String sortBy = DataProcessStatusFieldsEnum.id.toString();
+		Integer paginationIndex = 0;
+		
+		List<DataProcessStatus> dataProcessesStatusInDatabase = this.dataProcessStatusManagerDao.getDataProcessStatusAuxDao().findDataProcessStatusForUserWithDateRangeAndSortByTypePaginated(type,userId, from, to, paginationIndex, paginationSize, asc, sortBy);
+		
+		for(DataProcessStatus dataProcessStatusInDatabase:dataProcessesStatusInDatabase)
+		{
+			out.add(DataProcessStatusWrapper.convertToAnoteStructure(dataProcessStatusInDatabase));
+		}
+		return out;
+	}
 	
 	@Override
 	public List<IDataProcessStatus> getUserRecentDataProcessStatusSortedWLimit(Integer paginationSize) {
@@ -149,6 +199,142 @@ public class DataProcessStatusServiceImpl implements IDataProcessStatusService {
 			out.add(DataProcessStatusWrapper.convertToAnoteStructure(dataProcessStatusInDatabase));
 		}
 		return out;
+	}
+	
+	@Override
+	public List<IDataProcessStatus> getAdminPrivilegesProcessStatusByTypeSortedPaginated(
+			ProcessStatusResourceTypesEnum type,Integer paginationIndex,Integer paginationSize, boolean asc, String sortBy) {
+		if(DataProcessStatusFieldsEnum.valueOf(sortBy).equals(DataProcessStatusFieldsEnum.none)) {
+			sortBy = DataProcessStatusFieldsEnum.id.toString();
+		}
+		
+		Boolean isAdmin = false;
+		String roleAdmin = RolesEnum.role_admin.toString();
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		usersManagerDao.getAuthUsersDao().refresh(user);
+
+		Set<AuthGroupHasRoles> groupHasRoles = user.getAuthGroups().getAuthGroupHasRoleses();
+		for (AuthGroupHasRoles groupHasRole : groupHasRoles) {
+			String role = groupHasRole.getAuthRoles().getArRoleCode();
+			if (role.equals(roleAdmin)) {
+				isAdmin = true;
+				break;
+			}
+		}
+		
+		List<DataProcessStatus> dataProcessesStatusInDatabase = null;
+		if (isAdmin)
+			dataProcessesStatusInDatabase = this.dataProcessStatusManagerDao.getDataProcessStatusAuxDao().findDataProcessStatusWithSortPaginated(type, paginationIndex, paginationSize, asc, sortBy);
+		else {
+			Long userId = user.getAuId();
+			dataProcessesStatusInDatabase = this.dataProcessStatusManagerDao.getDataProcessStatusAuxDao().findDataProcessStatusForUserWithSortPaginated(type, userId, paginationIndex, paginationSize, asc, sortBy);
+		}
+		
+		List<IDataProcessStatus> out = new ArrayList<>();
+		for(DataProcessStatus dataProcessStatusInDatabase:dataProcessesStatusInDatabase)
+		{
+			out.add(DataProcessStatusWrapper.convertToAnoteStructure(dataProcessStatusInDatabase));
+		}
+		return out;
+		
+	}
+	
+	@Override
+	public Integer countAdminPrivilegesProcessStatusByType(
+			ProcessStatusResourceTypesEnum type) {
+		
+		Boolean isAdmin = false;
+		String roleAdmin = RolesEnum.role_admin.toString();
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		usersManagerDao.getAuthUsersDao().refresh(user);
+
+		Set<AuthGroupHasRoles> groupHasRoles = user.getAuthGroups().getAuthGroupHasRoleses();
+		for (AuthGroupHasRoles groupHasRole : groupHasRoles) {
+			String role = groupHasRole.getAuthRoles().getArRoleCode();
+			if (role.equals(roleAdmin)) {
+				isAdmin = true;
+				break;
+			}
+		}
+		
+		if (isAdmin)
+			return this.dataProcessStatusManagerDao.getDataProcessStatusAuxDao().countDataProcessStatus(type);
+		else {
+			Long userId = user.getAuId();
+			return this.dataProcessStatusManagerDao.getDataProcessStatusAuxDao().countDataProcessStatusforUser(userId, type);
+		}
+		
+		
+	}
+	
+	@Override
+	public List<IDataProcessStatus> getAdminPrivilegesProcessStatusSortedPaginated(Integer paginationIndex,Integer paginationSize, boolean asc, String sortBy) {
+		if(DataProcessStatusFieldsEnum.valueOf(sortBy).equals(DataProcessStatusFieldsEnum.none)) {
+			sortBy = DataProcessStatusFieldsEnum.id.toString();
+		}
+		
+		Boolean isAdmin = false;
+		String roleAdmin = RolesEnum.role_admin.toString();
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		usersManagerDao.getAuthUsersDao().refresh(user);
+
+		Set<AuthGroupHasRoles> groupHasRoles = user.getAuthGroups().getAuthGroupHasRoleses();
+		for (AuthGroupHasRoles groupHasRole : groupHasRoles) {
+			String role = groupHasRole.getAuthRoles().getArRoleCode();
+			if (role.equals(roleAdmin)) {
+				isAdmin = true;
+				break;
+			}
+		}
+		
+		List<DataProcessStatus> dataProcessesStatusInDatabase = null;
+		if (isAdmin)
+			dataProcessesStatusInDatabase = this.dataProcessStatusManagerDao.getDataProcessStatusAuxDao().findDataProcessStatusWithSortPaginated( paginationIndex, paginationSize, asc, sortBy);
+		else {
+			Long userId = user.getAuId();
+			dataProcessesStatusInDatabase = this.dataProcessStatusManagerDao.getDataProcessStatusAuxDao().findDataProcessStatusForUserWithSortPaginated( userId, paginationIndex, paginationSize, asc, sortBy);
+		}
+		
+		List<IDataProcessStatus> out = new ArrayList<>();
+		for(DataProcessStatus dataProcessStatusInDatabase:dataProcessesStatusInDatabase)
+		{
+			out.add(DataProcessStatusWrapper.convertToAnoteStructure(dataProcessStatusInDatabase));
+		}
+		return out;
+		
+	}
+	
+	@Override
+	public Integer countAdminPrivilegesProcessStatus() {
+		
+		Boolean isAdmin = false;
+		String roleAdmin = RolesEnum.role_admin.toString();
+		AuthUsers user = userLogged.getCurrentUserLogged();
+		usersManagerDao.getAuthUsersDao().refresh(user);
+
+		Set<AuthGroupHasRoles> groupHasRoles = user.getAuthGroups().getAuthGroupHasRoleses();
+		for (AuthGroupHasRoles groupHasRole : groupHasRoles) {
+			String role = groupHasRole.getAuthRoles().getArRoleCode();
+			if (role.equals(roleAdmin)) {
+				isAdmin = true;
+				break;
+			}
+		}
+		
+		if (isAdmin)
+			return this.dataProcessStatusManagerDao.getDataProcessStatusAuxDao().countDataProcessStatus();
+		else {
+			Long userId = user.getAuId();
+			return this.dataProcessStatusManagerDao.getDataProcessStatusAuxDao().countDataProcessStatusforUser(userId);
+		}
+		
+		
+	}
+	
+	@Override
+	public Integer countRunningOrStartDataProcessStatusforUser() {
+		Long userId = this.userLogged.getCurrentUserLogged().getAuId();
+		return this.dataProcessStatusManagerDao.getDataProcessStatusAuxDao().countRunningOrStartDataProcessStatusforUser(userId);
 	}
 	
 	@Override

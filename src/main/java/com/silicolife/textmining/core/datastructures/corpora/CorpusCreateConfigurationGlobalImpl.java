@@ -12,6 +12,11 @@ public class CorpusCreateConfigurationGlobalImpl extends CorpusCreateConfigurati
 	
 	private String searchString;
 	public  static final String  configurationUID = "corpus.globalSearchCreation";
+	private static final String OR = "OR";
+	private static final String AND = "AND";
+	private static final String CLOSE = "}";
+	private static final String TERM = "TERM";
+	
 	
 	public CorpusCreateConfigurationGlobalImpl() {
 		super();
@@ -48,6 +53,65 @@ public class CorpusCreateConfigurationGlobalImpl extends CorpusCreateConfigurati
 				+ ", toString()=" + super.toString() + "]";
 	}
 	
+	@JsonIgnore
+	@Override
+	public String htmlReport(int documentsAdded) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<h3>"+this.getCorpusName()+" creation "+documentsAdded+" documents added</h3>");
+		sb.append("<p><b>Global search query:</b></p>");
+		sb.append(this.prettySearchQuery());
+		return sb.toString();
+	}
 	
+	private String prettySearchQuery() {
+		String trimmed = this.searchString.trim().replaceAll(" +", " ");
+		StringBuilder sb = new StringBuilder();
+		String[] tokens = trimmed.split(" ",-1);
+		int count = 1;
+		int tabs = 1;
+		int size = tokens.length;
+		sb.append("<span style='white-space:pre'>");
+		sb.append("<p>"+tokens[0]+"</p>");
+		while(count< size-1) {
+			String token = tokens[count];
+			switch(token) {
+				case OR:
+					count++;
+					sb.append(this.buildWithNTabs(tabs, token+" "+tokens[count]));
+					tabs++;
+					break;
+				case AND:
+					count++;
+					sb.append(this.buildWithNTabs(tabs, token+" "+tokens[count]));
+					tabs++;
+					break;
+				case CLOSE:
+					tabs--;
+					sb.append(this.buildWithNTabs(tabs, token));
+					break;
+				default:
+					count++;
+					sb.append(this.buildWithNTabs(tabs, token+" "+tokens[count]));
+					break;
+			}
+			count++;
+		}
+		sb.append("<p>"+tokens[size-1]+"</p>");
+		sb.append("</span>");
+		return sb.toString();
+	}
+	
+	private String buildWithNTabs(int nTabs, String content) {
+		StringBuilder sb = new StringBuilder();
+		int count = 0;
+		sb.append("<p>");
+		while(count < nTabs) {
+			sb.append("&#9;");
+			count++;
+		}
+		sb.append(content);
+		sb.append("</p>");
+		return sb.toString();
+	}
 	
 }

@@ -64,5 +64,7 @@ public interface ICorpusCreateConfiguration extends IConfiguration{
 	public CorpusCreateSourceEnum getCorpusSource();
 	
 	public Properties getProperties();
+
+	public String htmlReport(int documentsAdded);
 	
 }

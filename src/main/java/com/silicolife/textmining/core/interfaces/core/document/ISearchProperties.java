@@ -52,4 +52,6 @@ public interface ISearchProperties {
 
 	public boolean isExpression();
 
+	public String toHtml();
+
 }

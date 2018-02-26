@@ -156,5 +156,11 @@ public class CorpusCreateConfigurationImpl extends ConfigurationImpl implements 
 	public void setCorpusSource(CorpusCreateSourceEnum corpusSource) {
 		this.corpusSource = corpusSource;
 	}
+	
+	@JsonIgnore
+	@Override
+	public String htmlReport(int documentsAdded){
+		return "Corpus creation "+documentsAdded+" documents added";
+	}
 
 }
