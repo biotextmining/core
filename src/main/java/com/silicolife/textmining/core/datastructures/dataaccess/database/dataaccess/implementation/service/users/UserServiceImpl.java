@@ -93,6 +93,12 @@ public class UserServiceImpl implements IUserService {
 		IUser user = usersManagerDao.getAuthUsersDao().findById(id);
 		return user;
 	}
+	
+	@Override
+	public IUser getLoggedUser() {
+		IUser user = this.userLogged.getCurrentUserLogged();
+		return user;
+	}
 
 	@Override
 	public List<AuthUsers> getAllUsers() {

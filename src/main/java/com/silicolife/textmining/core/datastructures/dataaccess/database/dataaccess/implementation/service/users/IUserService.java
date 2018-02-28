@@ -120,4 +120,6 @@ public interface IUserService {
 
 	public byte[] postAvatar(String image);
 
+	public IUser getLoggedUser();
+
 }
