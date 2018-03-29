@@ -183,6 +183,8 @@ public class PublicationImpl extends Observable implements IPublication {
 
 	@Override
 	public String getFulldate() {
+		if(fulldate==null || fulldate.isEmpty())
+			return yeardate;
 		return fulldate;
 	}
 
