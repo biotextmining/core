@@ -188,7 +188,7 @@ public class PublicationImpl extends Observable implements IPublication {
 		return fulldate;
 	}
 
-	public void setFulldate(String fulldate) {
+	public void setFullDate(String fulldate) {
 		this.fulldate = fulldate;
 	}
 

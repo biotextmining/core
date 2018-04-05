@@ -202,6 +202,8 @@ public interface IPublication extends Serializable{
 
 	public void setYeardate(String date);
 	
+	public void setFullDate(String fullDate);
+	
 	public void setPublicationExternalIDSource(List<IPublicationExternalSourceLink> publicationExternalIDSource);
 
 	public void setPublicationFields(List<IPublicationField> publicationFields);
