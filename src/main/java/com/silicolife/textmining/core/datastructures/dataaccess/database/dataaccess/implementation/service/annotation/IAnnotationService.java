@@ -45,6 +45,9 @@ public interface IAnnotationService {
 
 	public List<Long> getPublicationsIdsByAnnotationsFilter(IAnnotationsFilter filter) throws AnnotationException;
 
-	public Boolean removeAllProcessDocumentAnnotations(Long processID, Long publicationId)  throws AnnotationException;;
+	public Boolean removeAllProcessDocumentAnnotations(Long processID, Long publicationId)  throws AnnotationException;
+
+	public List<IEntityAnnotation> getProcessDoumentAnnotationEntitiesFilteredByResourceElement(Long publicationId,
+			Long processID, Long resourceId) throws AnnotationException;;
 	
 }

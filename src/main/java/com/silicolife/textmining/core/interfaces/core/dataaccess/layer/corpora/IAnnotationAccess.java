@@ -115,4 +115,8 @@ public interface IAnnotationAccess {
 	
 	public List<Long> getPublicationsIdsByAnnotationsFilter(IAnnotationsFilter filter) throws ANoteException;
 
+
+	public List<IEntityAnnotation> getAnnotatedDocumentEntitiesFilteredByResourceElement(IIEProcess process,
+			IPublication publication, IResourceElement resourceElement) throws ANoteException;
+
 }

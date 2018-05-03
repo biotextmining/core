@@ -1255,6 +1255,13 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public List<IEntityAnnotation> getAnnotatedDocumentEntitiesFilteredByResourceElement(IIEProcess process,
+			IPublication publication, IResourceElement resourceElement) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 }

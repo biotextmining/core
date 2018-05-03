@@ -163,8 +163,41 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return iEntityAnnotations;
 		}	
 	}
+	
+	/**
+	 * Get process documents annotation entities filtered by resourceElement
+	 * 
+	 * 
+	 * @param processId
+	 * @param publicationId
+	 * @param resourceId
+	 * @return
+	 * @throws DaemonException
+	 */
+	public List<IEntityAnnotation> getProcessDoumentAnnotationEntitiesFilteredByResourceElement(Long processId, Long publicationId, Long resourceId) throws DaemonException{
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<List<EntityAnnotationImpl>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<EntityAnnotationImpl>>>() {};	
+		Map<String, Long> uriVariables = new LinkedHashMap<String, Long>();
+		uriVariables.put("publicationId", publicationId);
+		uriVariables.put("processId", processId);
+		uriVariables.put("resourceId", resourceId);
 
+		ResponseEntity<DaemonResponse<List<EntityAnnotationImpl>>> response = webClient.get("annotation/getProcessDoumentAnnotationEntitiesFilteredByResourceElement", responseType, uriVariables);
 
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
+		} else {
+			List<IEntityAnnotation> iEntityAnnotations = new ArrayList<IEntityAnnotation>();
+			List<EntityAnnotationImpl> entityAnnotation = response.getBody().getContent();
+
+			for (EntityAnnotationImpl entityAnnot : entityAnnotation) {
+				iEntityAnnotations.add(entityAnnot);
+			}
+
+			return iEntityAnnotations;
+		}	
+	}
+	
 	/**
 	 * Get process documents log
 	 * 
@@ -436,4 +469,5 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return response.getBody().getContent();
 		}	
 	}
+
 }

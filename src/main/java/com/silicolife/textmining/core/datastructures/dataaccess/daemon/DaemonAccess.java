@@ -469,6 +469,11 @@ public class DaemonAccess implements IDataAccess {
 	public List<IEntityAnnotation> getAnnotatedDocumentEntities(IAnnotatedDocument annotedDocument) throws ANoteException {
 		return annotationAccessImpl.getProcessDoumentAnnotationEntities(annotedDocument.getProcess().getId(), annotedDocument.getId());
 	}
+	
+	@Override
+	public List<IEntityAnnotation> getAnnotatedDocumentEntitiesFilteredByResourceElement(IIEProcess process,IPublication publication,IResourceElement resourceElement) throws ANoteException {
+		return annotationAccessImpl.getProcessDoumentAnnotationEntitiesFilteredByResourceElement(process.getId(), publication.getId(), resourceElement.getId());
+	}
 
 	@Override
 	public void addProcessDocumentEntitiesAnnotations(IIEProcess schema, IPublication document, List<IEntityAnnotation> entityAnnotations) throws ANoteException {

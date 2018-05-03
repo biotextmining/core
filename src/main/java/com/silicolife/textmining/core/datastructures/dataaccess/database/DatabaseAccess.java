@@ -81,7 +81,6 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.IDataAccess;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.database.IDatabase;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.resources.IResourceManagerReport;
-import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.runserverprocesses.IDataProcessStatusAcess;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocument;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
@@ -794,6 +793,19 @@ public class DatabaseAccess implements IDataAccess {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			List<IEntityAnnotation> entities = annotationService.getProcessDoumentAnnotationEntities(annotedDocument.getId(),annotedDocument.getProcess().getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return entities;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
+	@Override
+	public List<IEntityAnnotation> getAnnotatedDocumentEntitiesFilteredByResourceElement(IIEProcess process, IPublication publication, IResourceElement resourceElement) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IEntityAnnotation> entities = annotationService.getProcessDoumentAnnotationEntitiesFilteredByResourceElement(publication.getId(), process.getId(), resourceElement.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return entities;
 		} catch (RuntimeException e) {

@@ -376,15 +376,13 @@ public List<Corpus> findCorpusByAttributesPaginated(Long auId, String corpusstr,
 //		SQLQuery qry = session.createSQLQuery(sqlString);
 //		qry.setParameter(0, publicationId);
 //		qry.addEntity(Corpus.class);
-		
 		String hqlString = "select distinct c from Corpus as c "
-				+ "inner join CorpusHasPublications as cp "
-				+ "where c.crpId = cp.id.chpCorpusId and cp.id.chpPublicationId = :publicationId";
+				+ "inner join CorpusHasPublications as cp on cp.id.chpCorpusId = c.crpId "
+				+ "where cp.id.chpPublicationId = :publicationId";
 		Query qry = session.createQuery(hqlString);
 		qry.setParameter("publicationId", publicationId);
 		@SuppressWarnings("unchecked")
 		List<Corpus> result = qry.list();
-
 		return result;
 	}
 }

@@ -203,6 +203,34 @@ public class AnnotationServiceImpl implements IAnnotationService{
 		}
 		return entitiesAnnotations;
 	}
+	
+	@Override
+	public List<IEntityAnnotation> getProcessDoumentAnnotationEntitiesFilteredByResourceElement(Long publicationId, Long processID, Long resourceId) throws AnnotationException {
+		Processes processes = processManagerDao.getProcessesDao().findById(processID);
+		if (processes == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
+		Publications publications = corpusManagerDao.getPublicationsDao().findById(publicationId);
+		if (publications == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoPublication, ExceptionsCodes.msgNoPublication);
+		ResourceElements resourceElements = resourceManagerDao.getResourcesElememtsDao().findById(resourceId);
+		if(resourceElements == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoResourceElement, ExceptionsCodes.msgNoResourceElement);
+		
+		Map<String, Serializable> eqRestrictions = new HashMap<String, Serializable>();
+		eqRestrictions.put("processes", processes);
+		eqRestrictions.put("publications", publications);
+		eqRestrictions.put("resourceElements", resourceElements);
+		eqRestrictions.put("annActive", true);
+		eqRestrictions.put("annAnnotType", AnnotationType.ner.name());
+		List<Annotations> list = annotationManagerdao.getAnnotationsDao().findByAttributes(eqRestrictions);
+		List<IEntityAnnotation> entitiesAnnotations = new ArrayList<IEntityAnnotation>();
+		for(Annotations annot:list)
+		{
+			IEntityAnnotation entityAnnotation = AnnotationsWrapper.convertToANoteStructure(annot);
+			entitiesAnnotations.add(entityAnnotation);
+		}
+		return entitiesAnnotations;
+	}
 
 	@Override
 	public SortedSet<IAnnotationLog> getProcessDocumentLogs(Long processID,Long publicationId) throws AnnotationException {
