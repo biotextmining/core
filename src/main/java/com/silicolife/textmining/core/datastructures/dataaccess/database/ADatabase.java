@@ -65,7 +65,7 @@ public abstract class ADatabase implements IDatabase {
 			{
 				return false;
 			}
-			else if(!port.equals(db.getPort()))
+			else if(port!=null && !port.equals(db.getPort()))
 			{
 				return false;
 			}

@@ -76,10 +76,11 @@ public class OpenNLPSentenceSpliter {
 	public List<ISentence> getSentencesText(String text) throws IOException
 	{
 		SentenceDetectorME sentenceDetector = new SentenceDetectorME(getSentenceModel());
-		Span sentences[] = sentenceDetector.sentPosDetect(text);
+		Span sentences[] = sentenceDetector.sentPosDetect(text.trim());
 		List<ISentence> sents = new ArrayList<ISentence>();
 		for(Span sent:sentences)
 		{
+			
 			SentenceImpl sen = new SentenceImpl(sent.getStart(), sent.getEnd(), text.substring((int) sent.getStart(), (int) sent.getEnd()));
 			sents.add(sen);
 		}	
