@@ -487,6 +487,7 @@ public class AnnotationServiceImpl implements IAnnotationService{
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public Boolean removeAllProcessDocumentAnnotations(Long processID, Long publicationId) throws AnnotationException {
 		Processes processes = processManagerDao.getProcessesDao().findById(processID);
 		if (processes == null)

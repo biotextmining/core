@@ -37,19 +37,23 @@ public class PDFtoText {
 			doc.close();
 		} catch (IOException e) {
 		}
-		if(text==null || text.isEmpty() || verifyValidOCRlenght(text)==false)
+		if(text!=null)
+			text = NormalizationForm.removeOffsetProblemSituation(text);
+		if(text==null || text.isEmpty() || !verifyValidOCRlenght(text))
 		{
 			try {
 				text =  fileOCR(url);
-			} catch (TesseractException e) {
+			} catch (TesseractException | IOException e) {
 				text = new String();
 			}
 		}
-		if(text==null || text.isEmpty() || verifyValidOCRlenght(text)==false)
+		if(text!=null)
+			text = NormalizationForm.removeOffsetProblemSituation(text);
+		if(text==null || text.isEmpty() || !verifyValidOCRlenght(text))
 		{
 			try {
 				text =  convertEncryptedPDFDocument(url);
-			} catch (TesseractException e) {
+			} catch (TesseractException | IOException e) {
 				text = new String();
 			}
 		}
@@ -90,6 +94,8 @@ public class PDFtoText {
 
 
 	private static boolean verifyValidOCRlenght(String text){
+		if(!isValidText(text))
+			return false;
 		String newText = text.replaceAll("\\s", "");
 		if (newText.length()<200){
 			return false;
@@ -97,6 +103,11 @@ public class PDFtoText {
 		return true;
 	}
 
+	public static boolean isValidText(String text)
+	{
+		return text.contains("is") || text.contains("are") || text.contains("the");
+	}
+	
 
 }
 
