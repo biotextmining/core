@@ -86,6 +86,19 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 			c.add(Restrictions.eq(entry.getKey(), entry.getValue()));
 		return c.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findByAttributesBetween(Map<String, Serializable> eqRestrictions, Map<String, Serializable> greaterOrEqual,Map<String, Serializable> lessOrEqual) {
+		Criteria c = sessionFactory.getCurrentSession().createCriteria(klass);
+		for (Map.Entry<String, Serializable> entry : eqRestrictions.entrySet())
+			c.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		for (Map.Entry<String, Serializable> entry : greaterOrEqual.entrySet())
+			c.add(Restrictions.ge(entry.getKey(), entry.getValue()));
+		for (Map.Entry<String, Serializable> entry : lessOrEqual.entrySet())
+			c.add(Restrictions.le(entry.getKey(), entry.getValue()));
+		return c.list();
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

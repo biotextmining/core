@@ -18,6 +18,10 @@ public class SentenceImpl implements ISentence{
 	private List<IChunkerToken> orderChunkTokens;
 	private List<IParsingToken> parsingTokens;
 	
+	public SentenceImpl() {
+		super();
+	}
+	
 	public SentenceImpl(long startOffset,long endOffset,String text)
 	{
 		this.startOffset=startOffset;

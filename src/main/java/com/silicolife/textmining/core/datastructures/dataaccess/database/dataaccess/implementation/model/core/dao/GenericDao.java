@@ -52,5 +52,8 @@ public interface GenericDao<T> {
 	//only works if sortBy is already the same as in the core entity that maps the database 
 	public List<T> findAllPaginated(Integer paginationIndex, Integer paginationSize, boolean asc, String sortBy);
 
+	public List<T> findByAttributesBetween(Map<String, Serializable> eqRestrictions, Map<String, Serializable> greater,
+			Map<String, Serializable> less);
+
 //	public T findUniqueByAttributeCaseSensitive(String attribute, Serializable value);
 }

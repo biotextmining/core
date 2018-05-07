@@ -1,6 +1,7 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -85,11 +86,13 @@ import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumen
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
+import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
 import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpusStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.labels.IPublicationLabel;
 import com.silicolife.textmining.core.interfaces.core.document.relevance.IQueryPublicationRelevance;
+import com.silicolife.textmining.core.interfaces.core.document.structure.ISentence;
 import com.silicolife.textmining.core.interfaces.core.general.IDataProcessStatus;
 import com.silicolife.textmining.core.interfaces.core.general.IExternalID;
 import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
@@ -774,7 +777,34 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}
 	}
-
+	
+	@Override
+	public ISentence getSentence(IEntityAnnotation annotatedEntity) throws ANoteException, IOException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			ISentence sentence = annotationService.getSentence(annotatedEntity.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return sentence;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
+	@Override
+	public List<IEntityAnnotation> getProcessDoumentAnnotationEntitiesOfSentence(IIEProcess process,
+			IPublication publication, ISentence sentence) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IEntityAnnotation> annotations = annotationService.getProcessDoumentAnnotationEntitiesOfSentence(publication.getId(), process.getId(), sentence);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return annotations;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
 	@Override
 	public List<IEventAnnotation> getAnnotatedDocumentEvents(IAnnotatedDocument annotedDocument) throws ANoteException {
 		try {
@@ -1964,6 +1994,24 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}
 	}
+	
+	@Override
+	public List<Long> getPublicationsIdsByResourceElementsFilteredByPublicationFilter(
+			Set<IResourceElement> resourceElements, IPublicationFilter pubFilter) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Set<Long> resourceElementsIds = new HashSet<>();
+			for(IResourceElement resourceElement : resourceElements)
+				resourceElementsIds.add(resourceElement.getId());
+			List<Long> publications = annotationService.getPublicationsIdsByResourceElementsFilteredByPublicationFilter(resourceElementsIds, pubFilter);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return publications;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
 
 	@Override
 	public boolean rebuildLuceneIndex() throws ANoteException {
@@ -2682,6 +2730,9 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}			
 	}
+
+
+
 
 
 	

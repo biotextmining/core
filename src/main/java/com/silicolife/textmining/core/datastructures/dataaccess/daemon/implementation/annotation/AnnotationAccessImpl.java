@@ -20,6 +20,9 @@ import com.silicolife.textmining.core.datastructures.annotation.re.EventAnnotati
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.RestClientAccess;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.webserviceclient.DaemonResponse;
 import com.silicolife.textmining.core.datastructures.documents.AnnotatedDocumentStatisticsImpl;
+import com.silicolife.textmining.core.datastructures.documents.PublicationFilterImpl;
+import com.silicolife.textmining.core.datastructures.documents.structure.SentenceImpl;
+import com.silicolife.textmining.core.datastructures.utils.GenericPairImpl;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationLog;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
@@ -28,6 +31,9 @@ import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotatio
 import com.silicolife.textmining.core.interfaces.core.annotation.IManualCurationAnnotations;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
+import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
+import com.silicolife.textmining.core.interfaces.core.document.structure.ISentence;
+import com.silicolife.textmining.core.interfaces.core.utils.IGenericPair;
 
 /**
  * Class which implements all annotation daemon access methods
@@ -199,6 +205,38 @@ public class AnnotationAccessImpl extends RestClientAccess {
 	}
 	
 	/**
+	 * Gets process document annotations of a sentence
+	 * 
+	 * @param processId
+	 * @param publicationId
+	 * @param sentence
+	 * @return
+	 * @throws DaemonException
+	 */
+	public List<IEntityAnnotation> getProcessDoumentAnnotationEntitiesOfSentence(Long processId, Long publicationId, ISentence sentence) throws DaemonException{
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<List<EntityAnnotationImpl>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<EntityAnnotationImpl>>>() {};	
+		Map<String, Long> uriVariables = new LinkedHashMap<String, Long>();
+		uriVariables.put("publicationId", publicationId);
+		uriVariables.put("processId", processId);
+
+		ResponseEntity<DaemonResponse<List<EntityAnnotationImpl>>> response = webClient.post("annotation/getProcessDoumentAnnotationEntitiesOfSentence", responseType, sentence, uriVariables);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
+		} else {
+			List<IEntityAnnotation> iEntityAnnotations = new ArrayList<IEntityAnnotation>();
+			List<EntityAnnotationImpl> entityAnnotation = response.getBody().getContent();
+
+			for (EntityAnnotationImpl entityAnnot : entityAnnotation) {
+				iEntityAnnotations.add(entityAnnot);
+			}
+
+			return iEntityAnnotations;
+		}	
+	}
+	
+	/**
 	 * Get process documents log
 	 * 
 	 * @param processId
@@ -348,6 +386,30 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return manualCuration.getAnnotations();
 		}	
 	}
+	
+	/**
+	 * Gets the sentence an annotation is in
+	 * 
+	 * @param entityAnnotationId
+	 * @return
+	 * @throws DaemonException
+	 */
+	public ISentence getSentence(Long entityAnnotationId) throws DaemonException{
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<SentenceImpl>> responseType = new ParameterizedTypeReference<DaemonResponse<SentenceImpl>>() {};	
+		Map<String, Long> uriVariables = new HashMap<String, Long>();
+		uriVariables.put("entityAnnotationId", entityAnnotationId);
+
+		ResponseEntity<DaemonResponse<SentenceImpl>> response = webClient.get("annotation/getSentence", responseType, uriVariables);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
+		} else {
+			ISentence sentence = response.getBody().getContent();
+
+			return sentence;
+		}	
+	}
 
 	/**
 	 * Add annotations logs
@@ -427,7 +489,21 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return response.getBody().getContent();
 		}	
 	}
+	
+	public List<Long> getPublicationsIdsByResourceElementsFilteredByPublicationFilter(Set<Long> resourceElementIds, IPublicationFilter pubFilter) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<List<Long>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<Long>>>() {};
+		IGenericPair<Set<Long>, PublicationFilterImpl> pair = new GenericPairImpl<Set<Long>, PublicationFilterImpl>();
+		pair.setX(resourceElementIds);
+		pair.setY((PublicationFilterImpl) pubFilter);
+		ResponseEntity<DaemonResponse<List<Long>>> response = webClient.post("annotation/getPublicationsIdsByResourceElementsFilteredByPublicationFilter", responseType, pair);
 
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
+		} else {
+			return response.getBody().getContent();
+		}	
+	}
 
 	public List<Long> getProcessesIdsByResourceElements(Set<Long> resourceElementsIds) throws DaemonException {
 		checkAndForceLoginIfNecessary();

@@ -1,5 +1,6 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.annotation;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,15 +43,26 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ResourceElements;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.annotation.AnnotationsWrapper;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.general.ClassesWrapper;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.process.ProcessWrapper;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsWrapper;
+import com.silicolife.textmining.core.datastructures.documents.AnnotatedDocumentImpl;
 import com.silicolife.textmining.core.datastructures.documents.AnnotatedDocumentStatisticsImpl;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationLog;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IManualCurationAnnotations;
+import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
+import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocument;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
+import com.silicolife.textmining.core.interfaces.core.document.IPublication;
+import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
+import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
+import com.silicolife.textmining.core.interfaces.core.document.structure.ISentence;
 import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
+import com.silicolife.textmining.core.interfaces.process.IProcess;
 import com.silicolife.textmining.core.interfaces.process.ProcessTypeEnum;
+import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 
 @Service
 @Transactional(readOnly = true)
@@ -205,6 +217,33 @@ public class AnnotationServiceImpl implements IAnnotationService{
 	}
 	
 	@Override
+	public List<IEntityAnnotation> getProcessDoumentAnnotationEntitiesOfSentence(Long publicationId, Long processID, ISentence sentence) throws AnnotationException {
+		Processes processes = processManagerDao.getProcessesDao().findById(processID);
+		if (processes == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
+		Publications publications = corpusManagerDao.getPublicationsDao().findById(publicationId);
+		if (publications == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoPublication, ExceptionsCodes.msgNoPublication);
+		Map<String, Serializable> eqRestrictions = new HashMap<String, Serializable>();
+		Map<String, Serializable> greater = new HashMap<String, Serializable>();
+		Map<String, Serializable> less = new HashMap<String, Serializable>();
+		eqRestrictions.put("processes", processes);
+		eqRestrictions.put("publications", publications);
+		eqRestrictions.put("annActive", true);
+		eqRestrictions.put("annAnnotType", AnnotationType.ner.name());
+		greater.put("annAnnotStart", sentence.getStartOffset());
+		less.put("annAnnotEnd", sentence.getEndOffset());
+		List<Annotations> list = annotationManagerdao.getAnnotationsDao().findByAttributesBetween(eqRestrictions, greater, less);
+		List<IEntityAnnotation> entitiesAnnotations = new ArrayList<IEntityAnnotation>();
+		for(Annotations annot:list)
+		{
+			IEntityAnnotation entityAnnotation = AnnotationsWrapper.convertToANoteStructure(annot);
+			entitiesAnnotations.add(entityAnnotation);
+		}
+		return entitiesAnnotations;
+	}
+	
+	@Override
 	public List<IEntityAnnotation> getProcessDoumentAnnotationEntitiesFilteredByResourceElement(Long publicationId, Long processID, Long resourceId) throws AnnotationException {
 		Processes processes = processManagerDao.getProcessesDao().findById(processID);
 		if (processes == null)
@@ -349,7 +388,40 @@ public class AnnotationServiceImpl implements IAnnotationService{
 		}
 		return eventAnnoationAnnotations;
 	}
+	
+	
+	/* 
+	 * Returs the sentence that an annotation is in. It expects that the 
+	 */
+	@Override
+	public ISentence getSentence(Long entityAnnotationId) throws ANoteException, IOException {
+		/*Processes processes = processManagerDao.getProcessesDao().findById(processID);
+		if (processes == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
+		Publications publications = corpusManagerDao.getPublicationsDao().findById(publicationId);
+		if (publications == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoPublication, ExceptionsCodes.msgNoPublication);*/
+		Annotations annotations = annotationManagerdao.getAnnotationsDao().findById(entityAnnotationId);
+		if(annotations == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoAnnotation, ExceptionsCodes.msgNoAnnotation);
+		Processes processes = annotations.getProcesses();
+		Publications publications = annotations.getPublications();
+		
+		IEntityAnnotation entityAnnot = AnnotationsWrapper.convertToANoteStructure(annotations);
+		IPublication publication = PublicationsWrapper.convertToAnoteStructure(publications);
+		IIEProcess process = ProcessWrapper.convertToAnoteStructure(processes);
+		ICorpus corpus = process.getCorpus();
 
+		IAnnotatedDocument annotatedDoc = new AnnotatedDocumentImpl(publication, process, corpus);
+		List<ISentence> sentences = annotatedDoc.getSentencesText();
+		for(ISentence sentence : sentences) {
+			if(sentence.getStartOffset() <= entityAnnot.getStartOffset() && sentence.getEndOffset() >= entityAnnot.getEndOffset()) {
+				return sentence;
+			}
+		}
+		return null;
+	}
+	
 	@Override
 	public IManualCurationAnnotations getProcessDocumentAnnotationsAssociatedToLogs(Long processID) throws AnnotationException {
 		Processes processes = processManagerDao.getProcessesDao().findById(processID);
@@ -461,6 +533,17 @@ public class AnnotationServiceImpl implements IAnnotationService{
 		}
 
 		return annotationManagerdao.getAnnotationAuxDao().getPublicationsIdsByResourceElements(resourceElementIds);
+	}
+	
+	@Override
+	public List<Long> getPublicationsIdsByResourceElementsFilteredByPublicationFilter(Set<Long> resourceElementIds, IPublicationFilter pubFilter) throws AnnotationException {
+		for(Long resourceElementId : resourceElementIds){
+			ResourceElements resourceElemen = resourceManagerDao.getResourcesElememtsDao().findById(resourceElementId);
+			if (resourceElemen == null)
+				throw new AnnotationException(ExceptionsCodes.codeNoResourceElement, ExceptionsCodes.msgNoResourceElement);
+		}
+
+		return annotationManagerdao.getAnnotationAuxDao().getPublicationsIdsByResourceElementsFilteredByPublicationFilter(resourceElementIds, pubFilter);
 	}
 	
 	public List<Long> getProcessesIdsByResourceElements(Set<Long> resourceElementIds) throws AnnotationException{

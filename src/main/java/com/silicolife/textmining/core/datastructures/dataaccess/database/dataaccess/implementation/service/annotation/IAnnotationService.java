@@ -1,5 +1,6 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.annotation;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -11,7 +12,10 @@ import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFil
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IManualCurationAnnotations;
+import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
+import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
+import com.silicolife.textmining.core.interfaces.core.document.structure.ISentence;
 
 public interface IAnnotationService {
 	
@@ -48,6 +52,16 @@ public interface IAnnotationService {
 	public Boolean removeAllProcessDocumentAnnotations(Long processID, Long publicationId)  throws AnnotationException;
 
 	public List<IEntityAnnotation> getProcessDoumentAnnotationEntitiesFilteredByResourceElement(Long publicationId,
-			Long processID, Long resourceId) throws AnnotationException;;
+			Long processID, Long resourceId) throws AnnotationException;
+
+	public List<Long> getPublicationsIdsByResourceElementsFilteredByPublicationFilter(Set<Long> resourceElementIds,
+			IPublicationFilter pubFilter) throws AnnotationException;
+
+	//public ISentence getSentence(Long processID, Long publicationId, Long entityAnnotationId) throws AnnotationException, ANoteException, IOException;
+
+	public ISentence getSentence(Long entityAnnotationId) throws ANoteException, IOException;
+
+	public List<IEntityAnnotation> getProcessDoumentAnnotationEntitiesOfSentence(Long publicationId, Long processID,
+			ISentence sentence) throws AnnotationException;;
 	
 }

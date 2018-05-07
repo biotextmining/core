@@ -1,5 +1,6 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,9 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -24,6 +27,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Processes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
+import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
 
 @Repository
 public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
@@ -129,7 +133,7 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 
 		return totalResult;
 	}
-
+	
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Long> getPublicationsIdsByResourceElements(Set<Long> resElemIds) {
@@ -142,6 +146,103 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 		c.setProjection(projections);
       return c.list();
 	}
+	
+	//Filter only tested with types ...
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Long> getPublicationsIdsByResourceElementsFilteredByPublicationFilter(Set<Long> resElemIds, IPublicationFilter pubFilter) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Annotations.class, "annnotations");
+		c.add(Restrictions.in("resourceElements.resId", resElemIds));
+//		c.add(Restrictions.eq("annActive", true)); //slowing the query... 
+		ProjectionList projections = Projections.projectionList();
+		addPublicationFilterToCriteria(pubFilter, c);
+		projections.add(Projections.distinct(Projections.property("publications.pubId")), "pubId");
+		c.setProjection(projections);
+      return c.list();
+	}
+
+	private void addPublicationFilterToCriteria(IPublicationFilter pubFilter, Criteria c) {
+		if(!pubFilter.getCategories().isEmpty())
+			addPubCategoryDijunctionToCriteria(pubFilter, c);
+		if(!pubFilter.getTypes().isEmpty())
+			addPubTypeDijunctionToCriteria(pubFilter, c);
+		if(!pubFilter.getStatus().isEmpty())
+			addPubStatusDijunctionToCriteria(pubFilter, c);
+		if(!pubFilter.getYears().isEmpty())
+			addPubYearDijunctionToCriteria(pubFilter, c);	
+	}
+
+	private void addPubTypeDijunctionToCriteria(IPublicationFilter pubFilter, Criteria c) {
+		DetachedCriteria subQuery;
+		subQuery = DetachedCriteria.forClass(Publications.class, "publications");
+		Disjunction disjunction = Restrictions.disjunction(); 
+		addToPubTypeDijunction(pubFilter, disjunction);
+		subQuery.add(disjunction);
+		subQuery.setProjection(Projections.distinct(Projections.property("publications.pubId")));
+		c.add(Subqueries.propertyIn("publications.pubId", subQuery));
+	}
+	
+	private void addPubCategoryDijunctionToCriteria(IPublicationFilter pubFilter, Criteria c) {
+		DetachedCriteria subQuery;
+		subQuery = DetachedCriteria.forClass(Publications.class, "publications");
+		Disjunction disjunction = Restrictions.disjunction(); 
+		addToPubCategoryDijunction(pubFilter, disjunction);
+		subQuery.add(disjunction);
+		subQuery.setProjection(Projections.distinct(Projections.property("publications.pubId")));
+		c.add(Subqueries.propertyIn("publications.pubId", subQuery));
+	}
+	
+	private void addPubStatusDijunctionToCriteria(IPublicationFilter pubFilter, Criteria c) {
+		DetachedCriteria subQuery;
+		subQuery = DetachedCriteria.forClass(Publications.class, "publications");
+		Disjunction disjunction = Restrictions.disjunction(); 
+		addToPubStatusDijunction(pubFilter, disjunction);
+		subQuery.add(disjunction);
+		subQuery.setProjection(Projections.distinct(Projections.property("publications.pubId")));
+		c.add(Subqueries.propertyIn("publications.pubId", subQuery));
+	}
+	
+	private void addPubYearDijunctionToCriteria(IPublicationFilter pubFilter, Criteria c) {
+		DetachedCriteria subQuery;
+		subQuery = DetachedCriteria.forClass(Publications.class, "publications");
+		Disjunction disjunction = Restrictions.disjunction(); 
+		addToPubYearDijunction(pubFilter, disjunction);
+		subQuery.add(disjunction);
+		subQuery.setProjection(Projections.distinct(Projections.property("publications.pubId")));
+		c.add(Subqueries.propertyIn("publications.pubId", subQuery));
+	}
+
+	private void addToPubTypeDijunction(IPublicationFilter pubFilter, Disjunction disjunction) {
+		for( String type : pubFilter.getTypes()){
+			Criterion criterion =  Restrictions.eq("publications.pubType", type);
+			disjunction.add(criterion);		
+		}
+	}
+	
+	private void addToPubCategoryDijunction(IPublicationFilter pubFilter, Disjunction disjunction) {
+		for( String category : pubFilter.getCategories()){
+			Criterion criterion =  Restrictions.eq("publications.pubCategory", category);
+			disjunction.add(criterion);		
+		}
+	}
+	
+	private void addToPubStatusDijunction(IPublicationFilter pubFilter, Disjunction disjunction) {
+		for( String status : pubFilter.getStatus()){
+			Criterion criterion =  Restrictions.eq("publications.pubStatus", status);
+			disjunction.add(criterion);		
+		}
+	}
+	
+	private void addToPubYearDijunction(IPublicationFilter pubFilter, Disjunction disjunction) {
+		for( Integer year : pubFilter.getYears()){
+			Criterion criterion =  Restrictions.eq("publications.pubYeardate", year);
+			disjunction.add(criterion);		
+		}
+	}
+	
+	
+	
 	
 	@Override
 	@SuppressWarnings("unchecked")

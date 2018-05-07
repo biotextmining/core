@@ -1,5 +1,6 @@
 package com.silicolife.textmining.core.interfaces.core.dataaccess.layer.corpora;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -11,6 +12,8 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.Daemo
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocument;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
+import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
+import com.silicolife.textmining.core.interfaces.core.document.structure.ISentence;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 
@@ -118,5 +121,15 @@ public interface IAnnotationAccess {
 
 	public List<IEntityAnnotation> getAnnotatedDocumentEntitiesFilteredByResourceElement(IIEProcess process,
 			IPublication publication, IResourceElement resourceElement) throws ANoteException;
+
+
+	public List<Long> getPublicationsIdsByResourceElementsFilteredByPublicationFilter(Set<IResourceElement> resourceElements,
+			IPublicationFilter pubFilter) throws ANoteException;
+
+	public ISentence getSentence(IEntityAnnotation entityAnnotation) throws ANoteException, IOException;
+
+
+	public List<IEntityAnnotation> getProcessDoumentAnnotationEntitiesOfSentence(IIEProcess process, IPublication publication,
+			ISentence sentence) throws ANoteException;
 
 }

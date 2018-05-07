@@ -1,5 +1,6 @@
 package com.silicolife.textmining.core.datastructures.dataaccess;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +24,13 @@ import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumen
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
+import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
 import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpusStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.labels.IPublicationLabel;
 import com.silicolife.textmining.core.interfaces.core.document.relevance.IQueryPublicationRelevance;
+import com.silicolife.textmining.core.interfaces.core.document.structure.ISentence;
 import com.silicolife.textmining.core.interfaces.core.general.IDataProcessStatus;
 import com.silicolife.textmining.core.interfaces.core.general.IExternalID;
 import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
@@ -1258,6 +1261,26 @@ public class DataAccessStart implements IDataAccess {
 	@Override
 	public List<IEntityAnnotation> getAnnotatedDocumentEntitiesFilteredByResourceElement(IIEProcess process,
 			IPublication publication, IResourceElement resourceElement) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Long> getPublicationsIdsByResourceElementsFilteredByPublicationFilter(
+			Set<IResourceElement> resourceElements, IPublicationFilter pubFilter) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ISentence getSentence(IEntityAnnotation entityAnnotation) throws ANoteException, IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IEntityAnnotation> getProcessDoumentAnnotationEntitiesOfSentence(IIEProcess process,
+			IPublication publication, ISentence sentence) throws ANoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}

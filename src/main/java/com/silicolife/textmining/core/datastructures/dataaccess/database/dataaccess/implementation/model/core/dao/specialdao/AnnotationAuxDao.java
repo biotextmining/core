@@ -1,13 +1,16 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Annotations;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Classes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Processes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
+import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
 
 public interface AnnotationAuxDao {
 
@@ -28,6 +31,9 @@ public interface AnnotationAuxDao {
 	public List<Long> getPublicationsIdsByAnnotationsFilter(IAnnotationsFilter filter);
 
 	public void removeAllProcessDocumentAnnotations(Processes processes, Publications publications);
+
+	public List<Long> getPublicationsIdsByResourceElementsFilteredByPublicationFilter(Set<Long> resElemIds,
+			IPublicationFilter pubFilter);
 	
 //	public  List<Publications> getPublicationsByResourceElements(Set<Long> resElemIds);
 }
