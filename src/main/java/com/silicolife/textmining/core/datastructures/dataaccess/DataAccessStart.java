@@ -8,6 +8,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.SortedSet;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.AnnotationException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.PermissionsUtilsEnum;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.ResourcesTypeUtils;
@@ -1285,6 +1286,15 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
-
+	@Override
+	public List<IResource<IResourceElement>> getAllPrivilegesResources() throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public Long countAnnotations(IIEProcess process, IResourceElement resourceElement) throws ANoteException {
+		return null;
+	}
 
 }

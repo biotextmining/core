@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Annotations;
+
 /**
  * Define all generic methos to access the data.
  * 
@@ -54,6 +56,8 @@ public interface GenericDao<T> {
 
 	public List<T> findByAttributesBetween(Map<String, Serializable> eqRestrictions, Map<String, Serializable> greater,
 			Map<String, Serializable> less);
+
+	public Long countByAttributes(Map<String, Serializable> eqRestrictions);
 
 //	public T findUniqueByAttributeCaseSensitive(String attribute, Serializable value);
 }

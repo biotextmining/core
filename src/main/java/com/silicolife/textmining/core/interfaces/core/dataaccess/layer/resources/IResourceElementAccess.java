@@ -265,5 +265,4 @@ public interface IResourceElementAccess {
 	 */
 	public IResourceElementSet<IResourceElement> getResourceElementsByExternalID(IExternalID externalId) throws ANoteException;
 
-
 }

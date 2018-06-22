@@ -74,4 +74,7 @@ public interface IResourcesElementService {
 
 	public Integer countResourceElements(Long resourceId) throws ResourcesExceptions;
 
+	public IResourceElementSet<IResourceElement> getResourceElementsByResourcePaginated(Long resourceId, int index, int size)
+			throws ResourcesExceptions;
+
 }

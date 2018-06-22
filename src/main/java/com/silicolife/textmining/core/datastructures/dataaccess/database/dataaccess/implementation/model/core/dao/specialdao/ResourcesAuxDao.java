@@ -54,4 +54,6 @@ public interface ResourcesAuxDao {
 	public Integer countResourcesByAttributes(Long id, String resourceType, String permission);
 
 	public Integer countActiveResources();
+
+	public List<Resources> findResourcesByAttributesWithAnyPermission(Long id, String resourceType);
 }

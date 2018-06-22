@@ -249,4 +249,51 @@ public class ResourcesAccessImpl extends RestClientAccess {
 		}	
 	}
 
+	/**
+	 * Get All resources the user has any permission
+	 * 
+	 * @return
+	 * @throws DaemonException
+	 */
+	public List<IResource<IResourceElement>> getAllPrivilegesResources() throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<List<ResourceImpl>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<ResourceImpl>>>() {};
+
+		ResponseEntity<DaemonResponse<List<ResourceImpl>>> response = webClient.get("resources/getAllPrivilegesResources", responseType);
+
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			List<IResource<IResourceElement>> iResources = new ArrayList<IResource<IResourceElement>>();
+			List<ResourceImpl> resources = response.getBody().getContent();
+			for (ResourceImpl resourceImpl : resources) {
+				IResource<IResourceElement> resourceElement = null;
+				ResourcesTypeEnum typeEnum = ResourcesTypeEnum.valueOf(resourceImpl.getType());
+				switch(typeEnum){
+				case dictionary:
+					resourceElement = new DictionaryImpl(resourceImpl.getId(), resourceImpl.getName(), resourceImpl.getInfo(), resourceImpl.isActive());
+					break;
+				case lookuptable:
+					resourceElement = new LookupTableImpl(resourceImpl.getId(), resourceImpl.getName(), resourceImpl.getInfo(), resourceImpl.isActive());
+					break;
+				case rule:
+					resourceElement = new RuleSetImpl(resourceImpl.getId(), resourceImpl.getName(), resourceImpl.getInfo(), resourceImpl.isActive());
+					break;
+				case ontology:
+					resourceElement = new OntologyImpl(resourceImpl.getId(), resourceImpl.getName(), resourceImpl.getInfo(), resourceImpl.isActive());
+					break;
+				case lexicalwords:
+					resourceElement = new LexicalWordsImpl(resourceImpl.getId(), resourceImpl.getName(), resourceImpl.getInfo(), resourceImpl.isActive());
+					break;
+				default:
+					resourceElement = resourceImpl;
+					break;
+				}
+				iResources.add(resourceElement);
+			}
+
+			return iResources;
+		}	
+	}
+	
 }

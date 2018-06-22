@@ -10,8 +10,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Annotations;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 
 
@@ -85,6 +87,15 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 		for (Map.Entry<String, Serializable> entry : eqRestrictions.entrySet())
 			c.add(Restrictions.eq(entry.getKey(), entry.getValue()));
 		return c.list();
+	}
+	
+	@Override
+	public Long countByAttributes(Map<String, Serializable> eqRestrictions) {
+		Criteria c = sessionFactory.getCurrentSession().createCriteria(klass);
+		for (Map.Entry<String, Serializable> entry : eqRestrictions.entrySet())
+			c.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		return (Long) c.setProjection(Projections.rowCount())
+                .uniqueResult();
 	}
 	
 	@SuppressWarnings("unchecked")

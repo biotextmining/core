@@ -467,6 +467,11 @@ public class DaemonAccess implements IDataAccess {
 	public List<IEventAnnotation> getAnnotatedDocumentEvents(IAnnotatedDocument annotedDocument) throws ANoteException {
 		return annotationAccessImpl.getProcessDoumentAnnotationEvents(annotedDocument.getProcess().getId(), annotedDocument.getId());
 	}
+	
+	@Override
+	public Long countAnnotations(IIEProcess process, IResourceElement resourceElement) throws ANoteException {
+		return annotationAccessImpl.countAnnotations(process.getId(), resourceElement.getId());
+	}
 
 	@Override
 	public List<IEntityAnnotation> getAnnotatedDocumentEntities(IAnnotatedDocument annotedDocument) throws ANoteException {
@@ -1304,6 +1309,12 @@ public class DaemonAccess implements IDataAccess {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public List<IResource<IResourceElement>> getAllPrivilegesResources() throws ANoteException {
+		return this.resourcesAccessImpl.getAllPrivilegesResources();
+	}
+
 
 	
 }

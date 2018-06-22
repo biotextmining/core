@@ -345,7 +345,19 @@ public class ResourcesAuxDaoImpl implements ResourcesAuxDao {
 
 	}
 	
-	
+	@Override
+	public List<Resources> findResourcesByAttributesWithAnyPermission(Long id, String resourceType) {
+		Session session = sessionFactory.getCurrentSession();
+		String hqlString = "select b from Resources as b "
+				+ "inner join AuthUserDataObjects as a on a.id.audoUidResource = b.resoId "
+				+ "where a.id.audoUserId = :id and a.id.audoTypeResource = :resourceType ";
+		Query qry = session.createQuery(hqlString);
+		qry.setParameter("id", id);
+		qry.setParameter("resourceType", resourceType);
+		@SuppressWarnings("unchecked")
+		List<Resources> result = qry.list();
+		return result;
+	}
 	
 
 	@Override
@@ -360,7 +372,7 @@ public class ResourcesAuxDaoImpl implements ResourcesAuxDao {
 //		qry.setParameter(2, permission);
 //		qry.addEntity("resources", Resources.class);
 		
-		String hqlString = "select b form Resources as b "
+		String hqlString = "select b from Resources as b "
 				+ "inner join AuthUserDataObjects as a on a.id.audoUidResource = b.resoId "
 				+ "where a.id.audoUserId = :id and a.id.audoTypeResource = :resourceType and a.audoPermission = :permission";
 		Query qry = session.createQuery(hqlString);

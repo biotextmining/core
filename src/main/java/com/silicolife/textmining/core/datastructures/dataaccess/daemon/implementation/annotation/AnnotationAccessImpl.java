@@ -34,6 +34,8 @@ import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumen
 import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
 import com.silicolife.textmining.core.interfaces.core.document.structure.ISentence;
 import com.silicolife.textmining.core.interfaces.core.utils.IGenericPair;
+import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
+import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 
 /**
  * Class which implements all annotation daemon access methods
@@ -359,8 +361,32 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			return iEventAnnotation;
 		}	
 	}
+	
+	/**
+	 * counts annotations
+	 * 
+	 * @param processId
+	 * @param resourceElementId
+	 * @return
+	 * @throws DaemonException
+	 */
+	public Long countAnnotations(Long processId, Long resourceElementId) throws DaemonException{
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Long>> responseType = new ParameterizedTypeReference<DaemonResponse<Long>>() {};	
+		Map<String, Long> uriVariables = new LinkedHashMap<String, Long>();
+		uriVariables.put("processId", processId);
+		uriVariables.put("resourceElementId", resourceElementId);
 
+		ResponseEntity<DaemonResponse<Long>> response = webClient.get("annotation/countAnnotations", responseType, uriVariables);
 
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());
+		} else {
+			Long count = response.getBody().getContent();
+			return count;
+		}	
+	}
+	
 	/**
 	 * Get process document annotation association logs
 	 * 

@@ -62,6 +62,8 @@ public interface IAnnotationService {
 	public ISentence getSentence(Long entityAnnotationId) throws ANoteException, IOException;
 
 	public List<IEntityAnnotation> getProcessDoumentAnnotationEntitiesOfSentence(Long publicationId, Long processID,
-			ISentence sentence) throws AnnotationException;;
+			ISentence sentence) throws AnnotationException;
+
+	public Long countAnnotations(Long processId, Long resourceElementId) throws AnnotationException;;
 	
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.AnnotationException;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
@@ -131,5 +132,8 @@ public interface IAnnotationAccess {
 
 	public List<IEntityAnnotation> getProcessDoumentAnnotationEntitiesOfSentence(IIEProcess process, IPublication publication,
 			ISentence sentence) throws ANoteException;
+
+
+	public Long countAnnotations(IIEProcess process, IResourceElement resourceElement) throws  ANoteException;
 
 }

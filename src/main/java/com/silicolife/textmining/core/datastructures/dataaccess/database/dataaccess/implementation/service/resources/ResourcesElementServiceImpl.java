@@ -139,6 +139,27 @@ public class ResourcesElementServiceImpl implements IResourcesElementService {
 		return elementSet;
 
 	}
+	
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByResourcePaginated(Long resourceId, int index,int size) throws ResourcesExceptions{
+		Resources resource = resourcesManagerDao.getResourceDao().findById(resourceId);
+		if (resource == null)
+			throw new ResourcesExceptions(ExceptionsCodes.codeNoResource, ExceptionsCodes.msgNoResource);
+
+		Map<String, Serializable> eqRestrictions = new HashMap<String, Serializable>();
+		eqRestrictions.put("resActive", true);
+		eqRestrictions.put("resources", resource);
+		List<ResourceElements> resourcesElements = resourcesManagerDao.getResourcesElememtsDao().findByAttributesWithPagniation(eqRestrictions, index, size);
+
+		IResourceElementSet<IResourceElement> elementSet = new ResourceElementSetImpl<IResourceElement>();
+
+		for (ResourceElements resourceElement : resourcesElements) {
+			IResourceElement resourceElement_ = ResourceElementWrapper.convertToAnoteStructure(resourceElement);
+			elementSet.addElementResource(resourceElement_);
+		}
+
+		return elementSet;
+	}
 
 	@Override
 	public IResourceContent getResourceContent(Long resourceId) throws ResourcesExceptions {

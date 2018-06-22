@@ -239,6 +239,25 @@ public class ResourcesServiceImpl implements IResourcesService {
 
 	
 	}
+	
+	
+	@Override
+	public List<IResource<IResourceElement>> getAllPrivilegesResources() throws ResourcesExceptions {
+
+		AuthUsers user = userLogged.getCurrentUserLogged();
+
+		List<Resources> listResources = resourcesManagerDao.getResourcesAuxDao().findResourcesByAttributesWithAnyPermission(user.getAuId(), resourcesStr);
+
+		List<IResource<IResourceElement>> listResources_ = new ArrayList<IResource<IResourceElement>>();
+		for (Resources resource : listResources) {
+			if(resource.isResoActive())
+			{
+				IResource<IResourceElement> resource_ = ResourcesWrapper.convertToAnoteStructure(resource);
+				listResources_.add(resource_);
+			}
+		}
+		return listResources_;
+	}
 
 	@Override
 	public List<IResource<IResourceElement>> getAllPrivilegesResourcesAdminAccess() throws ResourcesExceptions {

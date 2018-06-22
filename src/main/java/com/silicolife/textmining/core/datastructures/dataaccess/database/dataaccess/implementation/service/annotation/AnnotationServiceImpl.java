@@ -581,4 +581,20 @@ public class AnnotationServiceImpl implements IAnnotationService{
 		annotationManagerdao.getAnnotationAuxDao().removeAllProcessDocumentAnnotations(processes,publications);
 		return true;
 	}
+	
+	@Override
+	public Long countAnnotations(Long processId, Long resourceElementId) throws AnnotationException {
+		Processes processes = processManagerDao.getProcessesDao().findById(processId);
+		if (processes == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
+		ResourceElements resourceElements = resourceManagerDao.getResourcesElememtsDao().findById(resourceElementId);
+		if (resourceElements == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoResourceElement, ExceptionsCodes.msgNoResourceElement);
+		Map<String, Serializable> eqRestrictions = new HashMap<String, Serializable>();
+		eqRestrictions.put("processes", processes);
+		eqRestrictions.put("resourceElements", resourceElements);
+		eqRestrictions.put("annActive", true);
+		eqRestrictions.put("annAnnotType", AnnotationType.ner.name());
+		return annotationManagerdao.getAnnotationsDao().countByAttributes(eqRestrictions);
+	}
 }

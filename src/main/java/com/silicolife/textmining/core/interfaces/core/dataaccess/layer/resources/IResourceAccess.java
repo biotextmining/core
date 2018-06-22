@@ -95,4 +95,12 @@ public interface IResourceAccess extends IResourceElementAccess{
 	 * @throws ANoteException
 	 */
 	public IResourceContent getResourceContent(IResource<IResourceElement> resource) throws ANoteException;
+
+	/**
+	 * Get Resources the user has any permission 
+	 * 
+	 * @return
+	 * @throws ANoteException
+	 */
+	public List<IResource<IResourceElement>> getAllPrivilegesResources() throws ANoteException;
 }

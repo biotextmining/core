@@ -17,6 +17,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.AnnotationException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.manager.LuceneManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.ILuceneService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.LuceneServiceImpl;
@@ -984,6 +985,19 @@ public class DatabaseAccess implements IDataAccess {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			List<IResource<IResourceElement>> resources = resourcesService.getAllPrivilegesResourcesAdminAccess();
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resources;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
+	@Override
+	public List<IResource<IResourceElement>> getAllPrivilegesResources() throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IResource<IResourceElement>> resources = resourcesService.getAllPrivilegesResources();
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return resources;
 		} catch (RuntimeException e) {
@@ -2731,9 +2745,17 @@ public class DatabaseAccess implements IDataAccess {
 		}			
 	}
 
-
-
-
-
+	@Override
+	public Long countAnnotations(IIEProcess process, IResourceElement resourceElement) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Long count = this.annotationService.countAnnotations(process.getId(), resourceElement.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}			
+	}
 	
 }
