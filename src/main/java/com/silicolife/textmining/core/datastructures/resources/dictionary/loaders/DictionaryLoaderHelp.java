@@ -160,7 +160,7 @@ public class DictionaryLoaderHelp extends PortResourceUpdateReport{
 	
 	public boolean isBatchSizeLimitOvertaken()
 	{
-		return this.batch.size() > recomendedMaxbatchSize;
+		return this.batch.size() >= recomendedMaxbatchSize;
 	}
 
 	public IResourceManagerReport executeBatch() throws ANoteException {
