@@ -6,7 +6,7 @@ public enum NERCaseSensativeEnum {
 	ONLYINSMALLWORDS,
 	INALLWORDS;
 	
-	private int smallWordsSize = 4;
+	private int smallWordsSize = 8;
 	
 	public int getSmallWordSize(){
 		return smallWordsSize;
