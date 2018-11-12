@@ -1,0 +1,61 @@
+image: maven:latest
+
+variables:
+  MAVEN_CLI_OPTS: "-s settings.xml --batch-mode"
+  
+before_script:
+  #SSH agent
+  - 'which ssh-agent || ( apk update  && apk add openssh)'
+  - eval $(ssh-agent -s)    
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  #GPG (gnupg)
+  - 'which gpg-agent || ( apk update  && apk add gnupg)'
+  - gpg -v --batch --import <(echo "$GPG_PRIVATE_KEY")
+  # Install JFrog CLI / configure artifactory
+  -  curl -fL https://getcli.jfrog.io | sh
+  - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+  - ./jfrog rt c show
+  - export M2_HOME=/usr/share/maven
+  - sed -i 's,SNAPSHOT_REMOTE_REPO_KEY,'"$SNAPSHOT_REMOTE_REPO_KEY"',g' configuration.yml
+  - sed -i 's,RELEASE_REMOTE_REPO_KEY,'"$RELEASE_REMOTE_REPO_KEY"',g' configuration.yml
+  - sed -i 's,SNAPSHOT_REPO_KEY,'"$SNAPSHOT_REPO_KEY"',g' configuration.yml
+  - sed -i 's,RELEASE_REPO_KEY,'"$RELEASE_REPO_KEY"',g' configuration.yml
+  - sed -i 's,ARTIFACTORY_JCENTER_REPO_KEY,'"$ARTIFACTORY_JCENTER_REPO_KEY"',g' configuration.yml
+  # modify settings.xml
+  - sed -i 's,ARTIFACTORY_URL,'"$ARTIFACTORY_URL"',g' settings.xml
+  - sed -i 's,ARTIFACTORY_USER,'"$ARTIFACTORY_USER"',g' settings.xml
+  - sed -i 's,ARTIFACTORY_PASS,'"$ARTIFACTORY_PASS"',g' settings.xml
+
+stages:
+ - compile
+# - test
+ - deploy
+
+maven_compile:
+  stage: compile
+  tags:
+    - maven
+  script:
+    - mvn $MAVEN_CLI_OPTS compile
+ 
+#maven test:
+#  stage: test
+#  tags: 
+#    - maven
+#  script:
+#    - mvn $MAVEN_CLI_OPTS test
+
+maven_deploy:
+  stage: deploy
+  tags:
+    - maven
+    - artifactory
+  script:
+    - ./jfrog rt mvn "clean verify gpg:sign install -DadditionalJOption=-Xdoclint:none" configuration.yml --build-name=mew-core_gitlabci_build --build-number=$CI_JOB_ID
+    - ./jfrog rt bce mew-core_gitlabci_build $CI_JOB_ID
+    - ./jfrog rt bp mew-core_gitlabci_build $CI_JOB_ID
+  only:
+    - master
+
