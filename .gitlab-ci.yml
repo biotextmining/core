@@ -53,7 +53,7 @@ maven_deploy:
     - maven
     - artifactory
   script:
-    - ./jfrog rt mvn "clean verify gpg:sign install -DadditionalJOption=-Xdoclint:none" configuration.yml --build-name=mew-core_gitlabci_build --build-number=$CI_JOB_ID
+    - ./jfrog rt mvn "clean verify gpg:sign install -DadditionalJOption=-Xdoclint:none -Dmaven.test.skip=true" configuration.yml --build-name=mew-core_gitlabci_build --build-number=$CI_JOB_ID
     - ./jfrog rt bce mew-core_gitlabci_build $CI_JOB_ID
     - ./jfrog rt bp mew-core_gitlabci_build $CI_JOB_ID
   only:
