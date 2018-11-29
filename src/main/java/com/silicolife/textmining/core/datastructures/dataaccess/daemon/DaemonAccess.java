@@ -168,6 +168,7 @@ public class DaemonAccess implements IDataAccess {
 			luceneAccessImpl.setRestClient(webClient);
 			luceneResourcesElementsAccessImpl.setRestClient(webClient);
 			luceneQueriesAccessImpl.setRestClient(webClient);
+			lucenePublicationsAcessImpl.setRestClient(webClient);
 			luceneCorpusAcessImpl.setRestClient(webClient);
 			luceneResourcesAccessImpl.setRestClient(webClient);
 			initConnection();
