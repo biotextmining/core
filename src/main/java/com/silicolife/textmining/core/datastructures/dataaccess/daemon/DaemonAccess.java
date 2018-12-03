@@ -1255,6 +1255,12 @@ public class DaemonAccess implements IDataAccess {
 			int paginationSize) throws ANoteException {
 		return lucenePublicationsAcessImpl.getPublicationsFromSearchPaginated(searchProperties, index, paginationSize);
 	}
+	
+	@Override
+	public List<IPublication> getPublicationsFromSearchPaginatedWSort(ISearchProperties searchProperties, int index,
+			int paginationSize, boolean asc, String sortBy) throws ANoteException {
+		return lucenePublicationsAcessImpl.getPublicationsFromSearchPaginatedWSort(searchProperties, index, paginationSize, asc, sortBy);
+	}
 
 	@Override
 	public Integer countGetPublicationsFromSearch(ISearchProperties searchProperties) throws ANoteException {

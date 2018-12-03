@@ -2619,6 +2619,20 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}
 	}
+	
+	@Override
+	public List<IPublication> getPublicationsFromSearchPaginatedWSort(ISearchProperties searchProperties, int index,
+			int paginationSize, boolean asc, String sortBy) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IPublication> result = lucenePublicationsService.getPublicationsFromSearchPaginatedWSort(searchProperties, index, paginationSize, asc, sortBy);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return result;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
 
 	@Override
 	public List<IPublication> getPublicationsFromSearchPaginated(ISearchProperties searchProperties, int index,
@@ -2757,5 +2771,6 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}			
 	}
+
 	
 }

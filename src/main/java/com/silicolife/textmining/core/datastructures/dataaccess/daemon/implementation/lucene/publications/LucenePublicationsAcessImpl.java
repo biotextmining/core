@@ -59,14 +59,21 @@ public class LucenePublicationsAcessImpl extends RestClientAccess  {
 	
 	@SuppressWarnings("unchecked")
 	public List<IPublication> getPublicationsFromSearchPaginated(ISearchProperties searchProperties, int index, int paginationSize ) throws ANoteException{
+		return this.getPublicationsFromSearchPaginatedWSort(searchProperties, index, paginationSize, true, "none");
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<IPublication> getPublicationsFromSearchPaginatedWSort(ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy) throws ANoteException{
 		checkAndForceLoginIfNecessary();
 		
 		ParameterizedTypeReference<DaemonResponse<List<IPublication>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<IPublication>>>() {};
 		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
 		uriVariables.add("index", String.valueOf(index));
 		uriVariables.add("paginationSize",  String.valueOf(paginationSize));
+		uriVariables.add("asc",  String.valueOf(asc));
+		uriVariables.add("sortBy",  String.valueOf(sortBy));
 
-		ResponseEntity<DaemonResponse<List<IPublication>>> response = webClient.post("publications/getPublicationsFromSearchPaginated", responseType, searchProperties, uriVariables);
+		ResponseEntity<DaemonResponse<List<IPublication>>> response = webClient.post("publications/getPublicationsFromSearchPaginatedWSort", responseType, searchProperties, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
 		} else {
@@ -76,6 +83,7 @@ public class LucenePublicationsAcessImpl extends RestClientAccess  {
 		}
 		
 	}
+	
 	
 	@SuppressWarnings("unchecked")
 	public Integer countGetPublicationsFromSearch(ISearchProperties searchProperties)  throws ANoteException{
