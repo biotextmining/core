@@ -1,6 +1,7 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.lucene.resources;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.core.ParameterizedTypeReference;
@@ -14,6 +15,7 @@ import com.silicolife.textmining.core.datastructures.dataaccess.daemon.webservic
 import com.silicolife.textmining.core.datastructures.resources.ResourceElementImpl;
 import com.silicolife.textmining.core.datastructures.resources.ResourceElementSetImpl;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
+import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElementSet;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElementsFilter;
@@ -456,6 +458,71 @@ public class LuceneResourcesElementsAccessImpl extends RestClientAccess{
 		uriVariables.add("partialString", partialString);
 		
 		ResponseEntity<DaemonResponse<Integer>> response = webClient.post("resourceElements/getResourceElementsCountByPartialTermOrPartialSynonym", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			return response.getBody().getContent();
+		}
+	}
+
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactTermOrExactSynonymPaginated(
+			String exactString, int index, int paginationSize) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >> responseType = new ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >>() {};
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("exactString",  exactString);
+		uriVariables.add("index",  String.valueOf(index));
+		uriVariables.add("paginationSize", String.valueOf(paginationSize));
+
+		ResponseEntity<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl>>> response = webClient.post("resourceElements/getResourceElementsByExactTermOrExactSynonymPaginated", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+
+			IResourceElementSet<? extends IResourceElement> resourceElements = response.getBody().getContent();
+			return (IResourceElementSet<IResourceElement>) resourceElements;
+		}
+	}
+
+	public Integer getCountResourceElementsByExactTermOrExactSynonymPaginated(String exactString) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Integer>> responseType = new ParameterizedTypeReference<DaemonResponse<Integer>>() {};
+		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
+		uriVariables.add("exactString",exactString);
+		
+		ResponseEntity<DaemonResponse<Integer>> response = webClient.post("resourceElements/getCountResourceElementsByExactTermOrExactSynonymPaginated", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			return response.getBody().getContent();
+		}
+	}
+
+	public IResourceElementSet<IResourceElement> getResourceElementsPaginated(ISearchProperties searchProperties,
+			int index, int paginationSize, boolean asc, String sortBy) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >> responseType = new ParameterizedTypeReference<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl> >>() {};
+		Map<String, Object> uriVariables = new LinkedHashMap<String, Object>();
+		uriVariables.put("index",  index);
+		uriVariables.put("paginationSize", paginationSize);
+		uriVariables.put("asc", asc);
+		uriVariables.put("sortBy", sortBy);
+
+		ResponseEntity<DaemonResponse<ResourceElementSetImpl<ResourceElementImpl>>> response = webClient.post("resourceElements/getResourceElementsPaginated", responseType, searchProperties, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+
+			IResourceElementSet<? extends IResourceElement> resourceElements = response.getBody().getContent();
+			return (IResourceElementSet<IResourceElement>) resourceElements;
+		}
+	}
+	
+	public Integer countResourceElements(ISearchProperties searchProperties) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Integer>> responseType = new ParameterizedTypeReference<DaemonResponse<Integer>>() {};
+		
+		ResponseEntity<DaemonResponse<Integer>> response = webClient.post("resourceElements/countResourceElementsWAuthAndSort", responseType, searchProperties);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
 		} else {

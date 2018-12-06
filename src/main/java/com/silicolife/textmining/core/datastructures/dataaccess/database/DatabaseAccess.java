@@ -17,7 +17,6 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.AnnotationException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.manager.LuceneManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.ILuceneService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.LuceneServiceImpl;
@@ -2879,6 +2878,145 @@ public class DatabaseAccess implements IDataAccess {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
 			Integer count = this.luceneResourcesService.countPrivilegesResourcesAdminAccessFromSearch(searchProperties);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactExternalID(String externalId)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IResourceElementSet<IResourceElement> resourcElements = this.luceneResourcesElementService.getResourceElementsByExactExternalID(externalId);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resourcElements;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByExactExternalID(
+			IResourceElementsFilter filter, String externalId) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IResourceElementSet<IResourceElement> resourcElements = this.luceneResourcesElementService.getResourceElementsFilteredByExactExternalID(filter,externalId);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resourcElements;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalID(String partialString)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IResourceElementSet<IResourceElement> resourcElements = this.luceneResourcesElementService.getResourceElementsByPartialExternalID(partialString);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resourcElements;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialExternalID(
+			IResourceElementsFilter filter, String partialString) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IResourceElementSet<IResourceElement> resourcElements = this.luceneResourcesElementService.getResourceElementsFilteredByPartialExternalID(filter, partialString);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resourcElements;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIDPaginated(String partialString,
+			int index, int paginationSize) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IResourceElementSet<IResourceElement> resourcElements = this.luceneResourcesElementService.getResourceElementsByPartialExternalIDPaginated(partialString, index, paginationSize);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resourcElements;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialExternalIDPaginated(
+			IResourceElementsFilter filter, String partialString, int index, int paginationSize) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IResourceElementSet<IResourceElement> resourcElements = this.luceneResourcesElementService.getResourceElementsFilteredByPartialExternalIDPaginated(filter, partialString, index, paginationSize);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resourcElements;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactTermOrExactSynonymPaginated(
+			String exactString, int index, int paginationSize) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IResourceElementSet<IResourceElement> resourcElements = this.luceneResourcesElementService.getResourceElementsByExactTermOrExactSynonymPaginated(exactString, index, paginationSize);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resourcElements;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Integer getCountResourceElementsByExactTermOrExactSynonymPaginated(String exactString)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer count = this.luceneResourcesElementService.getCountResourceElementsByExactTermOrExactSynonymPaginated(exactString);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsPaginated(ISearchProperties searchProperties,
+			int index, int paginationSize, boolean asc, String sortBy) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			IResourceElementSet<IResourceElement> resourcElements = this.luceneResourcesElementService.getResourceElementsPaginated(searchProperties, index, paginationSize, asc, sortBy);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resourcElements;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Integer countResourceElements(ISearchProperties searchProperties) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer count = this.luceneResourcesElementService.countResourceElements(searchProperties);
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return count;
 		} catch (RuntimeException e) {

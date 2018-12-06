@@ -1358,4 +1358,73 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactExternalID(String externalId)
+			throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByExactExternalID(
+			IResourceElementsFilter filter, String externalId) throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalID(String partialString)
+			throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialExternalID(
+			IResourceElementsFilter filter, String partialString) throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIDPaginated(String partialString,
+			int index, int paginationSize) throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialExternalIDPaginated(
+			IResourceElementsFilter filter, String partialString, int index, int paginationSize) throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactTermOrExactSynonymPaginated(
+			String exactString, int index, int paginationSize) throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public Integer getCountResourceElementsByExactTermOrExactSynonymPaginated(String exactString)
+			throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsPaginated(ISearchProperties searchProperties,
+			int index, int paginationSize, boolean asc, String sortBy) throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public Integer countResourceElements(ISearchProperties searchProperties) throws ANoteException {
+		
+		return null;
+	}
+
 }
