@@ -14,5 +14,7 @@ public interface ILucenePublicationsDataAccess {
 	
 	public List<IPublication> getPublicationsFromSearchPaginated(ISearchProperties searchProperties, int index, int paginationSize ) throws ANoteException;
 	
+	public List<IPublication> getPublicationsFromSearchPaginatedWSort(ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy) throws ANoteException;
+	
 	public Integer countGetPublicationsFromSearch(ISearchProperties searchProperties) throws ANoteException;
 }

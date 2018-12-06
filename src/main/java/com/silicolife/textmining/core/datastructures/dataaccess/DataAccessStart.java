@@ -1297,4 +1297,11 @@ public class DataAccessStart implements IDataAccess {
 		return null;
 	}
 
+	@Override
+	public List<IPublication> getPublicationsFromSearchPaginatedWSort(ISearchProperties searchProperties, int index,
+			int paginationSize, boolean asc, String sortBy) throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

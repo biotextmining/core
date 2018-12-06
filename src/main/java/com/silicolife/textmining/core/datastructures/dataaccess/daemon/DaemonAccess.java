@@ -168,6 +168,7 @@ public class DaemonAccess implements IDataAccess {
 			luceneAccessImpl.setRestClient(webClient);
 			luceneResourcesElementsAccessImpl.setRestClient(webClient);
 			luceneQueriesAccessImpl.setRestClient(webClient);
+			lucenePublicationsAcessImpl.setRestClient(webClient);
 			luceneCorpusAcessImpl.setRestClient(webClient);
 			luceneResourcesAccessImpl.setRestClient(webClient);
 			initConnection();
@@ -1253,6 +1254,12 @@ public class DaemonAccess implements IDataAccess {
 	public List<IPublication> getPublicationsFromSearchPaginated(ISearchProperties searchProperties, int index,
 			int paginationSize) throws ANoteException {
 		return lucenePublicationsAcessImpl.getPublicationsFromSearchPaginated(searchProperties, index, paginationSize);
+	}
+	
+	@Override
+	public List<IPublication> getPublicationsFromSearchPaginatedWSort(ISearchProperties searchProperties, int index,
+			int paginationSize, boolean asc, String sortBy) throws ANoteException {
+		return lucenePublicationsAcessImpl.getPublicationsFromSearchPaginatedWSort(searchProperties, index, paginationSize, asc, sortBy);
 	}
 
 	@Override
