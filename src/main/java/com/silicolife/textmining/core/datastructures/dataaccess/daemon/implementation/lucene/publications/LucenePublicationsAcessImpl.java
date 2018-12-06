@@ -1,6 +1,9 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.lucene.publications;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
@@ -10,11 +13,11 @@ import org.springframework.util.MultiValueMap;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.RestClientAccess;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.webserviceclient.DaemonResponse;
+import com.silicolife.textmining.core.datastructures.documents.PublicationImpl;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
-import com.silicolife.textmining.core.interfaces.process.IR.IQuery;
 
 public class LucenePublicationsAcessImpl extends RestClientAccess  {
 	
@@ -66,20 +69,22 @@ public class LucenePublicationsAcessImpl extends RestClientAccess  {
 	public List<IPublication> getPublicationsFromSearchPaginatedWSort(ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy) throws ANoteException{
 		checkAndForceLoginIfNecessary();
 		
-		ParameterizedTypeReference<DaemonResponse<List<IPublication>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<IPublication>>>() {};
-		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
-		uriVariables.add("index", String.valueOf(index));
-		uriVariables.add("paginationSize",  String.valueOf(paginationSize));
-		uriVariables.add("asc",  String.valueOf(asc));
-		uriVariables.add("sortBy",  String.valueOf(sortBy));
+		ParameterizedTypeReference<DaemonResponse<List<PublicationImpl>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<PublicationImpl>>>() {};
+		Map<String, Object> uriVariables = new LinkedHashMap<String, Object>();
+		uriVariables.put("index", index);
+		uriVariables.put("paginationSize", paginationSize);
+		uriVariables.put("asc", asc);
+		uriVariables.put("sortBy", sortBy);
 
-		ResponseEntity<DaemonResponse<List<IPublication>>> response = webClient.post("publications/getPublicationsFromSearchPaginatedWSort", responseType, searchProperties, uriVariables);
+		ResponseEntity<DaemonResponse<List<PublicationImpl>>> response = webClient.post("publications/getPublicationsFromSearchPaginatedWSort", responseType, searchProperties, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
 		} else {
-
-			List<IPublication> publications = response.getBody().getContent();
-			return (List<IPublication>) publications;
+			List<IPublication> publications = new ArrayList<>();
+			List<PublicationImpl> pubs_ = response.getBody().getContent();
+			for(PublicationImpl pub_ : pubs_)
+				publications.add(pub_);
+			return publications;
 		}
 		
 	}
