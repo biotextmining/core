@@ -8,7 +8,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.SortedSet;
 
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.AnnotationException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.PermissionsUtilsEnum;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.ResourcesTypeUtils;
@@ -1162,133 +1161,130 @@ public class DataAccessStart implements IDataAccess {
 
 	@Override
 	public List<IQuery> getQueriesByOrganism(String organism) throws ANoteException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<IQuery> getQueriesBykeywords(String keywords) throws ANoteException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<IQuery> getQueriesKeywordsByWildCard(String subKeyword) throws ANoteException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<String> getKeywordsOfQueriesByWildCard(String subKeyword) throws ANoteException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<IPublication> getPublicationsByTitle(String title) throws ANoteException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	
 	@Override
 	public List<IPublication> getPublicationsFromSearch(ISearchProperties searchProperties)  throws ANoteException{
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<IPublication> getPublicationsFromSearchPaginated(ISearchProperties searchProperties, int index,
 			int paginationSize) throws ANoteException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public Integer countGetPublicationsFromSearch(ISearchProperties searchProperties) throws ANoteException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public Integer countGetCorpusFrom(ISearchProperties searchProperties) throws ANoteException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<ICorpus> getCorpusFromSearchPaginated(ISearchProperties searchProperties, int index, int paginationSize)
 			throws ANoteException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public Integer countResourcesFromSearchWAuth(ISearchProperties searchProperties) throws ANoteException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public Integer countAllPublications() throws ANoteException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public void addDataProcessStatus(IDataProcessStatus dataprocessStatus) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void updateDataProcessStatus(IDataProcessStatus dataProcessStatus) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public List<IDataProcessStatus> getAllDataProcessStatus() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<IDataProcessStatus> getDataProcessStatusByUserAndDateRange(IUser user, Date startDateRange,
 			Date endDateRange) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<IEntityAnnotation> getAnnotatedDocumentEntitiesFilteredByResourceElement(IIEProcess process,
 			IPublication publication, IResourceElement resourceElement) throws ANoteException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<Long> getPublicationsIdsByResourceElementsFilteredByPublicationFilter(
 			Set<IResourceElement> resourceElements, IPublicationFilter pubFilter) throws ANoteException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public ISentence getSentence(IEntityAnnotation entityAnnotation) throws ANoteException, IOException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<IEntityAnnotation> getProcessDoumentAnnotationEntitiesOfSentence(IIEProcess process,
 			IPublication publication, ISentence sentence) throws ANoteException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<IResource<IResourceElement>> getAllPrivilegesResources() throws ANoteException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -1300,7 +1296,65 @@ public class DataAccessStart implements IDataAccess {
 	@Override
 	public List<IPublication> getPublicationsFromSearchPaginatedWSort(ISearchProperties searchProperties, int index,
 			int paginationSize, boolean asc, String sortBy) throws ANoteException {
-		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getResourcesFromSearchPaginatedWAuth(ISearchProperties searchProperties,
+			int index, int paginationSize) throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public Integer countActiveResourcesFromSearch(ISearchProperties searchProperties) throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public Integer countResourcesFromSearchWAuth(ISearchProperties searchProperties, String permission)
+			throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getActiveResourcesFromSearchPaginatedWSort(
+			ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy)
+			throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getResourcesFromSearchPaginatedWAuthAndSort(
+			ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy)
+			throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getResourcesFromSearchPaginatedWAuthAndSort(
+			ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy,
+			String permission) throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getPrivilegesResourcesAdminAccessFromSearchPaginated(
+			ISearchProperties searchProperties, Integer paginationIndex, Integer paginationSize, boolean asc,
+			String sortBy) throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public Integer countPrivilegesResourcesAdminAccessFromSearch(ISearchProperties searchProperties)
+			throws ANoteException {
+		
 		return null;
 	}
 

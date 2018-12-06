@@ -2772,5 +2772,120 @@ public class DatabaseAccess implements IDataAccess {
 		}			
 	}
 
+	@Override
+	public List<IResource<IResourceElement>> getResourcesFromSearchPaginatedWAuth(ISearchProperties searchProperties,
+			int index, int paginationSize) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IResource<IResourceElement>> resources = this.luceneResourcesService.getResourcesFromSearchPaginatedWAuth(searchProperties,index, paginationSize);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resources;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}			
+	}
+
+	@Override
+	public Integer countActiveResourcesFromSearch(ISearchProperties searchProperties) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer count = this.luceneResourcesService.countActiveResourcesFromSearch(searchProperties);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}		
+	}
+
+	@Override
+	public Integer countResourcesFromSearchWAuth(ISearchProperties searchProperties, String permission)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer count = this.luceneResourcesService.countResourcesFromSearchWAuth(searchProperties, permission);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getActiveResourcesFromSearchPaginatedWSort(
+			ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IResource<IResourceElement>> resources = this.luceneResourcesService.getActiveResourcesFromSearchPaginatedWSort(searchProperties,index, paginationSize, asc, sortBy);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resources;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}	
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getResourcesFromSearchPaginatedWAuthAndSort(
+			ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IResource<IResourceElement>> resources = this.luceneResourcesService.getResourcesFromSearchPaginatedWAuthAndSort(searchProperties,index, paginationSize, asc, sortBy);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resources;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}	
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getResourcesFromSearchPaginatedWAuthAndSort(
+			ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy,
+			String permission) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IResource<IResourceElement>> resources = this.luceneResourcesService.getResourcesFromSearchPaginatedWAuthAndSort(searchProperties,index, paginationSize, asc, sortBy, permission);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resources;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}	
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getPrivilegesResourcesAdminAccessFromSearchPaginated(
+			ISearchProperties searchProperties, Integer paginationIndex, Integer paginationSize, boolean asc,
+			String sortBy) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IResource<IResourceElement>> resources = this.luceneResourcesService.getPrivilegesResourcesAdminAccessFromSearchPaginated(searchProperties,paginationIndex, paginationSize, asc, sortBy);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return resources;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}	
+	}
+
+	@Override
+	public Integer countPrivilegesResourcesAdminAccessFromSearch(ISearchProperties searchProperties)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Integer count = this.luceneResourcesService.countPrivilegesResourcesAdminAccessFromSearch(searchProperties);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
 	
 }

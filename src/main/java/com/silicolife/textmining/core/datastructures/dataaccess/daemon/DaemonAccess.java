@@ -1322,6 +1322,57 @@ public class DaemonAccess implements IDataAccess {
 		return this.resourcesAccessImpl.getAllPrivilegesResources();
 	}
 
+	@Override
+	public List<IResource<IResourceElement>> getResourcesFromSearchPaginatedWAuth(ISearchProperties searchProperties,
+			int index, int paginationSize) throws ANoteException {
+		return luceneResourcesAccessImpl.getResourcesFromSearchPaginatedWAuth(searchProperties, index, paginationSize);
+	}
+
+	@Override
+	public Integer countActiveResourcesFromSearch(ISearchProperties searchProperties) throws ANoteException {
+		return luceneResourcesAccessImpl.countActiveResourcesFromSearch(searchProperties);
+	}
+
+	@Override
+	public Integer countResourcesFromSearchWAuth(ISearchProperties searchProperties, String permission)
+			throws ANoteException {
+		return luceneResourcesAccessImpl.countResourcesFromSearchWAuth(searchProperties, permission);
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getActiveResourcesFromSearchPaginatedWSort(
+			ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy)
+			throws ANoteException {
+		return luceneResourcesAccessImpl.getActiveResourcesFromSearchPaginatedWSort(searchProperties, index, paginationSize, asc, sortBy);
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getResourcesFromSearchPaginatedWAuthAndSort(
+			ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy)
+			throws ANoteException {
+		return luceneResourcesAccessImpl.getResourcesFromSearchPaginatedWAuthAndSort(searchProperties, index, paginationSize, asc, sortBy);
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getResourcesFromSearchPaginatedWAuthAndSort(
+			ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy,
+			String permission) throws ANoteException {
+		return luceneResourcesAccessImpl.getResourcesFromSearchPaginatedWAuthAndSort(searchProperties,index,paginationSize,asc,sortBy,permission);
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getPrivilegesResourcesAdminAccessFromSearchPaginated(
+			ISearchProperties searchProperties, Integer paginationIndex, Integer paginationSize, boolean asc,
+			String sortBy) throws ANoteException {
+		return luceneResourcesAccessImpl.getPrivilegesResourcesAdminAccessFromSearchPaginated(searchProperties, paginationIndex, paginationSize, asc, sortBy);
+	}
+
+	@Override
+	public Integer countPrivilegesResourcesAdminAccessFromSearch(ISearchProperties searchProperties)
+			throws ANoteException {
+		return luceneResourcesAccessImpl.countPrivilegesResourcesAdminAccessFromSearch(searchProperties);
+	}
+
 
 	
 }
