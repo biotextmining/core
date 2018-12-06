@@ -28,17 +28,19 @@ public class LucenePublicationsAcessImpl extends RestClientAccess  {
 	@SuppressWarnings("unchecked")
 	public List<IPublication> getPublicationsByTitle(String title) throws DaemonException{
 		checkAndForceLoginIfNecessary();
-		ParameterizedTypeReference<DaemonResponse<List<IPublication>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<IPublication>>>() {};
+		ParameterizedTypeReference<DaemonResponse<List<PublicationImpl>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<PublicationImpl>>>() {};
 		MultiValueMap<String, String> uriVariables = new LinkedMultiValueMap<String, String>();
 		uriVariables.add("title", title);
 
-		ResponseEntity<DaemonResponse<List<IPublication>>> response = webClient.get("publications/getPublicationsByTitle", responseType, uriVariables);
+		ResponseEntity<DaemonResponse<List<PublicationImpl>>> response = webClient.get("publications/getPublicationsByTitle", responseType, uriVariables);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
 		} else {
-
-			List<IPublication> publications = response.getBody().getContent();
-			return (List<IPublication>) publications;
+			List<IPublication> publications = new ArrayList<>();
+			List<PublicationImpl> pubs_ = response.getBody().getContent();
+			for(PublicationImpl pub_ : pubs_)
+				publications.add(pub_);
+			return publications;
 		}
 	}
 	
@@ -46,17 +48,19 @@ public class LucenePublicationsAcessImpl extends RestClientAccess  {
 	public List<IPublication> getPublicationsFromSearch(ISearchProperties searchProperties)  throws ANoteException{
 		checkAndForceLoginIfNecessary();
 		
-		ParameterizedTypeReference<DaemonResponse<List<IPublication>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<IPublication>>>() {};
+		ParameterizedTypeReference<DaemonResponse<List<PublicationImpl>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<PublicationImpl>>>() {};
 		//MultiValueMap<String, ISearchProperties> uriVariables = new LinkedMultiValueMap<String, ISearchProperties>();
 		//uriVariables.add("searchProperties", searchProperties);
 
-		ResponseEntity<DaemonResponse<List<IPublication>>> response = webClient.post("publications/getPublicationsFromSearch", responseType, searchProperties);
+		ResponseEntity<DaemonResponse<List<PublicationImpl>>> response = webClient.post("publications/getPublicationsFromSearch", responseType, searchProperties);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
 		} else {
-
-			List<IPublication> publications = response.getBody().getContent();
-			return (List<IPublication>) publications;
+			List<IPublication> publications = new ArrayList<>();
+			List<PublicationImpl> pubs_ = response.getBody().getContent();
+			for(PublicationImpl pub_ : pubs_)
+				publications.add(pub_);
+			return publications;
 		}
 	}
 	
