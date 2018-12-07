@@ -9,10 +9,7 @@ import java.util.Set;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
-import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Property;
 import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
@@ -22,7 +19,6 @@ import org.hibernate.search.query.dsl.PhraseMatchingContext;
 import org.hibernate.search.query.dsl.QueryBuilder;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUserDataObjects;
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUserDataObjectsId;
 
 public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 
@@ -655,6 +651,7 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 		combinedQuery = addMustFieldsWithShouldPhraseWithMultipleAtributes(filtersOnFields,qb, combinedQuery);
 		}
 		
+		
 		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(combinedQuery.createQuery());
 		return fullTextQuery;
 	}
@@ -1139,7 +1136,8 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 			Map<String, List<String>> filtersOnFields, boolean isPhrase) {
 		FullTextQuery fullTextQuery = createFullTextQueryForWebTable(eqSentenceOnField, eqMustSentenceOnField, filtersOnFields, isPhrase);
 		
-		return fullTextQuery.list().size();
+		//return fullTextQuery.list().size(); //too slow, since we only want lucene queries, it's pointless forcing it going to check de DB.
+		return fullTextQuery.getResultSize();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -1148,7 +1146,8 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 			Map<String, List<String>> filtersOnFields, boolean isPhrase) {
 		FullTextQuery fullTextQuery = createFullTextQueryForWebTable(q, eqMustSentenceOnField, filtersOnFields, isPhrase);
 		
-		return fullTextQuery.list().size();
+		//return fullTextQuery.list().size(); //too slow, since we only want lucene queries, it's pointless forcing it going to check de DB.
+		return fullTextQuery.getResultSize();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -1157,7 +1156,8 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 			Map<String, String> permissionFields,String idField, Map<String, List<String>> filtersOnFields, boolean isPhrase) {
 		FullTextQuery fullTextQuery = createFullTextQueryForWebTableWPermissions(eqSentenceOnField, eqMustSentenceOnField,permissionFields, idField, filtersOnFields, isPhrase);
 		
-		return fullTextQuery.list().size();
+		//return fullTextQuery.list().size();//too slow, since we only want lucene queries, it's pointless forcing it going to check de DB.
+		return fullTextQuery.getResultSize();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -1169,7 +1169,8 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 			Map<String, List<String>> filtersOnFields, boolean isPhrase) {
 		FullTextQuery fullTextQuery = createFullTextQueryForWebTableWPermissions(eqSentenceOnField,uniqueRestrictions, eqMustSentenceOnField,permissionFields, idField, filtersOnFields, isPhrase);
 		
-		return fullTextQuery.list().size();
+		//return fullTextQuery.list().size(); //too slow, since we only want lucene queries, it's pointless forcing it going to check de DB.
+		return fullTextQuery.getResultSize();
 	}
 	
 	
@@ -1180,7 +1181,8 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 			Map<String, String> permissionFields,String idField, Map<String, List<String>> filtersOnFields, boolean isPhrase) {
 		FullTextQuery fullTextQuery = createFullTextQueryForWebTableWPermissions(setOfAttributeForMultipleFieldsMap, eqMustSentenceOnField,permissionFields, idField, filtersOnFields, isPhrase);
 		
-		return fullTextQuery.list().size();
+		//return fullTextQuery.list().size(); //too slow, since we only want lucene queries, it's pointless forcing it going to check de DB.
+		return fullTextQuery.getResultSize();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -1192,7 +1194,8 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 			Map<String, List<String>> filtersOnFields, boolean isPhrase) {
 		FullTextQuery fullTextQuery = createFullTextQueryForWebTableWPermissions(setOfAttributeForMultipleFieldsMap,uniqueRestrictions, eqMustSentenceOnField,permissionFields, idField, filtersOnFields, isPhrase);
 		
-		return fullTextQuery.list().size();
+		//return fullTextQuery.list().size(); //too slow, since we only want lucene queries, it's pointless forcing it going to check de DB.
+		return fullTextQuery.getResultSize();
 	}
 	
 	
@@ -1203,7 +1206,8 @@ public class GenericLuceneDaoImpl<T> implements IGenericLuceneDao<T> {
 			Map<String, List<String>> filtersOnFields, boolean isPhrase) {
 		FullTextQuery fullTextQuery = createFullTextQueryForWebTable(setOfAttributeForMultipleFieldsMap, eqMustSentenceOnField, filtersOnFields, isPhrase);
 		
-		return fullTextQuery.list().size();
+		//return fullTextQuery.list().size(); //too slow, since we only want lucene queries, it's pointless forcing it going to check de DB.
+		return fullTextQuery.getResultSize();
 	}
 	
 	
