@@ -1,6 +1,5 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.lucene.publications;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,11 +35,8 @@ public class LucenePublicationsAcessImpl extends RestClientAccess  {
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
 		} else {
-			List<IPublication> publications = new ArrayList<>();
-			List<PublicationImpl> pubs_ = response.getBody().getContent();
-			for(PublicationImpl pub_ : pubs_)
-				publications.add(pub_);
-			return publications;
+			List<? extends IPublication> publications = response.getBody().getContent();
+			return (List<IPublication>) publications;
 		}
 	}
 	
@@ -56,11 +52,8 @@ public class LucenePublicationsAcessImpl extends RestClientAccess  {
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
 		} else {
-			List<IPublication> publications = new ArrayList<>();
-			List<PublicationImpl> pubs_ = response.getBody().getContent();
-			for(PublicationImpl pub_ : pubs_)
-				publications.add(pub_);
-			return publications;
+			List<? extends IPublication> publications = response.getBody().getContent();
+			return (List<IPublication>) publications;
 		}
 	}
 	
@@ -84,11 +77,8 @@ public class LucenePublicationsAcessImpl extends RestClientAccess  {
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
 		} else {
-			List<IPublication> publications = new ArrayList<>();
-			List<PublicationImpl> pubs_ = response.getBody().getContent();
-			for(PublicationImpl pub_ : pubs_)
-				publications.add(pub_);
-			return publications;
+			List<? extends IPublication> publications = response.getBody().getContent();
+			return (List<IPublication>) publications;
 		}
 		
 	}

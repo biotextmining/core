@@ -1,6 +1,9 @@
 package com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.layer;
 
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.ResourcesExceptions;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
+import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElementSet;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElementsFilter;
@@ -212,18 +215,41 @@ public interface ILuceneResourceElementDataAccess {
 	 * @return
 	 * @throws ANoteException
 	 */
-	public Integer getResourceElementsCountByPartialSynonym(String partialSynonym) throws ANoteException;
 	
-	public Integer getResourceElementsFilteredCountByPartialTerm(IResourceElementsFilter filter, String partialTerm) throws ANoteException;
+	public Integer getResourceElementsFilteredCountByPartialTerm(IResourceElementsFilter filter, String partialString) throws ANoteException;
 	
-	public Integer getResourceElementsFilteredCountByPartialSynonym(IResourceElementsFilter filter, String partialSynonym) throws ANoteException;
+	public Integer getResourceElementsCountByPartialSynonym(String partialString) throws ANoteException;
 	
-	public Integer getResourceElementsCountByPartialExternalID(String partialExternalId) throws ANoteException;
+	public Integer getResourceElementsFilteredCountByPartialSynonym(IResourceElementsFilter filter, String partialString) throws ANoteException;
 	
-	public Integer getResourceElementsFilteredCountByPartialExternalID(IResourceElementsFilter filter, String partialExternalId) throws ANoteException;
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactExternalID(String externalId) throws ANoteException;
 
-	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermOrPartialSynonymPaginated(String partialString, int index, int paginationSize) throws ANoteException;
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByExactExternalID(IResourceElementsFilter filter, String externalId) throws ANoteException;
 	
-	public Integer getResourceElementsCountByPartialTermOrPartialSynonym(String partialString) throws ANoteException;
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalID(String partialString) throws ANoteException;
+	
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialExternalID(IResourceElementsFilter filter, String partialString) throws ANoteException;
+	
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIDPaginated(String partialString, int index, int paginationSize) throws ANoteException;
+	
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialExternalIDPaginated(IResourceElementsFilter filter, String partialString, int index, int paginationSize) throws ANoteException;
+	
+	public Integer getResourceElementsCountByPartialExternalID(String partialString) throws ANoteException;
+	
+	public Integer getResourceElementsFilteredCountByPartialExternalID(IResourceElementsFilter filter, String partialString) throws ANoteException;
+	
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialTermOrPartialSynonymPaginated(String partialString, int index, int paginationSize)  throws ANoteException;
+
+	public Integer getResourceElementsCountByPartialTermOrPartialSynonym(String partialString)  throws ANoteException;
+
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactTermOrExactSynonymPaginated(String exactString,
+			int index, int paginationSize) throws ANoteException;
+
+	public Integer getCountResourceElementsByExactTermOrExactSynonymPaginated(String exactString) throws ANoteException;
+
+	public IResourceElementSet<IResourceElement> getResourceElementsPaginated(ISearchProperties searchProperties, int index,
+			int paginationSize, boolean asc, String sortBy) throws ANoteException;
+
+	public Integer countResourceElements(ISearchProperties searchProperties) throws ANoteException;
 	
 }

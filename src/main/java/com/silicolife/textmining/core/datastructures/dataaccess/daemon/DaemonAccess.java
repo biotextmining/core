@@ -1322,6 +1322,116 @@ public class DaemonAccess implements IDataAccess {
 		return this.resourcesAccessImpl.getAllPrivilegesResources();
 	}
 
+	@Override
+	public List<IResource<IResourceElement>> getResourcesFromSearchPaginatedWAuth(ISearchProperties searchProperties,
+			int index, int paginationSize) throws ANoteException {
+		return luceneResourcesAccessImpl.getResourcesFromSearchPaginatedWAuth(searchProperties, index, paginationSize);
+	}
+
+	@Override
+	public Integer countActiveResourcesFromSearch(ISearchProperties searchProperties) throws ANoteException {
+		return luceneResourcesAccessImpl.countActiveResourcesFromSearch(searchProperties);
+	}
+
+	@Override
+	public Integer countResourcesFromSearchWAuth(ISearchProperties searchProperties, String permission)
+			throws ANoteException {
+		return luceneResourcesAccessImpl.countResourcesFromSearchWAuth(searchProperties, permission);
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getActiveResourcesFromSearchPaginatedWSort(
+			ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy)
+			throws ANoteException {
+		return luceneResourcesAccessImpl.getActiveResourcesFromSearchPaginatedWSort(searchProperties, index, paginationSize, asc, sortBy);
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getResourcesFromSearchPaginatedWAuthAndSort(
+			ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy)
+			throws ANoteException {
+		return luceneResourcesAccessImpl.getResourcesFromSearchPaginatedWAuthAndSort(searchProperties, index, paginationSize, asc, sortBy);
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getResourcesFromSearchPaginatedWAuthAndSort(
+			ISearchProperties searchProperties, int index, int paginationSize, boolean asc, String sortBy,
+			String permission) throws ANoteException {
+		return luceneResourcesAccessImpl.getResourcesFromSearchPaginatedWAuthAndSort(searchProperties,index,paginationSize,asc,sortBy,permission);
+	}
+
+	@Override
+	public List<IResource<IResourceElement>> getPrivilegesResourcesAdminAccessFromSearchPaginated(
+			ISearchProperties searchProperties, Integer paginationIndex, Integer paginationSize, boolean asc,
+			String sortBy) throws ANoteException {
+		return luceneResourcesAccessImpl.getPrivilegesResourcesAdminAccessFromSearchPaginated(searchProperties, paginationIndex, paginationSize, asc, sortBy);
+	}
+
+	@Override
+	public Integer countPrivilegesResourcesAdminAccessFromSearch(ISearchProperties searchProperties)
+			throws ANoteException {
+		return luceneResourcesAccessImpl.countPrivilegesResourcesAdminAccessFromSearch(searchProperties);
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactExternalID(String externalId)
+			throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsByExactExternalID(externalId);
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByExactExternalID(
+			IResourceElementsFilter filter, String externalId) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsFilteredByExactExternalID(filter, externalId);
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalID(String partialString)
+			throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsByPartialExternalID(partialString);
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialExternalID(
+			IResourceElementsFilter filter, String partialString) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsFilteredByPartialExternalID(filter, partialString);
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByPartialExternalIDPaginated(String partialString,
+			int index, int paginationSize) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsByPartialExternalIDPaginated(partialString, index, paginationSize);
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsFilteredByPartialExternalIDPaginated(
+			IResourceElementsFilter filter, String partialString, int index, int paginationSize) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsFilteredByPartialExternalIDPaginated(filter, partialString, index, paginationSize);
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsByExactTermOrExactSynonymPaginated(
+			String exactString, int index, int paginationSize) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsByExactTermOrExactSynonymPaginated(exactString, index, paginationSize);
+	}
+
+	@Override
+	public Integer getCountResourceElementsByExactTermOrExactSynonymPaginated(String exactString)
+			throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getCountResourceElementsByExactTermOrExactSynonymPaginated(exactString);
+	}
+
+	@Override
+	public IResourceElementSet<IResourceElement> getResourceElementsPaginated(ISearchProperties searchProperties,
+			int index, int paginationSize, boolean asc, String sortBy) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.getResourceElementsPaginated(searchProperties, index, paginationSize, asc, sortBy);
+	}
+
+	@Override
+	public Integer countResourceElements(ISearchProperties searchProperties) throws ANoteException {
+		return luceneResourcesElementsAccessImpl.countResourceElements(searchProperties);
+	}
+
 
 	
 }
