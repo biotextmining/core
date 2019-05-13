@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.silicolife.textmining.core.datastructures.analysis.AnnotatedDocumentStatisticsImpl;
 import com.silicolife.textmining.core.datastructures.annotation.AnnotationType;
 import com.silicolife.textmining.core.datastructures.annotation.ManualCurationAnnotationsImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.AnnotationException;
@@ -45,8 +46,9 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.general.ClassesWrapper;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.process.ProcessWrapper;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.publications.PublicationsWrapper;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.resources.ResourceElementWrapper;
 import com.silicolife.textmining.core.datastructures.documents.AnnotatedDocumentImpl;
-import com.silicolife.textmining.core.datastructures.documents.AnnotatedDocumentStatisticsImpl;
+import com.silicolife.textmining.core.interfaces.core.analysis.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationLog;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
@@ -54,15 +56,14 @@ import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotatio
 import com.silicolife.textmining.core.interfaces.core.annotation.IManualCurationAnnotations;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocument;
-import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.core.document.structure.ISentence;
 import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
-import com.silicolife.textmining.core.interfaces.process.IProcess;
 import com.silicolife.textmining.core.interfaces.process.ProcessTypeEnum;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
+import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 
 @Service
 @Transactional(readOnly = true)
@@ -112,16 +113,16 @@ public class AnnotationServiceImpl implements IAnnotationService{
 			Classes klass = resourceManagerDao.getClassesDao().findUniqueByAttribute("claName", entityAnnotation.getClassAnnotation().getName());
 			if(klass==null)
 			{
-				resourceManagerDao.getClassesDao().save(annot.getClasses());
+				resourceManagerDao.getClassesDao().saveOrUpdate(annot.getClasses());
 			}
 			else
 			{
 				annot.setClasses(klass);
 			}
-			annotationManagerdao.getAnnotationsDao().save(annot);
+			annotationManagerdao.getAnnotationsDao().saveOrUpdate(annot);
 			Set<AnnotationProperties> annotationPropertiess = annot.getAnnotationPropertieses();
 			for (AnnotationProperties annotationProperty : annotationPropertiess) {
-				annotationManagerdao.getAnnotationPropertiesDao().save(annotationProperty);
+				annotationManagerdao.getAnnotationPropertiesDao().saveOrUpdate(annotationProperty);
 			}
 		}
 		
@@ -169,26 +170,40 @@ public class AnnotationServiceImpl implements IAnnotationService{
 		}
 	}
 
-	@Override
-	public IAnnotatedDocumentStatistics getProcessDocumentStatistics(Long documentID, Long processID) throws AnnotationException {
+	
+	public Map<IAnoteClass, Long> countAnnotationsByClassInDocument(Long documentID, Long processID) throws AnnotationException {
 		Processes processes = processManagerDao.getProcessesDao().findById(processID);
 		if (processes == null)
 			throw new AnnotationException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
 		Publications publications = corpusManagerDao.getPublicationsDao().findById(documentID);
 		if (publications == null)
 			throw new AnnotationException(ExceptionsCodes.codeNoPublication, ExceptionsCodes.msgNoPublication);
-		IAnnotatedDocumentStatistics statistics = new AnnotatedDocumentStatisticsImpl();
-		Map<Classes, Integer> classStatistics = annotationManagerdao.getAnnotationAuxDao().getProcessDocumentClassStatistics(processes.getProId(),publications.getPubId());
-		for(Classes klass:classStatistics.keySet())
-		{
-			int numberOFClassEntities = classStatistics.get(klass);
-			IAnoteClass klassConver = ClassesWrapper.convertToAnoteStructure(klass);
-			statistics.addClassStatistics(klassConver, numberOFClassEntities );
+		
+		Map<Classes, Long> annotationsWithClass = annotationManagerdao.getAnnotationAuxDao().getProcessDocumentClassStatistics(processes.getProId(),publications.getPubId());
+		
+		Map<IAnoteClass, Long> mapAnoteClassNumberOFOccurrences = new HashMap<>();
+		for(Classes klass:annotationsWithClass.keySet()){
+			IAnoteClass anoteKlass = ClassesWrapper.convertToAnoteStructure(klass);
+			mapAnoteClassNumberOFOccurrences.put(anoteKlass, annotationsWithClass.get(klass));
 		}
+		return mapAnoteClassNumberOFOccurrences;
+	}
+	
+	//TODO: remove from service the Statistics datastructures, since it does not improve speed for multiple accesses (it should be a process!)
+	@Override
+	public IAnnotatedDocumentStatistics getProcessDocumentStatistics(Long documentID, Long processID) throws AnnotationException {
+		Map<IAnoteClass, Long> classStatistics = countAnnotationsByClassInDocument(documentID, processID);
+
+		IAnnotatedDocumentStatistics statistics = new AnnotatedDocumentStatisticsImpl();
+
+		for(IAnoteClass klass:classStatistics.keySet()) 
+			statistics.addClassStatistics(klass,  classStatistics.get(klass));
+		
+		Processes processes = processManagerDao.getProcessesDao().findById(processID);
 		if(processes.getProcessTypes().getPtProcessType().equals(ProcessTypeEnum.RE.toString()))
 		{
-			int numberOfevents = annotationManagerdao.getAnnotationAuxDao().getRelationSize(processID, documentID);
-			statistics.addEventNumber(numberOfevents );
+			Long numberOfevents = countPublicationAnnotationsByAnnotionType(processID, documentID, AnnotationType.re.name());
+			statistics.setEventsCount(numberOfevents);
 		}
 		return statistics;
 	}
@@ -583,7 +598,7 @@ public class AnnotationServiceImpl implements IAnnotationService{
 	}
 	
 	@Override
-	public Long countAnnotations(Long processId, Long resourceElementId) throws AnnotationException {
+	public Long countAnnotationsByResourceElement(Long processId, Long resourceElementId) throws AnnotationException {
 		Processes processes = processManagerDao.getProcessesDao().findById(processId);
 		if (processes == null)
 			throw new AnnotationException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
@@ -597,4 +612,125 @@ public class AnnotationServiceImpl implements IAnnotationService{
 		eqRestrictions.put("annAnnotType", AnnotationType.ner.name());
 		return annotationManagerdao.getAnnotationsDao().countByAttributes(eqRestrictions);
 	}
+	
+	@Override
+	public Long countAnnotationsByAnnotionType(Long processId, String annotationType) throws AnnotationException {
+		Processes processes = processManagerDao.getProcessesDao().findById(processId);
+		if (processes == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
+
+		Map<String, Serializable> eqRestrictions = new HashMap<String, Serializable>();
+		eqRestrictions.put("processes.proId", processId);
+		eqRestrictions.put("annActive", true);
+		eqRestrictions.put("annAnnotType", annotationType);
+		return annotationManagerdao.getAnnotationsDao().countByAttributes(eqRestrictions);
+	}
+	
+	@Override
+	public Long countPublicationAnnotationsByAnnotionType(Long processId, Long publicationID, String annotationType) throws AnnotationException {
+		Processes processes = processManagerDao.getProcessesDao().findById(processId);
+		if (processes == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
+
+		Map<String, Serializable> eqRestrictions = new HashMap<String, Serializable>();
+		eqRestrictions.put("publications.pubId", publicationID);
+		eqRestrictions.put("processes.proId", processId);
+		eqRestrictions.put("annActive", true);
+		eqRestrictions.put("annAnnotType", annotationType);
+		return annotationManagerdao.getAnnotationsDao().countByAttributes(eqRestrictions);
+	}
+
+	@Override
+	public Map<IAnoteClass, Long> countAnnotationsByClassInProcess(Long processId) throws AnnotationException {
+		Processes processes = processManagerDao.getProcessesDao().findById(processId);
+		if (processes == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
+		
+		Map<Classes, Long> annotationsWithClass = annotationManagerdao.getAnnotationAuxDao().getProcessProcessClassStatistics(processId);
+		
+		Map<IAnoteClass, Long> mapAnoteClassNumberOFOccurrences = new HashMap<>();
+		for(Classes klass:annotationsWithClass.keySet()){
+			IAnoteClass anoteKlass = ClassesWrapper.convertToAnoteStructure(klass);
+			mapAnoteClassNumberOFOccurrences.put(anoteKlass, annotationsWithClass.get(klass));
+		}
+		return mapAnoteClassNumberOFOccurrences;
+	}
+
+	@Override
+	public Map<IResourceElement, Long> countAnnotationsByResourceElementInProcess(Long processId)
+			throws AnnotationException {
+		Processes processes = processManagerDao.getProcessesDao().findById(processId);
+		if (processes == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
+		
+		Map<ResourceElements, Long> annotationsByresourceCount = annotationManagerdao.getAnnotationAuxDao().countAnnotationsByResourceElementInProcess(processId);
+		
+		Map<IResourceElement, Long> mapAnnotationsByresourceCount = new HashMap<>();
+		for(ResourceElements resElm : annotationsByresourceCount.keySet()) {
+			IResourceElement anoteResElm = ResourceElementWrapper.convertToAnoteStructure(resElm);
+			mapAnnotationsByresourceCount.put(anoteResElm, annotationsByresourceCount.get(resElm));
+		}
+		return mapAnnotationsByresourceCount;
+	}
+
+	@Override
+	public Map<IResourceElement, Long> countAnnotationsByResourceElementInDocument(Long documentId, Long processId)
+			throws AnnotationException {
+		
+		Publications publications = corpusManagerDao.getPublicationsDao().findById(documentId);
+		if (publications == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoPublication, ExceptionsCodes.msgNoPublication);
+		
+		Processes processes = processManagerDao.getProcessesDao().findById(processId);
+		if (processes == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
+		
+		Map<ResourceElements, Long> annotationsByresourceCount = annotationManagerdao.getAnnotationAuxDao().countAnnotationsByResourceElementInDocument(documentId,processId);
+		
+		Map<IResourceElement, Long> mapAnnotationsByresourceCount = new HashMap<>();
+		for(ResourceElements resElm : annotationsByresourceCount.keySet()) {
+			IResourceElement anoteResElm = ResourceElementWrapper.convertToAnoteStructure(resElm);
+			mapAnnotationsByresourceCount.put(anoteResElm, annotationsByresourceCount.get(resElm));
+		}
+		return mapAnnotationsByresourceCount;
+	}
+
+	@Override
+	public Long countDocumentsWithResourceElementInProcess(Long resourceElementId, Long processId) throws AnnotationException {
+		ResourceElements resourceElemen = resourceManagerDao.getResourcesElememtsDao().findById(resourceElementId);
+		if (resourceElemen == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoResourceElement, ExceptionsCodes.msgNoResourceElement);
+		Processes processes = processManagerDao.getProcessesDao().findById(processId);
+		if (processes == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
+		
+		Map<String, Serializable> eqRestrictions = new HashMap<>();
+		eqRestrictions.put("processes.proId", processId);
+		eqRestrictions.put("resourceElements.resId", resourceElementId);
+		eqRestrictions.put("annActive", true);
+		List<String> distinctBy = new ArrayList<>();
+		distinctBy.add("publications.pubId");
+		Long count = annotationManagerdao.getAnnotationsDao().countByAttributesDistinctBy(eqRestrictions, distinctBy);
+		
+		return count;
+	}
+
+	@Override
+	public Map<IResourceElement, Long> countDocumentsWithAnnotationsByResourceElementInProcess(Long processId)
+			throws AnnotationException {
+
+		Processes processes = processManagerDao.getProcessesDao().findById(processId);
+		if (processes == null)
+			throw new AnnotationException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
+		
+		Map<ResourceElements, Long> annotationsByresourceCount = annotationManagerdao.getAnnotationAuxDao().countDocumentsWithAnnotationsByResourceElementInProcess(processId);
+		
+		Map<IResourceElement, Long> mapAnnotationsByresourceCount = new HashMap<>();
+		for(ResourceElements resElm : annotationsByresourceCount.keySet()) {
+			IResourceElement anoteResElm = ResourceElementWrapper.convertToAnoteStructure(resElm);
+			mapAnnotationsByresourceCount.put(anoteResElm, annotationsByresourceCount.get(resElm));
+		}
+		return mapAnnotationsByresourceCount;
+	}
+	
 }

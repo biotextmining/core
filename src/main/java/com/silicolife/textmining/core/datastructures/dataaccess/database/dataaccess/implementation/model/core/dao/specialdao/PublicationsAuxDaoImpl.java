@@ -460,6 +460,23 @@ public class PublicationsAuxDaoImpl implements PublicationsAuxDao {
 		List<Object> response = c.list();
 		return response;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Long> getCorpusPublicationIdsByExternalId(Long sourceId, String internalSourceId, Long corpusId){
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = session.createCriteria(Corpus.class, "corp");
+		c.createAlias("corp.corpusHasPublicationses", "corpHasPubs");
+		c.setFetchMode("corp.corpusHasPublicationses", FetchMode.JOIN);
+		c.createAlias("corpHasPubs.publications", "pub");
+		c.setFetchMode("corpHasPubs.publications", FetchMode.JOIN);
+		c.createAlias("pub.publicationHasSourceses", "pubExternalIds");
+		c.setFetchMode("pub.publicationHasSourceses", FetchMode.JOIN);
+		c.add(Restrictions.eq("corp.id", corpusId));
+		c.add(Restrictions.eq("pubExternalIds.id.phpsPublicationSourceId", sourceId));
+		c.add(Restrictions.eq("pubExternalIds.id.phpsPublicationSourceInternalId", internalSourceId));
+		c.setProjection(Projections.distinct(Projections.projectionList().add(Projections.property("pub.id"), "pubId")));
+		return (List<Long>) c.list();
+	}
 
 
 }

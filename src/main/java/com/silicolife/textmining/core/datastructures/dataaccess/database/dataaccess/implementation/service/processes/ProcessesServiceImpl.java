@@ -1,5 +1,6 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.service.processes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.silicolife.textmining.core.datastructures.analysis.IEProcessStatisticsImpl;
+import com.silicolife.textmining.core.datastructures.annotation.AnnotationType;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.ProcessException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.general.ExceptionsCodes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
@@ -32,10 +35,9 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.RolesEnum;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.general.ClassesWrapper;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.wrapper.process.ProcessWrapper;
-import com.silicolife.textmining.core.datastructures.process.IEProcessStatisticsImpl;
+import com.silicolife.textmining.core.interfaces.core.analysis.IIEProcessStatistics;
 import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
-import com.silicolife.textmining.core.interfaces.process.IE.IIEProcessStatistics;
 
 @Service
 @Transactional(readOnly = true)
@@ -134,16 +136,23 @@ public class ProcessesServiceImpl implements IProcessesService {
 		return processes_;
 	}
 
+	//TODO: remove this to a statitics process!
 	@Override
 	public IIEProcessStatistics getProcessStatistics(long processID) throws ProcessException {
 		Processes processs = processesManagerDao.getProcessesDao().findById(processID);
 		if (processs == null)
 			throw new ProcessException(ExceptionsCodes.codeNoProcess, ExceptionsCodes.msgNoProcess);
-		int entitiesSize = annotationsManagerDao.getAnnotationAuxDao().getEntitieSize(processs);
-		int relationsSize = annotationsManagerDao.getAnnotationAuxDao().getRelationSize(processs);
+		
+		Map<String, Serializable> eqRestrictions = new HashMap<>();
+		eqRestrictions.put("processes", processs);
+		eqRestrictions.put("annActive", true);
+		eqRestrictions.put("annAnnotType", AnnotationType.ner.name());
+		Long entitiesSize = annotationsManagerDao.getAnnotationsDao().countByAttributes(eqRestrictions);
+		eqRestrictions.put("annAnnotType", AnnotationType.re.name());
+		Long relationsSize = annotationsManagerDao.getAnnotationsDao().countByAttributes(eqRestrictions);
 		IIEProcessStatistics statistics= new IEProcessStatisticsImpl(entitiesSize, relationsSize);
-		Map<Classes, Integer> mapCLassNumberOfOcurrences = annotationsManagerDao.getAnnotationAuxDao().getProcessProcessClassStatistics(processID);
-		Map<IAnoteClass, Integer> mapAnoteClassNumberOFOccurrences = new HashMap<IAnoteClass, Integer>();
+		Map<Classes, Long> mapCLassNumberOfOcurrences = annotationsManagerDao.getAnnotationAuxDao().getProcessProcessClassStatistics(processID);
+		Map<IAnoteClass, Long> mapAnoteClassNumberOFOccurrences = new HashMap<>();
 		for(Classes klass:mapCLassNumberOfOcurrences.keySet())
 		{
 			IAnoteClass anoteKlass = ClassesWrapper.convertToAnoteStructure(klass);

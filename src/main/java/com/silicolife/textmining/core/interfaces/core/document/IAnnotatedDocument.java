@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.silicolife.textmining.core.datastructures.process.IEProcessImpl;
+import com.silicolife.textmining.core.interfaces.core.analysis.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;

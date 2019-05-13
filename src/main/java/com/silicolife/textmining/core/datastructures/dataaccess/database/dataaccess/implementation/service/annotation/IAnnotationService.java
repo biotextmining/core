@@ -2,20 +2,23 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.AnnotationException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
+import com.silicolife.textmining.core.interfaces.core.analysis.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationLog;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IManualCurationAnnotations;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
-import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
 import com.silicolife.textmining.core.interfaces.core.document.structure.ISentence;
+import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
+import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 
 public interface IAnnotationService {
 	
@@ -64,6 +67,20 @@ public interface IAnnotationService {
 	public List<IEntityAnnotation> getProcessDoumentAnnotationEntitiesOfSentence(Long publicationId, Long processID,
 			ISentence sentence) throws AnnotationException;
 
-	public Long countAnnotations(Long processId, Long resourceElementId) throws AnnotationException;;
+	public Long countAnnotationsByResourceElement(Long processId, Long resourceElementId) throws AnnotationException;
+	
+	public Long countAnnotationsByAnnotionType(Long processId, String annotationType) throws AnnotationException;
+	
+	public Map<IAnoteClass, Long> countAnnotationsByClassInProcess(Long processId) throws AnnotationException;
+
+	public Long countPublicationAnnotationsByAnnotionType(Long processId, Long publicationID, String annotationType) throws AnnotationException;
+	
+	public Map<IResourceElement, Long> countAnnotationsByResourceElementInProcess(Long processId) throws AnnotationException;
+
+	public Map<IResourceElement, Long> countAnnotationsByResourceElementInDocument(Long documentId, Long processId) throws AnnotationException;
+
+	public Long countDocumentsWithResourceElementInProcess(Long resourceElementId, Long processId) throws AnnotationException;
+	
+	public Map<IResourceElement, Long> countDocumentsWithAnnotationsByResourceElementInProcess(Long processId) throws AnnotationException;
 	
 }

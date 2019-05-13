@@ -171,6 +171,7 @@ public interface ICorpusService {
 			boolean asc, String sortBy);
 
 	public Integer countAllPrivilegesCorpusAdminAccess();
-
+	
+	public List<Long> getCorpusPublicationsFromExternalID(Long corpusId, String source, String internalSourceId);
 
 }

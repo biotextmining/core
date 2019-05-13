@@ -17,6 +17,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+import com.silicolife.textmining.core.datastructures.annotation.AnnotationType;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.dao.manager.LuceneManagerDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.ILuceneService;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.lucene.service.LuceneServiceImpl;
@@ -71,6 +72,8 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.init.InitConfiguration;
 import com.silicolife.textmining.core.datastructures.init.dataaccess.DataAccessDefaultSettings;
 import com.silicolife.textmining.core.datastructures.resources.ResourceElementSetImpl;
+import com.silicolife.textmining.core.interfaces.core.analysis.IAnnotatedDocumentStatistics;
+import com.silicolife.textmining.core.interfaces.core.analysis.IIEProcessStatistics;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationLog;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
@@ -83,7 +86,6 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.database.IDatab
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.resources.IResourceManagerReport;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocument;
-import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
@@ -103,7 +105,6 @@ import com.silicolife.textmining.core.interfaces.core.user.IUser;
 import com.silicolife.textmining.core.interfaces.core.user.IUserDataObject;
 import com.silicolife.textmining.core.interfaces.core.utils.IGenericPair;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
-import com.silicolife.textmining.core.interfaces.process.IE.IIEProcessStatistics;
 import com.silicolife.textmining.core.interfaces.process.IE.re.IRelationsType;
 import com.silicolife.textmining.core.interfaces.process.IR.IQuery;
 import com.silicolife.textmining.core.interfaces.resource.IResource;
@@ -1906,6 +1907,19 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}
 	}
+	
+	@Override
+	public List<Long> getCorpusPublicationsFromExternalID(ICorpus corpus, String source, String InternalSourceId) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<Long> pubIds = corpusService.getCorpusPublicationsFromExternalID(corpus.getId(), source, InternalSourceId);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return pubIds;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
 
 
 	@Override
@@ -2759,10 +2773,10 @@ public class DatabaseAccess implements IDataAccess {
 	}
 
 	@Override
-	public Long countAnnotations(IIEProcess process, IResourceElement resourceElement) throws ANoteException {
+	public Long countAnnotationsByResourceElement(IIEProcess process, IResourceElement resourceElement) throws ANoteException {
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
-			Long count = this.annotationService.countAnnotations(process.getId(), resourceElement.getId());
+			Long count = this.annotationService.countAnnotationsByResourceElement(process.getId(), resourceElement.getId());
 			sessionFactory.getCurrentSession().getTransaction().commit();
 			return count;
 		} catch (RuntimeException e) {
@@ -3024,6 +3038,117 @@ public class DatabaseAccess implements IDataAccess {
 			throw new ANoteException(e);
 		}
 	}
+
+	@Override
+	public List<IPublication> getQueryPublicationsPaginated(IQuery query, Integer paginationIndex,
+			Integer paginationSize, Boolean asc, String sortBy) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			List<IPublication> publications = queriesService.getQueryPublicationsPaginated(query.getId(), paginationIndex, paginationSize, asc, sortBy);
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return publications;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Long countQueryPublications(IQuery query) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Long count = queriesService.getQueryPublicationsCount(query.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Long countAnnotationsByAnnotationType(IIEProcess process, AnnotationType annotType) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Long count = annotationService.countAnnotationsByAnnotionType(process.getId(), annotType.name());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Map<IAnoteClass, Long> countAnnotationsByClassInProcess(IIEProcess process) throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Map<IAnoteClass, Long> count = annotationService.countAnnotationsByClassInProcess(process.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Map<IResourceElement, Long> countAnnotationsByResourceElementInProcess(IIEProcess process)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Map<IResourceElement, Long> count = annotationService.countAnnotationsByResourceElementInProcess(process.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Map<IResourceElement, Long> countAnnotationsByResourceElementInDocument(IAnnotatedDocument document)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Map<IResourceElement, Long> count = annotationService.countAnnotationsByResourceElementInDocument(document.getId(), document.getProcess().getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Long countDocumentsWithResourceElementInProcess(IResourceElement resourceElement, IIEProcess process)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Long count = annotationService.countDocumentsWithResourceElementInProcess(resourceElement.getId(), process.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+
+	@Override
+	public Map<IResourceElement, Long> countDocumentsWithAnnotationsByResourceElementInProcess(IIEProcess process)
+			throws ANoteException {
+		try {
+			sessionFactory.getCurrentSession().beginTransaction();
+			Map<IResourceElement, Long> count = annotationService.countDocumentsWithAnnotationsByResourceElementInProcess(process.getId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return count;
+		} catch (RuntimeException e) {
+			sessionFactory.getCurrentSession().getTransaction().rollback();
+			throw new ANoteException(e);
+		}
+	}
+	
+	
 
 	
 }

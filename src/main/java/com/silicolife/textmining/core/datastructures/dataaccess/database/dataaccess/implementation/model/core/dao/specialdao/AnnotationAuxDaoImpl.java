@@ -1,6 +1,7 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.specialdao;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -21,11 +23,13 @@ import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.silicolife.textmining.core.datastructures.annotation.AnnotationType;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.GenericDao;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.GenericDaoImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Annotations;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Classes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Processes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ResourceElements;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
 import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
 
@@ -39,100 +43,157 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 		this.sessionFactory = sessionFactory;
 	}
 
+//	@Override
+//	public Integer getEntitieSize(Processes processs) {
+//		Session session = sessionFactory.getCurrentSession();
+//		Criteria c = session.createCriteria(Annotations.class, "annnotations");
+//		c.add(Restrictions.eq("annnotations.processes", processs));
+//		c.add(Restrictions.eq("annnotations.annAnnotType", AnnotationType.ner.name()));
+//		c.add(Restrictions.eq("annnotations.annActive", true));
+//		Number result = (Number) c.setProjection(Projections.rowCount()).uniqueResult();
+//		if(result == null)
+//			return 0;
+//		Integer totalResult = result.intValue();
+//
+//		return totalResult;
+//	}
+//
+//	@Override
+//	public Integer getRelationSize(Processes processs) {
+//		Session session = sessionFactory.getCurrentSession();
+//		Criteria c = session.createCriteria(Annotations.class, "annnotations");
+//		c.add(Restrictions.eq("annnotations.processes", processs));
+//		c.add(Restrictions.eq("annnotations.annAnnotType", AnnotationType.re.name()));
+//		c.add(Restrictions.eq("annnotations.annActive", true));
+//		Number result = (Number) c.setProjection(Projections.rowCount()).uniqueResult();
+//		if(result == null)
+//			return 0;
+//		Integer totalResult = result.intValue();
+//
+//		return totalResult;
+//	}
+
 	@Override
-	public Integer getEntitieSize(Processes processs) {
+	public Map<Classes, Long> getProcessDocumentClassStatistics(Long processID, Long publicationID) {
 		Session session = sessionFactory.getCurrentSession();
-		Criteria c = session.createCriteria(Annotations.class, "annnotations");
-		c.add(Restrictions.eq("annnotations.processes", processs));
-		c.add(Restrictions.eq("annnotations.annAnnotType", AnnotationType.ner.name()));
-		c.add(Restrictions.eq("annnotations.annActive", true));
-		Number result = (Number) c.setProjection(Projections.rowCount()).uniqueResult();
-		if(result == null)
-			return 0;
-		Integer totalResult = result.intValue();
 
-		return totalResult;
-	}
-
-	@Override
-	public Integer getRelationSize(Processes processs) {
-		Session session = sessionFactory.getCurrentSession();
-		Criteria c = session.createCriteria(Annotations.class, "annnotations");
-		c.add(Restrictions.eq("annnotations.processes", processs));
-		c.add(Restrictions.eq("annnotations.annAnnotType", AnnotationType.re.name()));
-		c.add(Restrictions.eq("annnotations.annActive", true));
-		Number result = (Number) c.setProjection(Projections.rowCount()).uniqueResult();
-		if(result == null)
-			return 0;
-		Integer totalResult = result.intValue();
-
-		return totalResult;
-	}
-
-	@Override
-	public Map<Classes, Integer> getProcessDocumentClassStatistics(
-			Long processID, Long publicationID) {
-		Session session = sessionFactory.getCurrentSession();
-		Criteria c = session.createCriteria(Classes.class, "classes");
-		c.createAlias("classes.annotationses", "anotation");
-		c.add(Restrictions.eq("anotation.publications.pubId", publicationID));
-		c.add(Restrictions.eq("anotation.processes.proId", processID));
-		c.add(Restrictions.eq("anotation.annActive", true));
-		c.setProjection(Projections.projectionList()
-				.add(Projections.groupProperty("claId"), "claId")
-				.add(Projections.count("claId"), "classNumber"));
-
-		@SuppressWarnings({"rawtypes", "unchecked"})
-		List<Object[]> data = (List) c.list();
-		Map<Classes, Integer> map = new HashMap<Classes, Integer>();
-		for (Object[] object : data) {
-			Long id = (Long) object[0];
-			Integer count = Integer.valueOf(object[1].toString());
-			Classes class_ = (Classes) session.get(Classes.class, id);
-			map.put(class_, count);
+		GenericDao<Classes> gendao = new GenericDaoImpl<Classes>(sessionFactory, Classes.class);
+		
+		Map<String, String> alias = new HashMap<>();
+		alias.put("annotationses", "anotation");
+		
+		Map<String, Serializable> eqRestrictions = new HashMap<>();
+		eqRestrictions.put("anotation.publications.pubId", publicationID);
+		eqRestrictions.put("anotation.processes.proId", processID);
+		eqRestrictions.put("anotation.annActive", true);
+		
+		List<String> groups = new ArrayList<>();
+		groups.add("claId");
+		
+		Map<String, Long> data = gendao.countByAttributesWithAliasGroupedBy(alias, eqRestrictions, groups);
+		
+		Map<Classes, Long> map = new HashMap<>();
+		for (String idstring : data.keySet()) {
+			Classes class_ = (Classes) session.get(Classes.class, Long.valueOf(idstring));
+			map.put(class_, data.get(idstring));
 		}
 
 		return map;	
 	}
 
 	@Override
-	public Map<Classes, Integer> getProcessProcessClassStatistics(Long processID) {
+	public Map<Classes, Long> getProcessProcessClassStatistics(Long processID) {
 		Session session = sessionFactory.getCurrentSession();
-		Criteria c = session.createCriteria(Classes.class, "classes");
-		c.createAlias("classes.annotationses", "anotation");
-		c.add(Restrictions.eq("anotation.processes.proId", processID));
-		c.add(Restrictions.eq("anotation.annActive", true));
-		c.setProjection(Projections.projectionList()
-				.add(Projections.groupProperty("claId"), "claId")
-				.add(Projections.count("claId"), "classNumber"));
 
-		@SuppressWarnings({"rawtypes", "unchecked"})
-		List<Object[]> data = (List) c.list();
-		Map<Classes, Integer> map = new HashMap<Classes, Integer>();
-		for (Object[] object : data) {
-			Long id = (Long) object[0];
-			Integer count = Integer.valueOf(object[1].toString());
-			Classes class_ = (Classes) session.get(Classes.class, id);
-			map.put(class_, count);
+		GenericDao<Classes> gendao = new GenericDaoImpl<Classes>(sessionFactory, Classes.class);
+		
+		Map<String, String> alias = new HashMap<>();
+		alias.put("annotationses", "anotation");
+		
+		Map<String, Serializable> eqRestrictions = new HashMap<>();
+		eqRestrictions.put("anotation.processes.proId", processID);
+		eqRestrictions.put("anotation.annActive", true);
+		
+		List<String> groups = new ArrayList<>();
+		groups.add("claId");
+		
+		Map<String, Long> data = gendao.countByAttributesWithAliasGroupedBy(alias, eqRestrictions, groups);
+		
+		Map<Classes, Long> map = new HashMap<>();
+		for (String idstring : data.keySet()) {
+			Classes class_ = (Classes) session.get(Classes.class, Long.valueOf(idstring));
+			map.put(class_, data.get(idstring));
+		}
+		return map;	
+	}
+	
+	@Override
+	public Map<ResourceElements, Long> countAnnotationsByResourceElementInProcess(Long processID){
+		Session session = sessionFactory.getCurrentSession();
+		
+		GenericDao<Annotations> gendao = new GenericDaoImpl<Annotations>(sessionFactory, Annotations.class);
+		
+		Map<String, Serializable> eqRestrictions = new HashMap<>();
+		eqRestrictions.put("processes.proId", processID);
+		eqRestrictions.put("annActive", true);
+		
+		List<String> groups = new ArrayList<>();
+		groups.add("resourceElements.resId");
+		
+		Map<String, Long> data = gendao.countByAttributesGroupedBy(eqRestrictions, groups);
+		
+		Map<ResourceElements, Long> map = new HashMap<>();
+		for (String idstring : data.keySet()) {
+			if(Long.valueOf(idstring)!=null) {
+				ResourceElements resourceElm = (ResourceElements) session.get(ResourceElements.class, Long.valueOf(idstring));
+				map.put(resourceElm, data.get(idstring));
+			}
+		}
+		return map;	
+	}
+	
+
+	@Override
+	public Map<ResourceElements, Long> countAnnotationsByResourceElementInDocument(Long documentId, Long processId) {
+		Session session = sessionFactory.getCurrentSession();
+		
+		GenericDao<Annotations> gendao = new GenericDaoImpl<Annotations>(sessionFactory, Annotations.class);
+		
+		Map<String, Serializable> eqRestrictions = new HashMap<>();
+		eqRestrictions.put("publications.pubId", processId);
+		eqRestrictions.put("processes.proId", processId);
+		eqRestrictions.put("annActive", true);
+		
+		List<String> groups = new ArrayList<>();
+		groups.add("resourceElements.resId");
+		
+		Map<String, Long> data = gendao.countByAttributesGroupedBy(eqRestrictions, groups);
+		
+		Map<ResourceElements, Long> map = new HashMap<>();
+		for (String idstring : data.keySet()) {
+			if(Long.valueOf(idstring)!=null) {
+				ResourceElements resourceElm = (ResourceElements) session.get(ResourceElements.class, Long.valueOf(idstring));
+				map.put(resourceElm, data.get(idstring));
+			}
 		}
 		return map;	
 	}
 
-	@Override
-	public Integer getRelationSize(Long processID, Long publicationID) {
-		Session session = sessionFactory.getCurrentSession();
-		Criteria c = session.createCriteria(Annotations.class, "annnotations");
-		c.add(Restrictions.eq("annnotations.publications.pubId", publicationID));
-		c.add(Restrictions.eq("annnotations.processes.proId", processID));
-		c.add(Restrictions.eq("annnotations.annAnnotType", AnnotationType.re.name()));
-		c.add(Restrictions.eq("annnotations.annActive", true));
-		Number result = (Number) c.setProjection(Projections.rowCount()).uniqueResult();
-		if(result == null)
-			return 0;
-		Integer totalResult = result.intValue();
-
-		return totalResult;
-	}
+//	@Override
+//	public Integer getRelationSize(Long processID, Long publicationID) {
+//		Session session = sessionFactory.getCurrentSession();
+//		Criteria c = session.createCriteria(Annotations.class, "annnotations");
+//		c.add(Restrictions.eq("annnotations.publications.pubId", publicationID));
+//		c.add(Restrictions.eq("annnotations.processes.proId", processID));
+//		c.add(Restrictions.eq("annnotations.annAnnotType", AnnotationType.re.name()));
+//		c.add(Restrictions.eq("annnotations.annActive", true));
+//		Number result = (Number) c.setProjection(Projections.rowCount()).uniqueResult();
+//		if(result == null)
+//			return 0;
+//		Integer totalResult = result.intValue();
+//
+//		return totalResult;
+//	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
@@ -321,5 +382,32 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 		query.setParameter("ann_publication_id", publications.getPubId());
 		query.executeUpdate();
 	}
+
+	@Override
+	public Map<ResourceElements, Long> countDocumentsWithAnnotationsByResourceElementInProcess(Long processId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria c = sessionFactory.getCurrentSession().createCriteria(Annotations.class);
+		
+		c.add(Restrictions.eq("processes.proId", processId));
+		
+		c.setProjection(Projections.projectionList()
+		.add(Projections.countDistinct("publications.pubId").as("publicationsCount"))
+		.add(Projections.groupProperty("resourceElements.resId")));
+
+		c.addOrder(Order.desc("publicationsCount"));
+		@SuppressWarnings("unchecked")
+		List<Object[]> result = c.list();
+		
+		Map<ResourceElements, Long> resultmap =  new HashMap<>();
+		for(Object[] row :result) {
+			if(Long.valueOf(row[0].toString())!=null) {
+				ResourceElements resourceElm = (ResourceElements) session.get(ResourceElements.class, Long.valueOf(row[0].toString()));
+				resultmap.put(resourceElm,  Long.valueOf(row[row.length-1].toString()));
+			}
+		}
+			
+		return resultmap;
+	}
+
 	
 }

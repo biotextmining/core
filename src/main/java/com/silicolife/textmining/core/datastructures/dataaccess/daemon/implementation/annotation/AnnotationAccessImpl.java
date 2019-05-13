@@ -13,16 +13,17 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.silicolife.textmining.core.datastructures.analysis.AnnotatedDocumentStatisticsImpl;
 import com.silicolife.textmining.core.datastructures.annotation.ManualCurationAnnotationsImpl;
 import com.silicolife.textmining.core.datastructures.annotation.log.AnnotationLogImpl;
 import com.silicolife.textmining.core.datastructures.annotation.ner.EntityAnnotationImpl;
 import com.silicolife.textmining.core.datastructures.annotation.re.EventAnnotationImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.RestClientAccess;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.webserviceclient.DaemonResponse;
-import com.silicolife.textmining.core.datastructures.documents.AnnotatedDocumentStatisticsImpl;
 import com.silicolife.textmining.core.datastructures.documents.PublicationFilterImpl;
 import com.silicolife.textmining.core.datastructures.documents.structure.SentenceImpl;
 import com.silicolife.textmining.core.datastructures.utils.GenericPairImpl;
+import com.silicolife.textmining.core.interfaces.core.analysis.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationLog;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
@@ -30,12 +31,9 @@ import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotati
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IManualCurationAnnotations;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
-import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
 import com.silicolife.textmining.core.interfaces.core.document.structure.ISentence;
 import com.silicolife.textmining.core.interfaces.core.utils.IGenericPair;
-import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
-import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 
 /**
  * Class which implements all annotation daemon access methods
@@ -370,14 +368,14 @@ public class AnnotationAccessImpl extends RestClientAccess {
 	 * @return
 	 * @throws DaemonException
 	 */
-	public Long countAnnotations(Long processId, Long resourceElementId) throws DaemonException{
+	public Long countAnnotationsByResourceElement(Long processId, Long resourceElementId) throws DaemonException{
 		checkAndForceLoginIfNecessary();
 		ParameterizedTypeReference<DaemonResponse<Long>> responseType = new ParameterizedTypeReference<DaemonResponse<Long>>() {};	
 		Map<String, Long> uriVariables = new LinkedHashMap<String, Long>();
 		uriVariables.put("processId", processId);
 		uriVariables.put("resourceElementId", resourceElementId);
 
-		ResponseEntity<DaemonResponse<Long>> response = webClient.get("annotation/countAnnotations", responseType, uriVariables);
+		ResponseEntity<DaemonResponse<Long>> response = webClient.get("annotation/countAnnotationsByResourceElement", responseType, uriVariables);
 
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getCompletedMessage());

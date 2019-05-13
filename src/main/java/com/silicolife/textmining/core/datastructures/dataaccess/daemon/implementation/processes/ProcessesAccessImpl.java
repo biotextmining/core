@@ -9,16 +9,16 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.silicolife.textmining.core.datastructures.analysis.IEProcessStatisticsImpl;
 import com.silicolife.textmining.core.datastructures.corpora.CorpusImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.RestClientAccess;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.webserviceclient.DaemonResponse;
 import com.silicolife.textmining.core.datastructures.process.IEProcessImpl;
-import com.silicolife.textmining.core.datastructures.process.IEProcessStatisticsImpl;
+import com.silicolife.textmining.core.interfaces.core.analysis.IIEProcessStatistics;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
-import com.silicolife.textmining.core.interfaces.process.IE.IIEProcessStatistics;
 
 /**
  * Class which implements all processes daemon access methods

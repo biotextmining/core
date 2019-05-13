@@ -3,7 +3,6 @@ package com.silicolife.textmining.core.datastructures.dataaccess.database.dataac
 import java.util.List;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
-import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 
 public interface PublicationsAuxDao {
 
@@ -52,4 +51,6 @@ public interface PublicationsAuxDao {
 	public List<String> findAllDistinctColumnValuesFromPublications(String column);
 
 	public Integer countAll();
+	
+	public List<Long> getCorpusPublicationIdsByExternalId(Long sourceId, String internalSourceId, Long corpusId);
 }
