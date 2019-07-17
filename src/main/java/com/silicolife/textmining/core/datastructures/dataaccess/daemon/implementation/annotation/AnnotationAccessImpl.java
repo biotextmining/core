@@ -769,7 +769,7 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			ObjectMapper mapper = new ObjectMapper();
 			for(Entry<String, Long> entry : content.entrySet()) {
 				try {
-					TypeReference<List<IResourceElement>> typRef = new TypeReference<List<IResourceElement>>() {};
+					TypeReference<List<ResourceElementImpl>> typRef = new TypeReference<List<ResourceElementImpl>>() {};
 					List<IResourceElement> pair = mapper.readValue(entry.getKey(), typRef);
 					result.put(new ImmutablePair<IResourceElement, IResourceElement>(pair.get(0), pair.get(1)), entry.getValue());
 				} catch (IOException e) {
@@ -796,7 +796,7 @@ public class AnnotationAccessImpl extends RestClientAccess {
 			ObjectMapper mapper = new ObjectMapper();
 			for(Entry<String, Long> entry : content.entrySet()) {
 				try {
-					TypeReference<List<IResourceElement>> typRef = new TypeReference<List<IResourceElement>>() {};
+					TypeReference<List<ResourceElementImpl>> typRef = new TypeReference<List<ResourceElementImpl>>() {};
 					List<IResourceElement> pair = mapper.readValue(entry.getKey(), typRef);
 					result.put(new ImmutablePair<IResourceElement, IResourceElement>(pair.get(0), pair.get(1)), entry.getValue());
 				} catch (IOException e) {
