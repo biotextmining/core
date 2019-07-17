@@ -1,18 +1,23 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.annotation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.silicolife.textmining.core.datastructures.analysis.AnnotatedDocumentStatisticsImpl;
 import com.silicolife.textmining.core.datastructures.annotation.ManualCurationAnnotationsImpl;
 import com.silicolife.textmining.core.datastructures.annotation.log.AnnotationLogImpl;
@@ -22,6 +27,8 @@ import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implement
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.webserviceclient.DaemonResponse;
 import com.silicolife.textmining.core.datastructures.documents.PublicationFilterImpl;
 import com.silicolife.textmining.core.datastructures.documents.structure.SentenceImpl;
+import com.silicolife.textmining.core.datastructures.general.AnoteClass;
+import com.silicolife.textmining.core.datastructures.resources.ResourceElementImpl;
 import com.silicolife.textmining.core.datastructures.utils.GenericPairImpl;
 import com.silicolife.textmining.core.interfaces.core.analysis.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotation;
@@ -33,7 +40,9 @@ import com.silicolife.textmining.core.interfaces.core.annotation.IManualCuration
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
 import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
 import com.silicolife.textmining.core.interfaces.core.document.structure.ISentence;
+import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
 import com.silicolife.textmining.core.interfaces.core.utils.IGenericPair;
+import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 
 /**
  * Class which implements all annotation daemon access methods
@@ -568,6 +577,234 @@ public class AnnotationAccessImpl extends RestClientAccess {
 		else {
 			return response.getBody().getContent();
 		}	
+	}
+
+
+
+	public Long countAnnotationsByAnnotationType(Long processId, String annotationType) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Long>> responseType = new ParameterizedTypeReference<DaemonResponse<Long>>() {};
+		Map<String, String> uriVariables = new HashMap<>();
+		uriVariables.put("processId", String.valueOf(processId));
+		uriVariables.put("annotationType", annotationType);
+		ResponseEntity<DaemonResponse<Long>> response = webClient.get("annotation/countAnnotationsByAnnotationType", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			return response.getBody().getContent();
+		}
+	}
+
+
+	public Long countDocumentsWithResourceElementByAnnotationTypeInProcess(Long resourceElementId, Long processId, String annotationType) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Long>> responseType = new ParameterizedTypeReference<DaemonResponse<Long>>() {};
+		Map<String, String> uriVariables = new HashMap<>();
+		uriVariables.put("resourceElementId", String.valueOf(resourceElementId));
+		uriVariables.put("processId", String.valueOf(processId));
+		uriVariables.put("annotationType", annotationType);
+		ResponseEntity<DaemonResponse<Long>> response = webClient.get("annotation/countDocumentsWithResourceElementByAnnotationTypeInProcess", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			return response.getBody().getContent();
+		}
+	}
+
+
+	public Map<IAnoteClass, Long> countEntityAnnotationsByClassInProcess(Long processId) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Map<String, Long>>> responseType = new ParameterizedTypeReference<DaemonResponse<Map<String, Long>>>() {};
+		Map<String, String> uriVariables = new HashMap<>();
+		uriVariables.put("processId", String.valueOf(processId));
+		ResponseEntity<DaemonResponse<Map<String, Long>>> response = webClient.get("annotation/countEntityAnnotationsByClassInProcess", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			Map<String, Long> content = response.getBody().getContent();
+			Map<IAnoteClass, Long> result = new HashMap<>();
+			ObjectMapper mapper = new ObjectMapper();
+			for(Entry<String, Long> entry : content.entrySet()) {
+				try {
+					result.put(mapper.readValue(entry.getKey(), AnoteClass.class), entry.getValue());
+				} catch (IOException e) {
+					throw new DaemonException(e);
+				}
+			}
+			return result;
+		}
+	}
+
+
+	public Map<IResourceElement, Long> countDocumentsWithEntityAnnotationsByResourceElementInProcess(Long processId) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Map<String, Long>>> responseType = new ParameterizedTypeReference<DaemonResponse<Map<String, Long>>>() {};
+		Map<String, String> uriVariables = new HashMap<>();
+		uriVariables.put("processId", String.valueOf(processId));
+		ResponseEntity<DaemonResponse<Map<String, Long>>> response = webClient.get("annotation/countDocumentsWithEntityAnnotationsByResourceElementInProcess", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			Map<String, Long> content = response.getBody().getContent();
+			Map<IResourceElement, Long> result = new HashMap<>();
+			ObjectMapper mapper = new ObjectMapper();
+			for(Entry<String, Long> entry : content.entrySet()) {
+				try {
+					result.put(mapper.readValue(entry.getKey(), ResourceElementImpl.class), entry.getValue());
+				} catch (IOException e) {
+					throw new DaemonException(e);
+				}
+			}
+			return result;
+		}
+	}
+
+
+	public Map<IResourceElement, Long> countEntityAnnotationsByResourceElementInProcess(Long processId) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Map<String, Long>>> responseType = new ParameterizedTypeReference<DaemonResponse<Map<String, Long>>>() {};
+		Map<String, String> uriVariables = new HashMap<>();
+		uriVariables.put("processId", String.valueOf(processId));
+		ResponseEntity<DaemonResponse<Map<String, Long>>> response = webClient.get("annotation/countEntityAnnotationsByResourceElementInProcess", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			Map<String, Long> content = response.getBody().getContent();
+			Map<IResourceElement, Long> result = new HashMap<>();
+			ObjectMapper mapper = new ObjectMapper();
+			for(Entry<String, Long> entry : content.entrySet()) {
+				try {
+					result.put(mapper.readValue(entry.getKey(), ResourceElementImpl.class), entry.getValue());
+				} catch (IOException e) {
+					throw new DaemonException(e);
+				}
+			}
+			return result;
+		}
+	}
+
+
+	public Map<ImmutablePair<IAnoteClass, IAnoteClass>, Long> countPublicationsWithEventsByIAnoteClasses(Long processId) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Map<String, Long>>> responseType = new ParameterizedTypeReference<DaemonResponse<Map<String, Long>>>() {};
+		Map<String, String> uriVariables = new HashMap<>();
+//		uriVariables.put("corpusId", String.valueOf(corpusId));
+		uriVariables.put("processId", String.valueOf(processId));
+		ResponseEntity<DaemonResponse<Map<String, Long>>> response = webClient.get("annotation/countPublicationsWithEventsByIAnoteClasses", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			Map<String, Long> content = response.getBody().getContent();
+			Map<ImmutablePair<IAnoteClass, IAnoteClass>, Long> result = new HashMap<>();
+			ObjectMapper mapper = new ObjectMapper();
+			for(Entry<String, Long> entry : content.entrySet()) {
+				try {
+					TypeReference<List<AnoteClass>> typRef = new TypeReference<List<AnoteClass>>() {};
+					List<IAnoteClass> pair = mapper.readValue(entry.getKey(), typRef);
+					result.put(new ImmutablePair<IAnoteClass, IAnoteClass>(pair.get(0), pair.get(1)), entry.getValue());
+				} catch (IOException e) {
+					throw new DaemonException(e);
+				}
+			}
+			return result;
+		}
+	}
+
+
+	public Map<ImmutablePair<IAnoteClass, IAnoteClass>, Long> countEventAnnotationsByClassInProcess( Long processId) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Map<String, Long>>> responseType = new ParameterizedTypeReference<DaemonResponse<Map<String, Long>>>() {};
+		Map<String, String> uriVariables = new HashMap<>();
+//		uriVariables.put("corpusId", String.valueOf(corpusId));
+		uriVariables.put("processId", String.valueOf(processId));
+		ResponseEntity<DaemonResponse<Map<String, Long>>> response = webClient.get("annotation/countEventAnnotationsByClassInProcess", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			Map<String, Long> content = response.getBody().getContent();
+			Map<ImmutablePair<IAnoteClass, IAnoteClass>, Long> result = new HashMap<>();
+			ObjectMapper mapper = new ObjectMapper();
+			for(Entry<String, Long> entry : content.entrySet()) {
+				try {
+					TypeReference<List<AnoteClass>> typRef = new TypeReference<List<AnoteClass>>() {};
+					List<IAnoteClass> pair = mapper.readValue(entry.getKey(), typRef);
+					result.put(new ImmutablePair<IAnoteClass, IAnoteClass>(pair.get(0), pair.get(1)), entry.getValue());
+				} catch (IOException e) {
+					throw new DaemonException(e);
+				}
+			}
+			return result;
+		}
+	}
+
+
+	public List<Long> getPublicationsIdsByEventResourceElements( Long processId, Set<String> resElemConcated) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<List<Long>>> responseType = new ParameterizedTypeReference<DaemonResponse<List<Long>>>() {};
+		Map<String, String> uriVariables = new HashMap<>();
+//		uriVariables.put("corpusId", String.valueOf(corpusId));
+		uriVariables.put("processId", String.valueOf(processId));
+
+		ResponseEntity<DaemonResponse<List<Long>>> response = webClient.post("annotation/getPublicationsIdsByEventResourceElements", responseType, resElemConcated, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			return response.getBody().getContent();
+		}
+	}
+
+
+	public Map<ImmutablePair<IResourceElement, IResourceElement>, Long> countDocumentsWithEventsByResourceElemnts( Long processId) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Map<String, Long>>> responseType = new ParameterizedTypeReference<DaemonResponse<Map<String, Long>>>() {};
+		Map<String, String> uriVariables = new HashMap<>();
+//		uriVariables.put("corpusId", String.valueOf(corpusId));
+		uriVariables.put("processId", String.valueOf(processId));
+		ResponseEntity<DaemonResponse<Map<String, Long>>> response = webClient.get("annotation/countDocumentsWithEventsByResourceElemnts", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			Map<String, Long> content = response.getBody().getContent();
+			Map<ImmutablePair<IResourceElement, IResourceElement>, Long> result = new HashMap<>();
+			ObjectMapper mapper = new ObjectMapper();
+			for(Entry<String, Long> entry : content.entrySet()) {
+				try {
+					TypeReference<List<IResourceElement>> typRef = new TypeReference<List<IResourceElement>>() {};
+					List<IResourceElement> pair = mapper.readValue(entry.getKey(), typRef);
+					result.put(new ImmutablePair<IResourceElement, IResourceElement>(pair.get(0), pair.get(1)), entry.getValue());
+				} catch (IOException e) {
+					throw new DaemonException(e);
+				}
+			}
+			return result;
+		}
+	}
+
+
+	public Map<ImmutablePair<IResourceElement, IResourceElement>, Long> countEventsByResourceElemnts(Long processId) throws DaemonException {
+		checkAndForceLoginIfNecessary();
+		ParameterizedTypeReference<DaemonResponse<Map<String, Long>>> responseType = new ParameterizedTypeReference<DaemonResponse<Map<String, Long>>>() {};
+		Map<String, String> uriVariables = new HashMap<>();
+//		uriVariables.put("corpusId", String.valueOf(corpusId));
+		uriVariables.put("processId", String.valueOf(processId));
+		ResponseEntity<DaemonResponse<Map<String, Long>>> response = webClient.get("annotation/countEventsByResourceElemnts", responseType, uriVariables);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			throw new DaemonException(response.getBody().getException().getCode(), response.getBody().getException().getMessage());
+		} else {
+			Map<String, Long> content = response.getBody().getContent();
+			Map<ImmutablePair<IResourceElement, IResourceElement>, Long> result = new HashMap<>();
+			ObjectMapper mapper = new ObjectMapper();
+			for(Entry<String, Long> entry : content.entrySet()) {
+				try {
+					TypeReference<List<IResourceElement>> typRef = new TypeReference<List<IResourceElement>>() {};
+					List<IResourceElement> pair = mapper.readValue(entry.getKey(), typRef);
+					result.put(new ImmutablePair<IResourceElement, IResourceElement>(pair.get(0), pair.get(1)), entry.getValue());
+				} catch (IOException e) {
+					throw new DaemonException(e);
+				}
+			}
+			return result;
+		}
 	}
 
 }

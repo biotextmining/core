@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Classes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Processes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
@@ -37,7 +39,18 @@ public interface AnnotationAuxDao {
 
 	public Map<ResourceElements, Long> countAnnotationsByResourceElementInDocument(Long documentId, Long processId);
 
-	public Map<ResourceElements, Long> countDocumentsWithAnnotationsByResourceElementInProcess(Long processId);
+	public Map<ResourceElements, Long> countDocumentsWithEntityAnnotationsByResourceElementInProcess(Long processId);
+
+	public List<Long> getPublicationsIdsWithEventsByResourceElements(List<Long> resourceElementIds);
+
+	public Map<ImmutablePair<Classes, Classes>, Long> countPublicationsWithEventsByIAnoteClasses(Long processId);
+
+	public Map<ImmutablePair<Classes, Classes>, Long> countEventAnnotationsByClassInProcess(Long processId);
 	
+	public List<Long> getPublicationsIdsByEventResourceElements(Long processId, Set<String> resElemIds);
 //	public  List<Publications> getPublicationsByResourceElements(Set<Long> resElemIds);
+
+	public Map<ImmutablePair<ResourceElements, ResourceElements>, Long> countDocumentsWithEventsByResourceElemnts(Long processId);
+
+	public Map<ImmutablePair<ResourceElements, ResourceElements>, Long> countEventsByResourceElemnts(Long processId);
 }

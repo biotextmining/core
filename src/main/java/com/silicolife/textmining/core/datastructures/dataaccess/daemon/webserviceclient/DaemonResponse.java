@@ -1,8 +1,12 @@
 package com.silicolife.textmining.core.datastructures.dataaccess.daemon.webserviceclient;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.silicolife.textmining.core.datastructures.dataaccess.daemon.deserializes.DaemonContentJsonDeserializer;
+
 
 public class DaemonResponse<T> {
 
+	//@JsonDeserialize(using=DaemonContentJsonDeserializer.class)
 	private T content;
 	private ExceptionInfo exception;
 

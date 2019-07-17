@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.AnnotationException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.interfaces.core.analysis.IAnnotatedDocumentStatistics;
@@ -71,16 +73,29 @@ public interface IAnnotationService {
 	
 	public Long countAnnotationsByAnnotionType(Long processId, String annotationType) throws AnnotationException;
 	
-	public Map<IAnoteClass, Long> countAnnotationsByClassInProcess(Long processId) throws AnnotationException;
+	public Map<IAnoteClass, Long> countEntityAnnotationsByClassInProcess(Long processId) throws AnnotationException;
 
 	public Long countPublicationAnnotationsByAnnotionType(Long processId, Long publicationID, String annotationType) throws AnnotationException;
 	
-	public Map<IResourceElement, Long> countAnnotationsByResourceElementInProcess(Long processId) throws AnnotationException;
+	public Map<IResourceElement, Long> countEntityAnnotationsByResourceElementInProcess(Long processId) throws AnnotationException;
 
-	public Map<IResourceElement, Long> countAnnotationsByResourceElementInDocument(Long documentId, Long processId) throws AnnotationException;
+	public Map<IResourceElement, Long> countEntityAnnotationsByResourceElementInDocument(Long documentId, Long processId) throws AnnotationException;
 
-	public Long countDocumentsWithResourceElementInProcess(Long resourceElementId, Long processId) throws AnnotationException;
+	public Long countDocumentsWithResourceElementByAnnotationTypeInProcess(Long resourceElementId, Long processId, String annotationType) throws AnnotationException;
 	
-	public Map<IResourceElement, Long> countDocumentsWithAnnotationsByResourceElementInProcess(Long processId) throws AnnotationException;
+	public Map<IResourceElement, Long> countDocumentsWithEntityAnnotationsByResourceElementInProcess(Long processId) throws AnnotationException;
 	
+	public Long countPublicationsWithEventsByResourceElements(List<Long> resourceElementIds) throws AnnotationException;
+	
+	public List<Long> getPublicationsIdsWithEventsByResourceElements(List<Long> resourceElementIds) throws AnnotationException;
+	
+	public Map<ImmutablePair<IAnoteClass,IAnoteClass>, Long> countPublicationsWithEventsByIAnoteClasses(Long processId) throws AnnotationException;
+	
+	public Map<ImmutablePair<IAnoteClass,IAnoteClass>, Long> countEventAnnotationsByClassInProcess(Long processId) throws AnnotationException;
+	
+	public List<Long> getPublicationsIdsByEventResourceElements(Long processId, Set<String> resElemIds) throws AnnotationException;
+	
+	public Map<ImmutablePair<IResourceElement, IResourceElement>, Long> countDocumentsWithEventsByResourceElemnts(Long processId) throws AnnotationException;
+	
+	public Map<ImmutablePair<IResourceElement, IResourceElement>, Long> countEventsByResourceElemnts(Long processId) throws AnnotationException;
 }

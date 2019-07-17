@@ -8,8 +8,9 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.SortedSet;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
 import com.silicolife.textmining.core.datastructures.annotation.AnnotationType;
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.PublicationManagerException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.PermissionsUtilsEnum;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.ResourcesTypeUtils;
@@ -1456,13 +1457,13 @@ public class DataAccessStart implements IDataAccess {
 	}
 
 	@Override
-	public Map<IAnoteClass, Long> countAnnotationsByClassInProcess(IIEProcess process) throws ANoteException {
+	public Map<IAnoteClass, Long> countEntityAnnotationsByClassInProcess(IIEProcess process) throws ANoteException {
 		
 		return null;
 	}
 
 	@Override
-	public Map<IResourceElement, Long> countAnnotationsByResourceElementInProcess(IIEProcess process)
+	public Map<IResourceElement, Long> countEntityAnnotationsByResourceElementInProcess(IIEProcess process)
 			throws ANoteException {
 
 		return null;
@@ -1474,16 +1475,65 @@ public class DataAccessStart implements IDataAccess {
 
 		return null;
 	}
-
+	
 	@Override
-	public Long countDocumentsWithResourceElementInProcess(IResourceElement resourceElement, IIEProcess process)
+	public Map<IResourceElement, Long> countDocumentsWithEntityAnnotationsByResourceElementInProcess(IIEProcess process)
 			throws ANoteException {
 
 		return null;
 	}
 
 	@Override
-	public Map<IResourceElement, Long> countDocumentsWithAnnotationsByResourceElementInProcess(IIEProcess process)
+	public Long countPublicationsWithEventsByResourceElements(List<IResourceElement> resourceElements)
+			throws ANoteException {
+
+		return null;
+	}
+
+	@Override
+	public List<Long> getPublicationsIdsWithEventsByResourceElements(List<IResourceElement> resourceElements)
+			throws ANoteException {
+
+		return null;
+	}
+
+	@Override
+	public Map<ImmutablePair<IAnoteClass, IAnoteClass>, Long> countPublicationsWithEventsByIAnoteClasses(
+			IIEProcess process) throws ANoteException {
+
+		return null;
+	}
+
+	@Override
+	public Map<ImmutablePair<IAnoteClass, IAnoteClass>, Long> countEventAnnotationsByClassInProcess(IIEProcess process)
+			throws ANoteException {
+
+		return null;
+	}
+
+	@Override
+	public Long countDocumentsWithResourceElementByAnnotationTypeInProcess(IResourceElement resourceElement,
+			IIEProcess process, AnnotationType annotType) throws ANoteException {
+		
+		return null;
+	}
+
+	@Override
+	public List<Long> getPublicationsIdsByEventResourceElements(IIEProcess process,
+			Set<ImmutablePair<IResourceElement, IResourceElement>> resElemIds) throws ANoteException {
+
+		return null;
+	}
+
+	@Override
+	public Map<ImmutablePair<IResourceElement, IResourceElement>, Long> countDocumentsWithEventsByResourceElemnts(
+			IIEProcess process) throws ANoteException {
+
+		return null;
+	}
+
+	@Override
+	public Map<ImmutablePair<IResourceElement, IResourceElement>, Long> countEventsByResourceElemnts(IIEProcess process)
 			throws ANoteException {
 
 		return null;

@@ -199,8 +199,8 @@ public interface ICorpusAccess extends IIEProcessAccess, IAnnotationAccess, IAnn
 
 	public List<Long> getCorpusPublicationsFromExternalID(ICorpus corpus, String source, String internalSourceId) throws ANoteException;
 
-	public Map<IAnoteClass, Long> countAnnotationsByClassInProcess(IIEProcess process) throws ANoteException;
+	public Map<IAnoteClass, Long> countEntityAnnotationsByClassInProcess(IIEProcess process) throws ANoteException;
 	
-	public Map<IResourceElement, Long> countAnnotationsByResourceElementInProcess(IIEProcess process) throws ANoteException;
+	public Map<IResourceElement, Long> countEntityAnnotationsByResourceElementInProcess(IIEProcess process) throws ANoteException;
 	
 }

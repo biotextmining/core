@@ -61,8 +61,12 @@ public interface GenericDao<T> {
 	public Map<String, Long> countByAttributesGroupedBy(Map<String, Serializable> eqRestrictions, List<String> groups);
 
 	public Map<String, Long> countByAttributesWithAliasGroupedBy(Map<String, String> alias, Map<String, Serializable> eqRestrictions, List<String> groups);
-
+	
 	public Long countByAttributesDistinctBy(Map<String, Serializable> eqRestrictions, List<String> distinctBy);
-
+	
+	public Long countByAttributesWithAliasDistinctBy(Map<String, String> alias, Map<String, Serializable> eqRestrictions, List<String> distinctBy);
+	
+	public Long countByAttributesInListsWithAliasDistinctBy(Map<String, String> alias, Map<String, Serializable> eqRestrictions, Map<String, Serializable> inRestrictions, List<String> distinctBy);
+	
 //	public T findUniqueByAttributeCaseSensitive(String attribute, Serializable value);
 }

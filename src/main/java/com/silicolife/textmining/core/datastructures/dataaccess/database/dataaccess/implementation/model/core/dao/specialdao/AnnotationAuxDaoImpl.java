@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -14,7 +15,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -25,11 +25,13 @@ import org.springframework.stereotype.Repository;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.GenericDao;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.GenericDaoImpl;
+import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AnnotationSides;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Annotations;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Classes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Processes;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.ResourceElements;
+import com.silicolife.textmining.core.interfaces.core.annotation.AnnotationSideEnum;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
 import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
 
@@ -384,17 +386,18 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 	}
 
 	@Override
-	public Map<ResourceElements, Long> countDocumentsWithAnnotationsByResourceElementInProcess(Long processId) {
+	public Map<ResourceElements, Long> countDocumentsWithEntityAnnotationsByResourceElementInProcess(Long processId) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria c = sessionFactory.getCurrentSession().createCriteria(Annotations.class);
 		
 		c.add(Restrictions.eq("processes.proId", processId));
 		
 		c.setProjection(Projections.projectionList()
-		.add(Projections.countDistinct("publications.pubId").as("publicationsCount"))
-		.add(Projections.groupProperty("resourceElements.resId")));
+		.add(Projections.groupProperty("resourceElements.resId"))
+		.add(Projections.countDistinct("publications.pubId").as("publicationsCount")));
 
-		c.addOrder(Order.desc("publicationsCount"));
+
+//		c.addOrder(Order.desc("publicationsCount")); //only usable to retrieve the top
 		@SuppressWarnings("unchecked")
 		List<Object[]> result = c.list();
 		
@@ -406,6 +409,169 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 			}
 		}
 			
+		return resultmap;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Long> getPublicationsIdsWithEventsByResourceElements(List<Long> resourceElementIds) {
+		Criteria c = sessionFactory.getCurrentSession().createCriteria(AnnotationSides.class);
+		c.createAlias("annotationsByAsAnnotationSubId", "annot");
+		c.add(Restrictions.in("annot.resourceElements.resId", resourceElementIds));
+		c.setProjection(Projections.distinct(Projections.property("annot.publications.pubId")));
+		return c.list();
+	}
+
+	@Override
+	public Map<ImmutablePair<Classes, Classes>, Long> countPublicationsWithEventsByIAnoteClasses(Long processId) {
+		
+		String queryHQL = "select leftsubAnnotation.classes, rightsubAnnotation.classes, count(distinct annotation.publications.pubId) as pub FROM AnnotationSides as leftSide, AnnotationSides as rightSide"
+				+ " INNER JOIN leftSide.annotationsByAsAnnotationId as annotation"
+				+ " INNER JOIN leftSide.annotationsByAsAnnotationSubId as leftsubAnnotation"
+				+ " INNER JOIN rightSide.annotationsByAsAnnotationSubId as rightsubAnnotation"
+				+ " WHERE leftSide.id.asAnnotationId = rightSide.id.asAnnotationId"
+//				+ " AND annotation.corpus.crpId = :corpusId"
+				+ " AND annotation.processes.proId = :processId"
+				+ " AND leftSide.asAnnotSideType = :leftEnum"
+				+ " AND rightSide.asAnnotSideType = :rightEnum"
+				+ " GROUP BY leftsubAnnotation.classes.claId, rightsubAnnotation.classes.claId ";
+		
+		
+		Query query = sessionFactory.getCurrentSession().createQuery(queryHQL );
+		query.setParameter("leftEnum", AnnotationSideEnum.left.toString());
+		query.setParameter("rightEnum", AnnotationSideEnum.right.toString());
+//		query.setParameter("corpusId", corpusId);
+		query.setParameter("processId", processId);
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> result = (List<Object[]>)query.list();
+		
+		Map<ImmutablePair<Classes, Classes>, Long> resultmap = new HashMap<>();
+		
+		for(Object[] res : result) {
+			ImmutablePair<Classes, Classes> classesPair = new ImmutablePair<>((Classes)res[0], (Classes)res[1]);
+			resultmap.put(classesPair, (Long)res[2]);
+		}
+		
+		return resultmap;
+		
+	}
+
+	@Override
+	public Map<ImmutablePair<Classes, Classes>, Long> countEventAnnotationsByClassInProcess(Long processId) {
+		String queryHQL = "select leftsubAnnotation.classes, rightsubAnnotation.classes, count(distinct annotation.annId) as pub FROM AnnotationSides as leftSide, AnnotationSides as rightSide"
+				+ " INNER JOIN leftSide.annotationsByAsAnnotationId as annotation"
+				+ " INNER JOIN leftSide.annotationsByAsAnnotationSubId as leftsubAnnotation"
+				+ " INNER JOIN rightSide.annotationsByAsAnnotationSubId as rightsubAnnotation"
+				+ " WHERE leftSide.id.asAnnotationId = rightSide.id.asAnnotationId"
+//				+ " AND annotation.corpus.crpId = :corpusId"
+				+ " AND annotation.processes.proId = :processId"
+				+ " AND leftSide.asAnnotSideType = :leftEnum"
+				+ " AND rightSide.asAnnotSideType = :rightEnum"
+				+ " GROUP BY leftsubAnnotation.classes.claId, rightsubAnnotation.classes.claId ";
+		
+		
+		Query query = sessionFactory.getCurrentSession().createQuery(queryHQL );
+		query.setParameter("leftEnum", AnnotationSideEnum.left.toString());
+		query.setParameter("rightEnum", AnnotationSideEnum.right.toString());
+//		query.setParameter("corpusId", corpusId);
+		query.setParameter("processId", processId);
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> result = (List<Object[]>)query.list();
+		
+		Map<ImmutablePair<Classes, Classes>, Long> resultmap = new HashMap<>();
+		
+		for(Object[] res : result) {
+			ImmutablePair<Classes, Classes> classesPair = new ImmutablePair<>((Classes)res[0], (Classes)res[1]);
+			resultmap.put(classesPair, (Long)res[2]);
+		}
+		return resultmap;
+	}
+	
+	@Override
+	public List<Long> getPublicationsIdsByEventResourceElements(Long processId, Set<String> resElemIds) {
+		
+		String queryHQL = "select distinct annotation.publications.pubId as pub FROM AnnotationSides as leftSide, AnnotationSides as rightSide"
+				+ " INNER JOIN leftSide.annotationsByAsAnnotationId as annotation"
+				+ " INNER JOIN leftSide.annotationsByAsAnnotationSubId as leftsubAnnotation"
+				+ " INNER JOIN rightSide.annotationsByAsAnnotationSubId as rightsubAnnotation"
+				+ " WHERE leftSide.id.asAnnotationId = rightSide.id.asAnnotationId"
+//				+ " AND annotation.corpus.crpId = :corpusId"
+				+ " AND annotation.processes.proId = :processId"
+				+ " AND concat(leftsubAnnotation.resourceElements.resId, '-', rightsubAnnotation.resourceElements.resId) in (:ids) ";
+		
+		Query query = sessionFactory.getCurrentSession().createQuery(queryHQL);
+		query.setParameter("ids", resElemIds);
+//		query.setParameter("corpusId", corpusId);
+		query.setParameter("processId", processId);
+		
+      return query.list();
+	}
+
+	@Override
+	public Map<ImmutablePair<ResourceElements, ResourceElements>, Long> countDocumentsWithEventsByResourceElemnts(
+			Long processId) {
+		String queryHQL = "select leftsubAnnotation.resourceElements, rightsubAnnotation.resourceElements, count(distinct annotation.publications.pubId) as pub FROM AnnotationSides as leftSide, AnnotationSides as rightSide"
+				+ " INNER JOIN leftSide.annotationsByAsAnnotationId as annotation"
+				+ " INNER JOIN leftSide.annotationsByAsAnnotationSubId as leftsubAnnotation"
+				+ " INNER JOIN rightSide.annotationsByAsAnnotationSubId as rightsubAnnotation"
+				+ " WHERE leftSide.id.asAnnotationId = rightSide.id.asAnnotationId"
+//				+ " AND annotation.corpus.crpId = :corpusId"
+				+ " AND annotation.processes.proId = :processId"
+				+ " AND leftSide.asAnnotSideType = :leftEnum"
+				+ " AND rightSide.asAnnotSideType = :rightEnum"
+				+ " GROUP BY leftsubAnnotation.resourceElements.resId, rightsubAnnotation.resourceElements.resId ";
+		
+		
+		Query query = sessionFactory.getCurrentSession().createQuery(queryHQL );
+		query.setParameter("leftEnum", AnnotationSideEnum.left.toString());
+		query.setParameter("rightEnum", AnnotationSideEnum.right.toString());
+//		query.setParameter("corpusId", corpusId);
+		query.setParameter("processId", processId);
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> result = (List<Object[]>)query.list();
+		
+		Map<ImmutablePair<ResourceElements, ResourceElements>, Long> resultmap = new HashMap<>();
+		
+		for(Object[] res : result) {
+			ImmutablePair<ResourceElements, ResourceElements> classesPair = new ImmutablePair<>((ResourceElements)res[0], (ResourceElements)res[1]);
+			resultmap.put(classesPair, (Long)res[2]);
+		}
+		
+		return resultmap;
+	}
+
+	@Override
+	public Map<ImmutablePair<ResourceElements, ResourceElements>, Long> countEventsByResourceElemnts(Long processId) {
+		String queryHQL = "select leftsubAnnotation.resourceElements, rightsubAnnotation.resourceElements, count(distinct annotation.annId) as pub FROM AnnotationSides as leftSide, AnnotationSides as rightSide"
+				+ " INNER JOIN leftSide.annotationsByAsAnnotationId as annotation"
+				+ " INNER JOIN leftSide.annotationsByAsAnnotationSubId as leftsubAnnotation"
+				+ " INNER JOIN rightSide.annotationsByAsAnnotationSubId as rightsubAnnotation"
+				+ " WHERE leftSide.id.asAnnotationId = rightSide.id.asAnnotationId"
+//				+ " AND annotation.corpus.crpId = :corpusId"
+				+ " AND annotation.processes.proId = :processId"
+				+ " AND leftSide.asAnnotSideType = :leftEnum"
+				+ " AND rightSide.asAnnotSideType = :rightEnum"
+				+ " GROUP BY leftsubAnnotation.resourceElements.resId, rightsubAnnotation.resourceElements.resId ";
+		
+		
+		Query query = sessionFactory.getCurrentSession().createQuery(queryHQL );
+		query.setParameter("leftEnum", AnnotationSideEnum.left.toString());
+		query.setParameter("rightEnum", AnnotationSideEnum.right.toString());
+//		query.setParameter("corpusId", corpusId);
+		query.setParameter("processId", processId);
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> result = (List<Object[]>)query.list();
+		
+		Map<ImmutablePair<ResourceElements, ResourceElements>, Long> resultmap = new HashMap<>();
+		
+		for(Object[] res : result) {
+			ImmutablePair<ResourceElements, ResourceElements> classesPair = new ImmutablePair<>((ResourceElements)res[0], (ResourceElements)res[1]);
+			resultmap.put(classesPair, (Long)res[2]);
+		}
 		return resultmap;
 	}
 

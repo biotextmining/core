@@ -10,6 +10,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.SortedSet;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 
@@ -1455,21 +1456,18 @@ public class DaemonAccess implements IDataAccess {
 
 	@Override
 	public Long countAnnotationsByAnnotationType(IIEProcess process, AnnotationType annotType) throws ANoteException {
-		// TODO Auto-generated method stub
-		return null;
+		return this.annotationAccessImpl.countAnnotationsByAnnotationType(process.getId(), annotType.name());
 	}
 
 	@Override
-	public Map<IAnoteClass, Long> countAnnotationsByClassInProcess(IIEProcess process) throws ANoteException {
-		// TODO Auto-generated method stub
-		return null;
+	public Map<IAnoteClass, Long> countEntityAnnotationsByClassInProcess(IIEProcess process) throws ANoteException {
+		return this.annotationAccessImpl.countEntityAnnotationsByClassInProcess(process.getId());
 	}
 
 	@Override
-	public Map<IResourceElement, Long> countAnnotationsByResourceElementInProcess(IIEProcess process)
+	public Map<IResourceElement, Long> countEntityAnnotationsByResourceElementInProcess(IIEProcess process)
 			throws ANoteException {
-		// TODO Auto-generated method stub
-		return null;
+		return this.annotationAccessImpl.countEntityAnnotationsByResourceElementInProcess(process.getId());
 	}
 
 	@Override
@@ -1480,17 +1478,63 @@ public class DaemonAccess implements IDataAccess {
 	}
 
 	@Override
-	public Long countDocumentsWithResourceElementInProcess(IResourceElement resourceElement, IIEProcess process)
+	public Map<IResourceElement, Long> countDocumentsWithEntityAnnotationsByResourceElementInProcess(IIEProcess process)
+			throws ANoteException {
+		return this.annotationAccessImpl.countDocumentsWithEntityAnnotationsByResourceElementInProcess(process.getId());
+	}
+
+	@Override
+	public Long countPublicationsWithEventsByResourceElements(List<IResourceElement> resourceElements)
 			throws ANoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Map<IResourceElement, Long> countDocumentsWithAnnotationsByResourceElementInProcess(IIEProcess process)
+	public List<Long> getPublicationsIdsWithEventsByResourceElements(List<IResourceElement> resourceElements)
 			throws ANoteException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Map<ImmutablePair<IAnoteClass, IAnoteClass>, Long> countPublicationsWithEventsByIAnoteClasses(
+			IIEProcess process) throws ANoteException {
+		return this.annotationAccessImpl.countPublicationsWithEventsByIAnoteClasses(process.getId());
+	}
+
+	@Override
+	public Map<ImmutablePair<IAnoteClass, IAnoteClass>, Long> countEventAnnotationsByClassInProcess(IIEProcess process)
+			throws ANoteException {
+		return this.annotationAccessImpl.countEventAnnotationsByClassInProcess( process.getId());
+	}
+
+	@Override
+	public Long countDocumentsWithResourceElementByAnnotationTypeInProcess(IResourceElement resourceElement,
+			IIEProcess process, AnnotationType annotType) throws ANoteException {
+		return this.annotationAccessImpl.countDocumentsWithResourceElementByAnnotationTypeInProcess(resourceElement.getId(), process.getId(), annotType.name());
+	}
+
+	@Override
+	public List<Long> getPublicationsIdsByEventResourceElements(IIEProcess process,
+			Set<ImmutablePair<IResourceElement, IResourceElement>> resElemIds) throws ANoteException {
+		Set<String> resElemConcated = new HashSet<>();
+		for(ImmutablePair<IResourceElement, IResourceElement> resId : resElemIds)
+			resElemConcated.add(String.valueOf(resId.getLeft().getId())+"-"+String.valueOf(resId.getRight().getId()));
+		
+		return this.annotationAccessImpl.getPublicationsIdsByEventResourceElements(process.getId(), resElemConcated);
+	}
+
+	@Override
+	public Map<ImmutablePair<IResourceElement, IResourceElement>, Long> countDocumentsWithEventsByResourceElemnts(
+			IIEProcess process) throws ANoteException {
+		return this.annotationAccessImpl.countDocumentsWithEventsByResourceElemnts(process.getId());
+	}
+
+	@Override
+	public Map<ImmutablePair<IResourceElement, IResourceElement>, Long> countEventsByResourceElemnts(IIEProcess process)
+			throws ANoteException {
+		return this.annotationAccessImpl.countEventsByResourceElemnts(process.getId());
 	}
 
 

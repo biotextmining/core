@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
 import com.silicolife.textmining.core.datastructures.annotation.AnnotationType;
 import com.silicolife.textmining.core.interfaces.core.analysis.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
@@ -16,6 +18,7 @@ import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumen
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
 import com.silicolife.textmining.core.interfaces.core.document.structure.ISentence;
+import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
 import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 
@@ -141,7 +144,21 @@ public interface IAnnotationAccess {
 	
 	public Map<IResourceElement, Long> countAnnotationsByResourceElementInDocument(IAnnotatedDocument document) throws ANoteException;
 	
-	public Long countDocumentsWithResourceElementInProcess(IResourceElement resourceElement, IIEProcess process) throws ANoteException;
+	public Long countDocumentsWithResourceElementByAnnotationTypeInProcess(IResourceElement resourceElement, IIEProcess process, AnnotationType annotType) throws ANoteException;
 	
-	public Map<IResourceElement, Long> countDocumentsWithAnnotationsByResourceElementInProcess(IIEProcess process) throws ANoteException;
+	public Map<IResourceElement, Long> countDocumentsWithEntityAnnotationsByResourceElementInProcess(IIEProcess process) throws ANoteException;
+	
+	public Long countPublicationsWithEventsByResourceElements(List<IResourceElement> resourceElements) throws ANoteException;
+	
+	public List<Long> getPublicationsIdsWithEventsByResourceElements(List<IResourceElement> resourceElements) throws ANoteException;
+	
+	public Map<ImmutablePair<IAnoteClass,IAnoteClass>, Long> countPublicationsWithEventsByIAnoteClasses(IIEProcess process) throws ANoteException;
+	
+	public Map<ImmutablePair<IAnoteClass,IAnoteClass>, Long> countEventAnnotationsByClassInProcess(IIEProcess process) throws ANoteException;
+	
+	public List<Long> getPublicationsIdsByEventResourceElements(IIEProcess process, Set<ImmutablePair<IResourceElement,IResourceElement>> resElemIds) throws ANoteException;
+	
+	public Map<ImmutablePair<IResourceElement, IResourceElement>, Long> countDocumentsWithEventsByResourceElemnts(IIEProcess process) throws ANoteException;
+	
+	public Map<ImmutablePair<IResourceElement, IResourceElement>, Long> countEventsByResourceElemnts(IIEProcess process) throws ANoteException;
 }
