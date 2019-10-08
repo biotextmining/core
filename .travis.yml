@@ -13,7 +13,7 @@ cache:
     - $HOME/.m2
 
 script:
-  - mvn $MAVEN_CLI_OPTS clean compile -P release -DskipTests
+  - mvn $MAVEN_CLI_OPTS clean verify -P release -DskipTests
     
 deploy:  
   - provider: script
