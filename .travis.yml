@@ -1,0 +1,27 @@
+language: java
+
+notifications:
+email: true
+
+install: 
+  - export MVN_SETTINGS=travis/settings.xml
+  - export MAVEN_CLI_OPTS="-s settings.xml --batch-mode"
+  - sed -i s/OSS_SONATYPE_USER/$OSS_SONATYPE_USER/g $MVN_SETTINGS
+  - sed -i s/OSS_SONATYPE_PASS/$OSS_SONATYPE_PASS/g $MVN_SETTINGS
+  - sed -i s,GPG_EXECUTABLE,$GPG_EXECUTABLE,g $MVN_SETTINGS
+  - sed -i s,GPG_PASSPHRASE,$GPG_PASSPHRASE,g $MVN_SETTINGS
+  
+
+script:
+  - mvn $MAVEN_CLI_OPTS clean compile -DskipTests
+  
+before_deploy:
+  - mvn $MAVEN_CLI_OPTS versions:set -DnewVersion=${TRAVIS_TAG}
+
+deploy:
+  - provider: script
+    script:
+      - mvn $MAVEN_CLI_OPTS clean deploy -DskipTests
+    on:
+     tags: true
+     all_branches: true
