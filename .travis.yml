@@ -5,7 +5,7 @@ email: true
 
 install: 
   - export MVN_SETTINGS=travis/settings.xml
-  - export MAVEN_CLI_OPTS="-s settings.xml --batch-mode"
+  - export MAVEN_CLI_OPTS="-s travis/settings.xml --batch-mode"
   - sed -i s/OSS_SONATYPE_USER/$OSS_SONATYPE_USER/g $MVN_SETTINGS
   - sed -i s/OSS_SONATYPE_PASS/$OSS_SONATYPE_PASS/g $MVN_SETTINGS
   - sed -i s,GPG_EXECUTABLE,$GPG_EXECUTABLE,g $MVN_SETTINGS
