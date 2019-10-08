@@ -4,17 +4,15 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Annotations;
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.Publications;
 
 
 /**
@@ -96,6 +94,116 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 			c.add(Restrictions.eq(entry.getKey(), entry.getValue()));
 		return (Long) c.setProjection(Projections.rowCount())
                 .uniqueResult();
+	}
+	
+	@Override
+	public Long countByAttributesDistinctBy(Map<String, Serializable> eqRestrictions, List<String> distinctBy) {
+		Criteria c = sessionFactory.getCurrentSession().createCriteria(klass);
+		for (Map.Entry<String, Serializable> entry : eqRestrictions.entrySet())
+			c.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		ProjectionList projectionListToDistinct = Projections.projectionList();
+		for(String distinctType : 	distinctBy)
+			projectionListToDistinct.add(Projections.property(distinctType), distinctType);
+		c.setProjection(Projections.distinct(projectionListToDistinct));
+		return (Long) c.setProjection(Projections.rowCount())
+                .uniqueResult();
+	}
+	
+	@Override
+	public Long countByAttributesWithAliasDistinctBy(Map<String, String> alias, Map<String, Serializable> eqRestrictions, List<String> distinctBy) {
+		Criteria c = sessionFactory.getCurrentSession().createCriteria(klass);
+		
+		for(Entry<String, String> aliasentry: alias.entrySet())
+			c.createAlias(aliasentry.getKey(), aliasentry.getValue());
+		
+		for (Map.Entry<String, Serializable> entry : eqRestrictions.entrySet())
+			c.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		
+		ProjectionList projectionListToDistinct = Projections.projectionList();
+		for(String distinctType : 	distinctBy)
+			projectionListToDistinct.add(Projections.property(distinctType), distinctType);
+		c.setProjection(Projections.distinct(projectionListToDistinct));
+		return (Long) c.setProjection(Projections.rowCount())
+                .uniqueResult();
+	}
+	
+	@Override
+	public Long countByAttributesInListsWithAliasDistinctBy(Map<String, String> alias, Map<String, Serializable> eqRestrictions, Map<String, Serializable> inRestrictions, List<String> distinctBy){
+		Criteria c = sessionFactory.getCurrentSession().createCriteria(klass);
+		
+		for(Entry<String, String> aliasentry: alias.entrySet())
+			c.createAlias(aliasentry.getKey(), aliasentry.getValue());
+		
+		for (Map.Entry<String, Serializable> entry : eqRestrictions.entrySet())
+			c.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		
+		for (Map.Entry<String, Serializable> entry : eqRestrictions.entrySet())
+			c.add(Restrictions.in(entry.getKey(), entry.getValue()));
+		
+		ProjectionList projectionListToDistinct = Projections.projectionList();
+		for(String distinctType : 	distinctBy)
+			projectionListToDistinct.add(Projections.property(distinctType), distinctType);
+		c.setProjection(Projections.distinct(projectionListToDistinct));
+		return (Long) c.setProjection(Projections.rowCount())
+                .uniqueResult();
+	}
+	
+	@Override
+	public Map<String, Long> countByAttributesGroupedBy(Map<String, Serializable> eqRestrictions, List<String> groups) {
+		Criteria c = sessionFactory.getCurrentSession().createCriteria(klass);
+		for (Map.Entry<String, Serializable> entry : eqRestrictions.entrySet())
+			c.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		
+		ProjectionList plist = Projections.projectionList();
+		for(String group : groups)
+			plist.add(Projections.groupProperty(group));
+		
+		plist.add(Projections.rowCount());
+		@SuppressWarnings("unchecked")
+		List<Object[]> result = c.setProjection(plist).list();
+		Map<String, Long> resultmap =  new HashMap<>();
+		for(Object[] row :result) {
+			StringBuffer sb = new StringBuffer();
+			for(int i=0; i<= row.length-2;i++) {
+				if(sb.length()!=0)
+					sb.append("-");
+				sb.append(row[i].toString());
+			}
+			resultmap.put(sb.toString(), Long.valueOf(row[row.length-1].toString()));
+		}
+			
+		return resultmap;
+	}
+	
+	@Override
+	public Map<String, Long> countByAttributesWithAliasGroupedBy(Map<String, String> alias, Map<String, Serializable> eqRestrictions, List<String> groups){
+		Criteria c = sessionFactory.getCurrentSession().createCriteria(klass);
+		
+		for(Entry<String, String> aliasentry: alias.entrySet())
+			c.createAlias(aliasentry.getKey(), aliasentry.getValue());
+		
+		for (Map.Entry<String, Serializable> entry : eqRestrictions.entrySet())
+			c.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		
+		ProjectionList plist = Projections.projectionList();
+		for(String group : groups)
+			plist.add(Projections.groupProperty(group));
+		
+		plist.add(Projections.rowCount());
+		@SuppressWarnings("unchecked")
+		List<Object[]> result = c.setProjection(plist).list();
+		Map<String, Long> resultmap =  new HashMap<>();
+		for(Object[] row :result) {
+			StringBuffer sb = new StringBuffer();
+			for(int i=0; i<= row.length-2;i++) {
+				if(sb.length()!=0)
+					sb.append("-");
+				sb.append(row[i].toString());
+			}
+			resultmap.put(sb.toString(), Long.valueOf(row[row.length-1].toString()));
+		}
+			
+		return resultmap;
 	}
 	
 	@SuppressWarnings("unchecked")

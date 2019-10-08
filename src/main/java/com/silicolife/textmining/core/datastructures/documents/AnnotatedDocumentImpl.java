@@ -11,11 +11,11 @@ import com.silicolife.textmining.core.datastructures.nlptools.OpenNLPSentenceSpl
 import com.silicolife.textmining.core.datastructures.utils.HTMLCodes;
 import com.silicolife.textmining.core.datastructures.utils.conf.GlobalNames;
 import com.silicolife.textmining.core.datastructures.utils.conf.OtherConfigurations;
+import com.silicolife.textmining.core.interfaces.core.analysis.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEntityAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IEventAnnotation;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocument;
-import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.CorpusTextType;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
@@ -38,10 +38,10 @@ public class AnnotatedDocumentImpl extends PublicationImpl implements IAnnotated
 	private ICorpus corpus;
 	private List<ISentence> sentences;
 	
-	public AnnotatedDocumentImpl(IPublication document,IIEProcess reProcess, ICorpus corpus) {	
+	public AnnotatedDocumentImpl(IPublication document,IIEProcess process, ICorpus corpus) {	
 		super(document);
 		this.corpus=corpus;
-		this.process=reProcess;
+		this.process=process;
 		this.entities=null;
 		this.events=null;
 	}
@@ -195,7 +195,7 @@ public class AnnotatedDocumentImpl extends PublicationImpl implements IAnnotated
 
 	@Override
 	public Set<IAnoteClass> getEntityAnnotatedClasses() throws ANoteException {
-		return getStatistics().getclassNumberOfEntities().keySet();
+		return getStatistics().getCountOfEntitiesByClass().keySet();
 	}
 	
 

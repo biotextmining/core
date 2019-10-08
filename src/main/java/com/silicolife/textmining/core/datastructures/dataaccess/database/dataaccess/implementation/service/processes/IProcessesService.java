@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.ProcessException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.dao.UsersLogged;
+import com.silicolife.textmining.core.interfaces.core.analysis.IIEProcessStatistics;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
-import com.silicolife.textmining.core.interfaces.process.IE.IIEProcessStatistics;
 
 /**
  * Interface to define all methods of Service layer about processes

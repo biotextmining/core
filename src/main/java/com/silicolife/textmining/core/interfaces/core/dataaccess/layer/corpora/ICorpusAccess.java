@@ -1,18 +1,19 @@
 package com.silicolife.textmining.core.interfaces.core.dataaccess.layer.corpora;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.CorpusException;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.corpora.ieprocess.IIEProcessAccess;
 import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
-import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpusStatistics;
+import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
+import com.silicolife.textmining.core.interfaces.resource.IResourceElement;
 
 public interface ICorpusAccess extends IIEProcessAccess, IAnnotationAccess, IAnnotationsLogAccess,ICorpusPrivilegesAccess {
 
@@ -196,4 +197,10 @@ public interface ICorpusAccess extends IIEProcessAccess, IAnnotationAccess, IAnn
 	
 	public Set<ICorpus> getCorpusByPublication(IPublication publication) throws ANoteException;
 
+	public List<Long> getCorpusPublicationsFromExternalID(ICorpus corpus, String source, String internalSourceId) throws ANoteException;
+
+	public Map<IAnoteClass, Long> countEntityAnnotationsByClassInProcess(IIEProcess process) throws ANoteException;
+	
+	public Map<IResourceElement, Long> countEntityAnnotationsByResourceElementInProcess(IIEProcess process) throws ANoteException;
+	
 }

@@ -2,6 +2,7 @@ package com.silicolife.textmining.core.interfaces.process.IE;
 
 import java.util.Properties;
 
+import com.silicolife.textmining.core.interfaces.core.analysis.IIEProcessStatistics;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.process.IProcess;

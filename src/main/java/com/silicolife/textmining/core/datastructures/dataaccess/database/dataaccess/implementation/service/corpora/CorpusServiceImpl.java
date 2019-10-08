@@ -192,11 +192,20 @@ public class CorpusServiceImpl implements ICorpusService {
 		/*
 		 * update corpus
 		 */
+
 		corpus.setCrpCorpusName(corpus_.getDescription());
 		corpus.setCrpNotes(corpus_.getNotes());
 		//		corpus.setCrpActive(corpus_.is);
 		AuthUsers user = userLogged.getCurrentUserLogged();
 		corpusManagerDao.getCorpusDao().update(corpus);
+		
+		/*
+		 * update corpus properties
+		 */
+		Corpus inputCorpus = CorpusWrapper.convertToDaemonStructure(corpus_);
+		Set<CorpusProperties> corpusProperties = inputCorpus.getCorpusPropertieses();
+		for (CorpusProperties corpusProperty : corpusProperties)
+			updateCorpusProperties(corpusProperty);
 		/*
 		 * log
 		 */
@@ -393,6 +402,10 @@ public class CorpusServiceImpl implements ICorpusService {
 	 */
 	private void createCorpusProperties(CorpusProperties properties) {
 		corpusManagerDao.getCorpusPropertiesDao().save(properties);
+	}
+	
+	private void updateCorpusProperties(CorpusProperties properties) {
+		corpusManagerDao.getCorpusPropertiesDao().saveOrUpdate(properties);
 	}
 
 	@Transactional(readOnly = false)
@@ -656,6 +669,17 @@ public class CorpusServiceImpl implements ICorpusService {
 
 		return response;
 	}
+	
+
+	@Override
+	public List<Long> getCorpusPublicationsFromExternalID(Long corpusId, String source, String internalSourceId) {
+		PublicationSources publicationSource = corpusManagerDao.getPublicationSourcesDao().findUniqueByAttribute("pssDescription", source);
+		if (publicationSource == null) 
+			return new ArrayList<>();
+		
+		return corpusManagerDao.getPublicationsAuxDao().getCorpusPublicationIdsByExternalId(publicationSource.getPssId(), internalSourceId, corpusId);
+
+	}
 
 	@Override
 	public Set<ICorpus> getCorpusByPublicationId(Long publicationId) throws CorpusException {
@@ -673,5 +697,6 @@ public class CorpusServiceImpl implements ICorpusService {
 
 		return listCorpus_;
 	}
+
 
 }

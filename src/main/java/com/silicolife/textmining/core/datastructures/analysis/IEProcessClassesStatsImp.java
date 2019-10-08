@@ -1,4 +1,4 @@
-package com.silicolife.textmining.core.datastructures.process;
+package com.silicolife.textmining.core.datastructures.analysis;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,18 +12,18 @@ public class IEProcessClassesStatsImp {
 	
 	@JsonDeserialize(using = MapClassDeserialize.class)
 	private Map<String,IAnoteClass> klassNameKlass;
-	private Map<String,Integer> klassNameNumber;
+	private Map<String,Long> klassNameNumber;
 
 	public IEProcessClassesStatsImp() {
 		klassNameKlass = new HashMap<String, IAnoteClass>();
-		klassNameNumber = new HashMap<String, Integer>();
+		klassNameNumber = new HashMap<String, Long>();
 	}
 
 	public Map<String, IAnoteClass> getKlassNameKlass() {
 		return klassNameKlass;
 	}
 
-	public Map<String, Integer> getKlassNameNumber() {
+	public Map<String, Long> getKlassNameNumber() {
 		return klassNameNumber;
 	}
 
@@ -31,27 +31,27 @@ public class IEProcessClassesStatsImp {
 		this.klassNameKlass = klassNameKlass;
 	}
 
-	public void setKlassNameNumber(Map<String, Integer> klassNameNumber) {
+	public void setKlassNameNumber(Map<String, Long> klassNameNumber) {
 		this.klassNameNumber = klassNameNumber;
 	}
 	
 	
 
-	public Map<IAnoteClass, Integer> classesNumberOfocuurrences() {
-		Map<IAnoteClass, Integer> result = new HashMap<IAnoteClass, Integer>();
+	public Map<IAnoteClass, Long> classesNumberOfocuurrences() {
+		Map<IAnoteClass, Long> result = new HashMap<IAnoteClass, Long>();
 		for(String klass:klassNameNumber.keySet())
 		{
 			IAnoteClass key = klassNameKlass.get(klass);
-			Integer value = klassNameNumber.get(klass);
+			Long value = klassNameNumber.get(klass);
 			result.put(key, value);
 		}
 		return result;
 	}
 
 	@JsonIgnore
-	public void setClassesNumberOfOcurrences(Map<IAnoteClass, Integer> mapClassesNumberOFOccurrences) {
+	public void setClassesNumberOfOcurrences(Map<IAnoteClass, Long> mapClassesNumberOFOccurrences) {
 		klassNameKlass = new HashMap<String, IAnoteClass>();
-		klassNameNumber = new HashMap<String, Integer>();
+		klassNameNumber = new HashMap<String, Long>();
 		for(IAnoteClass klass :mapClassesNumberOFOccurrences.keySet())
 		{
 			klassNameKlass.put(klass.getName(), klass);
@@ -60,7 +60,7 @@ public class IEProcessClassesStatsImp {
 	}
 	
 
-	public void addClassStatistics(IAnoteClass klass, int numberOFClassEntities)
+	public void addClassStatistics(IAnoteClass klass, Long numberOFClassEntities)
 	{
 		if(!klassNameKlass.containsKey(klass.getName()))
 		{

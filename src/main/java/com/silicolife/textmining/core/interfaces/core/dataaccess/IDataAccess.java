@@ -15,7 +15,6 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.runserver
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.runserverprocesses.IRunServerProcesses;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.user.IUserPrivilegesAccess;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.lucene.ILuceneDataAcess;
-import com.silicolife.textmining.core.interfaces.core.document.ISearchProperties;
 import com.silicolife.textmining.core.interfaces.core.user.IUser;
 
 public interface IDataAccess extends IPublicationManagerAccess, IGeneralDataAccess, ICorpusAccess, IResourceAccess, IUpdateAccess, IUserPrivilegesAccess, IHyperLinkMenuLayer,IRunServerProcesses,IDataProcessStatusAcess, ILuceneDataAcess {

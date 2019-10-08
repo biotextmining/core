@@ -270,4 +270,15 @@ public class QueryAccessImpl extends RestClientAccess {
 			return externalSourcesIds;
 		}
 	}
+
+	public List<IPublication> getQueryPublicationsPaginated(Long id, Integer paginationIndex, Integer paginationSize,
+			Boolean asc, String sortBy) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Long countQueryPublications(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -2,11 +2,11 @@ package com.silicolife.textmining.core.interfaces.core.dataaccess.layer.corpora.
 
 import java.util.List;
 
+import com.silicolife.textmining.core.interfaces.core.analysis.IIEProcessStatistics;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
-import com.silicolife.textmining.core.interfaces.process.IE.IIEProcessStatistics;
 
 public interface IIEProcessAccess extends IIEStatisticsAccess,IIEProcessPrivilegesAccess{
 

@@ -10,9 +10,11 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.SortedSet;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 
+import com.silicolife.textmining.core.datastructures.annotation.AnnotationType;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.annotation.AnnotationAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.clustering.ClusteringAccessImpl;
 import com.silicolife.textmining.core.datastructures.dataaccess.daemon.implementation.corpora.CorpusAccessImpl;
@@ -39,6 +41,8 @@ import com.silicolife.textmining.core.datastructures.dataaccess.database.dataacc
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUsers;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.PermissionsUtilsEnum;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.utils.ResourcesTypeUtils;
+import com.silicolife.textmining.core.interfaces.core.analysis.IAnnotatedDocumentStatistics;
+import com.silicolife.textmining.core.interfaces.core.analysis.IIEProcessStatistics;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotation;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationLog;
 import com.silicolife.textmining.core.interfaces.core.annotation.IAnnotationsFilter;
@@ -51,7 +55,6 @@ import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANote
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.DaemonException;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.layer.resources.IResourceManagerReport;
 import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocument;
-import com.silicolife.textmining.core.interfaces.core.document.IAnnotatedDocumentStatistics;
 import com.silicolife.textmining.core.interfaces.core.document.IDocumentSet;
 import com.silicolife.textmining.core.interfaces.core.document.IPublication;
 import com.silicolife.textmining.core.interfaces.core.document.IPublicationFilter;
@@ -71,7 +74,6 @@ import com.silicolife.textmining.core.interfaces.core.user.IUser;
 import com.silicolife.textmining.core.interfaces.core.user.IUserDataObject;
 import com.silicolife.textmining.core.interfaces.core.utils.IGenericPair;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
-import com.silicolife.textmining.core.interfaces.process.IE.IIEProcessStatistics;
 import com.silicolife.textmining.core.interfaces.process.IE.re.IRelationsType;
 import com.silicolife.textmining.core.interfaces.process.IR.IQuery;
 import com.silicolife.textmining.core.interfaces.resource.IResource;
@@ -470,8 +472,8 @@ public class DaemonAccess implements IDataAccess {
 	}
 	
 	@Override
-	public Long countAnnotations(IIEProcess process, IResourceElement resourceElement) throws ANoteException {
-		return annotationAccessImpl.countAnnotations(process.getId(), resourceElement.getId());
+	public Long countAnnotationsByResourceElement(IIEProcess process, IResourceElement resourceElement) throws ANoteException {
+		return annotationAccessImpl.countAnnotationsByResourceElement(process.getId(), resourceElement.getId());
 	}
 
 	@Override
@@ -1430,6 +1432,109 @@ public class DaemonAccess implements IDataAccess {
 	@Override
 	public Integer countResourceElements(ISearchProperties searchProperties) throws ANoteException {
 		return luceneResourcesElementsAccessImpl.countResourceElements(searchProperties);
+	}
+
+	@Override
+	public List<IPublication> getQueryPublicationsPaginated(IQuery query, Integer paginationIndex,
+			Integer paginationSize, Boolean asc, String sortBy) throws ANoteException {
+			List<IPublication> response = queryAccessImpl.getQueryPublicationsPaginated(query.getId(),paginationIndex, paginationSize, asc, sortBy);
+			return response;
+	}
+
+	@Override
+	public Long countQueryPublications(IQuery query) throws ANoteException {
+		Long response = queryAccessImpl.countQueryPublications(query.getId());
+		return response;
+	}
+
+	@Override
+	public List<Long> getCorpusPublicationsFromExternalID(ICorpus corpus, String source, String InternalSourceId)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Long countAnnotationsByAnnotationType(IIEProcess process, AnnotationType annotType) throws ANoteException {
+		return this.annotationAccessImpl.countAnnotationsByAnnotationType(process.getId(), annotType.name());
+	}
+
+	@Override
+	public Map<IAnoteClass, Long> countEntityAnnotationsByClassInProcess(IIEProcess process) throws ANoteException {
+		return this.annotationAccessImpl.countEntityAnnotationsByClassInProcess(process.getId());
+	}
+
+	@Override
+	public Map<IResourceElement, Long> countEntityAnnotationsByResourceElementInProcess(IIEProcess process)
+			throws ANoteException {
+		return this.annotationAccessImpl.countEntityAnnotationsByResourceElementInProcess(process.getId());
+	}
+
+	@Override
+	public Map<IResourceElement, Long> countAnnotationsByResourceElementInDocument(IAnnotatedDocument document)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<IResourceElement, Long> countDocumentsWithEntityAnnotationsByResourceElementInProcess(IIEProcess process)
+			throws ANoteException {
+		return this.annotationAccessImpl.countDocumentsWithEntityAnnotationsByResourceElementInProcess(process.getId());
+	}
+
+	@Override
+	public Long countPublicationsWithEventsByResourceElements(List<IResourceElement> resourceElements)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Long> getPublicationsIdsWithEventsByResourceElements(List<IResourceElement> resourceElements)
+			throws ANoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<ImmutablePair<IAnoteClass, IAnoteClass>, Long> countPublicationsWithEventsByIAnoteClasses(
+			IIEProcess process) throws ANoteException {
+		return this.annotationAccessImpl.countPublicationsWithEventsByIAnoteClasses(process.getId());
+	}
+
+	@Override
+	public Map<ImmutablePair<IAnoteClass, IAnoteClass>, Long> countEventAnnotationsByClassInProcess(IIEProcess process)
+			throws ANoteException {
+		return this.annotationAccessImpl.countEventAnnotationsByClassInProcess( process.getId());
+	}
+
+	@Override
+	public Long countDocumentsWithResourceElementByAnnotationTypeInProcess(IResourceElement resourceElement,
+			IIEProcess process, AnnotationType annotType) throws ANoteException {
+		return this.annotationAccessImpl.countDocumentsWithResourceElementByAnnotationTypeInProcess(resourceElement.getId(), process.getId(), annotType.name());
+	}
+
+	@Override
+	public List<Long> getPublicationsIdsByEventResourceElements(IIEProcess process,
+			Set<ImmutablePair<IResourceElement, IResourceElement>> resElemIds) throws ANoteException {
+		Set<String> resElemConcated = new HashSet<>();
+		for(ImmutablePair<IResourceElement, IResourceElement> resId : resElemIds)
+			resElemConcated.add(String.valueOf(resId.getLeft().getId())+"-"+String.valueOf(resId.getRight().getId()));
+		
+		return this.annotationAccessImpl.getPublicationsIdsByEventResourceElements(process.getId(), resElemConcated);
+	}
+
+	@Override
+	public Map<ImmutablePair<IResourceElement, IResourceElement>, Long> countDocumentsWithEventsByResourceElemnts(
+			IIEProcess process) throws ANoteException {
+		return this.annotationAccessImpl.countDocumentsWithEventsByResourceElemnts(process.getId());
+	}
+
+	@Override
+	public Map<ImmutablePair<IResourceElement, IResourceElement>, Long> countEventsByResourceElemnts(IIEProcess process)
+			throws ANoteException {
+		return this.annotationAccessImpl.countEventsByResourceElemnts(process.getId());
 	}
 
 

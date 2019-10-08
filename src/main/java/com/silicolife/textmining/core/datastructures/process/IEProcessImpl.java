@@ -15,12 +15,12 @@ import com.silicolife.textmining.core.datastructures.process.ner.ResourcesToNerA
 import com.silicolife.textmining.core.datastructures.resources.ResourceImpl;
 import com.silicolife.textmining.core.datastructures.utils.GenerateRandomId;
 import com.silicolife.textmining.core.datastructures.utils.conf.GlobalOptions;
+import com.silicolife.textmining.core.interfaces.core.analysis.IIEProcessStatistics;
 import com.silicolife.textmining.core.interfaces.core.dataaccess.exception.ANoteException;
 import com.silicolife.textmining.core.interfaces.core.document.corpus.ICorpus;
 import com.silicolife.textmining.core.interfaces.process.IProcessOrigin;
 import com.silicolife.textmining.core.interfaces.process.IProcessType;
 import com.silicolife.textmining.core.interfaces.process.IE.IIEProcess;
-import com.silicolife.textmining.core.interfaces.process.IE.IIEProcessStatistics;
 
 public class IEProcessImpl extends Observable implements IIEProcess {
 

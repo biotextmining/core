@@ -99,5 +99,21 @@ public interface IQueryAccess extends IQueryPrivilegesAccess {
 	 * @throws DatabaseLoadDriverException
 	 */
 	public Set<String> getQueryPublicationsExternalIDFromSource(IQuery query, String source) throws ANoteException;
+	
+	/**
+	 * Returns publications of a query paginated
+	 * 
+	 * @param queryId
+	 * @param paginationIndex
+	 * @param paginationSize
+	 * @param asc
+	 * @param sortBy
+	 * @return
+	 * @throws ANoteException 
+	 */
+	public List<IPublication> getQueryPublicationsPaginated(IQuery query, Integer paginationIndex, Integer paginationSize,
+			Boolean asc, String sortBy) throws ANoteException;
+	
+	public Long countQueryPublications(IQuery query) throws ANoteException;
 
 }

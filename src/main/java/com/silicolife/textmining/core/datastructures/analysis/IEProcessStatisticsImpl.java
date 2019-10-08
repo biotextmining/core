@@ -1,19 +1,19 @@
-package com.silicolife.textmining.core.datastructures.process;
+package com.silicolife.textmining.core.datastructures.analysis;
 
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.silicolife.textmining.core.interfaces.core.analysis.IIEProcessStatistics;
 import com.silicolife.textmining.core.interfaces.core.general.classe.IAnoteClass;
-import com.silicolife.textmining.core.interfaces.process.IE.IIEProcessStatistics;
 
 public class IEProcessStatisticsImpl implements IIEProcessStatistics{
 
-	private int entitiesSize;
-	private int relationsSize;
+	private Long entitiesSize;
+	private Long relationsSize;
 	private IEProcessClassesStatsImp klassStatistics;
 	
 	
-	public IEProcessStatisticsImpl(int entitiesSize, int relationsSize) {
+	public IEProcessStatisticsImpl(Long entitiesSize, Long relationsSize) {
 		super();
 		this.entitiesSize = entitiesSize;
 		this.relationsSize = relationsSize;
@@ -25,20 +25,20 @@ public class IEProcessStatisticsImpl implements IIEProcessStatistics{
 	}
 
 	@Override
-	public int getEntitiesSize() {
+	public Long getEntitiesSize() {
 		return entitiesSize;
 	}
 
 	@Override
-	public int getRelationsSize() {
+	public Long getRelationsSize() {
 		return relationsSize;
 	}	
 
-	public void setEntitiesSize(int entitiesSize) {
+	public void setEntitiesSize(Long entitiesSize) {
 		this.entitiesSize = entitiesSize;
 	}
 
-	public void setRelationsSize(int relationsSize) {
+	public void setRelationsSize(Long relationsSize) {
 		this.relationsSize = relationsSize;
 	}
 
@@ -52,13 +52,13 @@ public class IEProcessStatisticsImpl implements IIEProcessStatistics{
 
 	@JsonIgnore
 	@Override
-	public Map<IAnoteClass, Integer> getClassesNumberOfOcurrences() {
+	public Map<IAnoteClass, Long> getClassesNumberOfOcurrences() {
 		return klassStatistics.classesNumberOfocuurrences();
 	}
 	
 	@JsonIgnore
 	@Override
-	public void setClassesNumberOfOcurrences(Map<IAnoteClass, Integer> mapClassesNumberOFOccurrences) {
+	public void setClassesNumberOfOcurrences(Map<IAnoteClass, Long> mapClassesNumberOFOccurrences) {
 		this.klassStatistics.setClassesNumberOfOcurrences(mapClassesNumberOFOccurrences);
 	}
 }
