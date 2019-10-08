@@ -19,13 +19,11 @@ install:
 
 script:
   - mvn $MAVEN_CLI_OPTS clean compile -DskipTests
-  
-before_deploy:
-  - mvn $MAVEN_CLI_OPTS versions:set -DnewVersion=${TRAVIS_TAG}
 
-deploy:
+deploy:  
   - provider: script
     script:
+      - mvn $MAVEN_CLI_OPTS versions:set -DnewVersion=${TRAVIS_TAG}
       - mvn $MAVEN_CLI_OPTS clean deploy -P release -DskipTests
     on:
      tags: true
