@@ -6,13 +6,12 @@ email: true
 install: 
   - export MVN_SETTINGS=travis/settings.xml
   - export MAVEN_CLI_OPTS="-s travis/settings.xml --batch-mode"
-  - sed -i s/OSS_SONATYPE_USER/$OSS_SONATYPE_USER/g $MVN_SETTINGS
-  - sed -i s/OSS_SONATYPE_PASS/$OSS_SONATYPE_PASS/g $MVN_SETTINGS
-  - sed -i s,GPG_EXECUTABLE,$GPG_EXECUTABLE,g $MVN_SETTINGS
-  - sed -i s,GPG_PASSPHRASE,$GPG_PASSPHRASE,g $MVN_SETTINGS
-  - sudo apt-get install dirmngr --install-recommends
-  - gpg2 --recv-keys 9A94EF83
-  - gpg2 -a --export 9A94EF83 | sudo apt-key add -
+#   - sed -i s/OSS_SONATYPE_USER/$OSS_SONATYPE_USER/g $MVN_SETTINGS
+#   - sed -i s/OSS_SONATYPE_PASS/$OSS_SONATYPE_PASS/g $MVN_SETTINGS
+#   - sed -i s,GPG_EXECUTABLE,$GPG_EXECUTABLE,g $MVN_SETTINGS
+#   - sed -i s,GPG_PASSPHRASE,$GPG_PASSPHRASE,g $MVN_SETTINGS
+  - echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import
+  - echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust
 
 script:
   - mvn $MAVEN_CLI_OPTS clean compile -DskipTests
