@@ -26,7 +26,7 @@ before_deploy:
 deploy:
   - provider: script
     script:
-      - mvn $MAVEN_CLI_OPTS clean deploy -DskipTests
+      - mvn $MAVEN_CLI_OPTS clean deploy -P release -DskipTests
     on:
      tags: true
      all_branches: true
