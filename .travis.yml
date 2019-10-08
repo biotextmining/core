@@ -10,6 +10,7 @@ install:
   - sed -i s/OSS_SONATYPE_PASS/$OSS_SONATYPE_PASS/g $MVN_SETTINGS
   - sed -i s,GPG_EXECUTABLE,$GPG_EXECUTABLE,g $MVN_SETTINGS
   - sed -i s,GPG_PASSPHRASE,$GPG_PASSPHRASE,g $MVN_SETTINGS
+  - apt-get install dirmngr --install-recommends
   - gpg2 --keyserver hkp://pool.sks-keyservers.net --recv-keys B0E7772F0EBD62D2
   - gpg2 -a --export B0E7772F0EBD62D2 | sudo apt-key add -
 
