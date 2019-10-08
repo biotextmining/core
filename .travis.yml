@@ -15,20 +15,19 @@ install:
 #   - gpg2 -a --export 471F6684B909F1994323EAD1CB16F115FC370E8F | sudo apt-key add -
   - echo $GPG_SECRET_KEYS | base64 --decode | gpg2 --batch --yes --passphrase=$GPG_PASSPHRASE --import
   - echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust
-  
+cache:
+  directories:
+    - $HOME/.m2
 
 script:
   - mvn $MAVEN_CLI_OPTS clean compile -DskipTests
-  
-before_deploy:
-    skip_cleanup: true
-    script:
-       - mvn $MAVEN_CLI_OPTS versions:set -DnewVersion=${TRAVIS_TAG}
-
+    
 deploy:  
   - provider: script
     script:
+      - mvn $MAVEN_CLI_OPTS versions:set -DnewVersion=${TRAVIS_TAG}
       - mvn $MAVEN_CLI_OPTS clean deploy -P release -DskipTests
+    skip_cleanup: true
     on:
      tags: true
      all_branches: true
