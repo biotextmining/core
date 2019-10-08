@@ -10,11 +10,11 @@ install:
 #   - sed -i s/OSS_SONATYPE_PASS/$OSS_SONATYPE_PASS/g $MVN_SETTINGS
 #   - sed -i s,GPG_EXECUTABLE,$GPG_EXECUTABLE,g $MVN_SETTINGS
 #   - sed -i s,GPG_PASSPHRASE,$GPG_PASSPHRASE,g $MVN_SETTINGS
-  - sudo apt-get install dirmngr --install-recommends
-  - gpg2 --keyserver hkps://hkps.pool.sks-keyservers.net --recv-keys 471F6684B909F1994323EAD1CB16F115FC370E8F
-  - gpg2 -a --export 471F6684B909F1994323EAD1CB16F115FC370E8F | sudo apt-key add -
-  - echo $GPG_SECRET_KEYS | base64 --decode | gpg2 --import
-  - echo $GPG_OWNERTRUST | base64 --decode | gpg2 --import-ownertrust
+#   - sudo apt-get install dirmngr --install-recommends
+#   - gpg2 --keyserver hkps://hkps.pool.sks-keyservers.net --recv-keys 471F6684B909F1994323EAD1CB16F115FC370E8F
+#   - gpg2 -a --export 471F6684B909F1994323EAD1CB16F115FC370E8F | sudo apt-key add -
+  - echo $GPG_SECRET_KEYS | base64 --decode | gpg2 --batch --yes --passphrase=$GPG_PASSPHRASE --import
+  - echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust
   
 
 script:
