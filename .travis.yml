@@ -1,0 +1,25 @@
+dist: trusty
+language: java
+
+notifications:
+email: true
+
+install: 
+  - export MVN_SETTINGS=.travis/settings.xml
+  - export MAVEN_CLI_OPTS="-s .travis/settings.xml --batch-mode"
+  - echo $GPG_SECRET_KEYS | base64 --decode | gpg2 --batch --yes --passphrase=$GPG_PASSPHRASE --import
+  - echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust
+cache:
+  directories:
+    - $HOME/.m2
+
+script:
+  - mvn $MAVEN_CLI_OPTS clean verify -DskipTests
+    
+deploy:  
+  - provider: script
+    script: .travis/release.sh
+    skip_cleanup: true
+    on:
+     tags: true
+     all_branches: true

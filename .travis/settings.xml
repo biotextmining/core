@@ -1,0 +1,40 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                          http://maven.apache.org/xsd/settings-1.0.0.xsd">
+	<servers>
+		<server>
+			<id>ossrh</id>
+			<username>${env.OSS_SONATYPE_USER}</username>
+			<password>${env.OSS_SONATYPE_PASS}</password>
+		</server>
+		
+		<server>
+			<id>umrepo</id>
+			<username>${env.UM_USER}</username>
+			<password>${env.UM_PASS}</password>
+		</server>
+	</servers>
+
+	<profiles>
+		<profile>
+			<id>central-deploy</id>
+			<properties>
+				<gpg.executable>${env.GPG_EXECUTABLE}</gpg.executable>
+				<gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
+				<useAgent>false</useAgent>
+				<altSnapshotDeploymentRepository>ossrh::default::${env.CENTRAL_SNAPSHOT}</altSnapshotDeploymentRepository>
+				<altReleaseDeploymentRepository>ossrh::default::${env.CENTRAL_RELEASE}</altReleaseDeploymentRepository>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>um-deploy</id>
+			<properties>
+				<altSnapshotDeploymentRepository>umrepo::default::${env.UM_SNAPSHOT}</altSnapshotDeploymentRepository>
+				<altReleaseDeploymentRepository>umrepo::default::${env.UM_RELEASE}</altReleaseDeploymentRepository>
+			</properties>
+		</profile>
+	</profiles>
+
+</settings>
