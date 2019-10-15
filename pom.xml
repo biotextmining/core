@@ -247,7 +247,7 @@
 
 	<profiles>
 		<profile>
-			<id>release</id>
+			<id>central-deploy</id>
 			<build>
 				<plugins>
 					<!-- Uncomment when deploy to Mvn Central -->
