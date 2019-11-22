@@ -7,12 +7,9 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lowagie.text.pdf.codec.Base64;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.CredentialsAccessException;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.UserExceptions;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.exceptions.general.ExceptionsCodes;
@@ -43,13 +40,11 @@ public class UserServiceImpl implements IUserService {
 
 	private UsersManagerDao usersManagerDao;
 	private UsersLogged userLogged;
-	private ShaPasswordEncoder passwordEncoder = new ShaPasswordEncoder(256);
 
 	@Autowired
 	public UserServiceImpl(UsersManagerDao usersManagerDao, UsersLogged userLogged) {
 		this.usersManagerDao = usersManagerDao;
 		this.userLogged = userLogged;
-		passwordEncoder.setIterations(1000000);
 	}
 
 	@Override
@@ -59,15 +54,7 @@ public class UserServiceImpl implements IUserService {
 		if (user == null) {
 			return false;
 		}
-		Long userId = user.getAuId();
-		String strUserId = String.valueOf(userId);
-		Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-		encoder.setIterations(13);
-		String salt = encoder.encodePassword(strUserId, null);
-		if (!passwordEncoder.isPasswordValid(user.getAuPassword(), password, salt)) {
-			return false;
-		}
-		return true;
+		return GeneratePassword.checkPassword(password, user.getAuPassword());
 	}
 
 	@Override
@@ -77,12 +64,7 @@ public class UserServiceImpl implements IUserService {
 		if (user == null) {
 			throw new CredentialsAccessException(ExceptionsCodes.codeWrongCredentials, ExceptionsCodes.msgWrongCredentials);
 		}
-		Long userId = user.getAuId();
-		String strUserId = String.valueOf(userId);
-		Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-		encoder.setIterations(13);
-		String salt = encoder.encodePassword(strUserId, null);
-		if (!passwordEncoder.isPasswordValid(user.getAuPassword(), password, salt)) {
+		if (!GeneratePassword.checkPassword(password, user.getAuPassword())) {
 			throw new CredentialsAccessException(ExceptionsCodes.codeWrongCredentials, ExceptionsCodes.msgWrongCredentials);
 		}
 		return user;
@@ -93,7 +75,7 @@ public class UserServiceImpl implements IUserService {
 		IUser user = usersManagerDao.getAuthUsersDao().findById(id);
 		return user;
 	}
-	
+
 	@Override
 	public IUser getLoggedUser() {
 		IUser user = this.userLogged.getCurrentUserLogged();
@@ -118,17 +100,13 @@ public class UserServiceImpl implements IUserService {
 
 		return true;
 	}
-	
+
 	@Transactional(readOnly = false)
 	@Override
 	public Boolean createUserFromWeb(IUser userIn) {
-		
+
+		String pass = GeneratePassword.generate(String.valueOf(userIn.getAuPassword()));
 		Long id = GenerateRandomId.generateID();
-		Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-		encoder.setIterations(13);
-		String salt = encoder.encodePassword(String.valueOf(id), null);
-		String pass = GeneratePassword.generate(String.valueOf(userIn.getAuPassword()), salt);
-		
 		AuthUsers user = new AuthUsers();
 		user.setAuId(id);
 		user.setAuFullname(userIn.getAuFullname());
@@ -137,10 +115,10 @@ public class UserServiceImpl implements IUserService {
 		user.setAuAddress(userIn.getAuAddress());
 		user.setAuZipCode(userIn.getAuZipCode());
 		user.setAuLocation(userIn.getAuLocation());
-			user.setAuPhone(userIn.getAuPhone());
+		user.setAuPhone(userIn.getAuPhone());
 		user.setAuEmail(userIn.getAuEmail());
 		user.setAuthGroups((AuthGroups) userIn.getAuthGroups());
-	
+
 		usersManagerDao.getAuthUsersDao().save(user);
 
 		AuthUsers userLog = userLogged.getCurrentUserLogged();
@@ -149,7 +127,7 @@ public class UserServiceImpl implements IUserService {
 
 		return true;
 	}
-	
+
 
 
 	@Transactional(readOnly = false)
@@ -163,76 +141,66 @@ public class UserServiceImpl implements IUserService {
 
 		return true;
 	}
-	
+
 	@Transactional(readOnly = false)
 	@Override
 	public Boolean updateCurrentUserFromWeb(IUser user, String oldPassword) {
-		
+
 		AuthUsers userLog = userLogged.getCurrentUserLogged();
 		AuthUsers userFromBd = usersManagerDao.getAuthUsersDao().findUniqueByAttribute("auUsername", userLog.getAuUsername());
-		
-		
-		Long userId = userLog.getAuId();
-		String strUserId = String.valueOf(userId);
-		Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-		encoder.setIterations(13);
-		String salt = encoder.encodePassword(strUserId, null);
-		if (!passwordEncoder.isPasswordValid(userFromBd.getAuPassword(), oldPassword, salt)) {
+
+
+		if (!GeneratePassword.checkPassword(oldPassword, userFromBd.getAuPassword())) {
 			return false;
 		}
 		else {
 			//String pass = GeneratePassword.generate(oldPassword, salt);
 			//userCopy.setAuPassword(pass);	
-		if(user.getAuAddress()!=null) userFromBd.setAuAddress(user.getAuAddress());
-		if(user.getAuEmail()!=null) userFromBd.setAuEmail(user.getAuEmail()); 
-		if(user.getAuFullname()!=null) userFromBd.setAuFullname(user.getAuFullname()); 
-		if(user.getAuLocation()!=null) userFromBd.setAuLocation(user.getAuLocation()); 
-		if(user.getAuPhone()!=null) userFromBd.setAuPhone(user.getAuPhone()); 
-		if(user.getAuUsername()!=null) userFromBd.setAuUsername(user.getAuUsername());
-		if(user.getAuZipCode()!=null) userFromBd.setAuZipCode(user.getAuZipCode());
-		
-		if(user.getAuPassword()!=null) {
-		Long id = userLog.getAuId();
-		encoder = new Md5PasswordEncoder();
-		encoder.setIterations(13);
-		salt = encoder.encodePassword(String.valueOf(id), null);
-		String pass = GeneratePassword.generate(String.valueOf(user.getAuPassword()), salt);
-		userFromBd.setAuPassword(pass);
-		}
-		
-		usersManagerDao.getAuthUsersDao().update(userFromBd);
-		
-		AuthUserLogs log = new AuthUserLogs(userFromBd, new Date(), "update", "auth_users", null, "update an user");
-		usersManagerDao.getAuthUserLogsDao().save(log);
-		
+			if(user.getAuAddress()!=null) userFromBd.setAuAddress(user.getAuAddress());
+			if(user.getAuEmail()!=null) userFromBd.setAuEmail(user.getAuEmail()); 
+			if(user.getAuFullname()!=null) userFromBd.setAuFullname(user.getAuFullname()); 
+			if(user.getAuLocation()!=null) userFromBd.setAuLocation(user.getAuLocation()); 
+			if(user.getAuPhone()!=null) userFromBd.setAuPhone(user.getAuPhone()); 
+			if(user.getAuUsername()!=null) userFromBd.setAuUsername(user.getAuUsername());
+			if(user.getAuZipCode()!=null) userFromBd.setAuZipCode(user.getAuZipCode());
+			if(user.getAuPassword()!=null) {
+				String pass = GeneratePassword.generate(String.valueOf(user.getAuPassword()));
+				userFromBd.setAuPassword(pass);
+			}
 
-		return true;
+			usersManagerDao.getAuthUsersDao().update(userFromBd);
+
+			AuthUserLogs log = new AuthUserLogs(userFromBd, new Date(), "update", "auth_users", null, "update an user");
+			usersManagerDao.getAuthUserLogsDao().save(log);
+
+
+			return true;
 		}
 	}
-	
+
 	@Transactional(readOnly = false)
 	@Override
 	public byte[] postAvatar(String image) {
-		
+
 		AuthUsers userLog = userLogged.getCurrentUserLogged();
 		AuthUsers userFromBd = usersManagerDao.getAuthUsersDao().findUniqueByAttribute("auUsername", userLog.getAuUsername());
 		System.out.println(image);
 		String[] bytesString = image.split(",");
 		byte[] bytes = new byte[bytesString.length];
 		for(int i = 0 ; i < bytes.length ; ++i) {
-		    bytes[i] = Byte.parseByte(bytesString[i]);
+			bytes[i] = Byte.parseByte(bytesString[i]);
 		}
 		System.out.println(bytes);
 		userFromBd.setAuAvatar(bytes);
-		
+
 		usersManagerDao.getAuthUsersDao().update(userFromBd);
-		
+
 		AuthUserLogs log = new AuthUserLogs(userFromBd, new Date(), "update", "auth_users", null, "update an user");
 		usersManagerDao.getAuthUserLogsDao().save(log);
-		
+
 
 		return bytes;
-		
+
 	}
 
 	@Transactional(readOnly = false)
@@ -308,15 +276,15 @@ public class UserServiceImpl implements IUserService {
 		}
 		else
 		{
-			
+
 		}	
-		
+
 		return true;
 	}
 
 	@Override
 	public Properties loadProperties(Set<String> propertiesIdentifiers) {
-		 AuthUsers user = userLogged.getCurrentUserLogged();
+		AuthUsers user = userLogged.getCurrentUserLogged();
 		if(user!=null)
 		{
 			Properties properties = new Properties();

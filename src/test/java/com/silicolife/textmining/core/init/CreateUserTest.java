@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.junit.Test;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthGroups;
 import com.silicolife.textmining.core.datastructures.dataaccess.database.dataaccess.implementation.model.core.entities.AuthUsers;
@@ -30,10 +29,7 @@ public class CreateUserTest {
 
 		Long userID = GenerateRandomId.generateID();
 		String password = "test";
-		Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-		encoder.setIterations(13);
-		String salt = encoder.encodePassword(String.valueOf(userID), null);
-		String pass = GeneratePassword.generate(String.valueOf(password), salt);
+		String pass = GeneratePassword.generate(String.valueOf(password));
 		String preferLanguage = "en";
 		byte[] auAvatar = extractBytes("src/test/resources/images/anoteuser.png");
 

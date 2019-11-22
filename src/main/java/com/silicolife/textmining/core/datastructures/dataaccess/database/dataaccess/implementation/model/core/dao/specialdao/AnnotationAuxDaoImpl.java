@@ -435,6 +435,7 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 				+ " AND leftSide.asAnnotSideType = :leftEnum"
 				+ " AND rightSide.asAnnotSideType = :rightEnum"
 				+ " GROUP BY leftsubAnnotation.classes.claId, rightsubAnnotation.classes.claId ";
+//				+ " ORDER BY count(distinct annotation.publications.pubId)"; //hashmap or treemap loses the order
 		
 		
 		Query query = sessionFactory.getCurrentSession().createQuery(queryHQL );
@@ -469,6 +470,7 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 				+ " AND leftSide.asAnnotSideType = :leftEnum"
 				+ " AND rightSide.asAnnotSideType = :rightEnum"
 				+ " GROUP BY leftsubAnnotation.classes.claId, rightsubAnnotation.classes.claId ";
+//				+ " ORDER BY count(distinct annotation.annId) desc"; //hashmap or treemap loses the order
 		
 		
 		Query query = sessionFactory.getCurrentSession().createQuery(queryHQL );
@@ -522,6 +524,7 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 				+ " AND leftSide.asAnnotSideType = :leftEnum"
 				+ " AND rightSide.asAnnotSideType = :rightEnum"
 				+ " GROUP BY leftsubAnnotation.resourceElements.resId, rightsubAnnotation.resourceElements.resId ";
+//				+ " ORDER BY count(distinct annotation.publications.pubId) desc"; //hashmap or treemap loses the order
 		
 		
 		Query query = sessionFactory.getCurrentSession().createQuery(queryHQL );
@@ -529,6 +532,10 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 		query.setParameter("rightEnum", AnnotationSideEnum.right.toString());
 //		query.setParameter("corpusId", corpusId);
 		query.setParameter("processId", processId);
+		query.setFirstResult(0); // TODO: pagination and filtering
+		query.setFetchSize(200);
+		query.setMaxResults(200);
+		
 		
 		@SuppressWarnings("unchecked")
 		List<Object[]> result = (List<Object[]>)query.list();
@@ -555,6 +562,7 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 				+ " AND leftSide.asAnnotSideType = :leftEnum"
 				+ " AND rightSide.asAnnotSideType = :rightEnum"
 				+ " GROUP BY leftsubAnnotation.resourceElements.resId, rightsubAnnotation.resourceElements.resId ";
+//				+ " ORDER BY count(distinct annotation.annId) desc";//hashmap or treemap loses the order
 		
 		
 		Query query = sessionFactory.getCurrentSession().createQuery(queryHQL );
@@ -562,6 +570,9 @@ public class AnnotationAuxDaoImpl implements AnnotationAuxDao {
 		query.setParameter("rightEnum", AnnotationSideEnum.right.toString());
 //		query.setParameter("corpusId", corpusId);
 		query.setParameter("processId", processId);
+		query.setFirstResult(0); // TODO: pagination and filtering
+		query.setFetchSize(200);
+		query.setMaxResults(200);
 		
 		@SuppressWarnings("unchecked")
 		List<Object[]> result = (List<Object[]>)query.list();
