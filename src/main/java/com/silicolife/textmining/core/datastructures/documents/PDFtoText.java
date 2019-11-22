@@ -2,17 +2,17 @@ package com.silicolife.textmining.core.datastructures.documents;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.IIOImage;
 
-import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.util.PDFTextStripper;
+import org.apache.pdfbox.rendering.ImageType;
+import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.silicolife.textmining.core.datastructures.textprocessing.NormalizationForm;
 
@@ -29,12 +29,9 @@ public class PDFtoText {
 		String text = null;
 		try {
 			PDFTextStripper stripper = new PDFTextStripper();
-			PDFParser parser = new PDFParser(new FileInputStream(url));
-			parser.parse();
-			PDDocument doc = parser.getPDDocument();
-			text = stripper.getText(doc);
-			parser.clearResources();
-			doc.close();
+			PDDocument document = PDDocument.load(new File(url));
+			text = stripper.getText(document);
+			document.close();
 		} catch (IOException e) {
 		}
 		if(text!=null)
@@ -62,12 +59,13 @@ public class PDFtoText {
 
 	private static String convertEncryptedPDFDocument(String url) throws IOException, TesseractException{
 		int imageDPIValue = 300;
-		PDDocument document = PDDocument.loadNonSeq(new File(url), null);
-		@SuppressWarnings("unchecked")
-		List<PDPage> pdPages = document.getDocumentCatalog().getAllPages();
+		PDDocument document = PDDocument.load(new File(url));
+		PDFRenderer pdfRenderer = new PDFRenderer(document);
 		List<BufferedImage> imagesPages = new ArrayList<>();
-		for (PDPage pdPage : pdPages){ 
-			imagesPages.add(pdPage.convertToImage(BufferedImage.TYPE_INT_RGB, imageDPIValue));
+		int pageCounter = 0;
+		for (@SuppressWarnings("unused") PDPage pdPage : document.getPages()){
+			imagesPages.add(pdfRenderer.renderImageWithDPI(pageCounter, imageDPIValue, ImageType.RGB));
+			pageCounter++;
 		}
 		document.close();
 		Tesseract tessaract = TessaractManager.getInstance().getTessaract();
