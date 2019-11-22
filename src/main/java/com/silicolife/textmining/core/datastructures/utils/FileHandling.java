@@ -18,8 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.pdfbox.exceptions.COSVisitorException;
-
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -303,7 +301,7 @@ public class FileHandling {
 		return responseStrBuilder.toString();
 	}
 
-	public static void createPDFFileWithText(String filepath, String fullTextContent) throws COSVisitorException, IOException, DocumentException {
+	public static void createPDFFileWithText(String filepath, String fullTextContent) throws IOException, DocumentException {
 		Document document = new Document();
 		PdfWriter.getInstance(document, new FileOutputStream(filepath));
 		document.open();
